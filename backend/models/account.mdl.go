@@ -16,7 +16,7 @@ type (
 		Password   string         `gorm:"type:varchar(255);not null;comment:密码;" json:"-"`
 		Nickname   string         `gorm:"unique;type:varchar(64);not null;comment:昵称;" json:"nickname"`
 		BeAdmin    bool           `gorm:"type:boolean;not null;default:0;comment:是否是管理员" json:"be_admin"`
-		AvatarUuid string         `gorm:"index;type:varchar(36);not null;default:'';comment:用户头像文件uuid;" json:"avatar_uuid"`
+		AvatarUuid string         `gorm:"index;type:char(36);not null;default:'';comment:用户头像文件uuid;" json:"avatar_uuid"`
 		Avatar     *FileMdl       `gorm:"foreignKey:avatar_uuid;references:uuid" json:"avatar"`
 		RbacRoles  []*RbacRoleMdl `gorm:"many2many:pivot_rbac_roles__accounts;foreignKey:uuid;joinForeignKey:account_uuid;references:uuid;joinReferences:rbac_role_uuid;" json:"rbac_roles"`
 	}
@@ -50,12 +50,12 @@ func (receiver AccountMdl) GetPermissionUuids() (rbacPermissionUuids []string) {
 // GetListByQuery 通过Query获取列表
 func (receiver AccountMdl) GetListByQuery(ctx *gin.Context) *gorm.DB {
 	return NewAccountMdl().
-		SetWheresEqual("open_id", "work_area_unique_code", "rank").
+		SetWheresEqual("a.uuid", "a.work_area_unique_code", "a.rank").
 		SetWheresFuzzy(map[string]string{
 			"account":  "a.account like ?",
 			"nickname": "a.nickname like ?",
 		}).
-		SetWheresDateBetween("created_at", "updated_at", "deleted_at").
+		SetWheresDateBetween("a.created_at", "a.updated_at", "a.deleted_at").
 		SetWheresExtraHasValue(map[string]func(string, *gorm.DB) *gorm.DB{}).
 		SetWheresExtraHasValues(map[string]func([]string, *gorm.DB) *gorm.DB{}).
 		SetCtx(ctx).

@@ -41,24 +41,24 @@ type (
 		Icon          string         `gorm:"type:varchar(64);not null;default:'';comment:菜单图标" json:"icon"`
 		PageRouteName string         `gorm:"type:varchar(64);not null;default:'';comment:页面路由名称;" json:"page_route_name"`
 		RbacRoles     []*RbacRoleMdl `gorm:"many2many:pivot_rbac_roles__rbac_menus;foreignKey:uuid;joinForeignKey:rbac_menu_uuid;references:uuid;joinReferences:rbacRoleUuid;" json:"rbac_roles"`
-		ParentUuid    string         `gorm:"type:varchar(36);not null;default:'';comment:父级uuid;" json:"parent_uuid"`
+		ParentUuid    string         `gorm:"type:char(36);not null;default:'';comment:父级uuid;" json:"parent_uuid"`
 		Parent        *RbacMenuMdl   `gorm:"foreignKey:parent_uuid;references:uuid;comment:所属父级;" json:"parent"`
 		Subs          []*RbacMenuMdl `gorm:"foreignKey:parent_uuid;references:uuid;comment:相关子集;" json:"subs"`
 	}
 
 	PivotRbacRoleAccountMdl struct {
-		RbacRoleUuid string `gorm:"type:varchar(36);not null;default:'';comment:角色uuid" json:"rbac_role_uuid"`
-		AccountUuid  string `gorm:"type:varchar(36);not null;default:'';comment:用户uuid" json:"account_uuid"`
+		RbacRoleUuid string `gorm:"type:char(36);not null;default:'';comment:角色uuid" json:"rbac_role_uuid"`
+		AccountUuid  string `gorm:"type:char(36);not null;default:'';comment:用户uuid" json:"account_uuid"`
 	}
 
 	PivotRbacRoleRbacPermissionMdl struct {
-		RbacRoleUuid       string `gorm:"type:varchar(36);not null;default:'';comment:角色uuid" json:"rbac_role_uuid"`
-		RbacPermissionUuid string `gorm:"type:varchar(36);not null;default:'';comment:权限uuid" json:"rbac_permission_uuid"`
+		RbacRoleUuid       string `gorm:"type:char(36);not null;default:'';comment:角色uuid" json:"rbac_role_uuid"`
+		RbacPermissionUuid string `gorm:"type:char(36);not null;default:'';comment:权限uuid" json:"rbac_permission_uuid"`
 	}
 
 	PivotRbacRoleRbacMenuMdl struct {
-		RbacRoleUuid string `gorm:"type:varchar(36);not null;default:'';comment:角色uuid" json:"rbac_role_uuid"`
-		RbacMenuUuid string `gorm:"type:varchar(36);not null;default:'';comment:菜单uuid" json:"rbac_menu_uuid"`
+		RbacRoleUuid string `gorm:"type:char(36);not null;default:'';comment:角色uuid" json:"rbac_role_uuid"`
+		RbacMenuUuid string `gorm:"type:char(36);not null;default:'';comment:菜单uuid" json:"rbac_menu_uuid"`
 	}
 )
 
@@ -75,16 +75,16 @@ func (RbacRoleMdl) TableName() string {
 // GetListByQuery 根据Query获取角色列表
 func (receiver RbacRoleMdl) GetListByQuery(ctx *gin.Context) *gorm.DB {
 	return NewRbacRoleMdl().
-		SetWheresEqual("be_enable").
-		SetWheresDateBetween("created_at", "updated_at", "deleted_at").
+		SetWheresEqual("rr.be_enable").
+		SetWheresDateBetween("rr.created_at", "rr.updated_at", "rr.deleted_at").
 		SetWheresExtraHasValue(map[string]func(string, *gorm.DB) *gorm.DB{
 			"name": func(value string, db *gorm.DB) *gorm.DB {
-				return db.Where(fmt.Sprintf("name like '%%%s%%'", value))
+				return db.Where(fmt.Sprintf("rr.name like '%%%s%%'", value))
 			},
 		}).
 		SetWheresExtraHasValues(map[string]func([]string, *gorm.DB) *gorm.DB{
 			"names[]": func(values []string, db *gorm.DB) *gorm.DB {
-				return db.Where("name in (?)", values)
+				return db.Where("rr.name in (?)", values)
 			},
 		}).
 		SetCtx(ctx).
@@ -105,8 +105,8 @@ func (RbacPermissionMdl) TableName() string {
 // GetListByQuery 根据Query获取权限列表
 func (receiver RbacPermissionMdl) GetListByQuery(ctx *gin.Context) *gorm.DB {
 	return NewRbacPermissionMdl().
-		SetWheresEqual("be_enable").
-		SetWheresDateBetween("created_at", "updated_at", "deleted_at").
+		SetWheresEqual("rp.be_enable").
+		SetWheresDateBetween("rp.created_at", "rp.updated_at", "rp.deleted_at").
 		SetWheresExtraHasValue(map[string]func(string, *gorm.DB) *gorm.DB{
 			"name": func(value string, db *gorm.DB) *gorm.DB {
 				return db.Where(fmt.Sprintf("rp.name like '%%%s%%'", value))
@@ -160,28 +160,28 @@ func (receiver RbacMenuMdl) GetListByQuery(ctx *gin.Context) *gorm.DB {
 	}
 
 	return NewRbacMenuMdl().
-		SetWheresEqual("be_enable").
-		SetWheresDateBetween("created_at", "updated_at", "deleted_at").
+		SetWheresEqual("rm.be_enable").
+		SetWheresDateBetween("rm.created_at", "rm.updated_at", "rm.deleted_at").
 		SetWheresExtraHasValue(map[string]func(string, *gorm.DB) *gorm.DB{
 			"name": func(value string, db *gorm.DB) *gorm.DB {
-				return db.Where(fmt.Sprintf("name like '%%%s%%'", value))
+				return db.Where(fmt.Sprintf("rm.name like '%%%s%%'", value))
 			},
 			"uri": func(value string, db *gorm.DB) *gorm.DB {
-				return db.Where("uri", value)
+				return db.Where("rm.uri = ?", value)
 			},
 			"not_has_subs": func(value string, db *gorm.DB) *gorm.DB {
 				if len(subUuids) == 0 {
 					return db
 				}
-				return db.Where("uuid not in ?", subUuids)
+				return db.Where("rm.uuid not in ?", subUuids)
 			},
 		}).
 		SetWheresExtraHasValues(map[string]func([]string, *gorm.DB) *gorm.DB{
 			"names[]": func(values []string, db *gorm.DB) *gorm.DB {
-				return db.Where("name in (?)", values)
+				return db.Where("rm. name in (?)", values)
 			},
 			"uris[]": func(values []string, db *gorm.DB) *gorm.DB {
-				return db.Where("uri in (?)", values)
+				return db.Where("rm. uri in (?)", values)
 			},
 		}).
 		SetCtx(ctx).

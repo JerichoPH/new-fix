@@ -98,11 +98,22 @@ type (
 
 // 自动迁移列表
 var autoMigrateList = []any{
-	models.AccountMdl{},        // 用户
-	models.RbacRoleMdl{},       // 权限管理-角色
-	models.RbacPermissionMdl{}, // 权限管理-权限
-	models.RbacMenuMdl{},       // 权限管理-菜单
-	models.FileMdl{},           // 文件
+	models.AccountMdl{},               // 用户
+	models.RbacRoleMdl{},              // 权限管理-角色
+	models.RbacPermissionMdl{},        // 权限管理-权限
+	models.RbacMenuMdl{},              // 权限管理-菜单
+	models.FileMdl{},                  // 文件
+	models.EquipmentKindCategoryMdl{}, // 器材种类
+	models.EquipmentKindTypeMdl{},     // 器材类型
+	models.EquipmentKindModelMdl{},    // 器材型号
+	models.OrganizationRailwayMdl{},   // 组织结构-路局
+	models.OrganizationParagraphMdl{}, // 组织结构-站段
+	models.OrganizationWorkshopMdl{},  // 组织结构-车间
+	models.OrganizationStationMdl{},   // 组织结构-站场
+	models.OrganizationCrossroadMdl{}, // 组织结构-道口
+	models.OrganizationCenterMdl{},    // 组织结构-中心
+	models.OrganizationWorkAreaMdl{},  // 组织结构-工区
+	models.OrganizationLineMdl{},      // 组织结构-线别
 }
 
 // 执行command命令

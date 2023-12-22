@@ -41,9 +41,9 @@ func (receiver FileMdl) GetListByQuery(ctx *gin.Context) *gorm.DB {
 	return NewFileMdl().
 		SetWheresEqual().
 		SetWheresFuzzy(map[string]string{
-			"name": "f like ?",
+			"name": "f.name like ?",
 		}).
-		SetWheresDateBetween("created_at", "updated_at", "deleted_at").
+		SetWheresDateBetween("f.created_at", "f.updated_at", "f.deleted_at").
 		SetWheresExtraHasValue(map[string]func(string, *gorm.DB) *gorm.DB{}).
 		SetWheresExtraHasValues(map[string]func([]string, *gorm.DB) *gorm.DB{}).
 		SetCtx(ctx).
@@ -109,7 +109,7 @@ func (receiver *FileMdl) DeleteFile(uuid string) error {
 		p := path.Join(tools.GetRootPath(), receiver.SavePath, receiver.Filename)
 		fmt.Println(fmt.Sprintf("%s", p))
 		if err := os.Remove(p); err != nil {
-			fmt.Println(fmt.Sprintf("delete error: %s", err.Error()))
+			fmt.Println(fmt.Sprintf("delete error：%s", err.Error()))
 		}
 
 		NewFileMdl().
