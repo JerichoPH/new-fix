@@ -8,12 +8,23 @@ import (
 // EquipmentMdl 器材模型
 type EquipmentMdl struct {
 	MySqlMdl
-	UniqueCode                 string                   `gorm:"unique;char(19);not null;comment:唯一编号;" json:"unique_code"`
-	EquipmentKindModelUuid     string                   `gorm:"type:char(36);not null;comment:器材种类UUID;" json:"equipment_kind_model_uuid"`
-	EquipmentKindModel         *EquipmentKindModelMdl   `gorm:"foreignKey:equipment_kind_model_uuid;references:uuid;comment:所属器材型号;" json:"equipment_kind_model"`
-	PropertyBelongWorkAreaUuid string                   `gorm:"index;type:char(36);not null;default:'';comment:资产归属;" json:"property_belong_work_area_uuid"`
-	PropertyBelongWorkArea     *OrganizationWorkAreaMdl `gorm:"foreignKey:property_belong_work_area_uuid;references:uuid;comment:资产归属工区;" json:"property_belong_work_area"`
-	UseBelongWorkshopUuid      string                   `gorm:"index;type:char(36);not null;default:'';comment:使用归属车间;" json:"use_belong_workshop_uuid"`
+	UniqueCode                             string                    `gorm:"unique;char(19);not null;comment:唯一编号;" json:"unique_code"`
+	EquipmentKindModelUuid                 string                    `gorm:"type:char(36);not null;comment:器材种类UUID;" json:"equipment_kind_model_uuid"`
+	EquipmentKindModel                     *EquipmentKindModelMdl    `gorm:"foreignKey:equipment_kind_model_uuid;references:uuid;comment:所属器材型号;" json:"equipment_kind_model"`
+	PropertyBelongOrganizationWorkAreaUuid string                    `gorm:"index;type:char(36);not null;default:'';comment:资产归属;" json:"property_belong_organization_work_area_uuid"`
+	PropertyBelongOrganiationWorkArea      *OrganizationWorkAreaMdl  `gorm:"foreignKey:property_belong_organization_work_area_uuid;references:uuid;comment:资产归属工区;" json:"property_belong_organization_work_area"`
+	UseBelongOrganizaitonWorkshopUuid      string                    `gorm:"index;type:char(36);not null;default:'';comment:使用归属车间;" json:"use_belong_organizaiton_workshop_uuid"`
+	UseBelongOrganizaitonWorkshop          *OrganizationWorkshopMdl  `gorm:"foreignKey:use_belong_organizaiton_workshop_uuid;references:uuid;comment:使用归属车间;" json:"use_belong_organizaiton_workshop"`
+	UseBelongOrganizationStationUuid       string                    `gorm:"index;type:char(36);not null;default:'';comment:使用归属站场;" json:"use_belong_organization_station_uuid"`
+	UseBelongOrganizationStation           *OrganizationStationMdl   `gorm:"foreignKey:use_belong_organization_station_uuid;references:uuid;comment:使用归属站场;" json:"use_belong_organization_station"`
+	UseBelongOrganizationCrossroadUuid     string                    `gorm:"index;type:char(36);not null;default:'';comment:使用归属道口;" json:"use_belong_organization_crossroad_uuid"`
+	UseBelongOrganizationCrossroad         *OrganizationCrossroadMdl `gorm:"foreignKey:use_belong_organization_crossroad_uuid;references:uuid;comment:使用归属道口;" json:"use_belong_organization_crossroad"`
+	UseBelongOrganizationCenterUuid        string                    `gorm:"index;type:char(36);not null;default:'';comment:使用归属中心;" json:"use_belong_organization_center_uuid"`
+	UseBelongOrganizationCenter            *OrganizationCenterMdl    `gorm:"foreignKey:use_belong_organization_center_uuid;references:uuid;comment:使用归属中心;" json:"use_belong_organization_center"`
+	UseBelongOrganizationWorkAreaUuid      string                    `gorm:"index;type:char(36);not null;default:'';comment:使用归属工区;" json:"use_belong_organization_work_area_uuid"`
+	UseBelongOrganizationWorkArea          *OrganizationWorkAreaMdl  `gorm:"foreignKey:use_belong_organization_work_area_uuid;references:uuid;comment:使用归属工区;" json:"use_belong_organization_work_area"`
+	UseBelongOrganizationLineUuid          string                    `gorm:"index;type:char(36);not null;default:'';comment:使用归属线别;" json:"use_belong_organization_line_uuid"`
+	UseBelongOrganizationLine              *OrganizationLineMdl      `gorm:"foreignKey:use_belong_organization_line_uuid;references:uuid;comment:使用归属线别;" json:"use_belong_organization_line"`
 }
 
 // TableName 器材表名称
