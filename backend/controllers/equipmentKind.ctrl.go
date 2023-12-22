@@ -16,6 +16,10 @@ type (
 	EquipmentKindCategoryStoreForm struct {
 		Name string `json:"name"`
 	}
+	EquipmentKindCategoryDestroyManyForm struct {
+		Uuids                   []string `json:"uuids"`
+		equipmentKindCategories []*models.EquipmentKindCategoryMdl
+	}
 
 	// 器材类型控制器
 	EquipmentKindTypeCtrl struct{}
@@ -45,6 +49,20 @@ func (receiver EquipmentKindCategoryStoreForm) ShouldBind(ctx *gin.Context) Equi
 
 	if receiver.Name == "" {
 		wrongs.ThrowValidate("器材种类名称不能为空")
+	}
+
+	return receiver
+}
+
+// ShouldBind 表单绑定（批量删除器材种类）
+func (receiver EquipmentKindCategoryDestroyManyForm) ShouldBind(ctx *gin.Context) EquipmentKindCategoryDestroyManyForm {
+	var err error
+	if err = ctx.ShouldBind(&receiver); err != nil {
+		wrongs.ThrowValidate("表单绑定失败：%s", err.Error())
+	}
+
+	if len(receiver.Uuids) == 0 {
+		wrongs.ThrowValidate("器材种类编号不能为空")
 	}
 
 	return receiver
@@ -115,14 +133,17 @@ func (EquipmentKindCategoryCtrl) Store(ctx *gin.Context) {
 	wrongs.ThrowWhenNotEmpty(ret, "种类名称")
 
 	// 新建
-	EquipmentKindCategory := &models.EquipmentKindCategoryMdl{}
+	EquipmentKindCategory := &models.EquipmentKindCategoryMdl{
+		UniqueCode: models.EquipmentKindCategoryMdl{}.GetNewUniqueCode(),
+		Name:       form.Name,
+	}
 	if ret = models.NewEquipmentKindCategoryMdl().
 		GetDb("").
 		Create(&EquipmentKindCategory); ret.Error != nil {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Created(map[string]any{"EquipmentKindCategory": EquipmentKindCategory}).ToGinResponse())
+	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Created(map[string]any{"equipment_kind_category": EquipmentKindCategory}).ToGinResponse())
 }
 
 // Destroy 删除
@@ -144,6 +165,24 @@ func (EquipmentKindCategoryCtrl) Destroy(ctx *gin.Context) {
 		GetDb("").
 		Where("uuid = ?", ctx.Param("uuid")).
 		Delete(&EquipmentKindCategory); ret.Error != nil {
+		wrongs.ThrowForbidden(ret.Error.Error())
+	}
+
+	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+}
+
+// DestroyMany 批量删除
+func (EquipmentKindCategoryCtrl) DestroyMany(ctx *gin.Context) {
+	var ret *gorm.DB
+
+	// 表单
+	form := EquipmentKindCategoryDestroyManyForm{}.ShouldBind(ctx)
+
+	// 删除
+	if ret = models.NewEquipmentKindCategoryMdl().
+		GetDb("").
+		Where("uuid in ?", form.Uuids).
+		Delete(nil); ret.Error != nil {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
@@ -183,7 +222,7 @@ func (EquipmentKindCategoryCtrl) Update(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"EquipmentKindCategory": EquipmentKindCategory}).ToGinResponse())
+	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"equipment_kind_category": EquipmentKindCategory}).ToGinResponse())
 }
 
 // Detail 详情
@@ -199,7 +238,7 @@ func (EquipmentKindCategoryCtrl) Detail(ctx *gin.Context) {
 		First(&EquipmentKindCategory)
 	wrongs.ThrowWhenEmpty(ret, "种类")
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"EquipmentKindCategory": EquipmentKindCategory}).ToGinResponse())
+	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"equipment_kind_category": EquipmentKindCategory}).ToGinResponse())
 }
 
 // List 列表
@@ -210,9 +249,9 @@ func (receiver EquipmentKindCategoryCtrl) List(ctx *gin.Context) {
 		tools.NewCorrectWithGinContext("", ctx).
 			DataForPager(
 				models.EquipmentKindCategoryMdl{}.GetListByQuery(ctx),
-				func(db *gorm.DB) map[string]interface{} {
+				func(db *gorm.DB) map[string]any {
 					db.Find(&equipmentKindCategories)
-					return map[string]any{"equipmentKindCategories": equipmentKindCategories}
+					return map[string]any{"equipment_kind_categories": equipmentKindCategories}
 				},
 			).
 			ToGinResponse(),
@@ -227,9 +266,9 @@ func (receiver EquipmentKindCategoryCtrl) ListJdt(ctx *gin.Context) {
 		tools.NewCorrectWithGinContext("", ctx).
 			DataForJqueryDataTable(
 				models.EquipmentKindCategoryMdl{}.GetListByQuery(ctx),
-				func(db *gorm.DB) map[string]interface{} {
+				func(db *gorm.DB) map[string]any {
 					db.Find(&equipmentKindCategories)
-					return map[string]any{"equipmentKindCategories": equipmentKindCategories}
+					return map[string]any{"equipment_kind_categories": equipmentKindCategories}
 				},
 			).
 			ToGinResponse(),
@@ -260,14 +299,16 @@ func (EquipmentKindTypeCtrl) Store(ctx *gin.Context) {
 	wrongs.ThrowWhenNotEmpty(ret, "器材类型名称")
 
 	// 新建
-	equipmentKind := &models.EquipmentKindTypeMdl{}
+	equipmentKindType := &models.EquipmentKindTypeMdl{
+		Name: form.Name,
+	}
 	if ret = models.NewEquipmentKindTypeMdl().
 		GetDb("").
-		Create(&equipmentKind); ret.Error != nil {
+		Create(&equipmentKindType); ret.Error != nil {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Created(map[string]any{"equipmentKind": equipmentKind}).ToGinResponse())
+	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Created(map[string]any{"equipment_kind_type": equipmentKindType}).ToGinResponse())
 }
 
 // Destroy 删除
@@ -298,8 +339,8 @@ func (EquipmentKindTypeCtrl) Destroy(ctx *gin.Context) {
 // Update 编辑
 func (EquipmentKindTypeCtrl) Update(ctx *gin.Context) {
 	var (
-		ret                   *gorm.DB
-		equipmentKind, repeat *models.EquipmentKindTypeMdl
+		ret                       *gorm.DB
+		equipmentKindType, repeat *models.EquipmentKindTypeMdl
 	)
 
 	// 表单
@@ -317,36 +358,36 @@ func (EquipmentKindTypeCtrl) Update(ctx *gin.Context) {
 	ret = models.NewEquipmentKindTypeMdl().
 		GetDb("").
 		Where("uuid = ?", ctx.Param("uuid")).
-		First(&equipmentKind)
+		First(&equipmentKindType)
 	wrongs.ThrowWhenEmpty(ret, "器材类型")
 
 	// 编辑
-	equipmentKind.Name = form.Name
-	equipmentKind.EquipmentKindCategoryUuid = form.equipmentKindCategory.Uuid
+	equipmentKindType.Name = form.Name
+	equipmentKindType.EquipmentKindCategoryUuid = form.equipmentKindCategory.Uuid
 	if ret = models.NewEquipmentKindTypeMdl().
 		GetDb("").
 		Where("uuid = ?", ctx.Param("uuid")).
-		Save(&equipmentKind); ret.Error != nil {
+		Save(&equipmentKindType); ret.Error != nil {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"equipmentKind": equipmentKind}).ToGinResponse())
+	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"equipment_kind_type": equipmentKindType}).ToGinResponse())
 }
 
 // Detail 详情
 func (EquipmentKindTypeCtrl) Detail(ctx *gin.Context) {
 	var (
-		ret           *gorm.DB
-		equipmentKind *models.EquipmentKindTypeMdl
+		ret               *gorm.DB
+		equipmentKindType *models.EquipmentKindTypeMdl
 	)
 	ret = models.NewEquipmentKindTypeMdl().
 		SetCtx(ctx).
 		GetDbUseQuery("").
 		Where("uuid = ?", ctx.Param("uuid")).
-		First(&equipmentKind)
+		First(&equipmentKindType)
 	wrongs.ThrowWhenEmpty(ret, "器材类型")
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"equipmentKind": equipmentKind}).ToGinResponse())
+	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"equipment_kind_type": equipmentKindType}).ToGinResponse())
 }
 
 // List 列表
@@ -357,9 +398,9 @@ func (receiver EquipmentKindTypeCtrl) List(ctx *gin.Context) {
 		tools.NewCorrectWithGinContext("", ctx).
 			DataForPager(
 				models.EquipmentKindTypeMdl{}.GetListByQuery(ctx),
-				func(db *gorm.DB) map[string]interface{} {
+				func(db *gorm.DB) map[string]any {
 					db.Find(&equipmentKindTypes)
-					return map[string]any{"equipmentKindTypes": equipmentKindTypes}
+					return map[string]any{"equipment_kind_types": equipmentKindTypes}
 				},
 			).
 			ToGinResponse(),
@@ -374,9 +415,9 @@ func (receiver EquipmentKindTypeCtrl) ListJdt(ctx *gin.Context) {
 		tools.NewCorrectWithGinContext("", ctx).
 			DataForJqueryDataTable(
 				models.EquipmentKindTypeMdl{}.GetListByQuery(ctx),
-				func(db *gorm.DB) map[string]interface{} {
+				func(db *gorm.DB) map[string]any {
 					db.Find(&equipmentKindTypes)
-					return map[string]any{"equipmentKindTypes": equipmentKindTypes}
+					return map[string]any{"equipment_kind_types": equipmentKindTypes}
 				},
 			).
 			ToGinResponse(),
@@ -414,7 +455,7 @@ func (EquipmentKindModelCtrl) Store(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Created(map[string]any{"equipmentKindModel": equipmentKindModel}).ToGinResponse())
+	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Created(map[string]any{"equipment_kind_model": equipmentKindModel}).ToGinResponse())
 }
 
 // Destroy 删除
@@ -476,7 +517,7 @@ func (EquipmentKindModelCtrl) Update(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"equipmentKindModel": equipmentKindModel}).ToGinResponse())
+	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"equipment_kind_model": equipmentKindModel}).ToGinResponse())
 }
 
 // Detail 详情
@@ -492,7 +533,7 @@ func (EquipmentKindModelCtrl) Detail(ctx *gin.Context) {
 		First(&equipmentKindModel)
 	wrongs.ThrowWhenEmpty(ret, "器材型号")
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"equipmentKindModel": equipmentKindModel}).ToGinResponse())
+	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"equipment_kind_model": equipmentKindModel}).ToGinResponse())
 }
 
 // List 列表
@@ -503,9 +544,9 @@ func (receiver EquipmentKindModelCtrl) List(ctx *gin.Context) {
 		tools.NewCorrectWithGinContext("", ctx).
 			DataForPager(
 				models.EquipmentKindModelMdl{}.GetListByQuery(ctx),
-				func(db *gorm.DB) map[string]interface{} {
+				func(db *gorm.DB) map[string]any {
 					db.Find(&equipmentKindModels)
-					return map[string]any{"equipmentKindModels": equipmentKindModels}
+					return map[string]any{"equipment_kind_models": equipmentKindModels}
 				},
 			).
 			ToGinResponse(),
@@ -520,9 +561,9 @@ func (receiver EquipmentKindModelCtrl) ListJdt(ctx *gin.Context) {
 		tools.NewCorrectWithGinContext("", ctx).
 			DataForJqueryDataTable(
 				models.EquipmentKindModelMdl{}.GetListByQuery(ctx),
-				func(db *gorm.DB) map[string]interface{} {
+				func(db *gorm.DB) map[string]any {
 					db.Find(&equipmentKindModels)
-					return map[string]any{"equipmentKindModels": equipmentKindModels}
+					return map[string]any{"equipment_kind_models": equipmentKindModels}
 				},
 			).
 			ToGinResponse(),

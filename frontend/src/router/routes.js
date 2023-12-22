@@ -47,6 +47,13 @@ const routes = [
       { path: "menu", name: "rbacMenu:index", component: RbacMenuPage },
     ],
   },
+  {
+    path: "/equipmentKind",
+    component: () => MainLayoutVue,
+    children: [
+      { path: "category", name: "equipmentKindCategory:index", component: () => import("src/pages/equipmentKind/CategoryPage.vue") },
+    ],
+  },
   // Always leave this as last one,
   // but you can also remove it
   {

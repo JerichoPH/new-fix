@@ -30,6 +30,8 @@ func (EquipmentKindRout) Load(engine *gin.Engine) {
 		{
 			// 新建
 			categoryRout.POST("", controllers.NewEquipmentKindCategoryCtrl().Store)
+			// 批量删除
+			categoryRout.POST("/destroyMany", controllers.NewEquipmentKindCategoryCtrl().DestroyMany)
 			// 删除
 			categoryRout.DELETE("/:uuid", controllers.NewEquipmentKindCategoryCtrl().Destroy)
 			// 编辑
