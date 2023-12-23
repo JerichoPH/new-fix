@@ -142,3 +142,12 @@ export const actionNotify = (
 
   return n;
 };
+
+export const notifies = {
+  getDestroyActions,
+  loadingNotify,
+  infoNotify,
+  successNotify,
+  errorNotify,
+  actionNotify,
+};

@@ -53,6 +53,7 @@ const routes = [
     children: [
       { path: "category", name: "equipmentKindCategory:index", component: () => import("src/pages/equipmentKind/CategoryPage.vue") },
       { path: "type", name: "equipmentKindType:index", component: () => import("src/pages/equipmentKind/TypePage.vue") },
+      { path: "model", name: "equipmentKindModel:index", component: () => import("src/pages/equipmentKind/ModelPage.vue") },
     ],
   },
   // Always leave this as last one,

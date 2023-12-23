@@ -129,7 +129,7 @@
           </div>
           <div class="row">
             <div class="col">
-              <sel-equipment-kind-category_alert-edit labelName="所属种类"
+              <sel-equipment-kind-categrory_alert-edit labelName="所属种类"
                 v-model="equipmentKindCategoryUuid_alertEditEquipmentKindType" />
             </div>
           </div>
@@ -149,11 +149,12 @@ import { ajaxEquipmentKindTypeList, ajaxEquipmentKindTypeDetail, ajaxEquipmentKi
 import { loadingNotify, successNotify, errorNotify, actionNotify, getDestroyActions } from "src/utils/notify";
 import SelEquipmentKindCategory_search from "src/components/SelEquipmentKindCategory_search.vue";
 import SelEquipmentKindCategory_alertCreate from "src/components/SelEquipmentKindCategory_alertCreate.vue";
-import SelEquipmentkdincategrory_alertEdit from "src/components/SelEquipmentKindCategory_alertEdit.vue";
+import SelEquipmentKindCategrory_alertEdit from "src/components/SelEquipmentKindCategory_alertEdit.vue";
 
 // 搜索栏条件
 const name_search = ref("");
 const equipmentKindCategoryUuid_search = ref("");
+provide("equipmentKindCategoryUuid_search", equipmentKindCategoryUuid_search);
 
 // 表格数据
 const rows = ref([]);
@@ -164,15 +165,13 @@ const sortBy = ref("");
 const alertCreateEquipmentKindType = ref(false);
 const name_alertCreateEquipmentKindType = ref("");
 const equipmentKindCategoryUuid_alertCreateEquipmentKindType = ref("");
+provide("equipmentKindCategoryUuid_alertCreate", equipmentKindCategoryUuid_alertCreateEquipmentKindType);
 
 // 编辑器材类型弹窗数据
 const currentUuid = ref("");
 const alertEditEquipmentKindType = ref(false);
 const name_alertEditEquipmentKindType = ref("");
 const equipmentKindCategoryUuid_alertEditEquipmentKindType = ref("");
-
-provide("equipmentKindCategoryUuid_search", equipmentKindCategoryUuid_alertCreateEquipmentKindType);
-provide("equipmentKindCategoryUuids_alertCreate", equipmentKindCategoryUuid_alertCreateEquipmentKindType);
 
 /**
  * 渲染完成后执行
