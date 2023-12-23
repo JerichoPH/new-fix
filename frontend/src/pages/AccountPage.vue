@@ -305,9 +305,7 @@ onMounted(() => {
 const fnInit = () => {
   fnSearch();
 };
-const fnGetSelectedString = () => {
-  console.log(selected.value);
-};
+const fnGetSelectedString = () => {};
 /**
  * 重置搜索栏条件
  */

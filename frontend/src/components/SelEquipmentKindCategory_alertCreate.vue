@@ -1,10 +1,10 @@
 <template>
-  <q-select outlined use-input clearable v-model="parentUuid_alertCreate" :options="options" :label="labelName"
+  <q-select outlined use-input clearable v-model="equipmentKindCategoryUuid_alertCreate" :options="options" :label="labelName"
     @filter="fnFilter" emit-value map-options />
 </template>
 <script setup>
 import { inject, defineProps, onMounted, ref } from "vue";
-import { ajaxRbacMenuList } from "/src/apis/rbac";
+import { ajaxEquipmentKindCategoryList } from "/src/apis/equipmentKind";
 import { errorNotify } from "src/utils/notify";
 
 const props = defineProps({
@@ -23,36 +23,36 @@ const props = defineProps({
 
 const labelName = props.labelName;
 const ajaxParams = props.ajaxParams;
-const parentUuid_alertCreate = inject("parentUuid_alertCreate");
+const equipmentKindCategoryUuid_alertCreate = inject("equipmentKindCategoryUuid_alertCreate");
 const options = ref([]);
-const rbacMenus = ref([]);
+const equipmentKindCategories = ref([]);
 
 const fnFilter = (val, update) => {
   if (val === "") {
     update(() => {
-      options.value = rbacMenus.value;
+      options.value = equipmentKindCategories.value;
     });
     return;
   }
 
   update(() => {
-    options.value = rbacMenus.value.filter(
+    options.value = equipmentKindCategories.value.filter(
       (v) => v.label.toLowerCase().indexOf(val.toLowerCase()) > -1
     );
   });
 };
 
 onMounted(() => {
-  ajaxRbacMenuList(ajaxParams)
+  ajaxEquipmentKindCategoryList(ajaxParams)
     .then((res) => {
-      if (res.content.rbac_menus.length > 0) {
-        rbacMenus.value = res.content.rbac_menus
-          .map(rbacMenu => {
-            return {
-              label: rbacMenu.name,
-              value: rbacMenu.uuid,
-            };
-          });
+      if (res.content.equipment_kind_categories.length > 0) {
+        equipmentKindCategories.value = res.content.equipment_kind_categories
+        .map(equipmentKindCategory=>{
+          return {
+            label:equipmentKindCategory.name,
+            value:equipmentKindCategory.uuid,
+          }
+        });
       }
     })
     .catch((e) => {

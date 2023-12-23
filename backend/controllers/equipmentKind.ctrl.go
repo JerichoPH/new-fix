@@ -339,6 +339,7 @@ func (EquipmentKindTypeCtrl) Store(ctx *gin.Context) {
 
 	// 新建
 	equipmentKindType := &models.EquipmentKindTypeMdl{
+		UniqueCode:                models.EquipmentKindTypeMdl{}.GetNewUniqueCode(form.equipmentKindCategory),
 		Name:                      form.Name,
 		EquipmentKindCategoryUuid: form.equipmentKindCategory.Uuid,
 	}
@@ -506,6 +507,7 @@ func (EquipmentKindModelCtrl) Store(ctx *gin.Context) {
 
 	// 新建
 	equipmentKindModel := &models.EquipmentKindModelMdl{
+		UniqueCode:            models.EquipmentKindModelMdl{}.GetNewUniqueCode(form.equipmentKindType),
 		Name:                  form.Name,
 		EquipmentKindTypeUuid: form.equipmentKindType.Uuid,
 	}

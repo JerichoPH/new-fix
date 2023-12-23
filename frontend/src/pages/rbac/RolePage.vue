@@ -159,9 +159,7 @@ onMounted(() => {
 const fnInit = () => {
   fnSearch();
 };
-const fnGetSelectedString = () => {
-  console.log(collect(selected.value).pluck("name").all().join(","));
-};
+const fnGetSelectedString = () => {};
 /**
  * 重置搜索栏
  */

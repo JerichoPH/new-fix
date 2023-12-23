@@ -70,10 +70,11 @@ export const ajaxEquipmentKindTypeList = params => {
 /**
  * 器材类型详情
  * @param {string} uuid
+ * @params {{*}} params
  * @returns
  */
-export const ajaxEquipmentKindTypeDetail = uuid => {
-  return api.get(`${urlPrefix}/type/${uuid}`);
+export const ajaxEquipmentKindTypeDetail = (uuid, params) => {
+  return api.get(`${urlPrefix}/type/${uuid}`, { params });
 }
 
 /**

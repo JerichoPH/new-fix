@@ -1,11 +1,11 @@
 <template>
-  <q-select outlined use-input clearable v-model="parentUuid_alertEdit" :options="options"
-    :display-value="collect(rbacMenus).where('value', parentUuid_alertEdit).first()['label']" :filter="fnFilter"
+  <q-select outlined use-input clearable v-model="equipmentKindCategoryUuid_alertEdit" :options="options"
+    :display-value="collect(equipmentKindCategories).where('value', equipmentKindCategoryUuid_alertEdit).first()['label']" :filter="fnFilter"
     :label="labelName" @filter="fnFilter" emit-value map-options />
 </template>
 <script setup>
 import { inject, defineProps, onMounted, ref } from "vue";
-import { ajaxRbacMenuList } from "/src/apis/rbac";
+import { ajaxEquipmentKindCategoryList } from "/src/apis/equipmentKind";
 import collect from "collect.js";
 import { errorNotify } from "src/utils/notify";
 
@@ -25,34 +25,34 @@ const props = defineProps({
 
 const labelName = props.labelName;
 const ajaxParams = props.ajaxParams;
-const parentUuid_alertEdit = inject("parentUuid_alertEdit");
+const equipmentKindCategoryUuid_alertEdit = inject("equipmentKindCategoryUuid_alertEdit");
 const options = ref([]);
-const rbacMenus = ref([]);
+const equipmentKindCategories = ref([]);
 
 const fnFilter = (val, update) => {
   if (val === "") {
     update(() => {
-      options.value = rbacMenus.value;
+      options.value = equipmentKindCategories.value;
     });
     return;
   }
 
   update(() => {
-    options.value = rbacMenus.value.filter(
+    options.value = equipmentKindCategories.value.filter(
       (v) => v.label.toLowerCase().indexOf(val.toLowerCase()) > -1
     );
   });
 };
 
 onMounted(() => {
-  ajaxRbacMenuList(ajaxParams)
+  ajaxEquipmentKindCategoryList(ajaxParams)
     .then((res) => {
-      if (res.content.rbac_menus.length > 0) {
-        rbacMenus.value = res.content.rbac_menus
-          .map(rbacMenu => {
+      if (res.content.equipment_kind_categories.length > 0) {
+        equipmentKindCategories.value = res.content.equipment_kind_categories
+          .map(equipmentKindCategory => {
             return {
-              label: rbacMenu.name,
-              value: rbacMenu.uuid,
+              label: equipmentKindCategory.name,
+              value: equipmentKindCategory.uuid,
             };
           });
       }

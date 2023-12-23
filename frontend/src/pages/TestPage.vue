@@ -62,7 +62,5 @@ const fnInit = () => {
   });
 };
 
-const getSelectedString = () => {
-  console.log("ok", selected.value);
-};
+const getSelectedString = () => {};
 </script>

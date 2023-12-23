@@ -49,7 +49,7 @@ const fnFilter = (val, update) => {
 onMounted(() => {
   ajaxEquipmentKindCategoryList(ajaxParams)
     .then((res) => {
-      if (res.content.rbac_roles.length > 0) {
+      if (res.content.equipment_kind_categories.length > 0) {
         collect(res.content.equipment_kind_categories)
           .each((equipmentKindCategory) => {
             equipmentKindCategories.value.push({

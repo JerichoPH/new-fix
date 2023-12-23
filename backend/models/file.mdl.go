@@ -98,19 +98,14 @@ func (receiver *FileMdl) CreateByByte(savePath string, originalFilename, origina
 
 // DeleteFile 删除文件
 func (receiver *FileMdl) DeleteFile(uuid string) error {
-	var ret *gorm.DB
-
-	ret = NewFileMdl().
+	ret := NewFileMdl().
 		GetDb("").
 		Where("uuid = ?", uuid).
 		First(&receiver)
 
 	if !wrongs.ThrowWhenEmpty(ret, "") {
 		p := path.Join(tools.GetRootPath(), receiver.SavePath, receiver.Filename)
-		fmt.Println(fmt.Sprintf("%s", p))
-		if err := os.Remove(p); err != nil {
-			fmt.Println(fmt.Sprintf("delete error：%s", err.Error()))
-		}
+		os.Remove(p)
 
 		NewFileMdl().
 			GetDb("").

@@ -1,7 +1,7 @@
 import { boot } from "quasar/wrappers";
 import axios from "axios";
 import settings from "src/settings";
-import {errorNotify} from "src/utils/notify";
+import { errorNotify } from "src/utils/notify";
 
 // Be careful when using SSR for cross-request state pollution
 // due to creating a Singconston instance here;
@@ -41,6 +41,7 @@ api.interceptors.response.use(
       localStorage.removeItem("auth.token"); // 从 localStorage 中删除 token
       errorNotify("未登录", 1000); // 显示通知，提示用户未登录
     } else {
+      console.log("网络请求错误：", e);
       return Promise.reject({ msg: e.response.data.msg || e.response.data });
     }
   }

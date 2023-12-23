@@ -230,9 +230,7 @@ onMounted(() => {
 const fnInit = () => {
   fnSearch();
 };
-const fnGetSelectedString = () => {
-  console.log(collect(selected.value).pluck('name').toArray());
-};
+const fnGetSelectedString = () => {};
 /**
  * 初始化搜索栏
  */
