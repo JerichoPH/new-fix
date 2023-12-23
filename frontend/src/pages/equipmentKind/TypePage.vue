@@ -114,11 +114,11 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, provide } from "vue";
 import { fnColumnReverseSort } from "src/utils/common";
-import { ajaxEquipmentKindCategoryList, ajaxEquipmentKindTypeList, ajaxEquipmentKindTypeDetail, ajaxEquipmentKindTypeStore, ajaxEquipmentKindTypeUpdate, ajaxEquipmentKindTypeDestroy, ajaxEquipmentKindTypeDestroyMany, } from "src/apis/equipmentKind";
+import { ajaxEquipmentKindTypeList, ajaxEquipmentKindTypeDetail, ajaxEquipmentKindTypeStore, ajaxEquipmentKindTypeUpdate, ajaxEquipmentKindTypeDestroy, ajaxEquipmentKindTypeDestroyMany, } from "src/apis/equipmentKind";
 import { loadingNotify, successNotify, errorNotify, actionNotify, getDestroyActions } from "src/utils/notify";
-import {SelEquipmentKindCategory_search} from "src/components/SelEquipmentKindCategory_search.vue";
+import { SelEquipmentKindCategory_search } from "src/components/SelEquipmentKindCategory_search.vue";
 
 // 搜索栏条件
 const name_search = ref("");
@@ -134,6 +134,8 @@ const sortBy = ref("");
 const alertCreateEquipmentKindType = ref(false);
 const name_alertCreateEquipmentKindType = ref("");
 const equipmentKindCategoryUuid_alertCreateEquipmentKindType = ref("");
+
+provide("equipmentKindCategoryUuid_search", equipmentKindCategoryUuid_alertCreateEquipmentKindType)
 
 onMounted(() => {
   fnInit();

@@ -16,6 +16,7 @@ type (
 	EquipmentKindCategoryStoreForm struct {
 		Name string `json:"name"`
 	}
+	// 器材种类批量删除表单
 	EquipmentKindCategoryDestroyManyForm struct {
 		Uuids                   []string `json:"uuids"`
 		equipmentKindCategories []*models.EquipmentKindCategoryMdl
@@ -29,6 +30,11 @@ type (
 		EquipmentKindCategoryUuid string `json:"equipment_kind_category_uuid"`
 		equipmentKindCategory     *models.EquipmentKindCategoryMdl
 	}
+	// 器材类型批量删除表单
+	EquipmentKindTypeDestroyManyForm struct {
+		Uuids              []string `json:"uuids"`
+		equipmentKindTypes []*models.EquipmentKindTypeMdl
+	}
 
 	// 器材型号控制器
 	EquipmentKindModelCtrl struct{}
@@ -37,6 +43,11 @@ type (
 		Name                  string `json:"name"`
 		EquipmentKindTypeUuid string `json:"equipment_kind_type_uuid"`
 		equipmentKindType     *models.EquipmentKindTypeMdl
+	}
+	// 器材型号批量删除表单
+	EquipmentKindModelDestroyManyForm struct {
+		Uuids               []string `json:"uuids"`
+		equipmentKindModels []*models.EquipmentKindModelMdl
 	}
 )
 
@@ -92,6 +103,20 @@ func (receiver EquipmentKindTypeStoreForm) ShouldBind(ctx *gin.Context) Equipmen
 	return receiver
 }
 
+// ShouldBind 表单绑定（批量删除器材类型）
+func (receiver EquipmentKindTypeDestroyManyForm) ShouldBind(ctx *gin.Context) EquipmentKindTypeDestroyManyForm {
+	var err error
+	if err = ctx.ShouldBind(&receiver); err != nil {
+		wrongs.ThrowValidate("表单绑定失败：%s", err.Error())
+	}
+
+	if len(receiver.Uuids) == 0 {
+		wrongs.ThrowValidate("器材类型编号不能为空")
+	}
+
+	return receiver
+}
+
 // 表单绑定（器材类型）
 func (receiver EquipmentKindModelStoreForm) ShouldBind(ctx *gin.Context) EquipmentKindModelStoreForm {
 	var ret *gorm.DB
@@ -107,6 +132,20 @@ func (receiver EquipmentKindModelStoreForm) ShouldBind(ctx *gin.Context) Equipme
 		ret = models.NewEquipmentKindTypeMdl().GetDb("").Where("uuid = ?", receiver.EquipmentKindTypeUuid).First(&receiver.equipmentKindType)
 		wrongs.ThrowWhenEmpty(ret, "所属器材类型")
 	}
+	return receiver
+}
+
+// ShouldBind 表单绑定（批量删除器材型号）
+func (receiver EquipmentKindModelDestroyManyForm) ShouldBind(ctx *gin.Context) EquipmentKindModelDestroyManyForm {
+	var err error
+	if err = ctx.ShouldBind(&receiver); err != nil {
+		wrongs.ThrowValidate("表单绑定失败：%s", err.Error())
+	}
+
+	if len(receiver.Uuids) == 0 {
+		wrongs.ThrowValidate("器材型号编号不能为空")
+	}
+
 	return receiver
 }
 
@@ -300,7 +339,8 @@ func (EquipmentKindTypeCtrl) Store(ctx *gin.Context) {
 
 	// 新建
 	equipmentKindType := &models.EquipmentKindTypeMdl{
-		Name: form.Name,
+		Name:                      form.Name,
+		EquipmentKindCategoryUuid: form.equipmentKindCategory.Uuid,
 	}
 	if ret = models.NewEquipmentKindTypeMdl().
 		GetDb("").
@@ -336,6 +376,24 @@ func (EquipmentKindTypeCtrl) Destroy(ctx *gin.Context) {
 	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
+// DestroyMany 批量删除
+func (EquipmentKindTypeCtrl) DestroyMany(ctx *gin.Context) {
+	var ret *gorm.DB
+
+	// 表单
+	form := EquipmentKindTypeDestroyManyForm{}.ShouldBind(ctx)
+
+	// 删除
+	if ret = models.NewEquipmentKindTypeMdl().
+		GetDb("").
+		Where("uuid in ?", form.Uuids).
+		Delete(nil); ret.Error != nil {
+		wrongs.ThrowForbidden(ret.Error.Error())
+	}
+
+	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+}
+
 // Update 编辑
 func (EquipmentKindTypeCtrl) Update(ctx *gin.Context) {
 	var (
@@ -363,7 +421,6 @@ func (EquipmentKindTypeCtrl) Update(ctx *gin.Context) {
 
 	// 编辑
 	equipmentKindType.Name = form.Name
-	equipmentKindType.EquipmentKindCategoryUuid = form.equipmentKindCategory.Uuid
 	if ret = models.NewEquipmentKindTypeMdl().
 		GetDb("").
 		Where("uuid = ?", ctx.Param("uuid")).
@@ -448,7 +505,10 @@ func (EquipmentKindModelCtrl) Store(ctx *gin.Context) {
 	wrongs.ThrowWhenNotEmpty(ret, "器材型号名称")
 
 	// 新建
-	equipmentKindModel := &models.EquipmentKindModelMdl{}
+	equipmentKindModel := &models.EquipmentKindModelMdl{
+		Name:                  form.Name,
+		EquipmentKindTypeUuid: form.equipmentKindType.Uuid,
+	}
 	if ret = models.NewEquipmentKindModelMdl().
 		GetDb("").
 		Create(&equipmentKindModel); ret.Error != nil {
@@ -477,6 +537,24 @@ func (EquipmentKindModelCtrl) Destroy(ctx *gin.Context) {
 		GetDb("").
 		Where("uuid = ?", ctx.Param("uuid")).
 		Delete(&equipmentKindModel); ret.Error != nil {
+		wrongs.ThrowForbidden(ret.Error.Error())
+	}
+
+	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+}
+
+// DestroyMany 批量删除
+func (EquipmentKindModelCtrl) DestroyMany(ctx *gin.Context) {
+	var ret *gorm.DB
+
+	// 表单
+	form := EquipmentKindModelDestroyManyForm{}.ShouldBind(ctx)
+
+	// 删除
+	if ret = models.NewEquipmentKindModelMdl().
+		GetDb("").
+		Where("uuid in ?", form.Uuids).
+		Delete(nil); ret.Error != nil {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 

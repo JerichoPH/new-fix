@@ -53,6 +53,8 @@ func (EquipmentKindRout) Load(engine *gin.Engine) {
 		{
 			// 新建
 			typeRout.POST("", controllers.NewEquipmentKindTypeCtrl().Store)
+			// 批量删除
+			typeRout.POST("/destroyMany", controllers.NewEquipmentKindTypeCtrl().DestroyMany)
 			// 删除
 			typeRout.DELETE("/:uuid", controllers.NewEquipmentKindTypeCtrl().Destroy)
 			// 编辑
@@ -74,6 +76,8 @@ func (EquipmentKindRout) Load(engine *gin.Engine) {
 		{
 			// 新建
 			modelRout.POST("", controllers.NewEquipmentKindModelCtrl().Store)
+			// 批量删除
+			modelRout.POST("/destroyMany", controllers.NewEquipmentKindModelCtrl().DestroyMany)
 			// 删除
 			modelRout.DELETE("/:uuid", controllers.NewEquipmentKindModelCtrl().Destroy)
 			// 编辑

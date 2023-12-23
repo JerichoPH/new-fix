@@ -27,7 +27,7 @@ const props = defineProps({
 
 const labelName = props.labelName;
 const ajaxParams = props.ajaxParams;
-const equipmentKindCategoryUuid_search = inject("rbacRoleUuid_search");
+const equipmentKindCategoryUuid_search = inject("equipmentKindCategoryUuid_search");
 const equipmentKindCategories_search = ref([]);
 const equipmentKindCategories = ref([]);
 
