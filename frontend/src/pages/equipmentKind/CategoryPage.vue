@@ -183,6 +183,7 @@ const fnResetSearch = () => {
  * 搜索
  */
 const fnSearch = () => {
+  rows.value = [];
   ajaxEquipmentKindCategoryList({
     name: name_search.value,
   })

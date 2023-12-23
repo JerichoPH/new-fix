@@ -138,13 +138,29 @@ func (UpgradeCmd) init() []string {
 	std.EchoLineDebug("初始化菜单")
 	database.ExecSql("truncate table rbac_menus")
 	std.EchoLineSuccess("截断菜单表成功")
+	rbacMenu = &models.RbacMenuMdl{Name: "基础信息", Icon: "fa fa-cogs"}
+	models.NewRbacMenuMdl().GetDb("").Create(rbacMenu)
+	models.NewRbacMenuMdl().GetDb("").Create([]*models.RbacMenuMdl{
+		{Name: "器材种类管理", Uri: "/equipmentKind/category", Icon: "fa fa-list", PageRouteName: "equipmentKindCategory:index", ParentUuid: rbacMenu.Uuid},
+		{Name: "器材类型管理", Uri: "/equipmentKind/type", Icon: "fa fa-list", PageRouteName: "equipmentKindType:index", ParentUuid: rbacMenu.Uuid},
+		{Name: "器材型号管理", Uri: "/equipmentKind/model", Icon: "fa fa-list", PageRouteName: "equipmentKindModel:index", ParentUuid: rbacMenu.Uuid},
+
+		{Name: "路局管理", Uri: "/organization/railway", Icon: "fa fa-list", PageRouteName: "organizationRailway:index", ParentUuid: rbacMenu.Uuid},
+		{Name: "站段管理", Uri: "/organization/paragraph", Icon: "fa fa-list", PageRouteName: "organizationParagraph:index", ParentUuid: rbacMenu.Uuid},
+		{Name: "车间管理", Uri: "/organization/workshop", Icon: "fa fa-list", PageRouteName: "organizationWorkshop:index", ParentUuid: rbacMenu.Uuid},
+		{Name: "站场管理", Uri: "/organization/station", Icon: "fa fa-list", PageRouteName: "organizationStation:index", ParentUuid: rbacMenu.Uuid},
+		{Name: "道口管理", Uri: "/organization/crossroad", Icon: "fa fa-list", PageRouteName: "organizationCrossroad:index", ParentUuid: rbacMenu.Uuid},
+		{Name: "中心管理", Uri: "/organization/center", Icon: "fa fa-list", PageRouteName: "organizationCenter:index", ParentUuid: rbacMenu.Uuid},
+		{Name: "工区管理", Uri: "/organization/workArea", Icon: "fa fa-list", PageRouteName: "organizationWorkArea:index", ParentUuid: rbacMenu.Uuid},
+		{Name: "线别管理", Uri: "/organization/line", Icon: "fa fa-list", PageRouteName: "organizationLine:index", ParentUuid: rbacMenu.Uuid},
+	})
 	rbacMenu = &models.RbacMenuMdl{Name: "系统管理", Icon: "fa fa-cogs"}
 	models.NewRbacMenuMdl().GetDb("").Create(rbacMenu)
 	models.NewRbacMenuMdl().GetDb("").Create([]*models.RbacMenuMdl{
-		{Name: "用户列表", Uri: "/account", Icon: "fa fa-list", PageRouteName: "acocunt:index", ParentUuid: rbacMenu.Uuid},
-		{Name: "角色列表", Uri: "/rbac/role", Icon: "fa fa-list", PageRouteName: "rbacRole:index", ParentUuid: rbacMenu.Uuid},
-		{Name: "权限列表", Uri: "/rbac/permission", Icon: "fa fa-list", PageRouteName: "rbacPermission:index", ParentUuid: rbacMenu.Uuid},
-		{Name: "菜单列表", Uri: "/rbac/menu", Icon: "fa fa-list", PageRouteName: "rbacMenu:index", ParentUuid: rbacMenu.Uuid},
+		{Name: "用户管理", Uri: "/account", Icon: "fa fa-list", PageRouteName: "acocunt:index", ParentUuid: rbacMenu.Uuid},
+		{Name: "角色管理", Uri: "/rbac/role", Icon: "fa fa-list", PageRouteName: "rbacRole:index", ParentUuid: rbacMenu.Uuid},
+		{Name: "权限管理", Uri: "/rbac/permission", Icon: "fa fa-list", PageRouteName: "rbacPermission:index", ParentUuid: rbacMenu.Uuid},
+		{Name: "菜单管理", Uri: "/rbac/menu", Icon: "fa fa-list", PageRouteName: "rbacMenu:index", ParentUuid: rbacMenu.Uuid},
 	})
 	if ret = models.NewRbacMenuMdl().GetDb("").Create(&rbacMenus); ret.Error != nil {
 		std.EchoLineWrong(fmt.Sprintf("错误：%v", ret.Error.Error()))

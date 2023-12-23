@@ -25,7 +25,7 @@
                   <q-input outlined clearable lazy-rules v-model="description_search" label="描述" :rules="[]" />
                 </div>
                 <div class="col-3">
-                  <SelRbacRole_search label-name="所属角色" />
+                  <sel-rbac-role_search label-name="所属角色" />
                 </div>
               </div>
             </q-form>
@@ -125,7 +125,7 @@
                 class="q-mt-md" />
               <q-input outlined clearable lazy-rules v-model="description_alertCreateRbacPermission" label="描述"
                 :rules="[]" class="q-mt-md" />
-              <ChkRbacRole_alertCreate labelName="所属角色" class="q-mt-md" />
+              <chk-rbac-role_alert-create labelName="所属角色" class="q-mt-md" />
             </div>
           </div>
         </q-form>
@@ -150,7 +150,7 @@
                 class="q-mt-md" />
               <q-input outlined clearable lazy-rules v-model="description_alertEditRbacPermission" label="描述" :rules="[]"
                 class="q-mt-md" />
-              <ChkRbacRole_alertEdit labelName="所属角色" class="q-mt-md" />
+              <chk-rbac-role_alert-edit labelName="所属角色" class="q-mt-md" />
             </div>
           </div>
         </q-form>

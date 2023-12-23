@@ -25,10 +25,10 @@
                   <q-input outlined clearable lazy-rules v-model="description_search" label="描述" :rules="[]" />
                 </div>
                 <div class="col-3">
-                  <SelRbacMenu_search label-name="所属父级" v-if="selRbacMenu_search_enable" />
+                  <sel-rbac-menu_search label-name="所属父级" v-if="selRbacMenu_search_enable" />
                 </div>
                 <div class="col-3">
-                  <SelRbacRole_search label-name="所属角色" />
+                  <sel-rbac-role_search label-name="所属角色" />
                 </div>
               </div>
             </q-form>
@@ -138,8 +138,8 @@
                 class="q-mt-md" />
               <q-input outlined clearable lazy-rules v-model="icon_alertCreateRbacMenu" label="图标" :rules="[]"
                 class="q-mt-md" />
-              <SelRbacMenu_alertCreate labelName="所属父级" class="q-mt-md" />
-              <ChkRbacRole_alertCreate labelName="所属角色" class="q-mt-md" />
+              <sel-rbac-menu_alert-create labelName="所属父级" class="q-mt-md" />
+              <chk-rbac-role_alert-create labelName="所属角色" class="q-mt-md" />
             </div>
           </div>
         </q-form>
@@ -166,11 +166,11 @@
                 class="q-mt-md" />
               <q-input outlined clearable lazy-rules v-model="icon_alertEditRbacMenu" label="图标" :rules="[]"
                 class="q-mt-md" />
-              <SelRbacMenu_alertEdit labelName="所属父级" :ajaxParams="{
+              <sel-rbac-menu_alert-edit labelName="所属父级" :ajaxParams="{
                 ':<>*': { uuid: currentUuid },
                 not_has_subs: currentUuid,
               }" class="q-mt-md" />
-              <ChkRbacRole_alertEdit labelName="所属角色" class="q-mt-md" />
+              <chk-rbac-role_alert-edit labelName="所属角色" class="q-mt-md" />
             </div>
           </div>
         </q-form>
