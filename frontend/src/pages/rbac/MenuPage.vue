@@ -272,6 +272,8 @@ const fnResetSearch = () => {
  */
 const fnSearch = () => {
   rows.value = [];
+  selected.value = [];
+  
   ajaxRbacMenuList({
     ":~[]": ["Parent", "RbacRoles"],
     name: name_search.value,

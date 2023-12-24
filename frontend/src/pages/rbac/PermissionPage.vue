@@ -245,6 +245,7 @@ const fnResetSearch = () => {
  */
 const fnSearch = () => {
   rows.value = [];
+  selected.value = [];
 
   ajaxRbacPermissionList({
     ":~[]": ["RbacRoles"],

@@ -1,11 +1,12 @@
 <template>
   <q-select outlined use-input clearable v-model="equipmentKindTypeUuid_search" :options="equipmentKindTypes_search"
-    :display-value="equipmentKindTypes.find(value => value === equipmentKindTypeUuid_search)" :label="labelName"
-    @filter="fnFilter" emit-value map-options />
+    :display-value="collect(equipmentKindTypes).isNotEmpty() ? collect(equipmentKindTypes).where('value', equipmentKindTypeUuid_search).first().get('label') : ''"
+    :label=" labelName " @filter=" fnFilter " emit-value map-options />
 </template>
 
 <script setup>
 import { ref, onMounted, inject, defineProps, watch } from "vue";
+import collect from "collect.js"
 import { ajaxEquipmentKindTypeList } from "/src/apis/equipmentKind";
 import { errorNotify } from "src/utils/notify";
 

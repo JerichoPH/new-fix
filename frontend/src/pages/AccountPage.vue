@@ -305,7 +305,7 @@ onMounted(() => {
 const fnInit = () => {
   fnSearch();
 };
-const fnGetSelectedString = () => {};
+const fnGetSelectedString = () => { };
 /**
  * 重置搜索栏条件
  */
@@ -318,6 +318,9 @@ const fnResetSearch = () => {
  * 搜索
  */
 const fnSearch = () => {
+  rows.value = [];
+  selected.value = [];
+
   ajaxAccountList({
     ":~[]": ["Avatar", "RbacRoles"],
     username: username_search.value,

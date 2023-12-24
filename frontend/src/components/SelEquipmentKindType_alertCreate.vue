@@ -1,10 +1,11 @@
 <template>
   <q-select outlined use-input clearable v-model="equipmentKindTypeUuid_alertCreate" :options="options" :label="labelName"
-  :option-disable="equipmentKindTypes.find(value => value === equipmentKindTypeUuid_alertCreate)"
+    :option-disable="collect(equipmentKindTypes).where('value', equipmentKindTypeUuid_alertCreate).first()['label'] ?? ''"
     @filter="fnFilter" emit-value map-options />
 </template>
 <script setup>
 import { inject, defineProps, onMounted, ref, watch } from "vue";
+import collect from "collect.js"
 import { ajaxEquipmentKindTypeList } from "/src/apis/equipmentKind";
 import { errorNotify } from "src/utils/notify";
 

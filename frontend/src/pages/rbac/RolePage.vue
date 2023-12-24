@@ -171,6 +171,7 @@ const fnResetSearch = () => {
  */
 const fnSearch = () => {
   rows.value = [];
+  selected.value = [];
 
   ajaxRbacRoleList({
     name: name_search.value,

@@ -200,6 +200,8 @@ const fnInit = () => {
  */
 const fnSearch = () => {
   rows.value = [];
+  selected.value = [];
+  
   ajaxEquipmentKindTypeList({
     ":~[]": ["EquipmentKindCategory"],
     name: name_search.value,

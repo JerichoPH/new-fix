@@ -184,6 +184,8 @@ const fnResetSearch = () => {
  */
 const fnSearch = () => {
   rows.value = [];
+  selected.value = [];
+  
   ajaxEquipmentKindCategoryList({
     name: name_search.value,
   })

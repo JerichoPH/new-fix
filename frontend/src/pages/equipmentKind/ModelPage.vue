@@ -70,7 +70,7 @@
                   <q-td key="uniqueCode" :props="props">{{ props.row.uniqueCode }}</q-td>
                   <q-td key="name" :props="props">{{ props.row.name }}</q-td>
                   <q-td key="parent" :props="props">
-                    {{ props.row.parent.equipmentKindType.equipmentKindCategory.name }}
+                    {{ props.row.parent.equipmentKindCategory.name }}
                     {{ props.row.parent.equipmentKindType.name }}
                   </q-td>
                   <q-td key="operation" :props="props">
@@ -107,8 +107,8 @@
             <div class="col">
               <q-input outlined clearable lazy-rules v-model="name_alertCreateEquipmentKindModel" label="名称"
                 :rules="[]" />
-              <sel-equipment-kind-category_alert-create label-name="器材种类" :ajax-params="{}" class="q-mt-md"/>
-              <sel-equipment-kind-type_alert-create label-name="器材类型" :ajax-params="{}" class="q-mt-md"/>
+              <sel-equipment-kind-category_alert-create label-name="器材种类" :ajax-params="{}" class="q-mt-md" />
+              <sel-equipment-kind-type_alert-create label-name="器材类型" :ajax-params="{}" class="q-mt-md" />
             </div>
           </div>
         </q-card-section>
@@ -119,6 +119,25 @@
     </q-card>
   </q-dialog>
   <!-- 编辑器材型号弹窗 -->
+  <q-dialog v-model="alertEditEquipmentKindModel">
+    <q-card style="width: 800px">
+      <q-card-section>
+        <div class="text-h6">编辑器材型号</div>
+      </q-card-section>
+      <q-form class="q-gutter-md" @submit.prevent="fnUpdateEquipmentKindModel">
+        <q-card-section class="q-pt-none">
+          <div class="row">
+            <div class="col">
+              <q-input outlined clearable lazy-rules v-model="name_alertEditEquipmentKindModel" label="名称" :rules="[]" />
+            </div>
+          </div>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn type="submit" label="确定" icon="check" color="secondary" v-close-popup />
+        </q-card-actions>
+      </q-form>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script setup>
@@ -164,6 +183,12 @@ provide("equipmentKindCategoryUuid_alertCreate", equipmentKindCategoryUuid_alert
 const equipmentKindTypeUuid_alertCreate = ref("")
 provide("equipmentKindTypeUuid_alertCreate", equipmentKindTypeUuid_alertCreate);
 
+// 编辑器材型号弹窗数据
+const currentUuid = ref("");
+const alertEditEquipmentKindModel = ref(false);
+const name_alertEditEquipmentKindModel = ref("");
+
+
 onMounted(() => { fnInit(); });
 
 const fnInit = () => {
@@ -194,19 +219,19 @@ const fnSearch = () => {
   })
     .then((res) => {
       if (res.content.equipment_kind_models.length > 0) {
-        collect(res.content.equipment_kind_models)
-          .each((equipmentKindModel, index) => {
-            rows.value.push({
+        rows.value = res.content.equipment_kind_models
+          .map((equipmentKindModel, index) => {
+            return {
               index: index + 1,
               uuid: equipmentKindModel.uuid,
               uniqueCode: equipmentKindModel.unique_code,
               name: equipmentKindModel.name,
               parent: {
                 equipmentKindCategory: equipmentKindModel.equipment_kind_type.equipment_kind_category,
-                equipmentKindType: equipment_kind_type,
+                equipmentKindType: equipmentKindModel.equipment_kind_type,
               },
               operation: { uuid: equipmentKindModel.uuid },
-            });
+            };
           });
       }
     })
@@ -234,7 +259,7 @@ const fnOpenAlertCreateEquipmentKindModel = () => {
 /**
  * 新建器材型号
  */
-const fnStoreEquipomentKindModel = () =>{
+const fnStoreEquipomentKindModel = () => {
   ajaxEquipmentKindModelStore({
     name: name_alertCreateEquipmentKindModel.value,
     equipment_kind_type_uuid: equipmentKindTypeUuid_alertCreate.value,
@@ -249,7 +274,77 @@ const fnStoreEquipomentKindModel = () =>{
     });
 };
 
-const fnDestroyEquipmentKindModels = () => { };
-const fnOpenAlertEditEquipmentKindModel = () => { };
-const fnDestroyEquipmentKindModel = () => { };
+/**
+ * 删除器材型号
+ * @param {{*}} params
+ */
+const fnDestroyEquipmentKindModels = params => {
+  actionNotify(
+    destroyActions(() => {
+      const loading = loadingNotify();
+
+      ajaxEquipmentKindModelDestroyMany(selected.value.map(item => item.uuid))
+        .then(() => {
+          successNotify('删除成功');
+          fnSearch();
+        })
+        .catch(e => errorNotify(e.msg))
+        .finally(() => loading());
+    })
+  )
+};
+
+/**
+ * 打开编辑器材型号弹窗
+ * @param {{*}} params
+ */
+const fnOpenAlertEditEquipmentKindModel = params => {
+  if (!params['uuid']) return;
+  currentUuid.value = params.uuid;
+
+  ajaxEquipmentKindModelDetail(params.uuid)
+    .then(res => {
+      name_alertEditEquipmentKindModel.value = res.content.equipment_kind_model.name;
+      alertEditEquipmentKindModel.value = true;
+    })
+    .catch(e => errorNotify(e.msg));
+};
+
+/**
+ * 编辑器材型号
+ * @param {{*}} params
+ */
+const fnUpdateEquipmentKindModel = params => {
+  if (!currentUuid.value) return;
+
+  ajaxEquipmentKindModelUpdate(currentUuid.value, {
+    name: name_alertEditEquipmentKindModel.value,
+  })
+    .then(res => {
+      successNotify(res.msg);
+      alertEditEquipmentKindModel.value = false;
+      fnSearch();
+    })
+    .catch(e => errorNotify(e.msg));
+};
+/**
+ * 删除器材型号
+ */
+const fnDestroyEquipmentKindModel = params => {
+  if (!params['uuid']) return;
+
+  actionNotify(
+    destroyActions(() => {
+      const loading = loadingNotify();
+
+      ajaxEquipmentKindModelDestroy(params.uuid)
+        .then(() => {
+          successNotify('删除成功');
+          fnSearch();
+        })
+        .catch(e => errorNotify(e.msg))
+        .finally(() => loading());
+    })
+  );
+};
 </script>
