@@ -1,7 +1,7 @@
 <template>
   <q-select outlined use-input clearable v-model="equipmentKindCategoryUuid_search"
     :options="equipmentKindCategories_search"
-    :display-value="equipmentKindCategories_search.find((val) => val === equipmentKindCategoryUuid_search)"
+    :display-value="equipmentKindCategories.find(value => value === equipmentKindCategoryUuid_search)"
     :label="labelName" @filter="fnFilter" emit-value map-options />
 </template>
 

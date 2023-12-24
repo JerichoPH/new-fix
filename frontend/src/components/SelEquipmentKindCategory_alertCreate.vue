@@ -1,6 +1,7 @@
 <template>
-  <q-select outlined use-input clearable v-model="equipmentKindCategoryUuid_alertCreate" :options="options" :label="labelName"
-    @filter="fnFilter" emit-value map-options />
+  <q-select outlined use-input clearable v-model="equipmentKindCategoryUuid_alertCreate" :options="options"
+    :option-disable="equipmentKindCategories.find(value => value === equipmentKindCategoryUuid_alertCreate)"
+    :label="labelName" @filter="fnFilter" emit-value map-options />
 </template>
 <script setup>
 import { inject, defineProps, onMounted, ref } from "vue";
@@ -47,12 +48,12 @@ onMounted(() => {
     .then((res) => {
       if (res.content.equipment_kind_categories.length > 0) {
         equipmentKindCategories.value = res.content.equipment_kind_categories
-        .map(equipmentKindCategory=>{
-          return {
-            label:equipmentKindCategory.name,
-            value:equipmentKindCategory.uuid,
-          }
-        });
+          .map(equipmentKindCategory => {
+            return {
+              label: equipmentKindCategory.name,
+              value: equipmentKindCategory.uuid,
+            }
+          });
       }
     })
     .catch((e) => {

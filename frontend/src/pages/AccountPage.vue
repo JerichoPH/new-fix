@@ -231,7 +231,7 @@ import {
   successNotify,
   errorNotify,
   actionNotify,
-  getDestroyActions,
+  destroyActions,
 } from "src/utils/notify";
 import { fnColumnReverseSort } from "src/utils/common";
 import { getBase64 } from "src/utils/file";
@@ -473,7 +473,7 @@ const fnDestroyAccount = (params = {}) => {
   if (!params["uuid"]) return;
 
   actionNotify(
-    getDestroyActions(() => {
+    destroyActions(() => {
       const loading = loadingNotify();
 
       ajaxAccountDestroy(params.uuid)
@@ -497,7 +497,7 @@ const fnDestroyAccounts = () => {
   if (selected.value.length === 0) return;
 
   actionNotify(
-    getDestroyActions(() => {
+    destroyActions(() => {
       const loading = loadingNotify();
 
       ajaxAccountDestroyMany(collect(selected.value).pluck("uuid").all())

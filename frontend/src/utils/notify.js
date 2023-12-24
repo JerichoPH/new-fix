@@ -1,6 +1,6 @@
 import { Notify } from "quasar";
 
-export const getDestroyActions = (handler) => {
+export const destroyActions = (handler) => {
   return [
     {
       label: "取消",
@@ -14,7 +14,7 @@ export const getDestroyActions = (handler) => {
   ];
 };
 
-export const getErrorActions = () => {
+export const errorActions = () => {
   return [
     {
       label: "关闭",
@@ -144,7 +144,7 @@ export const actionNotify = (
 };
 
 export const notifies = {
-  getDestroyActions,
+  getDestroyActions: destroyActions,
   loadingNotify,
   infoNotify,
   successNotify,

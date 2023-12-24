@@ -1,15 +1,6 @@
 <template>
-  <q-select
-    outlined
-    use-input
-    clearable
-    v-model="parentUuid_search"
-    :options="rbacMenus_search"
-    :label="labelName"
-    @filter="fnFilter"
-    emit-value
-    map-options
-  />
+  <q-select outlined use-input clearable v-model="parentUuid_search" :options="rbacMenus_search" :label="labelName"
+    @filter="fnFilter" emit-value map-options />
 </template>
 <script setup>
 import { inject, defineProps, onMounted, ref } from "vue";

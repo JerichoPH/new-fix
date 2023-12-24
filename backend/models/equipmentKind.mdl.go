@@ -115,11 +115,16 @@ func (receiver EquipmentKindTypeMdl) GetListByQuery(ctx *gin.Context) *gorm.DB {
 			"name": "ekt.name like ?",
 		}).
 		SetWheresDateBetween("ekt.created_at", "ekt.updated_at", "ekt.deleted_at").
-		SetWheresExtraHasValue(map[string]func(string, *gorm.DB) *gorm.DB{}).
+		SetWheresExtraHasValue(map[string]func(string, *gorm.DB) *gorm.DB{
+			"equipment_kind_category_uuid": func(value string, db *gorm.DB) *gorm.DB {
+				return db.Where("ekc.uuid = ?", value)
+			},
+		}).
 		SetWheresExtraHasValues(map[string]func([]string, *gorm.DB) *gorm.DB{}).
 		SetCtx(ctx).
 		GetDbUseQuery("").
-		Table("equipment_kind_types as ekt")
+		Table("equipment_kind_types as ekt").
+		Joins("join equipment_kind_categories as ekc on ekc.uuid = ekt.equipment_kind_category_uuid")
 }
 
 // GetLastUniqueCode 获取最后一个UniqueCode
@@ -176,11 +181,20 @@ func (receiver EquipmentKindModelMdl) GetListByQuery(ctx *gin.Context) *gorm.DB 
 			"name": "ekm.name like ?",
 		}).
 		SetWheresDateBetween("ekm.created_at", "ekm.updated_at", "ekm.deleted_at").
-		SetWheresExtraHasValue(map[string]func(string, *gorm.DB) *gorm.DB{}).
+		SetWheresExtraHasValue(map[string]func(string, *gorm.DB) *gorm.DB{
+			"equipment_kind_type_uuid": func(value string, db *gorm.DB) *gorm.DB {
+				return db.Where("ekt.uuid = ?", value)
+			},
+			"equipment_kind_category_uuid": func(value string, db *gorm.DB) *gorm.DB {
+				return db.Where("ekc.uuid = ?", value)
+			},
+		}).
 		SetWheresExtraHasValues(map[string]func([]string, *gorm.DB) *gorm.DB{}).
 		SetCtx(ctx).
 		GetDbUseQuery("").
-		Table("equipment_kind_models as ekm")
+		Table("equipment_kind_models as ekm").
+		Joins("join equipment_kind_types as ekt on ekt.uuid = ekm.equipment_kind_type_uuid").
+		Joins("join equipment_kind_categories as ekc on ekc.uuid = ekt.equipment_kind_category_uuid")
 }
 
 // GetLastUniqueCode 获取最后一个UniqueCode

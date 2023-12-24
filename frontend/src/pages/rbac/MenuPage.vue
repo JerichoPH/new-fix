@@ -196,7 +196,7 @@ import {
   errorNotify,
   loadingNotify,
   actionNotify,
-  getDestroyActions,
+  destroyActions,
 } from "src/utils/notify";
 import {
   ajaxRbacMenuDestroy,
@@ -426,7 +426,7 @@ const fnDeconsteRbacMenu = (params = {}) => {
   if (!params.uuid) return;
 
   actionNotify(
-    getDestroyActions(() => {
+    destroyActions(() => {
       const loading = loadingNotify();
       ajaxRbacMenuDestroy(params.uuid)
         .then(() => {
@@ -448,7 +448,7 @@ const fnDeconsteRbacMenu = (params = {}) => {
  */
 const fnDestroyRbacMenus = () => {
   actionNotify(
-    getDestroyActions(() => {
+    destroyActions(() => {
       const loading = loadingNotify();
 
       ajaxRbacMenuDestroyMany(collect(selected.value).pluck('uuid').toArray())

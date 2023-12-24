@@ -121,7 +121,7 @@ export const ajaxEquipmentKindTypeDestroyMany = uuids => {
  * @returns
  */
 export const ajaxEquipmentKindModelList = params => {
-  return api.get(`${urlPrefix}`, { params });
+  return api.get(`${urlPrefix}/model`, { params });
 }
 
 /**
@@ -130,7 +130,7 @@ export const ajaxEquipmentKindModelList = params => {
  * @returns
  */
 export const ajaxEquipmentKindModelDetail = uuid => {
-  return api.get(`${urlPrefix}/${uuid}`);
+  return api.get(`${urlPrefix}/model/${uuid}`);
 }
 
 /**
@@ -139,7 +139,7 @@ export const ajaxEquipmentKindModelDetail = uuid => {
  * @returns
  */
 export const ajaxEquipmentKindModelStore = params => {
-  return api.post(`${urlPrefix}`, params);
+  return api.post(`${urlPrefix}/model`, params);
 }
 
 /**
@@ -149,7 +149,7 @@ export const ajaxEquipmentKindModelStore = params => {
  * @returns
  */
 export const ajaxEquipmentKindModelUpdate = (uuid, params) => {
-  return api.put(`${urlPrefix}/${uuid}`, params);
+  return api.put(`${urlPrefix}/model/${uuid}`, params);
 }
 
 /**
@@ -158,7 +158,7 @@ export const ajaxEquipmentKindModelUpdate = (uuid, params) => {
  * @returns
  */
 export const ajaxEquipmentKindModelDestroy = uuid => {
-  return api.delete(`${urlPrefix}/${uuid}`);
+  return api.delete(`${urlPrefix}/model/${uuid}`);
 }
 
 /**
@@ -168,5 +168,5 @@ export const ajaxEquipmentKindModelDestroy = uuid => {
  */
 export const ajaxEquipmentKindModelDestroyMany = uuids => {
   if (uuids.length === 0) return Promise.reject('器材型号编号列表不能为空');
-  return api.post(`${urlPrefix}/destroyMany`, { uuids });
+  return api.post(`${urlPrefix}/model/destroyMany`, { uuids });
 }

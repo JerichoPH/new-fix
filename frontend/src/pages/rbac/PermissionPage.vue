@@ -173,7 +173,7 @@ import {
   successNotify,
   errorNotify,
   actionNotify,
-  getDestroyActions,
+  destroyActions,
 } from "src/utils/notify";
 import {
   ajaxRbacPermissionList,
@@ -384,7 +384,7 @@ const fnDestroyRbacPermission = (params = {}) => {
 
   const loading = loadingNotify();
   actionNotify(
-    getDestroyActions(() => {
+    destroyActions(() => {
       ajaxRbacPermissionDestroy(params.uuid)
         .then((res) => {
           successNotify("删除成功");
@@ -405,7 +405,7 @@ const fnDestroyRbacPermission = (params = {}) => {
  */
 const fnDestroyRbacPermissions = () => {
   actionNotify(
-    getDestroyActions(() => {
+    destroyActions(() => {
       const loading = loadingNotify();
 
       ajaxRbacPermissionDestroyMany(collect(selected.value).pluck('uuid').toArray())

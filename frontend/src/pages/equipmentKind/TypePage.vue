@@ -146,7 +146,7 @@
 import { ref, onMounted, provide } from "vue";
 import { fnColumnReverseSort } from "src/utils/common";
 import { ajaxEquipmentKindTypeList, ajaxEquipmentKindTypeDetail, ajaxEquipmentKindTypeStore, ajaxEquipmentKindTypeUpdate, ajaxEquipmentKindTypeDestroy, ajaxEquipmentKindTypeDestroyMany, } from "src/apis/equipmentKind";
-import { loadingNotify, successNotify, errorNotify, actionNotify, getDestroyActions } from "src/utils/notify";
+import { loadingNotify, successNotify, errorNotify, actionNotify, destroyActions } from "src/utils/notify";
 import SelEquipmentKindCategory_search from "src/components/SelEquipmentKindCategory_search.vue";
 import SelEquipmentKindCategory_alertCreate from "src/components/SelEquipmentKindCategory_alertCreate.vue";
 import SelEquipmentKindCategrory_alertEdit from "src/components/SelEquipmentKindCategory_alertEdit.vue";
@@ -260,7 +260,7 @@ const fnStoreEquipmentKindType = () => {
  * 批量删除器材类型
  */
 const fnDestroyEquipmentKindTypes = params => {
-  actionNotify(getDestroyActions(() => {
+  actionNotify(destroyActions(() => {
     const loading = loadingNotify();
     ajaxEquipmentKindTypeDestroyMany(selected.value.map(item => item.uuid))
       .then((res) => {
@@ -325,7 +325,7 @@ const fnDestroyEquipmentKindType = params => {
   if (!params['uuid']) return;
 
   actionNotify(
-    getDestroyActions(
+    destroyActions(
       () => {
         const loading = loadingNotify();
 

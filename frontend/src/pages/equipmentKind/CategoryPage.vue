@@ -135,7 +135,7 @@ import {
   successNotify,
   errorNotify,
   actionNotify,
-  getDestroyActions,
+  destroyActions,
 } from "src/utils/notify";
 import {
   ajaxEquipmentKindCategoryList,
@@ -281,7 +281,7 @@ const fnDestroyEquipmentKindCategory = params => {
   if (!params['uuid']) return;
 
   actionNotify(
-    getDestroyActions(
+    destroyActions(
       () => {
         const loading = loadingNotify();
 
@@ -302,7 +302,7 @@ const fnDestroyEquipmentKindCategory = params => {
  */
 const fnDestroyEquipmentKindCategories = () => {
   actionNotify(
-    getDestroyActions(
+    destroyActions(
       () => {
         ajaxEquipmentKindCategoryDestroyMany(selected.value.map(item => item.uuid))
           .then(() => {

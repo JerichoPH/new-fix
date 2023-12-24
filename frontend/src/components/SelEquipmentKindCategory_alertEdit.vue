@@ -1,7 +1,7 @@
 <template>
   <q-select outlined use-input clearable v-model="equipmentKindCategoryUuid_alertEdit" :options="options"
-    :display-value="collect(equipmentKindCategories).where('value', equipmentKindCategoryUuid_alertEdit).first()['label']" :filter="fnFilter"
-    :label="labelName" @filter="fnFilter" emit-value map-options />
+    :display-value="collect(equipmentKindCategories).where('value', equipmentKindCategoryUuid_alertEdit).first()['label']"
+    :filter="fnFilter" :label="labelName" @filter="fnFilter" emit-value map-options />
 </template>
 <script setup>
 import { inject, defineProps, onMounted, ref } from "vue";

@@ -136,7 +136,7 @@ import {
   errorNotify,
   successNotify,
   actionNotify,
-  getDestroyActions,
+  destroyActions,
 } from "src/utils/notify";
 
 const name_search = ref("");
@@ -270,7 +270,7 @@ const fnDestroyRbacRole = (params = {}) => {
   if (!params["uuid"]) return;
 
   actionNotify(
-    getDestroyActions(() => {
+    destroyActions(() => {
       const loading = loadingNotify();
 
       ajaxRbacRoleDestroy(params.uuid)
@@ -292,7 +292,7 @@ const fnDestroyRbacRole = (params = {}) => {
  */
 const fnDestroyRbacRoles = () => {
   actionNotify(
-    getDestroyActions(() => {
+    destroyActions(() => {
       const loading = loadingNotify();
 
       ajaxRbacRoleDestroyMany(collect(selected.value).pluck('uuid').toArray())
