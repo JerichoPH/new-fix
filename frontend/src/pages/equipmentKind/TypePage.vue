@@ -42,8 +42,8 @@
         <div class="row q-mt-md">
           <div class="col">
             <q-table flat bordered title="器材类型列表" :rows="rows" row-key="uuid" :pagination="{ rowsPerPage: 200 }"
-              :rows-per-page-options="[50, 100, 200, 0]" rows-per-page-label="分页" :selected-rows-label="getSelectedString"
-              selection="multiple" v-model:selected="selected">
+              :rows-per-page-options="[50, 100, 200, 0]" rows-per-page-label="分页" selection="multiple"
+              v-model:selected="selected">
               <template v-slot:header="props">
                 <q-tr :props="props">
                   <q-th align="left"><q-checkbox key="allCheck" v-model="props.selected" /></q-th>
@@ -201,7 +201,7 @@ const fnInit = () => {
 const fnSearch = () => {
   rows.value = [];
   selected.value = [];
-  
+
   ajaxEquipmentKindTypeList({
     ":~[]": ["EquipmentKindCategory"],
     name: name_search.value,

@@ -52,7 +52,7 @@
           <div class="col">
             <q-table flat bordered title="菜单列表" :rows="rows" row-key="index" virtual-scroll
               :pagination="{ rowsPerPage: 200 }" :rows-per-page-options="[50, 100, 200, 0]" rows-per-page-label="分页"
-              :selected-rows-label="fnGetSelectedString" selection="multiple" v-model:selected="selected">
+              selection="multiple" v-model:selected="selected">
               <template v-slot:header="props">
                 <q-tr :props="props">
                   <q-th align="left"><q-checkbox key="allCheck" v-model="props.selected" /></q-th>
@@ -257,6 +257,7 @@ onMounted(() => {
 const fnInit = () => {
   fnSearch();
 };
+
 /**
  * 重置搜索栏
  */
@@ -267,13 +268,14 @@ const fnResetSearch = () => {
   parentUuid_search.value = "";
   rbacRoleUuid_search.value = "";
 };
+
 /**
  * 搜索
  */
 const fnSearch = () => {
   rows.value = [];
   selected.value = [];
-  
+
   ajaxRbacMenuList({
     ":~[]": ["Parent", "RbacRoles"],
     name: name_search.value,
@@ -307,6 +309,7 @@ const fnSearch = () => {
       selRbacMenu_search_enable.value = true;
     });
 };
+
 /**
  * 重置新建菜单对话框
  */
@@ -318,12 +321,14 @@ const fnResetAlertCreateRbace = () => {
   parentUuid_alertCreateRbacMenu.value = "";
   rbacRoleUuids_alertCreateRbacMenu.value = [];
 };
+
 /**
  * 打开新建菜单对话框
  */
 const fnOpenAlertCreateRbacMenu = () => {
   alertCreateRbacMenu.value = true;
 };
+
 /**
  * 新建菜单
  */
@@ -350,6 +355,7 @@ const fnStoreRbacMenu = () => {
       loading();
     });
 };
+
 /**
  * 重置编辑菜单对话框
  */
@@ -363,6 +369,7 @@ const fnResetAlertEditRbacMenu = () => {
   parentUuid_alertEditRbacMenu.value = "";
   rbacRoleUuids_alertEditRbacMenu.value = [];
 };
+
 /**
  * 打开编辑菜单对话框
  * @param {{uuid:string}} params 参数
@@ -394,6 +401,7 @@ const fnOpenAlertEditRbacMenu = (params = {}) => {
       errorNotify(e.msg);
     });
 };
+
 /**
  * 编辑菜单
  */
@@ -420,6 +428,7 @@ const fnUpdateRbacMenu = () => {
       loading();
     });
 };
+
 /**
  * 删除菜单
  * @param {{uuid:string}} params 参数

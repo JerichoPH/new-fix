@@ -39,14 +39,13 @@
         <div class="row q-mt-md">
           <div class="col">
             <q-table flat bordered title="" :rows="rows" row-key="name" :pagination="{ rowsPerPage: 200 }"
-              :rows-per-page-options="[50, 100, 200, 0]" rows-per-page-label="分页"
-              :selected-rows-label="fnGetSelectedString" selection="multiple" v-model:selected="selected">
+              :rows-per-page-options="[50, 100, 200, 0]" rows-per-page-label="分页" selection="multiple"
+              v-model:selected="selected">
               <template v-slot:header="props">
                 <q-tr :props="props">
                   <q-th align="left"><q-checkbox key="allCheck" v-model="props.selected" /></q-th>
                   <q-th align="left">#</q-th>
-                  <q-th align="left" key="name" @click="(event) => fnColumnReverseSort(event, props, sortBy)
-                    ">
+                  <q-th align="left" key="name" @click="(event) => fnColumnReverseSort(event, props, sortBy)">
                     名称
                   </q-th>
                   <q-th align="right"></q-th>
@@ -159,13 +158,14 @@ onMounted(() => {
 const fnInit = () => {
   fnSearch();
 };
-const fnGetSelectedString = () => {};
+
 /**
  * 重置搜索栏
  */
 const fnResetSearch = () => {
   name_search.value = "";
 };
+
 /**
  * 搜索
  */
@@ -188,18 +188,21 @@ const fnSearch = () => {
     }
   });
 };
+
 /**
  * 重置新建角色对话框
  */
 const fnResetAlertCreateRbacRole = () => {
   name_alertCreateRbacRole.value = "";
 };
+
 /**
  * 打开新建角色对话框
  */
 const fnOpenAlertCreateRbacRole = () => {
   alertCreateRbacRole.value = true;
 };
+
 /**
  * 新建角色
  */
@@ -221,12 +224,14 @@ const fnStoreRbacRole = () => {
       loading();
     });
 };
+
 /**
  * 重置编辑角色对话框
  */
 const fnResetAlertEditRbacRole = () => {
   name_alertEditRbacRole.value = "";
 };
+
 /**
  * 打开编辑角色对话框
  */
@@ -246,6 +251,7 @@ const fnOpenAlertEditRbacRole = (params = {}) => {
       errorNotify(e.msg);
     });
 };
+
 /**
  * 编辑角色
  */
@@ -264,6 +270,7 @@ const fnUpdateRbacRole = () => {
       errorNotify(e.msg);
     });
 };
+
 /**
  * 删除角色
  */
@@ -288,6 +295,7 @@ const fnDestroyRbacRole = (params = {}) => {
     })
   );
 };
+
 /**
  * 批量删除角色
  */

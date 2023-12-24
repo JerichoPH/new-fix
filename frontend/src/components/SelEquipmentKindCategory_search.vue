@@ -1,8 +1,8 @@
 <template>
   <q-select outlined use-input clearable v-model="equipmentKindCategoryUuid_search"
     :options="equipmentKindCategories_search"
-    :display-value="equipmentKindCategories.find(value => value === equipmentKindCategoryUuid_search)"
-    :label="labelName" @filter="fnFilter" emit-value map-options />
+    :display-value="equipmentKindCategories.find(value => value === equipmentKindCategoryUuid_search)" :label="labelName"
+    @filter="fnFilter" emit-value map-options />
 </template>
 
 <script setup>
@@ -50,13 +50,12 @@ onMounted(() => {
   ajaxEquipmentKindCategoryList(ajaxParams)
     .then((res) => {
       if (res.content.equipment_kind_categories.length > 0) {
-        collect(res.content.equipment_kind_categories)
-          .each((equipmentKindCategory) => {
-            equipmentKindCategories.value.push({
-              label: equipmentKindCategory.name,
-              value: equipmentKindCategory.uuid,
-            });
-          });
+        equipmentKindCategories.value = res.content.equipment_kind_categories.map(equipmentKindCategory => {
+          return {
+            label: equipmentKindCategory.name,
+            value: equipmentKindCategory.uuid,
+          }
+        });
       }
     })
     .catch((e) => {

@@ -45,8 +45,8 @@
         <div class="row q-mt-md">
           <div class="col">
             <q-table flat bordered title="用列表" :rows="rows" row-key="uuid" :pagination="{ rowsPerPage: 200 }"
-              :rows-per-page-options="[50, 100, 200, 0]" rows-per-page-label="分页"
-              :selected-rows-label="fnGetSelectedString" selection="multiple" v-model:selected="selected">
+              :rows-per-page-options="[50, 100, 200, 0]" rows-per-page-label="分页" selection="multiple"
+              v-model:selected="selected">
               <template v-slot:header="props">
                 <q-tr :props="props">
                   <q-th align="left"><q-checkbox key="allCheck" v-model="props.selected" /></q-th>
@@ -299,13 +299,14 @@ provide("checkedRbacRoleUuids_alertEdit", rbacRoleUuids_alertEditAccount);
 onMounted(() => {
   fnInit();
 });
+
 /**
  * 初始化页面
  */
 const fnInit = () => {
   fnSearch();
 };
-const fnGetSelectedString = () => { };
+
 /**
  * 重置搜索栏条件
  */
@@ -314,6 +315,7 @@ const fnResetSearch = () => {
   nickname_search.value = "";
   rbacRoleUuid_search.value = "";
 };
+
 /**
  * 搜索
  */
@@ -348,6 +350,7 @@ const fnSearch = () => {
       errorNotify(e.msg);
     });
 };
+
 /**
  * 重置新建用户对话框
  */
@@ -358,12 +361,14 @@ const fnResetAlertCreateAccount = () => {
   passwordConfirmation_alertCreateAccount.value = "";
   rbacRoleUuids_alertCreateAccount.value = [];
 };
+
 /**
  * 打开新建用户对话框
  */
 const fnOpenAlertCreateAccount = () => {
   alertCreateAccount.value = true;
 };
+
 /**
  * 新建用户
  */
@@ -400,6 +405,7 @@ const fnStoreAccount = async () => {
       loading();
     });
 };
+
 /**
  * 重置编辑用户对话框
  */
@@ -408,6 +414,7 @@ const fnResetAlertEditAccount = () => {
   nickname_alertEditAccount.value = "";
   rbacRoleUuids_alertEditAccount.value = [];
 };
+
 /**
  * 打开编辑用户对话框
  */
@@ -432,6 +439,7 @@ const fnOpenAlertEditAccount = (params = {}) => {
       errorNotify(e.msg);
     });
 };
+
 /**
  * 编辑用户
  */
@@ -468,6 +476,7 @@ const fnUpdateAccount = async () => {
       loading();
     });
 };
+
 /**
  * 删除用户
  * @param {{*}} params 参数
@@ -493,6 +502,7 @@ const fnDestroyAccount = (params = {}) => {
     })
   );
 };
+
 /**
  * 删除多用户
  */
@@ -517,6 +527,7 @@ const fnDestroyAccounts = () => {
     })
   );
 };
+
 /**
  * 重置密码对话框
  */
@@ -525,6 +536,7 @@ const fnResetAlertEditPassword = () => {
   password_alertEditPassword.value = "";
   passwordConfirmation_alertEditPassword.value = "";
 };
+
 /**
  * 打开编辑密码对话框
  */
@@ -533,6 +545,7 @@ const fnOpenAlertEditPassword = (params = {}) => {
   currentUuid.value = params.uuid;
   alertEditPassword.value = true;
 };
+
 /**
  * 编辑密码
  */

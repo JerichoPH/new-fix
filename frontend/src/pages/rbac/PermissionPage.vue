@@ -48,8 +48,8 @@
         <div class="row q-mt-md">
           <div class="col">
             <q-table flat bordered title="" :rows="rows" row-key="name" :pagination="{ rowsPerPage: 200 }"
-              :rows-per-page-options="[50, 100, 200, 0]" rows-per-page-label="分页"
-              :selected-rows-label="fnGetSelectedString" selection="multiple" v-model:selected="selected">
+              :rows-per-page-options="[50, 100, 200, 0]" rows-per-page-label="分页" selection="multiple"
+              v-model:selected="selected">
               <template v-slot:header="props">
                 <q-tr :props="props">
                   <q-th align="left"><q-checkbox key="allCheck" v-model="props.selected">全选</q-checkbox></q-th>
@@ -194,6 +194,7 @@ const name_search = ref("");
 const uri_search = ref("");
 const description_search = ref("");
 const rbacRoleUuid_search = ref("");
+provide("rbacRoleUuid_search", rbacRoleUuid_search);
 
 // 新建权限对话框
 const alertCreateRbacPermission = ref(false);
@@ -201,24 +202,17 @@ const name_alertCreateRbacPermission = ref("");
 const uri_alertCreateRbacPermission = ref("");
 const description_alertCreateRbacPermission = ref("");
 const rbacRoleUuids_alertCreateRbacPermission = ref([]);
+provide("checkedRbacRoleUuids_alertCreate", rbacRoleUuids_alertCreateRbacPermission);
 
 // 编辑权限对话框
 const alertEditRbacPermission = ref(false);
+const currentUuid = ref("");
 const name_alertEditRbacPermission = ref("");
 const uri_alertEditRbacPermission = ref("");
 const description_alertEditRbacPermission = ref("");
 const rbacRoleUuids_alertEditRbacPermission = ref([]);
-const currentUuid = ref("");
+provide("checkedRbacRoleUuids_alertEdit", rbacRoleUuids_alertEditRbacPermission);
 
-provide("rbacRoleUuid_search", rbacRoleUuid_search);
-provide(
-  "checkedRbacRoleUuids_alertCreate",
-  rbacRoleUuids_alertCreateRbacPermission
-);
-provide(
-  "checkedRbacRoleUuids_alertEdit",
-  rbacRoleUuids_alertEditRbacPermission
-);
 
 onMounted(() => {
   fnInit();
@@ -230,7 +224,7 @@ onMounted(() => {
 const fnInit = () => {
   fnSearch();
 };
-const fnGetSelectedString = () => {};
+
 /**
  * 初始化搜索栏
  */
@@ -240,6 +234,7 @@ const fnResetSearch = () => {
   description_search.value = "";
   rbacRoleUuid_search.value = "";
 };
+
 /**
  * 搜索
  */
@@ -273,6 +268,7 @@ const fnSearch = () => {
       errorNotify(e.msg);
     });
 };
+
 /**
  * 重置新建权限对话框
  */
@@ -288,6 +284,7 @@ const fnResetAlertCreateRbacPermission = () => {
 const fnOpenAlertCreateRbacPermission = () => {
   alertCreateRbacPermission.value = true;
 };
+
 /**
  * 新建权限
  */
@@ -312,6 +309,7 @@ const fnStoreRbacPermission = () => {
       loading();
     });
 };
+
 /**
  * 重置编辑权限对话框
  */
@@ -321,6 +319,7 @@ const fnResetAlertEditRbacPermission = () => {
   description_alertEditRbacPermission.value = "";
   rbacRoleUuids_alertEditRbacPermission.value = [];
 };
+
 /**
  * 打开编辑权限对话框
  * @param {{*}} params 参数
@@ -350,6 +349,7 @@ const fnOpenAlertEditRbacPermission = (params = {}) => {
       errorNotify(e.msg);
     });
 };
+
 /**
  * 编辑权限
  */
@@ -376,6 +376,7 @@ const fnUpdateRbacPermission = () => {
       loading();
     });
 };
+
 /**
  * 删除权限
  * @param {{*}} params 参数

@@ -1,6 +1,6 @@
 <template>
   <q-select outlined use-input clearable v-model="equipmentKindTypeUuid_alertCreate" :options="options" :label="labelName"
-    :option-disable="collect(equipmentKindTypes).where('value', equipmentKindTypeUuid_alertCreate).first()['label'] ?? ''"
+    :option-disable="collect(equipmentKindTypes).pluck('value','label').all()[equipmentKindTypeUuid_alertCreate]"
     @filter="fnFilter" emit-value map-options />
 </template>
 <script setup>
