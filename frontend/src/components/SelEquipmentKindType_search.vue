@@ -1,12 +1,11 @@
 <template>
-  <q-select outlined use-input clearable v-model="equipmentKindTypeUuid_search"
-    :options="equipmentKindTypes_search"
-    :display-value="collect(equipmentKindTypes_search).pluck('value','label').all()[equipmentKindTypeUuid_search]"
-    :label="labelName" @filter="fnFilter" emit-value map-options />
+  <q-select outlined use-input clearable v-model="equipmentKindTypeUuid_search" :options="equipmentKindTypes_search"
+    :display-value="collect(equipmentKindTypes_search).pluck('value', 'label').all()[equipmentKindTypeUuid_search]"
+    :label="labelName" @filter="fnFilter" emit-value map-options :disable="!equipmentKindCategoryUuid_search" />
 </template>
 
 <script setup>
-import { ref, onMounted, inject, defineProps } from "vue";
+import { ref, onMounted, inject, defineProps, watch } from "vue";
 import { ajaxEquipmentKindTypeList } from "/src/apis/equipmentKind";
 import collect from "collect.js";
 import { errorNotify } from "src/utils/notify";
@@ -27,42 +26,55 @@ const props = defineProps({
 
 const labelName = props.labelName;
 const ajaxParams = props.ajaxParams;
+const equipmentKindCategoryUuid_search = inject("equipmentKindCategoryUuid_search");
 const equipmentKindTypeUuid_search = inject("equipmentKindTypeUuid_search");
 const equipmentKindTypes_search = ref([]);
-const equipmentKindCategories = ref([]);
+
+watch(equipmentKindCategoryUuid_search, newValue => {
+  fnSearch(newValue);
+});
 
 const fnFilter = (val, update) => {
   if (val === "") {
     update(() => {
-      equipmentKindTypes_search.value = equipmentKindCategories.value;
+      equipmentKindTypes_search.value = equipmentKindTypes_search.value;
     });
     return;
   }
 
   update(() => {
-    equipmentKindTypes_search.value = equipmentKindCategories.value.filter(
+    equipmentKindTypes_search.value = equipmentKindTypes_search.value.filter(
       (v) => v.label.toLowerCase().indexOf(val.toLowerCase()) > -1
     );
   });
 };
 
-onMounted(() => {
-  ajaxEquipmentKindTypeList(ajaxParams)
-    .then((res) => {
-      if (res.content.equipment_kind_types.length > 0) {
-        equipmentKindTypes_search.value = res.content.equipment_kind_types
-        .map(equipmentKindType=>{
-          return {
-            label: equipmentKindType.name,
-            value: equipmentKindType.uuid,
-          }
-        });
-      }
-      console.log('equipmentKindTypes_search',equipmentKindTypes_search.value);
+const fnSearch = equipmentKindCategoryUuid => {
+  equipmentKindTypes_search.value = [];
+``
+  if (equipmentKindCategoryUuid) {
+    ajaxEquipmentKindTypeList({
+      ...ajaxParams,
+      equipment_kind_category_uuid: equipmentKindCategoryUuid,
     })
-    .catch((e) => {
-      console.error('err',e);
-      errorNotify(e.msg);
-    });
+      .then((res) => {
+        if (res.content.equipment_kind_types.length > 0) {
+          equipmentKindTypes_search.value = res.content.equipment_kind_types
+            .map(equipmentKindType => {
+              return {
+                label: equipmentKindType.name,
+                value: equipmentKindType.uuid,
+              }
+            });
+        }
+      })
+      .catch((e) => {
+        errorNotify(e.msg);
+      });
+  }
+};
+
+onMounted(() => {
+  fnSearch("");
 });
 </script>

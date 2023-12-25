@@ -10,41 +10,49 @@ import (
 )
 
 type (
-	// 器材种类控制器
+	// EquipmentKindCategoryCtrl 器材种类控制器
 	EquipmentKindCategoryCtrl struct{}
-	// 器材种类表单
+	// EquipmentKindCategoryStoreForm 器材种类表单
 	EquipmentKindCategoryStoreForm struct {
 		Name string `json:"name"`
 	}
-	// 器材种类批量删除表单
+	// EquipmentKindCategoryDestroyManyForm 器材种类批量删除表单
 	EquipmentKindCategoryDestroyManyForm struct {
 		Uuids                   []string `json:"uuids"`
 		equipmentKindCategories []*models.EquipmentKindCategoryMdl
 	}
 
-	// 器材类型控制器
+	// EquipmentKindTypeCtrl 器材类型控制器
 	EquipmentKindTypeCtrl struct{}
-	// 器材类型表单
+	// EquipmentKindTypeStoreForm 器材类型新建表单
 	EquipmentKindTypeStoreForm struct {
 		Name                      string `json:"name"`
 		EquipmentKindCategoryUuid string `json:"equipment_kind_category_uuid"`
 		equipmentKindCategory     *models.EquipmentKindCategoryMdl
 	}
-	// 器材类型批量删除表单
+	// EquipmentKindTypeUpdateForm 器材类型编辑表单
+	EquipmentKindTypeUpdateForm struct {
+		Name string `json:"name"`
+	}
+	// EquipmentKindTypeDestroyManyForm 器材类型批量删除表单
 	EquipmentKindTypeDestroyManyForm struct {
 		Uuids              []string `json:"uuids"`
 		equipmentKindTypes []*models.EquipmentKindTypeMdl
 	}
 
-	// 器材型号控制器
+	// EquipmentKindModelCtrl 器材型号控制器
 	EquipmentKindModelCtrl struct{}
-	// 器材型号表单
+	// EquipmentKindModelStoreForm 器材型号新建表单
 	EquipmentKindModelStoreForm struct {
 		Name                  string `json:"name"`
 		EquipmentKindTypeUuid string `json:"equipment_kind_type_uuid"`
 		equipmentKindType     *models.EquipmentKindTypeMdl
 	}
-	// 器材型号批量删除表单
+	// EquipmentKindModelUpdateForm 器材型号编辑表单
+	EquipmentKindModelUpdateForm struct {
+		Name string `json:"name"`
+	}
+	// EquipmentKindModelDestroyManyForm 器材型号批量删除表单
 	EquipmentKindModelDestroyManyForm struct {
 		Uuids               []string `json:"uuids"`
 		equipmentKindModels []*models.EquipmentKindModelMdl
@@ -79,7 +87,7 @@ func (receiver EquipmentKindCategoryDestroyManyForm) ShouldBind(ctx *gin.Context
 	return receiver
 }
 
-// ShouldBind 表单绑定（器材类型）
+// ShouldBind 表单绑定（新建器材类型）
 func (receiver EquipmentKindTypeStoreForm) ShouldBind(ctx *gin.Context) EquipmentKindTypeStoreForm {
 	var (
 		err error
@@ -88,18 +96,28 @@ func (receiver EquipmentKindTypeStoreForm) ShouldBind(ctx *gin.Context) Equipmen
 	if err = ctx.ShouldBind(&receiver); err != nil {
 		wrongs.ThrowValidate("表单绑定失败：%s", err.Error())
 	}
-
 	if receiver.Name == "" {
 		wrongs.ThrowValidate("器材类型名称不能为空")
 	}
-
 	if receiver.EquipmentKindCategoryUuid == "" {
 		wrongs.ThrowValidate("所属器材种类不能为空")
 	} else {
 		ret = models.NewEquipmentKindCategoryMdl().GetDb("").Where("uuid = ?", receiver.EquipmentKindCategoryUuid).First(&receiver.equipmentKindCategory)
 		wrongs.ThrowWhenEmpty(ret, "所属器材种类")
 	}
+	return receiver
+}
 
+// ShouldBind 表单绑定（编辑器材类型）
+func (receiver EquipmentKindTypeUpdateForm) ShouldBind(ctx *gin.Context) EquipmentKindTypeUpdateForm {
+	var err error
+
+	if err = ctx.ShouldBind(&receiver); err != nil {
+		wrongs.ThrowValidate("表单绑定失败：%s", err.Error())
+	}
+	if receiver.Name == "" {
+		wrongs.ThrowValidate("器材类型名称不能为空")
+	}
 	return receiver
 }
 
@@ -117,7 +135,7 @@ func (receiver EquipmentKindTypeDestroyManyForm) ShouldBind(ctx *gin.Context) Eq
 	return receiver
 }
 
-// 表单绑定（器材类型）
+// ShouldBind 表单绑定（器材型号）
 func (receiver EquipmentKindModelStoreForm) ShouldBind(ctx *gin.Context) EquipmentKindModelStoreForm {
 	var ret *gorm.DB
 	if err := ctx.ShouldBind(&receiver); err != nil {
@@ -131,6 +149,17 @@ func (receiver EquipmentKindModelStoreForm) ShouldBind(ctx *gin.Context) Equipme
 	} else {
 		ret = models.NewEquipmentKindTypeMdl().GetDb("").Where("uuid = ?", receiver.EquipmentKindTypeUuid).First(&receiver.equipmentKindType)
 		wrongs.ThrowWhenEmpty(ret, "所属器材类型")
+	}
+	return receiver
+}
+
+// ShouldBind 表单绑定（器材型号）
+func (receiver EquipmentKindModelUpdateForm) ShouldBind(ctx *gin.Context) EquipmentKindModelUpdateForm {
+	if err := ctx.ShouldBind(&receiver); err != nil {
+		wrongs.ThrowValidate("表单绑定失败：%s", err.Error())
+	}
+	if receiver.Name == "" {
+		wrongs.ThrowValidate("器材型号名称必填")
 	}
 	return receiver
 }
@@ -403,22 +432,23 @@ func (EquipmentKindTypeCtrl) Update(ctx *gin.Context) {
 	)
 
 	// 表单
-	form := EquipmentKindTypeStoreForm{}.ShouldBind(ctx)
+	form := EquipmentKindTypeUpdateForm{}.ShouldBind(ctx)
+
+	// 查询
+	ret = models.NewEquipmentKindTypeMdl().
+		SetPreloads("EquipmentKindCategory").
+		GetDb("").
+		Where("uuid = ?", ctx.Param("uuid")).
+		First(&equipmentKindType)
+	wrongs.ThrowWhenEmpty(ret, "器材类型")
 
 	// 查重
 	ret = models.NewEquipmentKindTypeMdl().
 		GetDb("").
 		Where("name = ? and uuid <> ?", form.Name, ctx.Param("uuid")).
-		Where("equipment_kind_category_uuid = ?", form.equipmentKindCategory.Uuid).
+		Where("equipment_kind_category_uuid = ?", equipmentKindType.EquipmentKindCategory.Uuid).
 		First(&repeat)
 	wrongs.ThrowWhenNotEmpty(ret, "器材类型名称")
-
-	// 查询
-	ret = models.NewEquipmentKindTypeMdl().
-		GetDb("").
-		Where("uuid = ?", ctx.Param("uuid")).
-		First(&equipmentKindType)
-	wrongs.ThrowWhenEmpty(ret, "器材类型")
 
 	// 编辑
 	equipmentKindType.Name = form.Name
@@ -571,22 +601,23 @@ func (EquipmentKindModelCtrl) Update(ctx *gin.Context) {
 	)
 
 	// 表单
-	form := EquipmentKindModelStoreForm{}.ShouldBind(ctx)
+	form := EquipmentKindModelUpdateForm{}.ShouldBind(ctx)
+
+	// 查询
+	ret = models.NewEquipmentKindModelMdl().
+		SetPreloads("EquipmentKindType").
+		GetDb("").
+		Where("uuid = ?", ctx.Param("uuid")).
+		First(&equipmentKindModel)
+	wrongs.ThrowWhenEmpty(ret, "器材型号")
 
 	// 查重
 	ret = models.NewEquipmentKindModelMdl().
 		GetDb("").
 		Where("name = ? and uuid <> ?", form.Name, ctx.Param("uuid")).
-		Where("equipment_kind_type_uuid = ?", form.equipmentKindType.Uuid).
+		Where("equipment_kind_type_uuid = ?", equipmentKindModel.EquipmentKindType.Uuid).
 		First(&repeat)
 	wrongs.ThrowWhenNotEmpty(ret, "器材型号名称")
-
-	// 查询
-	ret = models.NewEquipmentKindModelMdl().
-		GetDb("").
-		Where("uuid = ?", ctx.Param("uuid")).
-		First(&equipmentKindModel)
-	wrongs.ThrowWhenEmpty(ret, "器材型号")
 
 	// 编辑
 	equipmentKindModel.Name = form.Name
