@@ -51,7 +51,7 @@ const fnFilter = (val, update) => {
 
 const fnSearch = equipmentKindCategoryUuid => {
   equipmentKindTypes_search.value = [];
-``
+
   if (equipmentKindCategoryUuid) {
     ajaxEquipmentKindTypeList({
       ...ajaxParams,
