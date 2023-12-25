@@ -27,6 +27,8 @@ func (OrganizationRout) Load(engine *gin.Engine) {
 		{
 			// 新建
 			railwayRout.POST("", controllers.NewOrganizationRailwayCtrl().Store)
+			// 批量删除
+			railwayRout.POST("destroyMany", controllers.NewOrganizationRailwayCtrl().DestroyMany)
 			// 删除
 			railwayRout.DELETE(":uuid", controllers.NewOrganizationRailwayCtrl().Destroy)
 			// 编辑

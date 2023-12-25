@@ -16,6 +16,11 @@ type (
 	OrganizationRailwayStoreForm struct {
 		UniqueCode string `json:"unique_code"`
 		Name       string `json:"name"`
+		ShortName  string `json:"short_name"`
+	}
+	// OrganizationRailwayDestroyManyForm 批量删除路局表单
+	OrganizaitonRailwayDestroyManyForm struct {
+		Uuids []string `json:"uuids"`
 	}
 )
 
@@ -30,6 +35,22 @@ func (receiver OrganizationRailwayStoreForm) ShouldBind(ctx *gin.Context) Organi
 	if receiver.Name == "" {
 		wrongs.ThrowValidate("路局名称必填")
 	}
+	if receiver.ShortName == "" {
+		wrongs.ThrowValidate("路局简称必填")
+	}
+	return receiver
+}
+
+// ShouldBind 绑定表单（批量删除路局）
+func (receiver OrganizaitonRailwayDestroyManyForm) ShouldBind(ctx *gin.Context) OrganizaitonRailwayDestroyManyForm {
+	if err := ctx.ShouldBind(&receiver); err != nil {
+		wrongs.ThrowValidate("表单验证失败：%s", err.Error())
+	}
+
+	if len(receiver.Uuids) == 0 {
+		wrongs.ThrowValidate("路局uuid必填")
+	}
+
 	return receiver
 }
 
@@ -59,9 +80,18 @@ func (OrganizationRailwayCtrl) Store(ctx *gin.Context) {
 		Where("name = ?", form.Name).
 		First(&repeat)
 	wrongs.ThrowWhenNotEmpty(ret, "路局名称")
+	ret = models.NewOrganizationRailwayMdl().
+		GetDb("").
+		Where("short_name = ?", form.ShortName).
+		First(&repeat)
+	wrongs.ThrowWhenNotEmpty(ret, "路局简称")
 
 	// 新建
-	organizationRailway := &models.OrganizationRailwayMdl{}
+	organizationRailway := &models.OrganizationRailwayMdl{
+		UniqueCode: form.UniqueCode,
+		Name:       form.Name,
+		ShortName:  form.ShortName,
+	}
 	if ret = models.NewOrganizationRailwayMdl().
 		GetDb("").
 		Create(&organizationRailway); ret.Error != nil {
@@ -96,6 +126,16 @@ func (OrganizationRailwayCtrl) Destroy(ctx *gin.Context) {
 	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
+func (OrganizationRailwayCtrl) DestroyMany(ctx *gin.Context) {
+	form := OrganizaitonRailwayDestroyManyForm{}.ShouldBind(ctx)
+
+	if ret := models.NewOrganizationRailwayMdl().GetDb("").Where("uuid in ?", form.Uuids).Delete(nil); ret.Error != nil {
+		wrongs.ThrowForbidden("删除失败：%s", ret.Error.Error())
+	}
+
+	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+}
+
 // Update 编辑
 func (OrganizationRailwayCtrl) Update(ctx *gin.Context) {
 	var (
@@ -117,6 +157,11 @@ func (OrganizationRailwayCtrl) Update(ctx *gin.Context) {
 		Where("name = ? and uuid <> ?", form.Name, ctx.Param("uuid")).
 		First(&repeat)
 	wrongs.ThrowWhenNotEmpty(ret, "路局名称")
+	ret = models.NewOrganizationRailwayMdl().
+		GetDb("").
+		Where("short_name = ? and uuid <> ?", form.ShortName, ctx.Param("uuid")).
+		First(&repeat)
+	wrongs.ThrowWhenNotEmpty(ret, "路局简称")
 
 	// 查询
 	ret = models.NewOrganizationRailwayMdl().
@@ -128,6 +173,7 @@ func (OrganizationRailwayCtrl) Update(ctx *gin.Context) {
 	// 编辑
 	organizationRailway.UniqueCode = form.UniqueCode
 	organizationRailway.Name = form.Name
+	organizationRailway.ShortName = form.ShortName
 	if ret = models.NewOrganizationRailwayMdl().
 		GetDb("").
 		Where("uuid = ?", ctx.Param("uuid")).
