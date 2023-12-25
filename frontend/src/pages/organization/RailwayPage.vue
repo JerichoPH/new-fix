@@ -92,8 +92,20 @@
         <q-card-section class="q-pt-none">
           <div class="row">
             <div class="col">
-              <q-input outlined clearable lazy-rules v-model="name_alertCreateOrganizationRailway" label="名称"
+              <q-input outlined clearable lazy-rules v-model="uniqueCode_alertCreateOrganizationRailway" label="代码"
                 :rules="[]" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <q-input outlined clearable lazy-rules v-model="name_alertCreateOrganizationRailway" label="名称" :rules="[]"
+                class="q-mt-md" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <q-input outlined clearable lazy-rules v-model="shortName_alertCreateOrganizationRailway" label="简称"
+                :rules="[]" class="q-mt-md" />
             </div>
           </div>
         </q-card-section>
@@ -113,7 +125,20 @@
         <q-card-section class="q-pt-none">
           <div class="row">
             <div class="col">
-              <q-input outlined clearable lazy-rules v-model="name_alertEditOrganizationrailway" label="名称" :rules="[]" />
+              <q-input outlined clearable lazy-rules v-model="uniqueCode_alertEditOrganizationrailway" label="代码"
+                :rules="[]" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <q-input outlined clearable lazy-rules v-model="name_alertEditOrganizationrailway" label="名称" :rules="[]"
+                class="q-mt-md" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <q-input outlined clearable lazy-rules v-model="shortName_alertEditOrganizationrailway" label="简称"
+                :rules="[]" class="q-mt-md" />
             </div>
           </div>
         </q-card-section>
@@ -155,12 +180,16 @@ const sortBy = ref('');
 
 // 新建路局弹窗数据
 const alertCreateOrganizationRailway = ref(false);
+const uniqueCode_alertCreateOrganizationRailway = ref('');
 const name_alertCreateOrganizationRailway = ref('');
+const shortName_alertCreateOrganizationRailway = ref('');
 
 // 编辑路局弹窗数据
 const currentUuid = ref('');
 const alertEditOrganizationrailway = ref(false);
+const uniqueCode_alertEditOrganizationrailway = ref('');
 const name_alertEditOrganizationrailway = ref('');
+const shortName_alertEditOrganizationrailway = ref('');
 
 onMounted(() => fnInit());
 
@@ -198,7 +227,7 @@ const fnSearch = () => {
       }
     })
     .catch(e => {
-      console.error('err',e);
+      console.error('err', e);
       errorNotify(e.msg);
     });
 };
@@ -220,7 +249,11 @@ const fnOpenAlertCreateOrganizationRailway = () => { alertCreateOrganizationRail
 const fnStoreOrganizationRailway = params => {
   const loading = loadingNotify();
 
-  ajaxStoreOrganizationRailway({ name: name_alertCreateOrganizationRailway.value })
+  ajaxStoreOrganizationRailway({
+    unique_code: uniqueCode_alertCreateOrganizationRailway.value,
+    name: name_alertCreateOrganizationRailway.value,
+    short_name: shortName_alertCreateOrganizationRailway.value,
+  })
     .then(res => {
       successNotify(res.msg);
       fnResetAlertCreateOrganizationRailway();
@@ -241,7 +274,9 @@ const fnOpenAlertEditOrganizationRailway = params => {
 
   ajaxGetOrganizationRailway(params.uuid)
     .then(res => {
+      uniqueCode_alertEditOrganizationrailway.value = res.content.organization_railway.unique_code;
       name_alertEditOrganizationrailway.value = res.content.organization_railway.name;
+      shortName_alertEditOrganizationrailway.value = res.content.organization_railway.short_name;
       alertEditOrganizationrailway.value = true;
     })
     .catch(e => errorNotify(e.msg));
@@ -252,12 +287,16 @@ const fnOpenAlertEditOrganizationRailway = params => {
  * @param {string} uuid
  * @param {{*}} params
  */
-const fnUpdateOrganizationRailway = (uuid, params) => {
+const fnUpdateOrganizationRailway = () => {
   if (!currentUuid.value) return;
 
   const loading = loadingNotify();
 
-  ajaxUpdateOrganizationRailway({ name: name_alertEditOrganizationrailway.value })
+  ajaxUpdateOrganizationRailway(currentUuid.value, {
+    unique_code: uniqueCode_alertEditOrganizationrailway.value,
+    name: name_alertEditOrganizationrailway.value,
+    short_name: shortName_alertEditOrganizationrailway.value,
+  })
     .then(res => {
       successNotify(res.msg);
       fnSearch();
