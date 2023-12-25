@@ -138,12 +138,12 @@ import {
   destroyActions,
 } from "src/utils/notify";
 import {
-  ajaxEquipmentKindCategoryList,
-  ajaxEquipmentKindCategoryDetail,
-  ajaxEquipmentKindCategoryStore,
-  ajaxEquipmentKindCategoryUpdate,
-  ajaxEquipmentKindCategoryDestroy,
-  ajaxEquipmentKindCategoryDestroyMany,
+  ajaxGetEquipmentKindCategories,
+  ajaxGetEquipmentKindCategory,
+  ajaxStoreEquipmentKindCategory,
+  ajaxUpdateEquipmentKindCategory,
+  ajaxDestroyEquipmentKindCategory,
+  ajaxDestroyEquipmentKindCategories,
 } from "src/apis/equipmentKind";
 
 // 搜索栏条件
@@ -186,7 +186,7 @@ const fnSearch = () => {
   rows.value = [];
   selected.value = [];
 
-  ajaxEquipmentKindCategoryList({
+  ajaxGetEquipmentKindCategories({
     name: name_search.value,
   })
     .then((res) => {
@@ -226,7 +226,7 @@ const fnOpenAlertCreateEquipmentKindCategory = () => {
 const fnStoreEquipmentKindCategory = () => {
   const loading = loadingNotify();
 
-  ajaxEquipmentKindCategoryStore({
+  ajaxStoreEquipmentKindCategory({
     name: name_alertCreateEquipmentKindCategory.value,
   })
     .then(res => {
@@ -246,7 +246,7 @@ const fnOpenAlertEditEquipmentKindCategory = params => {
   if (!params['uuid']) return;
   currentUuid.value = params['uuid'];
 
-  ajaxEquipmentKindCategoryDetail(params.uuid)
+  ajaxGetEquipmentKindCategory(params.uuid)
     .then(res => {
       name_alertEditEquipmentKindCategory.value = res.content.equipment_kind_category.name;
       alertEditEquipmentKindCategory.value = true;
@@ -264,7 +264,7 @@ const fnUpdateEquipmentKindCategory = params => {
 
   const loading = loadingNotify();
 
-  ajaxEquipmentKindCategoryUpdate(currentUuid.value, {
+  ajaxUpdateEquipmentKindCategory(currentUuid.value, {
     name: name_alertEditEquipmentKindCategory.value,
   })
     .then(res => {
@@ -287,7 +287,7 @@ const fnDestroyEquipmentKindCategory = params => {
       () => {
         const loading = loadingNotify();
 
-        ajaxEquipmentKindCategoryDestroy(params.uuid)
+        ajaxDestroyEquipmentKindCategory(params.uuid)
           .then(() => {
             successNotify('删除成功');
             fnSearch();
@@ -306,7 +306,7 @@ const fnDestroyEquipmentKindCategories = () => {
   actionNotify(
     destroyActions(
       () => {
-        ajaxEquipmentKindCategoryDestroyMany(selected.value.map(item => item.uuid))
+        ajaxDestroyEquipmentKindCategories(selected.value.map(item => item.uuid))
           .then(() => {
             successNotify('删除成功');
             fnSearch();

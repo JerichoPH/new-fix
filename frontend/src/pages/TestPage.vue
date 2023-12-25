@@ -39,7 +39,7 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { ajaxRbacPermissionList } from "src/apis/rbac";
+import { ajaxGetRbacPermissions } from "src/apis/rbac";
 import collect from "collect.js";
 
 const rows = ref([]);
@@ -50,7 +50,7 @@ onMounted(() => {
 });
 
 const fnInit = () => {
-  ajaxRbacPermissionList().then((res) => {
+  ajaxGetRbacPermissions().then((res) => {
     collect(res.content.rbac_permissions).each((rbacPermission, idx) => {
       rows.value.push({
         index: idx + 1,

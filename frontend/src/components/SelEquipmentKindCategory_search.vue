@@ -7,7 +7,7 @@
 
 <script setup>
 import { ref, onMounted, inject, defineProps } from "vue";
-import { ajaxEquipmentKindCategoryList } from "/src/apis/equipmentKind";
+import { ajaxGetEquipmentKindCategories } from "/src/apis/equipmentKind";
 import collect from "collect.js";
 import { errorNotify } from "src/utils/notify";
 
@@ -47,7 +47,7 @@ const fnFilter = (val, update) => {
 };
 
 onMounted(() => {
-  ajaxEquipmentKindCategoryList(ajaxParams)
+  ajaxGetEquipmentKindCategories(ajaxParams)
     .then((res) => {
       if (res.content.equipment_kind_categories.length > 0) {
         equipmentKindCategories.value = res.content.equipment_kind_categories.map(equipmentKindCategory => {

@@ -199,12 +199,12 @@ import {
   destroyActions,
 } from "src/utils/notify";
 import {
-  ajaxRbacMenuDestroy,
-  ajaxRbacMenuDetail,
-  ajaxRbacMenuList,
-  ajaxRbacMenuStore,
-  ajaxRbacMenuUpdate,
-  ajaxRbacMenuDestroyMany,
+  ajaxDestroyRbacMenu,
+  ajaxGetRbacMenu,
+  ajaxGetRbacMenus,
+  ajaxStoreRbacMenu,
+  ajaxUpdateRbacMenu,
+  ajaxDestroyRbacMenus,
 } from "src/apis/rbac";
 
 // 表格数据
@@ -276,7 +276,7 @@ const fnSearch = () => {
   rows.value = [];
   selected.value = [];
 
-  ajaxRbacMenuList({
+  ajaxGetRbacMenus({
     ":~[]": ["Parent", "RbacRoles"],
     name: name_search.value,
     uri: uri_search.value,
@@ -335,7 +335,7 @@ const fnOpenAlertCreateRbacMenu = () => {
 const fnStoreRbacMenu = () => {
   const loading = loadingNotify();
 
-  ajaxRbacMenuStore({
+  ajaxStoreRbacMenu({
     name: name_alertCreateRbacMenu.value,
     uri: uri_alertCreateRbacMenu.value,
     description: description_alertCreateRbacMenu.value,
@@ -379,7 +379,7 @@ const fnOpenAlertEditRbacMenu = (params = {}) => {
 
   currentUuid.value = params.uuid;
 
-  ajaxRbacMenuDetail(currentUuid.value, {
+  ajaxGetRbacMenu(currentUuid.value, {
     ":~[]": ["Parent", "RbacRoles"],
   })
     .then((res) => {
@@ -408,7 +408,7 @@ const fnOpenAlertEditRbacMenu = (params = {}) => {
 const fnUpdateRbacMenu = () => {
   if (!currentUuid.value) return;
   const loading = loadingNotify();
-  ajaxRbacMenuUpdate(currentUuid.value, {
+  ajaxUpdateRbacMenu(currentUuid.value, {
     name: name_alertEditRbacMenu.value,
     uri: uri_alertEditRbacMenu.value,
     description: description_alertEditRbacMenu.value,
@@ -439,7 +439,7 @@ const fnDeconsteRbacMenu = (params = {}) => {
   actionNotify(
     destroyActions(() => {
       const loading = loadingNotify();
-      ajaxRbacMenuDestroy(params.uuid)
+      ajaxDestroyRbacMenu(params.uuid)
         .then(() => {
           successNotify("删除成功");
           fnSearch();
@@ -462,7 +462,7 @@ const fnDestroyRbacMenus = () => {
     destroyActions(() => {
       const loading = loadingNotify();
 
-      ajaxRbacMenuDestroyMany(collect(selected.value).pluck('uuid').toArray())
+      ajaxDestroyRbacMenus(collect(selected.value).pluck('uuid').toArray())
         .then(() => {
           successNotify("删除成功");
           fnSearch();

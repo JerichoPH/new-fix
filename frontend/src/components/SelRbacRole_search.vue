@@ -5,7 +5,7 @@
 </template>
 <script setup>
 import { inject, defineProps, onMounted, ref } from "vue";
-import { ajaxRbacRoleList } from "/src/apis/rbac";
+import { ajaxGetRbacRoles } from "/src/apis/rbac";
 import collect from "collect.js";
 import { errorNotify } from "src/utils/notify";
 
@@ -45,7 +45,7 @@ const fnFilter = (val, update) => {
 };
 
 onMounted(() => {
-  ajaxRbacRoleList(ajaxParams)
+  ajaxGetRbacRoles(ajaxParams)
     .then((res) => {
       if (res.content.rbac_roles.length > 0) {
         collect(res.content.rbac_roles).each((rbacRole) => {

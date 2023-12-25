@@ -5,7 +5,7 @@
 </template>
 <script setup>
 import { inject, defineProps, onMounted, ref } from "vue";
-import { ajaxRbacMenuList } from "/src/apis/rbac";
+import { ajaxGetRbacMenus } from "/src/apis/rbac";
 import collect from "collect.js";
 import { errorNotify } from "src/utils/notify";
 
@@ -45,7 +45,7 @@ const fnFilter = (val, update) => {
 };
 
 onMounted(() => {
-  ajaxRbacMenuList(ajaxParams)
+  ajaxGetRbacMenus(ajaxParams)
     .then((res) => {
       if (res.content.rbac_menus.length > 0) {
         rbacMenus.value = res.content.rbac_menus

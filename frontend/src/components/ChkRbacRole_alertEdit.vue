@@ -22,7 +22,7 @@
 <script setup>
 import { ref, onMounted, inject, defineProps } from "vue";
 import collect from "collect.js";
-import { ajaxRbacRoleList } from "src/apis/rbac";
+import { ajaxGetRbacRoles } from "src/apis/rbac";
 import { errorNotify } from "src/utils/notify";
 
 const props = defineProps({
@@ -47,7 +47,7 @@ onMounted(() => {
 });
 
 const fnGetRbacRoles = () => {
-  ajaxRbacRoleList(ajaxParams)
+  ajaxGetRbacRoles(ajaxParams)
     .then((res) => {
       if (res.content.rbac_roles.length > 0) {
         rbacRoles.value = collect(res.content.rbac_roles).chunk(4).all();

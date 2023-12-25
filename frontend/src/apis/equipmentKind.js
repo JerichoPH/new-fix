@@ -7,7 +7,7 @@ const urlPrefix = "/equipmentKind";
  * @param {{*}} params
  * @returns
  */
-export const ajaxEquipmentKindCategoryList = params => {
+export const ajaxGetEquipmentKindCategories = params => {
   return api.get(`${urlPrefix}/category`, { params });
 };
 
@@ -16,7 +16,7 @@ export const ajaxEquipmentKindCategoryList = params => {
  * @param {string} uuid
  * @returns
  */
-export const ajaxEquipmentKindCategoryDetail = uuid => {
+export const ajaxGetEquipmentKindCategory = uuid => {
   return api.get(`${urlPrefix}/category/${uuid}`);
 };
 
@@ -25,7 +25,7 @@ export const ajaxEquipmentKindCategoryDetail = uuid => {
  * @param {{*}} params
  * @returns
  */
-export const ajaxEquipmentKindCategoryStore = params => {
+export const ajaxStoreEquipmentKindCategory = params => {
   return api.post(`${urlPrefix}/category`, params);
 }
 
@@ -35,7 +35,7 @@ export const ajaxEquipmentKindCategoryStore = params => {
  * @param {{*}} params
  * @returns
  */
-export const ajaxEquipmentKindCategoryUpdate = (uuid, params) => {
+export const ajaxUpdateEquipmentKindCategory = (uuid, params) => {
   return api.put(`${urlPrefix}/category/${uuid}`, params);
 }
 
@@ -44,7 +44,7 @@ export const ajaxEquipmentKindCategoryUpdate = (uuid, params) => {
  * @param {string} uuid
  * @returns
  */
-export const ajaxEquipmentKindCategoryDestroy = uuid => {
+export const ajaxDestroyEquipmentKindCategory = uuid => {
   return api.delete(`${urlPrefix}/category/${uuid}`);
 }
 
@@ -53,7 +53,7 @@ export const ajaxEquipmentKindCategoryDestroy = uuid => {
  * @param {[string]} uuids
  * @returns
  */
-export const ajaxEquipmentKindCategoryDestroyMany = uuids => {
+export const ajaxDestroyEquipmentKindCategories = uuids => {
   if (uuids.length === 0) return Promise.reject('器材种类编号列表不能为空');
   return api.post(`${urlPrefix}/category/destroyMany`, { uuids });
 }
@@ -63,7 +63,7 @@ export const ajaxEquipmentKindCategoryDestroyMany = uuids => {
  * @param {{*}} params
  * @returns
  */
-export const ajaxEquipmentKindTypeList = params => {
+export const ajaxGetEquipmentKindTypes = params => {
   return api.get(`${urlPrefix}/type`, { params });
 }
 
@@ -73,7 +73,7 @@ export const ajaxEquipmentKindTypeList = params => {
  * @params {{*}} params
  * @returns
  */
-export const ajaxEquipmentKindTypeDetail = (uuid, params) => {
+export const ajaxGetEquipmentKindType = (uuid, params) => {
   return api.get(`${urlPrefix}/type/${uuid}`, { params });
 }
 
@@ -82,7 +82,7 @@ export const ajaxEquipmentKindTypeDetail = (uuid, params) => {
  * @param {{*}} params
  * @returns
  */
-export const ajaxEquipmentKindTypeStore = params => {
+export const ajaxStoreEquipmentKindType = params => {
   return api.post(`${urlPrefix}/type`, params);
 }
 
@@ -92,7 +92,7 @@ export const ajaxEquipmentKindTypeStore = params => {
  * @param {{*}} params
  * @returns
  */
-export const ajaxEquipmentKindTypeUpdate = (uuid, params) => {
+export const ajaxUpdateEquipmentKindType = (uuid, params) => {
   return api.put(`${urlPrefix}/type/${uuid}`, params);
 }
 
@@ -101,7 +101,7 @@ export const ajaxEquipmentKindTypeUpdate = (uuid, params) => {
  * @param {string} uuid
  * @returns
  */
-export const ajaxEquipmentKindTypeDestroy = uuid => {
+export const ajaxDestroyEquipmentKindType = uuid => {
   return api.delete(`${urlPrefix}/type/${uuid}`);
 }
 
@@ -110,7 +110,7 @@ export const ajaxEquipmentKindTypeDestroy = uuid => {
  * @param {[string]} uuids
  * @returns
  */
-export const ajaxEquipmentKindTypeDestroyMany = uuids => {
+export const ajaxDestroyEquipmentKindTypes = uuids => {
   if (uuids.length === 0) return Promise.reject('器材类型编号列表不能为空');
   return api.post(`${urlPrefix}/type/destroyMany`, { uuids });
 }
@@ -120,7 +120,7 @@ export const ajaxEquipmentKindTypeDestroyMany = uuids => {
  * @param {{*}} params
  * @returns
  */
-export const ajaxEquipmentKindModelList = params => {
+export const ajaxGetEquipmentKindModels = params => {
   return api.get(`${urlPrefix}/model`, { params });
 }
 
@@ -129,7 +129,7 @@ export const ajaxEquipmentKindModelList = params => {
  * @param {string} uuid
  * @returns
  */
-export const ajaxEquipmentKindModelDetail = uuid => {
+export const ajaxGetEquipmentKindModel = uuid => {
   return api.get(`${urlPrefix}/model/${uuid}`);
 }
 
@@ -138,7 +138,7 @@ export const ajaxEquipmentKindModelDetail = uuid => {
  * @param {{*}} params
  * @returns
  */
-export const ajaxEquipmentKindModelStore = params => {
+export const ajaxStoreEquipmentKindModel = params => {
   return api.post(`${urlPrefix}/model`, params);
 }
 
@@ -148,7 +148,7 @@ export const ajaxEquipmentKindModelStore = params => {
  * @param {{*}} params
  * @returns
  */
-export const ajaxEquipmentKindModelUpdate = (uuid, params) => {
+export const ajaxUpdateEquipmentKindModel = (uuid, params) => {
   return api.put(`${urlPrefix}/model/${uuid}`, params);
 }
 
@@ -157,7 +157,7 @@ export const ajaxEquipmentKindModelUpdate = (uuid, params) => {
  * @param {string} uuid
  * @returns
  */
-export const ajaxEquipmentKindModelDestroy = uuid => {
+export const ajaxDestroyEquipmentKindModel = uuid => {
   return api.delete(`${urlPrefix}/model/${uuid}`);
 }
 
@@ -166,7 +166,7 @@ export const ajaxEquipmentKindModelDestroy = uuid => {
  * @param {[string]} uuids
  * @returns
  */
-export const ajaxEquipmentKindModelDestroyMany = uuids => {
+export const ajaxDestroyEquipmentKindModels = uuids => {
   if (uuids.length === 0) return Promise.reject('器材型号编号列表不能为空');
   return api.post(`${urlPrefix}/model/destroyMany`, { uuids });
 }

@@ -139,7 +139,7 @@ import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { fabYoutube } from "@quasar/extras/fontawesome-v6";
 import { errorNotify } from "src/utils/notify";
-import { ajaxGetCurrentAccountMenuList } from "src/apis/auth";
+import { ajaxGetCurrentAccountMenus } from "src/apis/auth";
 
 const router = useRouter();
 
@@ -170,7 +170,7 @@ const fnInit = () => {
   }
 
   // 加载当前用户菜单
-  ajaxGetCurrentAccountMenuList({
+  ajaxGetCurrentAccountMenus({
     ":~[]": ["Subs"],
     ":== []": ["parent_uuid"],
   })

@@ -9,6 +9,11 @@ import RbacRolePage from "pages/rbac/RolePage.vue";
 import RbacPermissionPage from "pages/rbac/PermissionPage.vue";
 import RbacMenuPage from "pages/rbac/MenuPage.vue";
 import TestPage from "src/pages/TestPage.vue";
+import EquipmentKindCategoryPage from "src/pages/equipmentKind/CategoryPage.vue";
+import EquipmentKindTypePage from "src/pages/equipmentKind/TypePage.vue";
+import EquipmentKindModelPage from "src/pages/equipmentKind/ModelPage.vue";
+import OrganizationRailwayPage from "src/pages/organization/RailwayPage.vue";
+
 
 const routes = [
   {
@@ -51,9 +56,16 @@ const routes = [
     path: "/equipmentKind",
     component: () => MainLayoutVue,
     children: [
-      { path: "category", name: "equipmentKindCategory:index", component: () => import("src/pages/equipmentKind/CategoryPage.vue") },
-      { path: "type", name: "equipmentKindType:index", component: () => import("src/pages/equipmentKind/TypePage.vue") },
-      { path: "model", name: "equipmentKindModel:index", component: () => import("src/pages/equipmentKind/ModelPage.vue") },
+      { path: "category", name: "equipmentKindCategory:index", component: EquipmentKindCategoryPage },
+      { path: "type", name: "equipmentKindType:index", component: EquipmentKindTypePage },
+      { path: "model", name: "equipmentKindModel:index", component: () => EquipmentKindModelPage },
+    ],
+  },
+  {
+    path: "/organization",
+    component: () => MainLayoutVue,
+    children: [
+      { path: "railway", name: "organizationRailway:index", component: OrganizationRailwayPage },
     ],
   },
   // Always leave this as last one,

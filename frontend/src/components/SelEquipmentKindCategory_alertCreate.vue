@@ -5,7 +5,7 @@
 </template>
 <script setup>
 import { inject, defineProps, onMounted, ref } from "vue";
-import { ajaxEquipmentKindCategoryList } from "/src/apis/equipmentKind";
+import { ajaxGetEquipmentKindCategories } from "/src/apis/equipmentKind";
 import { errorNotify } from "src/utils/notify";
 
 const props = defineProps({
@@ -44,7 +44,7 @@ const fnFilter = (val, update) => {
 };
 
 onMounted(() => {
-  ajaxEquipmentKindCategoryList(ajaxParams)
+  ajaxGetEquipmentKindCategories(ajaxParams)
     .then((res) => {
       if (res.content.equipment_kind_categories.length > 0) {
         equipmentKindCategories.value = res.content.equipment_kind_categories

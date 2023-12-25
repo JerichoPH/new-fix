@@ -145,7 +145,7 @@
 <script setup>
 import { ref, onMounted, provide } from "vue";
 import { fnColumnReverseSort } from "src/utils/common";
-import { ajaxEquipmentKindTypeList, ajaxEquipmentKindTypeDetail, ajaxEquipmentKindTypeStore, ajaxEquipmentKindTypeUpdate, ajaxEquipmentKindTypeDestroy, ajaxEquipmentKindTypeDestroyMany, } from "src/apis/equipmentKind";
+import { ajaxGetEquipmentKindTypes, ajaxGetEquipmentKindType, ajaxStoreEquipmentKindType, ajaxUpdateEquipmentKindType, ajaxDestroyEquipmentKindType, ajaxDestroyEquipmentKindTypes, } from "src/apis/equipmentKind";
 import { loadingNotify, successNotify, errorNotify, actionNotify, destroyActions } from "src/utils/notify";
 import SelEquipmentKindCategory_search from "src/components/SelEquipmentKindCategory_search.vue";
 import SelEquipmentKindCategory_alertCreate from "src/components/SelEquipmentKindCategory_alertCreate.vue";
@@ -202,7 +202,7 @@ const fnSearch = () => {
   rows.value = [];
   selected.value = [];
 
-  ajaxEquipmentKindTypeList({
+  ajaxGetEquipmentKindTypes({
     ":~[]": ["EquipmentKindCategory"],
     name: name_search.value,
     equipment_kind_category_uuid: equipmentKindCategoryUuid_search.value,
@@ -243,7 +243,7 @@ const fnOpenAlertCreateEquipmentKindType = () => {
 const fnStoreEquipmentKindType = () => {
   const loading = loadingNotify();
 
-  ajaxEquipmentKindTypeStore({
+  ajaxStoreEquipmentKindType({
     name: name_alertCreateEquipmentKindType.value,
     equipment_kind_category_uuid: equipmentKindCategoryUuid_alertCreateEquipmentKindType.value,
   })
@@ -264,7 +264,7 @@ const fnStoreEquipmentKindType = () => {
 const fnDestroyEquipmentKindTypes = params => {
   actionNotify(destroyActions(() => {
     const loading = loadingNotify();
-    ajaxEquipmentKindTypeDestroyMany(selected.value.map(item => item.uuid))
+    ajaxDestroyEquipmentKindTypes(selected.value.map(item => item.uuid))
       .then((res) => {
         successNotify(res.msg);
         fnSearch();
@@ -284,7 +284,7 @@ const fnOpenAlertEditEquipmentKindType = params => {
   if (!params['uuid']) return;
   currentUuid.value = params.uuid;
 
-  ajaxEquipmentKindTypeDetail(params.uuid, {
+  ajaxGetEquipmentKindType(params.uuid, {
     ":~[]": ["EquipmentKindCategory"],
   })
     .then((res) => {
@@ -305,7 +305,7 @@ const fnUpdateEquipmentKindType = () => {
   if (!currentUuid.value) return;
 
   const loading = loadingNotify();
-  ajaxEquipmentKindTypeUpdate(currentUuid.value, {
+  ajaxUpdateEquipmentKindType(currentUuid.value, {
     name: name_alertEditEquipmentKindType.value,
     equipment_kind_category_uuid: equipmentKindCategoryUuid_alertEditEquipmentKindType.value,
   })
@@ -331,7 +331,7 @@ const fnDestroyEquipmentKindType = params => {
       () => {
         const loading = loadingNotify();
 
-        ajaxEquipmentKindTypeDestroy(params.uuid)
+        ajaxDestroyEquipmentKindType(params.uuid)
           .then((res) => {
             successNotify(res.msg);
             fnSearch();

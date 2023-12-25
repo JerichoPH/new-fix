@@ -6,7 +6,7 @@
 <script setup>
 import { inject, defineProps, onMounted, ref, watch } from "vue";
 import collect from "collect.js"
-import { ajaxEquipmentKindTypeList } from "/src/apis/equipmentKind";
+import { ajaxGetEquipmentKindTypes } from "/src/apis/equipmentKind";
 import { errorNotify } from "src/utils/notify";
 
 const props = defineProps({
@@ -61,7 +61,7 @@ const fnSearch = equipmentKindCategoryUuid => {
   equipmentKindTypes.value = [];
 
   if (equipmentKindCategoryUuid) {
-    ajaxEquipmentKindTypeList({
+    ajaxGetEquipmentKindTypes({
       ...ajaxParams,
       equipment_kind_category_uuid: equipmentKindCategoryUuid,
     })

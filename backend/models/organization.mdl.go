@@ -35,7 +35,7 @@ func (receiver OrganizationRailwayMdl) GetListByQuery(ctx *gin.Context) *gorm.DB
 		SetWheresExtraHasValues(map[string]func([]string, *gorm.DB) *gorm.DB{}).
 		SetCtx(ctx).
 		GetDbUseQuery("").
-		Table("organization_railways as or")
+		Table("organization_railways as `or`")
 }
 
 // OrganizationParagraphMdl 组织结构-站段模型

@@ -143,12 +143,12 @@
 <script setup>
 import { ref, onMounted, provide } from "vue";
 import {
-  ajaxEquipmentKindModelList,
-  ajaxEquipmentKindModelDetail,
-  ajaxEquipmentKindModelStore,
-  ajaxEquipmentKindModelUpdate,
-  ajaxEquipmentKindModelDestroy,
-  ajaxEquipmentKindModelDestroyMany,
+  ajaxGetEquipmentKindModels,
+  ajaxGetEquipmentKindModel,
+  ajaxStoreEquipmentKindModel,
+  ajaxUpdateEquipmentKindModel,
+  ajaxDestroyEquipmentKindModel,
+  ajaxDestroyEquipmentKindModels,
 } from "/src/apis/equipmentKind";
 import {
   loadingNotify,
@@ -211,7 +211,7 @@ const fnSearch = () => {
   rows.value = [];
   selected.value = [];
 
-  ajaxEquipmentKindModelList({
+  ajaxGetEquipmentKindModels({
     ":~[]": ["EquipmentKindType", "EquipmentKindType.EquipmentKindCategory"],
     name: name_search.value,
     equipment_kind_category_uuid: equipmentKindCategoryUuid_search.value,
@@ -260,7 +260,7 @@ const fnOpenAlertCreateEquipmentKindModel = () => {
  * 新建器材型号
  */
 const fnStoreEquipomentKindModel = () => {
-  ajaxEquipmentKindModelStore({
+  ajaxStoreEquipmentKindModel({
     name: name_alertCreateEquipmentKindModel.value,
     equipment_kind_type_uuid: equipmentKindTypeUuid_alertCreate.value,
   })
@@ -283,7 +283,7 @@ const fnDestroyEquipmentKindModels = params => {
     destroyActions(() => {
       const loading = loadingNotify();
 
-      ajaxEquipmentKindModelDestroyMany(selected.value.map(item => item.uuid))
+      ajaxDestroyEquipmentKindModels(selected.value.map(item => item.uuid))
         .then(() => {
           successNotify('删除成功');
           fnSearch();
@@ -302,7 +302,7 @@ const fnOpenAlertEditEquipmentKindModel = params => {
   if (!params['uuid']) return;
   currentUuid.value = params.uuid;
 
-  ajaxEquipmentKindModelDetail(params.uuid)
+  ajaxGetEquipmentKindModel(params.uuid)
     .then(res => {
       name_alertEditEquipmentKindModel.value = res.content.equipment_kind_model.name;
       alertEditEquipmentKindModel.value = true;
@@ -317,7 +317,7 @@ const fnOpenAlertEditEquipmentKindModel = params => {
 const fnUpdateEquipmentKindModel = params => {
   if (!currentUuid.value) return;
 
-  ajaxEquipmentKindModelUpdate(currentUuid.value, {
+  ajaxUpdateEquipmentKindModel(currentUuid.value, {
     name: name_alertEditEquipmentKindModel.value,
   })
     .then(res => {
@@ -338,7 +338,7 @@ const fnDestroyEquipmentKindModel = params => {
     destroyActions(() => {
       const loading = loadingNotify();
 
-      ajaxEquipmentKindModelDestroy(params.uuid)
+      ajaxDestroyEquipmentKindModel(params.uuid)
         .then(() => {
           successNotify('删除成功');
           fnSearch();

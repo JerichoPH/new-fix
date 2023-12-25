@@ -218,13 +218,13 @@ import { ref, onMounted, provide } from "vue";
 import collect from "collect.js";
 import settings from "src/settings";
 import {
-  ajaxAccountList,
-  ajaxAccountDetail,
-  ajaxAccountStore,
-  ajaxAccountUpdate,
-  ajaxAccountDestroy,
-  ajaxAccountDestroyMany,
-  ajaxAccountUpdatePassword,
+  ajaxGetAccounts,
+  ajaxGetAccount,
+  ajaxStoreAccount,
+  ajaxUpdateAccount,
+  ajaxDestroyAccount,
+  ajaxDestroyAccounts,
+  ajaxUpdateAccountPassword,
 } from "src/apis/account";
 import {
   loadingNotify,
@@ -323,7 +323,7 @@ const fnSearch = () => {
   rows.value = [];
   selected.value = [];
 
-  ajaxAccountList({
+  ajaxGetAccounts({
     ":~[]": ["Avatar", "RbacRoles"],
     username: username_search.value,
     nickname: nickname_search.value,
@@ -385,7 +385,7 @@ const fnStoreAccount = async () => {
     avatar.base64 = collect(avatar.base64.split('base64,')).last();
   }
 
-  ajaxAccountStore({
+  ajaxStoreAccount({
     username: username_alertCreateAccount.value,
     nickname: nickname_alertCreateAccount.value,
     password: password_alertCreateAccount.value,
@@ -423,7 +423,7 @@ const fnOpenAlertEditAccount = (params = {}) => {
 
   currentUuid.value = params.uuid;
 
-  ajaxAccountDetail(currentUuid.value, { ":~[]": ["Avatar", "RbacRoles"] })
+  ajaxGetAccount(currentUuid.value, { ":~[]": ["Avatar", "RbacRoles"] })
     .then((res) => {
       username_alertEditAccount.value = res.content.account.username;
       nickname_alertEditAccount.value = res.content.account.nickname;
@@ -458,7 +458,7 @@ const fnUpdateAccount = async () => {
 
   const loading = loadingNotify();
 
-  ajaxAccountUpdate(currentUuid.value, {
+  ajaxUpdateAccount(currentUuid.value, {
     username: username_alertEditAccount.value,
     nickname: nickname_alertEditAccount.value,
     rbac_role_uuids: rbacRoleUuids_alertEditAccount.value,
@@ -488,7 +488,7 @@ const fnDestroyAccount = (params = {}) => {
     destroyActions(() => {
       const loading = loadingNotify();
 
-      ajaxAccountDestroy(params.uuid)
+      ajaxDestroyAccount(params.uuid)
         .then((res) => {
           successNotify("删除成功");
           fnSearch();
@@ -513,7 +513,7 @@ const fnDestroyAccounts = () => {
     destroyActions(() => {
       const loading = loadingNotify();
 
-      ajaxAccountDestroyMany(collect(selected.value).pluck("uuid").all())
+      ajaxDestroyAccounts(collect(selected.value).pluck("uuid").all())
         .then((res) => {
           successNotify("删除成功");
           fnSearch();
@@ -553,7 +553,7 @@ const fnUpdatePassword = () => {
   if (!currentUuid.value) return;
 
   const loading = loadingNotify();
-  ajaxAccountUpdatePassword(currentUuid.value, {
+  ajaxUpdateAccountPassword(currentUuid.value, {
     old_password: oldPassword_alertEditPassword.value,
     password: password_alertEditPassword.value,
     password_confirmation: passwordConfirmation_alertEditPassword.value,

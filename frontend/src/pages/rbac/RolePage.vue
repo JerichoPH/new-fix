@@ -123,12 +123,12 @@ import { ref, onMounted } from "vue";
 import collect from "collect.js";
 import { fnColumnReverseSort } from "src/utils/common";
 import {
-  ajaxRbacRoleList,
-  ajaxRbacRoleDetail,
-  ajaxRbacRoleStore,
-  ajaxRbacRoleUpdate,
-  ajaxRbacRoleDestroy,
-  ajaxRbacRoleDestroyMany,
+  ajaxGetRbacRoles,
+  ajaxGetRbacRole,
+  ajaxStoreRbacRole,
+  ajaxUpdateRbacRole,
+  ajaxDestroyRbacRole,
+  ajaxDestroyRbacRoles,
 } from "src/apis/rbac";
 import {
   loadingNotify,
@@ -173,7 +173,7 @@ const fnSearch = () => {
   rows.value = [];
   selected.value = [];
 
-  ajaxRbacRoleList({
+  ajaxGetRbacRoles({
     name: name_search.value,
   }).then((res) => {
     if (res.content.rbac_roles.length > 0) {
@@ -209,7 +209,7 @@ const fnOpenAlertCreateRbacRole = () => {
 const fnStoreRbacRole = () => {
   const loading = loadingNotify();
 
-  ajaxRbacRoleStore({
+  ajaxStoreRbacRole({
     name: name_alertCreateRbacRole.value,
   })
     .then((res) => {
@@ -240,7 +240,7 @@ const fnOpenAlertEditRbacRole = (params = {}) => {
 
   currentUuid.value = params.uuid;
 
-  ajaxRbacRoleDetail(currentUuid.value)
+  ajaxGetRbacRole(currentUuid.value)
     .then((res) => {
       if (res.content.rbac_role) {
         name_alertEditRbacRole.value = res.content.rbac_role.name;
@@ -258,7 +258,7 @@ const fnOpenAlertEditRbacRole = (params = {}) => {
 const fnUpdateRbacRole = () => {
   if (!currentUuid.value) return;
 
-  ajaxRbacRoleUpdate(currentUuid.value, {
+  ajaxUpdateRbacRole(currentUuid.value, {
     name: name_alertEditRbacRole.value,
   })
     .then((res) => {
@@ -281,7 +281,7 @@ const fnDestroyRbacRole = (params = {}) => {
     destroyActions(() => {
       const loading = loadingNotify();
 
-      ajaxRbacRoleDestroy(params.uuid)
+      ajaxDestroyRbacRole(params.uuid)
         .then((res) => {
           successNotify("删除成功");
           fnSearch();
@@ -304,7 +304,7 @@ const fnDestroyRbacRoles = () => {
     destroyActions(() => {
       const loading = loadingNotify();
 
-      ajaxRbacRoleDestroyMany(collect(selected.value).pluck('uuid').toArray())
+      ajaxDestroyRbacRoles(collect(selected.value).pluck('uuid').toArray())
         .then(res => {
           successNotify('删除成功');
           fnSearch();
