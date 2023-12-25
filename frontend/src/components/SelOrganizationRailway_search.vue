@@ -1,5 +1,5 @@
 <template>
-  <q-select outlined use-input clearable v-model="parentUuid_search" :options="rbacMenus_search" :label="labelName"
+  <q-select outlined use-input clearable v-model="organizationRailwayUuid_search" :options="organizationRailways_search" :label="labelName"
     @filter="fnFilter" emit-value map-options />
 </template>
 <script setup>
@@ -24,34 +24,34 @@ const props = defineProps({
 
 const labelName = props.labelName;
 const ajaxParams = props.ajaxParams;
-const parentUuid_search = inject("parentUuid_search");
-const rbacMenus_search = ref([]);
+const organizationRailwayUuid_search = inject("organizationRailwayUuid_search");
+const organizationRailways_search = ref([]);
 
 const fnFilter = (val, update) => {
   if (val === "") {
     update(() => {
-      rbacMenus_search.value = rbacMenus.value;
+      organizationRailways_search.value = rbacMenus.value;
     });
     return;
   }
 
   update(() => {
-    rbacMenus_search.value = rbacMenus.value.filter(
+    organizationRailways_search.value = rbacMenus.value.filter(
       (v) => v.label.toLowerCase().indexOf(val.toLowerCase()) > -1
     );
   });
 };
 
 onMounted(() => {
-  rbacMenus_search.value = [];
+  organizationRailways_search.value = [];
 
   ajaxGetRbacMenus(ajaxParams)
     .then((res) => {
-      if (res.content.rbac_menus.length > 0) {
-        rbacMenus_search.value = res.content.rbac_menus.map(rbacMenu => {
+      if (res.content.organization_railways.length > 0) {
+        organizationRailways_search.value = res.content.organization_railways.map(organizationRailway=>{
           return {
-            label: rbacMenu.name,
-            value: rbacMenu.uuid,
+            label: organizationRailway.name,
+            value: organizationRailway.uuid,
           }
         });
       }
