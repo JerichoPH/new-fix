@@ -13,6 +13,7 @@ import EquipmentKindCategoryPage from "src/pages/equipmentKind/CategoryPage.vue"
 import EquipmentKindTypePage from "src/pages/equipmentKind/TypePage.vue";
 import EquipmentKindModelPage from "src/pages/equipmentKind/ModelPage.vue";
 import OrganizationRailwayPage from "src/pages/organization/RailwayPage.vue";
+import OrganizationParagraphPage from "src/pages/organization/ParagraphPage.vue";
 
 
 const routes = [
@@ -66,6 +67,7 @@ const routes = [
     component: () => MainLayoutVue,
     children: [
       { path: "railway", name: "organizationRailway:index", component: OrganizationRailwayPage },
+      { path: "paragraph", name: "organizationParagraph:index", component: OrganizationParagraphPage },
     ],
   },
   // Always leave this as last one,

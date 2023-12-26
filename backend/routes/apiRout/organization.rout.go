@@ -40,5 +40,27 @@ func (OrganizationRout) Load(engine *gin.Engine) {
 			// jquery-dataTable数据列表
 			railwayRout.GET(".jdt", controllers.NewOrganizationRailwayCtrl().ListJdt)
 		}
+
+		paragraphRout := organizationRout.Group(
+			"paragraph",
+			middlewares.CheckAuth(),
+			middlewares.CheckPermission(),
+		)
+		{
+			// 新建
+			paragraphRout.POST("", controllers.NewOrganizationParagraphCtrl().Store)
+			// 批量删除
+			paragraphRout.POST("destroyMany", controllers.NewOrganizationParagraphCtrl().DestroyMany)
+			// 删除
+			paragraphRout.DELETE(":uuid", controllers.NewOrganizationParagraphCtrl().Destroy)
+			// 编辑
+			paragraphRout.PUT(":uuid", controllers.NewOrganizationParagraphCtrl().Update)
+			// 详情
+			paragraphRout.GET(":uuid", controllers.NewOrganizationParagraphCtrl().Detail)
+			// 列表
+			paragraphRout.GET("", controllers.NewOrganizationParagraphCtrl().List)
+			// jquery-dataTable数据列表
+			paragraphRout.GET(".jdt", controllers.NewOrganizationParagraphCtrl().ListJdt)
+		}
 	}
 }

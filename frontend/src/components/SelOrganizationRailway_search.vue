@@ -1,10 +1,10 @@
 <template>
-  <q-select outlined use-input clearable v-model="organizationRailwayUuid_search" :options="organizationRailways_search" :label="labelName"
-    @filter="fnFilter" emit-value map-options />
+  <q-select outlined use-input clearable v-model="organizationRailwayUuid_search" :options="organizationRailways_search"
+    :label="labelName" @filter="fnFilter" emit-value map-options />
 </template>
 <script setup>
 import { inject, defineProps, onMounted, ref } from "vue";
-import { ajaxGetRbacMenus } from "/src/apis/rbac";
+import { ajaxGetOrganizationRailways } from "/src/apis/organization";
 import collect from "collect.js";
 import { errorNotify } from "src/utils/notify";
 
@@ -26,17 +26,18 @@ const labelName = props.labelName;
 const ajaxParams = props.ajaxParams;
 const organizationRailwayUuid_search = inject("organizationRailwayUuid_search");
 const organizationRailways_search = ref([]);
+const organizationRailways = ref([]);
 
 const fnFilter = (val, update) => {
   if (val === "") {
     update(() => {
-      organizationRailways_search.value = rbacMenus.value;
+      organizationRailways_search.value = organizationRailways.value;
     });
     return;
   }
 
   update(() => {
-    organizationRailways_search.value = rbacMenus.value.filter(
+    organizationRailways_search.value = organizationRailways.value.filter(
       (v) => v.label.toLowerCase().indexOf(val.toLowerCase()) > -1
     );
   });
@@ -45,10 +46,10 @@ const fnFilter = (val, update) => {
 onMounted(() => {
   organizationRailways_search.value = [];
 
-  ajaxGetRbacMenus(ajaxParams)
+  ajaxGetOrganizationRailways(ajaxParams)
     .then((res) => {
       if (res.content.organization_railways.length > 0) {
-        organizationRailways_search.value = res.content.organization_railways.map(organizationRailway=>{
+        organizationRailways.value = res.content.organization_railways.map(organizationRailway => {
           return {
             label: organizationRailway.name,
             value: organizationRailway.uuid,

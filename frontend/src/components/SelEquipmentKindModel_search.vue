@@ -29,6 +29,7 @@ const ajaxParams = props.ajaxParams;
 const equipmentKindTypeUuid_search = inject("equipmentKindTyypeUuid_search");
 const equipmentKindModelUuid_search = inject("equipmentKindTypeUuid_search");
 const equipmentKindModels_search = ref([]);
+const equipmentKindModels = ref([]);
 
 watch(equipmentKindTypeUuid_search, newValue => {
   fnSearch(newValue);
@@ -37,17 +38,21 @@ watch(equipmentKindTypeUuid_search, newValue => {
 const fnFilter = (val, update) => {
   if (val === "") {
     update(() => {
-      equipmentKindModels_search.value = equipmentKindModels_search.value;
+      equipmentKindModels_search.value = equipmentKindModels.value;
     });
     return;
   }
 
   update(() => {
-    equipmentKindModels_search.value = equipmentKindModels_search.value.filter(
+    equipmentKindModels_search.value = equipmentKindModels.value.filter(
       (v) => v.label.toLowerCase().indexOf(val.toLowerCase()) > -1
     );
   });
 };
+
+onMounted(() => {
+  fnSearch("");
+});
 
 const fnSearch = equipmentKindTypeUuid => {
   equipmentKindModels_search.value = [];
@@ -60,7 +65,7 @@ const fnSearch = equipmentKindTypeUuid => {
     })
       .then((res) => {
         if (res.content.equipment_kind_models.length > 0) {
-          equipmentKindModels_search.value = res.content.equipment_kind_models
+          equipmentKindModels.value = res.content.equipment_kind_models
             .map(equipmentKindModel => {
               return {
                 label: equipmentKindModel.name,
@@ -69,13 +74,7 @@ const fnSearch = equipmentKindTypeUuid => {
             });
         }
       })
-      .catch((e) => {
-        errorNotify(e.msg);
-      });
+      .catch((e) => errorNotify(e.msg));
   }
 };
-
-onMounted(() => {
-  fnSearch("");
-});
 </script>

@@ -26,6 +26,7 @@ const labelName = props.labelName;
 const ajaxParams = props.ajaxParams;
 const parentUuid_search = inject("parentUuid_search");
 const rbacMenus_search = ref([]);
+const rbacMenus = ref([]);
 
 const fnFilter = (val, update) => {
   if (val === "") {
@@ -48,17 +49,16 @@ onMounted(() => {
   ajaxGetRbacMenus(ajaxParams)
     .then((res) => {
       if (res.content.rbac_menus.length > 0) {
-        rbacMenus_search.value = res.content.rbac_menus.map(rbacMenu => {
-          return {
-            label: rbacMenu.name,
-            value: rbacMenu.uuid,
-          }
-        });
+        rbacMenus.value = res.content.rbac_menus
+          .map(rbacMenu => {
+            return {
+              label: rbacMenu.name,
+              value: rbacMenu.uuid,
+            }
+          });
       }
     })
-    .catch((e) => {
-      errorNotify(e.msg);
-    });
+    .catch((e) => errorNotify(e.msg));
 });
 </script>
 src/utils/notify

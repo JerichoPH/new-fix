@@ -2,7 +2,7 @@
   <div class="q-pa-md">
     <q-card>
       <q-card-section>
-        <div class="row">
+        <div class="row q-mb-md">
           <div class="col"><span :style="{ fontSize: '20px' }">搜索</span></div>
           <div class="col text-right">
             <q-btn-group>
@@ -161,7 +161,7 @@ import {
   ajaxUpdateOrganizationRailway,
   ajaxDestroyOrganizationRailway,
   ajaxDestroyOrganizationRailways,
-} from "src/apis/oragnization";
+} from "src/apis/organization";
 import {
   loadingNotify,
   successNotify,
@@ -260,7 +260,7 @@ const fnStoreOrganizationRailway = params => {
       fnSearch();
     })
     .catch(e => errorNotify(e.msg))
-    .finally(() => loading.close());
+    .finally(() => loading());
 };
 
 /**
@@ -348,3 +348,4 @@ const fnDestroyOrganizationRailways = uuids => {
 };
 
 </script>
+src/apis/organization

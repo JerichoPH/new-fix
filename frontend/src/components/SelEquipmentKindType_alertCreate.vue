@@ -76,9 +76,7 @@ const fnSearch = equipmentKindCategoryUuid => {
             });
         }
       })
-      .catch((e) => {
-        errorNotify(e.msg);
-      });
+      .catch((e) => errorNotify(e.msg));
   }
 };
 </script>
