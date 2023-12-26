@@ -16,6 +16,10 @@
             <q-form>
               <div class="row q-pb-sm q-col-gutter-sm">
                 <div class="col-3">
+                  <q-input outlined clearable lazy-rules v-model="uniqueCode_search" label="代码" :rules="[]"
+                    class="q-mb-md" />
+                </div>
+                <div class="col-3">
                   <q-input outlined clearable lazy-rules v-model="name_search" label="名称" :rules="[]" class="q-mb-md" />
                 </div>
               </div>
@@ -28,7 +32,9 @@
     <q-card class="q-mt-md">
       <q-card-section>
         <div class="row">
-          <div class="col"><span :style="{ fontSize: '20px' }">路局列表</span></div>
+          <div class="col">
+            <span :style="{ fontSize: '20px' }">路局列表</span>
+          </div>
           <div class="col text-right">
             <q-btn-group>
               <q-btn color="secondary" label="新建路局" icon="add" @click="fnOpenAlertCreateOrganizationRailway" />
@@ -45,10 +51,12 @@
                 <q-tr :props="props">
                   <q-th align="left"><q-checkbox key="allCheck" v-model="props.selected" /></q-th>
                   <q-th align="left">#</q-th>
-                  <q-th align="left" key="uniqueCode" @click="(event) => fnColumnReverseSort(event, props, sortBy)">
+                  <q-th align="left" key="uniqueCode" @click="(event) => fnColumnReverseSort(event, props, sortBy)
+                    ">
                     代码
                   </q-th>
-                  <q-th align="left" key="name" @click="(event) => fnColumnReverseSort(event, props, sortBy)">
+                  <q-th align="left" key="name" @click="(event) => fnColumnReverseSort(event, props, sortBy)
+                    ">
                     名称
                   </q-th>
                   <q-th align="right"></q-th>
@@ -58,16 +66,22 @@
                 <q-tr :props="props">
                   <q-td><q-checkbox :key="props.row.uuid" :value="props.row.uuid" v-model="props.selected" /></q-td>
                   <q-td>{{ props.row.index }}</q-td>
-                  <q-td key="uniqueCode" :props="props">{{ props.row.uniqueCode }}</q-td>
+                  <q-td key="uniqueCode" :props="props">{{
+                    props.row.uniqueCode
+                  }}</q-td>
                   <q-td key="name" :props="props">{{ props.row.name }}</q-td>
                   <q-td key="operation" :props="props">
                     <q-btn-group>
                       <q-btn @click="
-                        fnOpenAlertEditOrganizationRailway(props.row.operation)
+                        fnOpenAlertEditOrganizationRailway(
+                          props.row.operation
+                        )
                         " color="warning" icon="edit">
                         编辑
                       </q-btn>
-                      <q-btn @click="fnDestroyOrganizationRailway(props.row.operation)" color="negative" icon="delete">
+                      <q-btn @click="
+                        fnDestroyOrganizationRailway(props.row.operation)
+                        " color="negative" icon="delete">
                         删除
                       </q-btn>
                     </q-btn-group>
@@ -151,8 +165,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import collect from 'collect.js';
+import { ref, onMounted } from "vue";
+import collect from "collect.js";
 import { fnColumnReverseSort } from "src/utils/common";
 import {
   ajaxGetOrganizationRailways,
@@ -171,25 +185,26 @@ import {
 } from "src/utils/notify";
 
 // 搜索栏数据
-const name_search = ref('');
+const uniqueCode_search = ref("");
+const name_search = ref("");
 
 // 表格数据
 const rows = ref([]);
 const selected = ref([]);
-const sortBy = ref('');
+const sortBy = ref("");
 
 // 新建路局弹窗数据
 const alertCreateOrganizationRailway = ref(false);
-const uniqueCode_alertCreateOrganizationRailway = ref('');
-const name_alertCreateOrganizationRailway = ref('');
-const shortName_alertCreateOrganizationRailway = ref('');
+const uniqueCode_alertCreateOrganizationRailway = ref("");
+const name_alertCreateOrganizationRailway = ref("");
+const shortName_alertCreateOrganizationRailway = ref("");
 
 // 编辑路局弹窗数据
-const currentUuid = ref('');
+const currentUuid = ref("");
 const alertEditOrganizationrailway = ref(false);
-const uniqueCode_alertEditOrganizationrailway = ref('');
-const name_alertEditOrganizationrailway = ref('');
-const shortName_alertEditOrganizationrailway = ref('');
+const uniqueCode_alertEditOrganizationrailway = ref("");
+const name_alertEditOrganizationrailway = ref("");
+const shortName_alertEditOrganizationrailway = ref("");
 
 onMounted(() => fnInit());
 
@@ -212,41 +227,47 @@ const fnSearch = () => {
   rows.value = [];
   selected.value = [];
 
-  ajaxGetOrganizationRailways({ name: name_search.value })
-    .then(res => {
-      if (res.content.organization_railways.length > 0) {
-        rows.value = res.content.organization_railways.map((organizationRailway, idx) => {
-          return {
-            index: idx + 1,
-            uniqueCode: organizationRailway.unique_code,
-            name: organizationRailway.name,
-            uuid: organizationRailway.uuid,
-            operation: { uuid: organizationRailway.uuid },
+  ajaxGetOrganizationRailways({
+    unique_code: uniqueCode_search.value,
+    name: name_search.value,
+  })
+    .then((res) => {
+      rows.value = collect(res.content.organization_railways)
+        .map(
+          (organizationRailway, idx) => {
+            return {
+              index: idx + 1,
+              uniqueCode: organizationRailway.unique_code,
+              name: organizationRailway.name,
+              uuid: organizationRailway.uuid,
+              operation: { uuid: organizationRailway.uuid },
+            };
           }
-        });
-      }
+        )
+        .all();
     })
-    .catch(e => {
-      console.error('err', e);
-      errorNotify(e.msg);
-    });
+    .catch((e) => errorNotify(e.msg));
 };
 
 /**
  * 重置新建路局弹窗
  */
-const fnResetAlertCreateOrganizationRailway = () => { name_alertCreateOrganizationRailway.value = ""; };
+const fnResetAlertCreateOrganizationRailway = () => {
+  name_alertCreateOrganizationRailway.value = "";
+};
 
 /**
  * 打开新建路局弹窗
  */
-const fnOpenAlertCreateOrganizationRailway = () => { alertCreateOrganizationRailway.value = true; };
+const fnOpenAlertCreateOrganizationRailway = () => {
+  alertCreateOrganizationRailway.value = true;
+};
 
 /**
  * 新建路局
  * @param {{*}} params
  */
-const fnStoreOrganizationRailway = params => {
+const fnStoreOrganizationRailway = (params) => {
   const loading = loadingNotify();
 
   ajaxStoreOrganizationRailway({
@@ -254,12 +275,12 @@ const fnStoreOrganizationRailway = params => {
     name: name_alertCreateOrganizationRailway.value,
     short_name: shortName_alertCreateOrganizationRailway.value,
   })
-    .then(res => {
+    .then((res) => {
       successNotify(res.msg);
       fnResetAlertCreateOrganizationRailway();
       fnSearch();
     })
-    .catch(e => errorNotify(e.msg))
+    .catch((e) => errorNotify(e.msg))
     .finally(() => loading());
 };
 
@@ -267,19 +288,22 @@ const fnStoreOrganizationRailway = params => {
  * 打开编辑
  * @param {{*}} params
  */
-const fnOpenAlertEditOrganizationRailway = params => {
-  if (!params['uuid']) return;
+const fnOpenAlertEditOrganizationRailway = (params) => {
+  if (!params["uuid"]) return;
 
   currentUuid.value = params.uuid;
 
   ajaxGetOrganizationRailway(params.uuid)
-    .then(res => {
-      uniqueCode_alertEditOrganizationrailway.value = res.content.organization_railway.unique_code;
-      name_alertEditOrganizationrailway.value = res.content.organization_railway.name;
-      shortName_alertEditOrganizationrailway.value = res.content.organization_railway.short_name;
+    .then((res) => {
+      uniqueCode_alertEditOrganizationrailway.value =
+        res.content.organization_railway.unique_code;
+      name_alertEditOrganizationrailway.value =
+        res.content.organization_railway.name;
+      shortName_alertEditOrganizationrailway.value =
+        res.content.organization_railway.short_name;
       alertEditOrganizationrailway.value = true;
     })
-    .catch(e => errorNotify(e.msg));
+    .catch((e) => errorNotify(e.msg));
 };
 
 /**
@@ -297,11 +321,11 @@ const fnUpdateOrganizationRailway = () => {
     name: name_alertEditOrganizationrailway.value,
     short_name: shortName_alertEditOrganizationrailway.value,
   })
-    .then(res => {
+    .then((res) => {
       successNotify(res.msg);
       fnSearch();
     })
-    .catch(e => errorNotify(e.msg))
+    .catch((e) => errorNotify(e.msg))
     .finally(() => loading());
 };
 
@@ -309,8 +333,8 @@ const fnUpdateOrganizationRailway = () => {
  * 删除路局
  * @param {{*}} params
  */
-const fnDestroyOrganizationRailway = params => {
-  if (!params['uuid']) return;
+const fnDestroyOrganizationRailway = (params) => {
+  if (!params["uuid"]) return;
 
   actionNotify(
     destroyActions(() => {
@@ -318,10 +342,10 @@ const fnDestroyOrganizationRailway = params => {
 
       ajaxDestroyOrganizationRailway(params.uuid)
         .then(() => {
-          successNotify('删除成功');
+          successNotify("删除成功");
           fnSearch();
         })
-        .catch(e => errorNotify(e.msg))
+        .catch((e) => errorNotify(e.msg))
         .finally(() => loading());
     })
   );
@@ -331,21 +355,20 @@ const fnDestroyOrganizationRailway = params => {
  * 批量删除路局
  * @param {[string]} uuids
  */
-const fnDestroyOrganizationRailways = uuids => {
+const fnDestroyOrganizationRailways = (uuids) => {
   actionNotify(
     destroyActions(() => {
       const loading = loadingNotify();
 
       ajaxDestroyOrganizationRailways(selected.value)
         .then(() => {
-          successNotify('删除成功');
+          successNotify("删除成功");
           fnSearch();
         })
-        .catch(e => errorNotify(e.msg))
+        .catch((e) => errorNotify(e.msg))
         .finally(() => loading());
     })
   );
 };
-
 </script>
 src/apis/organization

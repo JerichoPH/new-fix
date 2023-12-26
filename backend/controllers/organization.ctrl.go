@@ -311,14 +311,18 @@ func (OrganizationParagraphCtrl) Store(ctx *gin.Context) {
 	wrongs.ThrowWhenNotEmpty(ret, "站段名称")
 
 	// 新建
-	organizationParagraph := &models.OrganizationParagraphMdl{}
+	organizationParagraph := &models.OrganizationParagraphMdl{
+		UniqueCode:              form.UniqueCode,
+		Name:                    form.Name,
+		OrganizationRailwayUuid: form.organizationRailway.Uuid,
+	}
 	if ret = models.NewOrganizationParagraphMdl().
 		GetDb("").
 		Create(&organizationParagraph); ret.Error != nil {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Created(map[string]any{"organizationParagraph": organizationParagraph}).ToGinResponse())
+	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Created(map[string]any{"organization_paragraph": organizationParagraph}).ToGinResponse())
 }
 
 // Destroy 删除
@@ -386,6 +390,7 @@ func (OrganizationParagraphCtrl) Update(ctx *gin.Context) {
 	// 编辑
 	organizationParagraph.UniqueCode = form.UniqueCode
 	organizationParagraph.Name = form.Name
+	organizationParagraph.OrganizationRailwayUuid = form.organizationRailway.Uuid
 	if ret = models.NewOrganizationParagraphMdl().
 		GetDb("").
 		Where("uuid = ?", ctx.Param("uuid")).
@@ -393,7 +398,7 @@ func (OrganizationParagraphCtrl) Update(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"organizationParagraph": organizationParagraph}).ToGinResponse())
+	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"organization_paragraph": organizationParagraph}).ToGinResponse())
 }
 
 // Detail 详情
@@ -409,7 +414,7 @@ func (OrganizationParagraphCtrl) Detail(ctx *gin.Context) {
 		First(&organizationParagraph)
 	wrongs.ThrowWhenEmpty(ret, "站段")
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"organizationParagraph": organizationParagraph}).ToGinResponse())
+	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"organization_paragraph": organizationParagraph}).ToGinResponse())
 }
 
 // List 列表
@@ -422,7 +427,7 @@ func (receiver OrganizationParagraphCtrl) List(ctx *gin.Context) {
 				models.OrganizationParagraphMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
 					db.Find(&organizationParagraphs)
-					return map[string]any{"organizationParagraphs": organizationParagraphs}
+					return map[string]any{"organization_paragraphs": organizationParagraphs}
 				},
 			).
 			ToGinResponse(),
@@ -439,7 +444,7 @@ func (receiver OrganizationParagraphCtrl) ListJdt(ctx *gin.Context) {
 				models.OrganizationParagraphMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
 					db.Find(&organizationParagraphs)
-					return map[string]any{"organizationParagraphs": organizationParagraphs}
+					return map[string]any{"organization_paragraphs": organizationParagraphs}
 				},
 			).
 			ToGinResponse(),

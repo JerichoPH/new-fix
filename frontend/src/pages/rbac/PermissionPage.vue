@@ -6,7 +6,12 @@
           <div class="col"><span :style="{ fontSize: '20px' }">搜索</span></div>
           <div class="col text-right">
             <q-btn-group>
-              <q-btn color="primary" label="搜索" icon="search" @click="fnSearch" />
+              <q-btn
+                color="primary"
+                label="搜索"
+                icon="search"
+                @click="fnSearch"
+              />
               <q-btn color="primary" label="重置" flat @click="fnResetSearch" />
             </q-btn-group>
           </div>
@@ -16,13 +21,34 @@
             <q-form>
               <div class="row q-col-gutter-sm">
                 <div class="col-3">
-                  <q-input outlined clearable lazy-rules v-model="name_search" label="名称" :rules="[]" />
+                  <q-input
+                    outlined
+                    clearable
+                    lazy-rules
+                    v-model="name_search"
+                    label="名称"
+                    :rules="[]"
+                  />
                 </div>
                 <div class="col-3">
-                  <q-input outlined clearable lazy-rules v-model="uri_search" label="路由" :rules="[]" />
+                  <q-input
+                    outlined
+                    clearable
+                    lazy-rules
+                    v-model="uri_search"
+                    label="路由"
+                    :rules="[]"
+                  />
                 </div>
                 <div class="col-3">
-                  <q-input outlined clearable lazy-rules v-model="description_search" label="描述" :rules="[]" />
+                  <q-input
+                    outlined
+                    clearable
+                    lazy-rules
+                    v-model="description_search"
+                    label="描述"
+                    :rules="[]"
+                  />
                 </div>
                 <div class="col-3">
                   <sel-rbac-role_search label-name="所属角色" />
@@ -37,33 +63,73 @@
     <q-card class="q-mt-md">
       <q-card-section>
         <div class="row">
-          <div class="col"><span :style="{ fontSize: '20px' }">权限列表</span></div>
+          <div class="col">
+            <span :style="{ fontSize: '20px' }">权限列表</span>
+          </div>
           <div class="col text-right">
             <q-btn-group>
-              <q-btn color="secondary" label="新建权限" icon="add" @click="fnOpenAlertCreateRbacPermission" />
-              <q-btn color="negative" label="删除权限" icon="delete" @click="fnDestroyRbacPermissions" />
+              <q-btn
+                color="secondary"
+                label="新建权限"
+                icon="add"
+                @click="fnOpenAlertCreateRbacPermission"
+              />
+              <q-btn
+                color="negative"
+                label="删除权限"
+                icon="delete"
+                @click="fnDestroyRbacPermissions"
+              />
             </q-btn-group>
           </div>
         </div>
         <div class="row q-mt-md">
           <div class="col">
-            <q-table flat bordered title="" :rows="rows" row-key="name" :pagination="{ rowsPerPage: 200 }"
-              :rows-per-page-options="[50, 100, 200, 0]" rows-per-page-label="分页" selection="multiple"
-              v-model:selected="selected">
+            <q-table
+              flat
+              bordered
+              title=""
+              :rows="rows"
+              row-key="name"
+              :pagination="{ rowsPerPage: 200 }"
+              :rows-per-page-options="[50, 100, 200, 0]"
+              rows-per-page-label="分页"
+              selection="multiple"
+              v-model:selected="selected"
+            >
               <template v-slot:header="props">
                 <q-tr :props="props">
-                  <q-th align="left"><q-checkbox key="allCheck" v-model="props.selected">全选</q-checkbox></q-th>
+                  <q-th align="left"
+                    ><q-checkbox key="allCheck" v-model="props.selected"
+                      >全选</q-checkbox
+                    ></q-th
+                  >
                   <q-th align="left">#</q-th>
-                  <q-th align="left" key="name" @click="(event) => fnColumnReverseSort(event, props, sortBy)
-                    ">
+                  <q-th
+                    align="left"
+                    key="name"
+                    @click="
+                      (event) => fnColumnReverseSort(event, props, sortBy)
+                    "
+                  >
                     名称
                   </q-th>
-                  <q-th align="left" key="uri" @click="(event) => fnColumnReverseSort(event, props, sortBy)
-                    ">
+                  <q-th
+                    align="left"
+                    key="uri"
+                    @click="
+                      (event) => fnColumnReverseSort(event, props, sortBy)
+                    "
+                  >
                     路由
                   </q-th>
-                  <q-th align="left" key="description" @click="(event) => fnColumnReverseSort(event, props, sortBy)
-                    ">
+                  <q-th
+                    align="left"
+                    key="description"
+                    @click="
+                      (event) => fnColumnReverseSort(event, props, sortBy)
+                    "
+                  >
                     描述
                   </q-th>
                   <q-th align="left" key="rbacRoles">所属角色</q-th>
@@ -72,7 +138,12 @@
               </template>
               <template v-slot:body="props">
                 <q-tr :props="props">
-                  <q-td><q-checkbox :key="props.row.uuid" :value="props.row.uuid" v-model="props.selected" /></q-td>
+                  <q-td
+                    ><q-checkbox
+                      :key="props.row.uuid"
+                      :value="props.row.uuid"
+                      v-model="props.selected"
+                  /></q-td>
                   <q-td>{{ props.row.index }}</q-td>
                   <q-td key="name" :props="props">{{ props.row.name }}</q-td>
                   <q-td key="uri" :props="props">{{
@@ -83,8 +154,12 @@
                   </q-td>
                   <q-td key="rbacRoles" :props="props">
                     <template v-if="props.row.rbacRoles.length > 0">
-                      <q-chip v-for="(rbacRole, idx) in props.row.rbacRoles" :key="idx" color="primary"
-                        text-color="white">
+                      <q-chip
+                        v-for="(rbacRole, idx) in props.row.rbacRoles"
+                        :key="idx"
+                        color="primary"
+                        text-color="white"
+                      >
                         {{ rbacRole.name }}
                       </q-chip>
                     </template>
@@ -92,10 +167,20 @@
                   </q-td>
                   <q-td key="operation" :props="props">
                     <q-btn-group>
-                      <q-btn @click="fnOpenAlertEditRbacPermission(props.row.operation)" color="warning" icon="edit">
+                      <q-btn
+                        @click="
+                          fnOpenAlertEditRbacPermission(props.row.operation)
+                        "
+                        color="warning"
+                        icon="edit"
+                      >
                         编辑
                       </q-btn>
-                      <q-btn @click="fnDestroyRbacPermission(props.row.operation)" color="negative" icon="delete">
+                      <q-btn
+                        @click="fnDestroyRbacPermission(props.row.operation)"
+                        color="negative"
+                        icon="delete"
+                      >
                         删除
                       </q-btn>
                     </q-btn-group>
@@ -120,18 +205,49 @@
         <q-form class="q-gutter-md" @submit.prevent="">
           <div class="row">
             <div class="col">
-              <q-input outlined clearable lazy-rules v-model="name_alertCreateRbacPermission" label="名称" :rules="[]" />
-              <q-input outlined clearable lazy-rules v-model="uri_alertCreateRbacPermission" label="路由" :rules="[]"
-                class="q-mt-md" />
-              <q-input outlined clearable lazy-rules v-model="description_alertCreateRbacPermission" label="描述"
-                :rules="[]" class="q-mt-md" />
-              <chk-rbac-role_alert-create labelName="所属角色" class="q-mt-md" />
+              <q-input
+                outlined
+                clearable
+                lazy-rules
+                v-model="name_alertCreateRbacPermission"
+                label="名称"
+                :rules="[]"
+              />
+              <q-input
+                outlined
+                clearable
+                lazy-rules
+                v-model="uri_alertCreateRbacPermission"
+                label="路由"
+                :rules="[]"
+                class="q-mt-md"
+              />
+              <q-input
+                outlined
+                clearable
+                lazy-rules
+                v-model="description_alertCreateRbacPermission"
+                label="描述"
+                :rules="[]"
+                class="q-mt-md"
+              />
+              <chk-rbac-role_alert-create
+                labelName="所属角色"
+                class="q-mt-md"
+              />
             </div>
           </div>
         </q-form>
       </q-card-section>
       <q-card-actions align="right">
-        <q-btn type="button" label="确定" icon="check" color="secondary" @click="fnStoreRbacPermission" v-close-popup />
+        <q-btn
+          type="button"
+          label="确定"
+          icon="check"
+          color="secondary"
+          @click="fnStoreRbacPermission"
+          v-close-popup
+        />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -145,18 +261,46 @@
         <q-form class="q-gutter-md" @submit.prevent="">
           <div class="row">
             <div class="col">
-              <q-input outlined clearable lazy-rules v-model="name_alertEditRbacPermission" label="名称" :rules="[]" />
-              <q-input outlined clearable lazy-rules v-model="uri_alertEditRbacPermission" label="路由" :rules="[]"
-                class="q-mt-md" />
-              <q-input outlined clearable lazy-rules v-model="description_alertEditRbacPermission" label="描述" :rules="[]"
-                class="q-mt-md" />
+              <q-input
+                outlined
+                clearable
+                lazy-rules
+                v-model="name_alertEditRbacPermission"
+                label="名称"
+                :rules="[]"
+              />
+              <q-input
+                outlined
+                clearable
+                lazy-rules
+                v-model="uri_alertEditRbacPermission"
+                label="路由"
+                :rules="[]"
+                class="q-mt-md"
+              />
+              <q-input
+                outlined
+                clearable
+                lazy-rules
+                v-model="description_alertEditRbacPermission"
+                label="描述"
+                :rules="[]"
+                class="q-mt-md"
+              />
               <chk-rbac-role_alert-edit labelName="所属角色" class="q-mt-md" />
             </div>
           </div>
         </q-form>
       </q-card-section>
       <q-card-actions align="right">
-        <q-btn type="button" label="确定" icon="check" color="warning" @click="fnUpdateRbacPermission" v-close-popup />
+        <q-btn
+          type="button"
+          label="确定"
+          icon="check"
+          color="warning"
+          @click="fnUpdateRbacPermission"
+          v-close-popup
+        />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -202,7 +346,10 @@ const name_alertCreateRbacPermission = ref("");
 const uri_alertCreateRbacPermission = ref("");
 const description_alertCreateRbacPermission = ref("");
 const rbacRoleUuids_alertCreateRbacPermission = ref([]);
-provide("checkedRbacRoleUuids_alertCreate", rbacRoleUuids_alertCreateRbacPermission);
+provide(
+  "checkedRbacRoleUuids_alertCreate",
+  rbacRoleUuids_alertCreateRbacPermission
+);
 
 // 编辑权限对话框
 const alertEditRbacPermission = ref(false);
@@ -211,8 +358,10 @@ const name_alertEditRbacPermission = ref("");
 const uri_alertEditRbacPermission = ref("");
 const description_alertEditRbacPermission = ref("");
 const rbacRoleUuids_alertEditRbacPermission = ref([]);
-provide("checkedRbacRoleUuids_alertEdit", rbacRoleUuids_alertEditRbacPermission);
-
+provide(
+  "checkedRbacRoleUuids_alertEdit",
+  rbacRoleUuids_alertEditRbacPermission
+);
 
 onMounted(() => {
   fnInit();
@@ -410,7 +559,9 @@ const fnDestroyRbacPermissions = () => {
     destroyActions(() => {
       const loading = loadingNotify();
 
-      ajaxDestroyRbacPermissions(collect(selected.value).pluck('uuid').toArray())
+      ajaxDestroyRbacPermissions(
+        collect(selected.value).pluck("uuid").toArray()
+      )
         .then(() => {
           successNotify("删除成功");
           fnSearch();
@@ -421,7 +572,7 @@ const fnDestroyRbacPermissions = () => {
         .finally(() => {
           loading();
         });
-    }),
+    })
   );
 };
 </script>

@@ -6,7 +6,12 @@
           <div class="col"><span :style="{ fontSize: '20px' }">搜索</span></div>
           <div class="col text-right">
             <q-btn-group>
-              <q-btn color="primary" label="搜索" icon="search" @click="fnSearch" />
+              <q-btn
+                color="primary"
+                label="搜索"
+                icon="search"
+                @click="fnSearch"
+              />
               <q-btn color="primary" label="重置" flat @click="fnResetSearch" />
             </q-btn-group>
           </div>
@@ -16,13 +21,27 @@
             <q-form>
               <div class="row q-pb-sm q-col-gutter-sm">
                 <div class="col-3">
-                  <q-input outlined clearable lazy-rules v-model="name_search" label="名称" :rules="[]" class="q-mb-md" />
+                  <q-input
+                    outlined
+                    clearable
+                    lazy-rules
+                    v-model="name_search"
+                    label="名称"
+                    :rules="[]"
+                    class="q-mb-md"
+                  />
                 </div>
                 <div class="col-3">
-                  <sel-equipment-kind-category_search label-name="器材种类" :ajax-params="{}" />
+                  <sel-equipment-kind-category_search
+                    label-name="器材种类"
+                    :ajax-params="{}"
+                  />
                 </div>
                 <div class="col-3">
-                  <sel-equipment-kind-type_search label-name="器材类型" :ajax-params="{}" />
+                  <sel-equipment-kind-type_search
+                    label-name="器材类型"
+                    :ajax-params="{}"
+                  />
                 </div>
               </div>
             </q-form>
@@ -34,30 +53,71 @@
     <q-card class="q-mt-md">
       <q-card-section>
         <div class="row">
-          <div class="col"><span :style="{ fontSize: '20px' }">器材型号列表</span></div>
+          <div class="col">
+            <span :style="{ fontSize: '20px' }">器材型号列表</span>
+          </div>
           <div class="col text-right">
             <q-btn-group>
-              <q-btn color="secondary" label="新建器材型号" icon="add" @click="fnOpenAlertCreateEquipmentKindModel" />
-              <q-btn color="negative" label="删除器材型号" icon="deleted" @click="fnDestroyEquipmentKindModels" />
+              <q-btn
+                color="secondary"
+                label="新建器材型号"
+                icon="add"
+                @click="fnOpenAlertCreateEquipmentKindModel"
+              />
+              <q-btn
+                color="negative"
+                label="删除器材型号"
+                icon="deleted"
+                @click="fnDestroyEquipmentKindModels"
+              />
             </q-btn-group>
           </div>
         </div>
         <div class="row q-mt-md">
           <div class="col">
-            <q-table flat bordered title="器材型号列表" :rows="rows" row-key="uuid" :pagination="{ rowsPerPage: 200 }"
-              :rows-per-page-options="[50, 100, 200, 0]" rows-per-page-label="分页" selection="multiple"
-              v-model:selected="selected">
+            <q-table
+              flat
+              bordered
+              title="器材型号列表"
+              :rows="rows"
+              row-key="uuid"
+              :pagination="{ rowsPerPage: 200 }"
+              :rows-per-page-options="[50, 100, 200, 0]"
+              rows-per-page-label="分页"
+              selection="multiple"
+              v-model:selected="selected"
+            >
               <template v-slot:header="props">
                 <q-tr :props="props">
-                  <q-th align="left"><q-checkbox key="allCheck" v-model="props.selected" /></q-th>
+                  <q-th align="left"
+                    ><q-checkbox key="allCheck" v-model="props.selected"
+                  /></q-th>
                   <q-th align="left">#</q-th>
-                  <q-th align="left" key="uniqueCode" @click="(event) => fnColumnReverseSort(event, props, sortBy)">
+                  <q-th
+                    align="left"
+                    key="uniqueCode"
+                    @click="
+                      (event) => fnColumnReverseSort(event, props, sortBy)
+                    "
+                  >
                     代码
                   </q-th>
-                  <q-th align="left" key="name" @click="(event) => fnColumnReverseSort(event, props, sortBy)">
+                  <q-th
+                    align="left"
+                    key="name"
+                    @click="
+                      (event) => fnColumnReverseSort(event, props, sortBy)
+                    "
+                  >
                     名称
                   </q-th>
-                  <q-th align="left" key="parent" @click="(event) => fnColumnReverseSort(event, props, sortBy)">
+                  <q-th
+                    align="left"
+                    key="parent"
+                    @click="
+                      (event) => fnColumnReverseSort(event, props, sortBy)
+                    "
+                  >
                     器材种类类型
                   </q-th>
                   <q-th align="right"></q-th>
@@ -65,9 +125,16 @@
               </template>
               <template v-slot:body="props">
                 <q-tr :props="props">
-                  <q-td><q-checkbox :key="props.row.uuid" :value="props.row.uuid" v-model="props.selected" /></q-td>
+                  <q-td
+                    ><q-checkbox
+                      :key="props.row.uuid"
+                      :value="props.row.uuid"
+                      v-model="props.selected"
+                  /></q-td>
                   <q-td>{{ props.row.index }}</q-td>
-                  <q-td key="uniqueCode" :props="props">{{ props.row.uniqueCode }}</q-td>
+                  <q-td key="uniqueCode" :props="props">{{
+                    props.row.uniqueCode
+                  }}</q-td>
                   <q-td key="name" :props="props">{{ props.row.name }}</q-td>
                   <q-td key="parent" :props="props">
                     {{ props.row.parent.equipmentKindCategory.name }}
@@ -75,12 +142,22 @@
                   </q-td>
                   <q-td key="operation" :props="props">
                     <q-btn-group>
-                      <q-btn @click="
-                        fnOpenAlertEditEquipmentKindModel(props.row.operation)
-                        " color="warning" icon="edit">
+                      <q-btn
+                        @click="
+                          fnOpenAlertEditEquipmentKindModel(props.row.operation)
+                        "
+                        color="warning"
+                        icon="edit"
+                      >
                         编辑
                       </q-btn>
-                      <q-btn @click="fnDestroyEquipmentKindModel(props.row.operation)" color="negative" icon="delete">
+                      <q-btn
+                        @click="
+                          fnDestroyEquipmentKindModel(props.row.operation)
+                        "
+                        color="negative"
+                        icon="delete"
+                      >
                         删除
                       </q-btn>
                     </q-btn-group>
@@ -105,15 +182,35 @@
         <q-card-section class="q-pt-none">
           <div class="row">
             <div class="col">
-              <q-input outlined clearable lazy-rules v-model="name_alertCreateEquipmentKindModel" label="名称"
-                :rules="[]" />
-              <sel-equipment-kind-category_alert-create label-name="器材种类" :ajax-params="{}" class="q-mt-md" />
-              <sel-equipment-kind-type_alert-create label-name="器材类型" :ajax-params="{}" class="q-mt-md" />
+              <q-input
+                outlined
+                clearable
+                lazy-rules
+                v-model="name_alertCreateEquipmentKindModel"
+                label="名称"
+                :rules="[]"
+              />
+              <sel-equipment-kind-category_alert-create
+                label-name="器材种类"
+                :ajax-params="{}"
+                class="q-mt-md"
+              />
+              <sel-equipment-kind-type_alert-create
+                label-name="器材类型"
+                :ajax-params="{}"
+                class="q-mt-md"
+              />
             </div>
           </div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn type="submit" label="确定" icon="check" color="secondary" v-close-popup />
+          <q-btn
+            type="submit"
+            label="确定"
+            icon="check"
+            color="secondary"
+            v-close-popup
+          />
         </q-card-actions>
       </q-form>
     </q-card>
@@ -128,12 +225,25 @@
         <q-card-section class="q-pt-none">
           <div class="row">
             <div class="col">
-              <q-input outlined clearable lazy-rules v-model="name_alertEditEquipmentKindModel" label="名称" :rules="[]" />
+              <q-input
+                outlined
+                clearable
+                lazy-rules
+                v-model="name_alertEditEquipmentKindModel"
+                label="名称"
+                :rules="[]"
+              />
             </div>
           </div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn type="submit" label="确定" icon="check" color="secondary" v-close-popup />
+          <q-btn
+            type="submit"
+            label="确定"
+            icon="check"
+            color="secondary"
+            v-close-popup
+          />
         </q-card-actions>
       </q-form>
     </q-card>
@@ -178,9 +288,12 @@ const sortBy = ref("name");
 // 新建器材型号弹窗数据
 const alertCreateEquipmentKindModel = ref(false);
 const name_alertCreateEquipmentKindModel = ref("");
-const equipmentKindCategoryUuid_alertCreate = ref("")
-provide("equipmentKindCategoryUuid_alertCreate", equipmentKindCategoryUuid_alertCreate);
-const equipmentKindTypeUuid_alertCreate = ref("")
+const equipmentKindCategoryUuid_alertCreate = ref("");
+provide(
+  "equipmentKindCategoryUuid_alertCreate",
+  equipmentKindCategoryUuid_alertCreate
+);
+const equipmentKindTypeUuid_alertCreate = ref("");
 provide("equipmentKindTypeUuid_alertCreate", equipmentKindTypeUuid_alertCreate);
 
 // 编辑器材型号弹窗数据
@@ -188,8 +301,9 @@ const currentUuid = ref("");
 const alertEditEquipmentKindModel = ref(false);
 const name_alertEditEquipmentKindModel = ref("");
 
-
-onMounted(() => { fnInit(); });
+onMounted(() => {
+  fnInit();
+});
 
 const fnInit = () => {
   fnSearch();
@@ -219,20 +333,23 @@ const fnSearch = () => {
   })
     .then((res) => {
       if (res.content.equipment_kind_models.length > 0) {
-        rows.value = res.content.equipment_kind_models
-          .map((equipmentKindModel, index) => {
+        rows.value = res.content.equipment_kind_models.map(
+          (equipmentKindModel, index) => {
             return {
               index: index + 1,
               uuid: equipmentKindModel.uuid,
               uniqueCode: equipmentKindModel.unique_code,
               name: equipmentKindModel.name,
               parent: {
-                equipmentKindCategory: equipmentKindModel.equipment_kind_type.equipment_kind_category,
+                equipmentKindCategory:
+                  equipmentKindModel.equipment_kind_type
+                    .equipment_kind_category,
                 equipmentKindType: equipmentKindModel.equipment_kind_type,
               },
               operation: { uuid: equipmentKindModel.uuid },
             };
-          });
+          }
+        );
       }
     })
     .catch((e) => {
@@ -278,61 +395,62 @@ const fnStoreEquipomentKindModel = () => {
  * 删除器材型号
  * @param {{*}} params
  */
-const fnDestroyEquipmentKindModels = params => {
+const fnDestroyEquipmentKindModels = (params) => {
   actionNotify(
     destroyActions(() => {
       const loading = loadingNotify();
 
-      ajaxDestroyEquipmentKindModels(selected.value.map(item => item.uuid))
+      ajaxDestroyEquipmentKindModels(selected.value.map((item) => item.uuid))
         .then(() => {
-          successNotify('删除成功');
+          successNotify("删除成功");
           fnSearch();
         })
-        .catch(e => errorNotify(e.msg))
+        .catch((e) => errorNotify(e.msg))
         .finally(() => loading());
     })
-  )
+  );
 };
 
 /**
  * 打开编辑器材型号弹窗
  * @param {{*}} params
  */
-const fnOpenAlertEditEquipmentKindModel = params => {
-  if (!params['uuid']) return;
+const fnOpenAlertEditEquipmentKindModel = (params) => {
+  if (!params["uuid"]) return;
   currentUuid.value = params.uuid;
 
   ajaxGetEquipmentKindModel(params.uuid)
-    .then(res => {
-      name_alertEditEquipmentKindModel.value = res.content.equipment_kind_model.name;
+    .then((res) => {
+      name_alertEditEquipmentKindModel.value =
+        res.content.equipment_kind_model.name;
       alertEditEquipmentKindModel.value = true;
     })
-    .catch(e => errorNotify(e.msg));
+    .catch((e) => errorNotify(e.msg));
 };
 
 /**
  * 编辑器材型号
  * @param {{*}} params
  */
-const fnUpdateEquipmentKindModel = params => {
+const fnUpdateEquipmentKindModel = (params) => {
   if (!currentUuid.value) return;
 
   ajaxUpdateEquipmentKindModel(currentUuid.value, {
     name: name_alertEditEquipmentKindModel.value,
   })
-    .then(res => {
+    .then((res) => {
       successNotify(res.msg);
       alertEditEquipmentKindModel.value = false;
       fnSearch();
     })
-    .catch(e => errorNotify(e.msg));
+    .catch((e) => errorNotify(e.msg));
 };
 
 /**
  * 删除器材型号
  */
-const fnDestroyEquipmentKindModel = params => {
-  if (!params['uuid']) return;
+const fnDestroyEquipmentKindModel = (params) => {
+  if (!params["uuid"]) return;
 
   actionNotify(
     destroyActions(() => {
@@ -340,10 +458,10 @@ const fnDestroyEquipmentKindModel = params => {
 
       ajaxDestroyEquipmentKindModel(params.uuid)
         .then(() => {
-          successNotify('删除成功');
+          successNotify("删除成功");
           fnSearch();
         })
-        .catch(e => errorNotify(e.msg))
+        .catch((e) => errorNotify(e.msg))
         .finally(() => loading());
     })
   );

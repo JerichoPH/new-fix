@@ -1,20 +1,12 @@
 <template>
-  <q-select
-    outlined
-    use-input
-    clearable
-    v-model="organizationRailwayUuid_search"
-    :options="organizationRailways_search"
-    :label="labelName"
-    @filter="fnFilter"
-    emit-value
-    map-options
-  />
+  <q-select outlined use-input clearable v-model="organizationRailwayUuid_alertEdit"
+    :options="organizationRailways_search" :display-value="organizationRailwaysMap[organizationRailwayUuid_alertEdit]"
+    :label="labelName" @filter="fnFilter" emit-value map-options />
 </template>
 <script setup>
 import { inject, defineProps, onMounted, ref } from "vue";
-import { ajaxGetOrganizationRailways } from "/src/apis/organization";
 import collect from "collect.js";
+import { ajaxGetOrganizationRailways } from "/src/apis/organization";
 import { errorNotify } from "src/utils/notify";
 
 const props = defineProps({
@@ -33,9 +25,10 @@ const props = defineProps({
 
 const labelName = props.labelName;
 const ajaxParams = props.ajaxParams;
-const organizationRailwayUuid_search = inject("organizationRailwayUuid_search");
+const organizationRailwayUuid_alertEdit = inject("organizationRailwayUuid_alertEdit");
 const organizationRailways_search = ref([]);
 const organizationRailways = ref([]);
+const organizationRailwaysMap = ref({});
 
 const fnFilter = (val, update) => {
   if (val === "") {
@@ -53,24 +46,19 @@ const fnFilter = (val, update) => {
 };
 
 onMounted(() => {
-  organizationRailways_search.value = [];
-
   ajaxGetOrganizationRailways(ajaxParams)
     .then((res) => {
-      if (res.content.organization_railways.length > 0) {
-        organizationRailways.value = res.content.organization_railways.map(
-          (organizationRailway) => {
-            return {
-              label: organizationRailway.short_name,
-              value: organizationRailway.uuid,
-            };
-          }
-        );
-      }
+      organizationRailways.value = collect(res.content.organization_railways)
+        .map((organizationRailway) => {
+          return {
+            label: organizationRailway.short_name,
+            value: organizationRailway.uuid,
+          };
+        })
+        .all();
+      organizationRailwaysMap.value = collect(organizationRailways.value).pluck('label', 'value').all();
     })
-    .catch((e) => {
-      errorNotify(e.msg);
-    });
+    .catch((e) => errorNotify(e.msg));
 });
 </script>
 src/utils/notify

@@ -15,7 +15,6 @@ import EquipmentKindModelPage from "src/pages/equipmentKind/ModelPage.vue";
 import OrganizationRailwayPage from "src/pages/organization/RailwayPage.vue";
 import OrganizationParagraphPage from "src/pages/organization/ParagraphPage.vue";
 
-
 const routes = [
   {
     path: "/",
@@ -57,17 +56,37 @@ const routes = [
     path: "/equipmentKind",
     component: () => MainLayoutVue,
     children: [
-      { path: "category", name: "equipmentKindCategory:index", component: EquipmentKindCategoryPage },
-      { path: "type", name: "equipmentKindType:index", component: EquipmentKindTypePage },
-      { path: "model", name: "equipmentKindModel:index", component: () => EquipmentKindModelPage },
+      {
+        path: "category",
+        name: "equipmentKindCategory:index",
+        component: EquipmentKindCategoryPage,
+      },
+      {
+        path: "type",
+        name: "equipmentKindType:index",
+        component: EquipmentKindTypePage,
+      },
+      {
+        path: "model",
+        name: "equipmentKindModel:index",
+        component: () => EquipmentKindModelPage,
+      },
     ],
   },
   {
     path: "/organization",
     component: () => MainLayoutVue,
     children: [
-      { path: "railway", name: "organizationRailway:index", component: OrganizationRailwayPage },
-      { path: "paragraph", name: "organizationParagraph:index", component: OrganizationParagraphPage },
+      {
+        path: "railway",
+        name: "organizationRailway:index",
+        component: OrganizationRailwayPage,
+      },
+      {
+        path: "paragraph",
+        name: "organizationParagraph:index",
+        component: OrganizationParagraphPage,
+      },
     ],
   },
   // Always leave this as last one,

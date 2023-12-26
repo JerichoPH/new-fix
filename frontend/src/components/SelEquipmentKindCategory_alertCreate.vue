@@ -1,7 +1,20 @@
 <template>
-  <q-select outlined use-input clearable v-model="equipmentKindCategoryUuid_alertCreate" :options="options"
-    :option-disable="equipmentKindCategories.find(value => value === equipmentKindCategoryUuid_alertCreate)"
-    :label="labelName" @filter="fnFilter" emit-value map-options />
+  <q-select
+    outlined
+    use-input
+    clearable
+    v-model="equipmentKindCategoryUuid_alertCreate"
+    :options="options"
+    :option-disable="
+      equipmentKindCategories.find(
+        (value) => value === equipmentKindCategoryUuid_alertCreate
+      )
+    "
+    :label="labelName"
+    @filter="fnFilter"
+    emit-value
+    map-options
+  />
 </template>
 <script setup>
 import { inject, defineProps, onMounted, ref } from "vue";
@@ -24,7 +37,9 @@ const props = defineProps({
 
 const labelName = props.labelName;
 const ajaxParams = props.ajaxParams;
-const equipmentKindCategoryUuid_alertCreate = inject("equipmentKindCategoryUuid_alertCreate");
+const equipmentKindCategoryUuid_alertCreate = inject(
+  "equipmentKindCategoryUuid_alertCreate"
+);
 const options = ref([]);
 const equipmentKindCategories = ref([]);
 
@@ -47,12 +62,12 @@ onMounted(() => {
   ajaxGetEquipmentKindCategories(ajaxParams)
     .then((res) => {
       if (res.content.equipment_kind_categories.length > 0) {
-        equipmentKindCategories.value = res.content.equipment_kind_categories
-          .map(equipmentKindCategory => {
+        equipmentKindCategories.value =
+          res.content.equipment_kind_categories.map((equipmentKindCategory) => {
             return {
               label: equipmentKindCategory.name,
               value: equipmentKindCategory.uuid,
-            }
+            };
           });
       }
     })

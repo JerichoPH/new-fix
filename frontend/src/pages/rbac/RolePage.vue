@@ -6,7 +6,12 @@
           <div class="col"><span style="font-size: 20px">搜索</span></div>
           <div class="col text-right">
             <q-btn-group>
-              <q-btn color="primary" label="搜索" icon="search" @click="fnSearch" />
+              <q-btn
+                color="primary"
+                label="搜索"
+                icon="search"
+                @click="fnSearch"
+              />
               <q-btn color="primary" label="重置" flat @click="fnResetSearch" />
             </q-btn-group>
           </div>
@@ -16,7 +21,14 @@
             <q-form>
               <div class="row q-col-gutter-sm">
                 <div class="col-3">
-                  <q-input outlined clearable lazy-rules v-model="name_search" label="名称" :rules="[]" />
+                  <q-input
+                    outlined
+                    clearable
+                    lazy-rules
+                    v-model="name_search"
+                    label="名称"
+                    :rules="[]"
+                  />
                 </div>
               </div>
             </q-form>
@@ -28,24 +40,53 @@
     <q-card class="q-mt-md">
       <q-card-section>
         <div class="row">
-          <div class="col"><span :style="{ fontSize: '20px' }">角色列表</span></div>
+          <div class="col">
+            <span :style="{ fontSize: '20px' }">角色列表</span>
+          </div>
           <div class="col text-right">
             <q-btn-group>
-              <q-btn color="secondary" label="添加角色" icon="add" @click="fnOpenAlertCreateRbacRole" />
-              <q-btn color="negative" label="删除角色" icon="delete" @click="fnDestroyRbacRoles" />
+              <q-btn
+                color="secondary"
+                label="添加角色"
+                icon="add"
+                @click="fnOpenAlertCreateRbacRole"
+              />
+              <q-btn
+                color="negative"
+                label="删除角色"
+                icon="delete"
+                @click="fnDestroyRbacRoles"
+              />
             </q-btn-group>
           </div>
         </div>
         <div class="row q-mt-md">
           <div class="col">
-            <q-table flat bordered title="" :rows="rows" row-key="name" :pagination="{ rowsPerPage: 200 }"
-              :rows-per-page-options="[50, 100, 200, 0]" rows-per-page-label="分页" selection="multiple"
-              v-model:selected="selected">
+            <q-table
+              flat
+              bordered
+              title=""
+              :rows="rows"
+              row-key="name"
+              :pagination="{ rowsPerPage: 200 }"
+              :rows-per-page-options="[50, 100, 200, 0]"
+              rows-per-page-label="分页"
+              selection="multiple"
+              v-model:selected="selected"
+            >
               <template v-slot:header="props">
                 <q-tr :props="props">
-                  <q-th align="left"><q-checkbox key="allCheck" v-model="props.selected" /></q-th>
+                  <q-th align="left"
+                    ><q-checkbox key="allCheck" v-model="props.selected"
+                  /></q-th>
                   <q-th align="left">#</q-th>
-                  <q-th align="left" key="name" @click="(event) => fnColumnReverseSort(event, props, sortBy)">
+                  <q-th
+                    align="left"
+                    key="name"
+                    @click="
+                      (event) => fnColumnReverseSort(event, props, sortBy)
+                    "
+                  >
                     名称
                   </q-th>
                   <q-th align="right"></q-th>
@@ -53,15 +94,25 @@
               </template>
               <template v-slot:body="props">
                 <q-tr :props="props">
-                  <q-td><q-checkbox :key="props.row.uuid" v-model="props.selected" /></q-td>
+                  <q-td
+                    ><q-checkbox :key="props.row.uuid" v-model="props.selected"
+                  /></q-td>
                   <q-td>{{ props.row.index }}</q-td>
                   <q-td key="name" :props="props">{{ props.row.name }}</q-td>
                   <q-td key="operation" :props="props">
                     <q-btn-group>
-                      <q-btn @click="fnOpenAlertEditRbacRole(props.row.operation)" color="warning" icon="edit">
+                      <q-btn
+                        @click="fnOpenAlertEditRbacRole(props.row.operation)"
+                        color="warning"
+                        icon="edit"
+                      >
                         编辑
                       </q-btn>
-                      <q-btn @click="fnDestroyRbacRole(props.row.operation)" color="negative" icon="delete">
+                      <q-btn
+                        @click="fnDestroyRbacRole(props.row.operation)"
+                        color="negative"
+                        icon="delete"
+                      >
                         删除
                       </q-btn>
                     </q-btn-group>
@@ -86,13 +137,27 @@
         <q-form class="q-gutter-md" @submit.prevent="">
           <div class="row">
             <div class="col">
-              <q-input outlined clearable lazy-rules v-model="name_alertCreateRbacRole" label="名称" :rules="[]" />
+              <q-input
+                outlined
+                clearable
+                lazy-rules
+                v-model="name_alertCreateRbacRole"
+                label="名称"
+                :rules="[]"
+              />
             </div>
           </div>
         </q-form>
       </q-card-section>
       <q-card-actions align="right">
-        <q-btn type="button" label="确定" icon="check" color="secondary" @click="fnStoreRbacRole" v-close-popup />
+        <q-btn
+          type="button"
+          label="确定"
+          icon="check"
+          color="secondary"
+          @click="fnStoreRbacRole"
+          v-close-popup
+        />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -106,13 +171,27 @@
         <q-form class="q-gutter-md" @submit.prevent="">
           <div class="row">
             <div class="col">
-              <q-input outlined clearable lazy-rules v-model="name_alertEditRbacRole" label="名称" :rules="[]" />
+              <q-input
+                outlined
+                clearable
+                lazy-rules
+                v-model="name_alertEditRbacRole"
+                label="名称"
+                :rules="[]"
+              />
             </div>
           </div>
         </q-form>
       </q-card-section>
       <q-card-actions align="right">
-        <q-btn type="button" label="确定" icon="check" color="warning" @click="fnUpdateRbacRole" v-close-popup />
+        <q-btn
+          type="button"
+          label="确定"
+          icon="check"
+          color="warning"
+          @click="fnUpdateRbacRole"
+          v-close-popup
+        />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -304,18 +383,18 @@ const fnDestroyRbacRoles = () => {
     destroyActions(() => {
       const loading = loadingNotify();
 
-      ajaxDestroyRbacRoles(collect(selected.value).pluck('uuid').toArray())
-        .then(res => {
-          successNotify('删除成功');
+      ajaxDestroyRbacRoles(collect(selected.value).pluck("uuid").toArray())
+        .then((res) => {
+          successNotify("删除成功");
           fnSearch();
         })
-        .catch(e => {
+        .catch((e) => {
           errorNotify(e.msg);
         })
         .finally(() => {
           loading();
         });
-    }),
+    })
   );
 };
 </script>

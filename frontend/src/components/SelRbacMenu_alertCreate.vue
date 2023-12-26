@@ -1,6 +1,15 @@
 <template>
-  <q-select outlined use-input clearable v-model="parentUuid_alertCreate" :options="options" :label="labelName"
-    @filter="fnFilter" emit-value map-options />
+  <q-select
+    outlined
+    use-input
+    clearable
+    v-model="parentUuid_alertCreate"
+    :options="options"
+    :label="labelName"
+    @filter="fnFilter"
+    emit-value
+    map-options
+  />
 </template>
 <script setup>
 import { inject, defineProps, onMounted, ref } from "vue";
@@ -46,13 +55,12 @@ onMounted(() => {
   ajaxGetRbacMenus(ajaxParams)
     .then((res) => {
       if (res.content.rbac_menus.length > 0) {
-        rbacMenus.value = res.content.rbac_menus
-          .map(rbacMenu => {
-            return {
-              label: rbacMenu.name,
-              value: rbacMenu.uuid,
-            };
-          });
+        rbacMenus.value = res.content.rbac_menus.map((rbacMenu) => {
+          return {
+            label: rbacMenu.name,
+            value: rbacMenu.uuid,
+          };
+        });
       }
     })
     .catch((e) => errorNotify(e.msg));

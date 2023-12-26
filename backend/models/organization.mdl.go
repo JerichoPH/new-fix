@@ -111,10 +111,14 @@ func (receiver OrganizationRailwayMdl) GetListByQuery(ctx *gin.Context) *gorm.DB
 	return NewOrganizationRailwayMdl().
 		SetWheresEqual().
 		SetWheresFuzzy(map[string]string{
-			"name": "or.name like ?",
+			"name": "ora.name like ?",
 		}).
-		SetWheresDateBetween("or.created_at", "or.updated_at", "or.deleted_at").
-		SetWheresExtraHasValue(map[string]func(string, *gorm.DB) *gorm.DB{}).
+		SetWheresDateBetween("ora.created_at", "ora.updated_at", "ora.deleted_at").
+		SetWheresExtraHasValue(map[string]func(string, *gorm.DB) *gorm.DB{
+			"unique_code": func(value string, db *gorm.DB) *gorm.DB {
+				return db.Where("ora.unique_code = ?", value)
+			},
+		}).
 		SetWheresExtraHasValues(map[string]func([]string, *gorm.DB) *gorm.DB{}).
 		SetCtx(ctx).
 		GetDbUseQuery("").
@@ -139,11 +143,19 @@ func (receiver OrganizationParagraphMdl) GetListByQuery(ctx *gin.Context) *gorm.
 			"name": "op.name like ?",
 		}).
 		SetWheresDateBetween("op.created_at", "op.updated_at", "op.deleted_at").
-		SetWheresExtraHasValue(map[string]func(string, *gorm.DB) *gorm.DB{}).
+		SetWheresExtraHasValue(map[string]func(string, *gorm.DB) *gorm.DB{
+			"unique_code": func(value string, db *gorm.DB) *gorm.DB {
+				return db.Where("op.unique_code = ?", value)
+			},
+			"organization_railway_uuid": func(value string, db *gorm.DB) *gorm.DB {
+				return db.Where("ora.uuid = ?", value)
+			},
+		}).
 		SetWheresExtraHasValues(map[string]func([]string, *gorm.DB) *gorm.DB{}).
 		SetCtx(ctx).
 		GetDbUseQuery("").
-		Table("organization_paragraphs as op")
+		Table("organization_paragraphs as op").
+		Joins("join organization_railways as ora on op.organization_railway_uuid = ora.uuid")
 }
 
 // TableName 组织结构-车间表名称

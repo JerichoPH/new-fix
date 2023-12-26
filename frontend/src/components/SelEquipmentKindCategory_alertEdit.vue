@@ -1,7 +1,7 @@
 <template>
   <q-select outlined use-input clearable v-model="equipmentKindCategoryUuid_alertEdit" :options="options"
-    :display-value="collect(equipmentKindCategories).where('value', equipmentKindCategoryUuid_alertEdit).first()['label']"
-    :filter="fnFilter" :label="labelName" @filter="fnFilter" emit-value map-options />
+    :display-value="equipmentKindCategoriesMap[equipmentKindCategoryUuid_alertEdit]" :label="labelName" @filter="fnFilter"
+    emit-value map-options />
 </template>
 <script setup>
 import { inject, defineProps, onMounted, ref } from "vue";
@@ -28,6 +28,7 @@ const ajaxParams = props.ajaxParams;
 const equipmentKindCategoryUuid_alertEdit = inject("equipmentKindCategoryUuid_alertEdit");
 const options = ref([]);
 const equipmentKindCategories = ref([]);
+const equipmentKindCategoriesMap = ref({});
 
 const fnFilter = (val, update) => {
   if (val === "") {
@@ -47,15 +48,16 @@ const fnFilter = (val, update) => {
 onMounted(() => {
   ajaxGetEquipmentKindCategories(ajaxParams)
     .then((res) => {
-      if (res.content.equipment_kind_categories.length > 0) {
-        equipmentKindCategories.value = res.content.equipment_kind_categories
-          .map(equipmentKindCategory => {
+      equipmentKindCategories.value =
+        collect(res.content.equipment_kind_categories)
+          .map((equipmentKindCategory) => {
             return {
               label: equipmentKindCategory.name,
               value: equipmentKindCategory.uuid,
             };
-          });
-      }
+          })
+          .all();
+      equipmentKindCategoriesMap.value = collect(equipmentKindCategories.value).pluck('label', 'value').all();
     })
     .catch((e) => errorNotify(e.msg));
 });

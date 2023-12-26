@@ -1,7 +1,21 @@
 <template>
-  <q-select outlined use-input clearable v-model="equipmentKindTypeUuid_search" :options="equipmentKindTypes_search"
-    :display-value="collect(equipmentKindTypes_search).pluck('value', 'label').all()[equipmentKindTypeUuid_search]"
-    :label="labelName" @filter="fnFilter" emit-value map-options :disable="!equipmentKindCategoryUuid_search" />
+  <q-select
+    outlined
+    use-input
+    clearable
+    v-model="equipmentKindTypeUuid_search"
+    :options="equipmentKindTypes_search"
+    :display-value="
+      collect(equipmentKindTypes_search).pluck('value', 'label').all()[
+        equipmentKindTypeUuid_search
+      ]
+    "
+    :label="labelName"
+    @filter="fnFilter"
+    emit-value
+    map-options
+    :disable="!equipmentKindCategoryUuid_search"
+  />
 </template>
 
 <script setup>
@@ -26,12 +40,14 @@ const props = defineProps({
 
 const labelName = props.labelName;
 const ajaxParams = props.ajaxParams;
-const equipmentKindCategoryUuid_search = inject("equipmentKindCategoryUuid_search");
+const equipmentKindCategoryUuid_search = inject(
+  "equipmentKindCategoryUuid_search"
+);
 const equipmentKindTypeUuid_search = inject("equipmentKindTypeUuid_search");
 const equipmentKindTypes_search = ref([]);
 const equipmentKindTypes = ref([]);
 
-watch(equipmentKindCategoryUuid_search, newValue => {
+watch(equipmentKindCategoryUuid_search, (newValue) => {
   fnSearch(newValue);
 });
 
@@ -54,7 +70,7 @@ onMounted(() => {
   fnSearch("");
 });
 
-const fnSearch = equipmentKindCategoryUuid => {
+const fnSearch = (equipmentKindCategoryUuid) => {
   equipmentKindTypes_search.value = [];
 
   if (equipmentKindCategoryUuid) {
@@ -64,13 +80,14 @@ const fnSearch = equipmentKindCategoryUuid => {
     })
       .then((res) => {
         if (res.content.equipment_kind_types.length > 0) {
-          equipmentKindTypes.value = res.content.equipment_kind_types
-            .map(equipmentKindType => {
+          equipmentKindTypes.value = res.content.equipment_kind_types.map(
+            (equipmentKindType) => {
               return {
                 label: equipmentKindType.name,
                 value: equipmentKindType.uuid,
-              }
-            });
+              };
+            }
+          );
         }
       })
       .catch((e) => errorNotify(e.msg));

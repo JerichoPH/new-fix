@@ -1,7 +1,6 @@
 <template>
-  <q-select outlined use-input clearable v-model="parentUuid_alertEdit" :options="options"
-    :display-value="collect(rbacMenus).where('value', parentUuid_alertEdit).first()['label']" :filter="fnFilter"
-    :label="labelName" @filter="fnFilter" emit-value map-options />
+  <q-select outlined use-input clearable v-model="parentUuid_alertEdit" :options="options" :display-value="collect(rbacMenus).where('value', parentUuid_alertEdit).first()['label']
+    " :filter="fnFilter" :label="labelName" @filter="fnFilter" emit-value map-options />
 </template>
 <script setup>
 import { inject, defineProps, onMounted, ref } from "vue";
@@ -28,6 +27,7 @@ const ajaxParams = props.ajaxParams;
 const parentUuid_alertEdit = inject("parentUuid_alertEdit");
 const options = ref([]);
 const rbacMenus = ref([]);
+const rbacMenusMap = ref({});
 
 const fnFilter = (val, update) => {
   if (val === "") {
@@ -47,15 +47,15 @@ const fnFilter = (val, update) => {
 onMounted(() => {
   ajaxGetRbacMenus(ajaxParams)
     .then((res) => {
-      if (res.content.rbac_menus.length > 0) {
-        rbacMenus.value = res.content.rbac_menus
-          .map(rbacMenu => {
-            return {
-              label: rbacMenu.name,
-              value: rbacMenu.uuid,
-            };
-          });
-      }
+      rbacMenus.value = collect(res.content.rbac_menus)
+        .map((rbacMenu) => {
+          return {
+            label: rbacMenu.name,
+            value: rbacMenu.uuid,
+          };
+        })
+        .all();
+      rbacMenusMap.value = collect(rbacMenus.value).pluck('label', 'value').all();
     })
     .catch((e) => errorNotify(e.msg));
 });

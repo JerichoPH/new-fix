@@ -1,11 +1,24 @@
 <template>
-  <q-select outlined use-input clearable v-model="equipmentKindTypeUuid_alertCreate" :options="options" :label="labelName"
-    :option-disable="collect(equipmentKindTypes).pluck('value','label').all()[equipmentKindTypeUuid_alertCreate]"
-    @filter="fnFilter" emit-value map-options />
+  <q-select
+    outlined
+    use-input
+    clearable
+    v-model="equipmentKindTypeUuid_alertCreate"
+    :options="options"
+    :label="labelName"
+    :option-disable="
+      collect(equipmentKindTypes).pluck('value', 'label').all()[
+        equipmentKindTypeUuid_alertCreate
+      ]
+    "
+    @filter="fnFilter"
+    emit-value
+    map-options
+  />
 </template>
 <script setup>
 import { inject, defineProps, onMounted, ref, watch } from "vue";
-import collect from "collect.js"
+import collect from "collect.js";
 import { ajaxGetEquipmentKindTypes } from "/src/apis/equipmentKind";
 import { errorNotify } from "src/utils/notify";
 
@@ -25,12 +38,16 @@ const props = defineProps({
 
 const labelName = props.labelName;
 const ajaxParams = props.ajaxParams;
-const equipmentKindCategoryUuid_alertCreate = inject("equipmentKindCategoryUuid_alertCreate");
-const equipmentKindTypeUuid_alertCreate = inject("equipmentKindTypeUuid_alertCreate");
+const equipmentKindCategoryUuid_alertCreate = inject(
+  "equipmentKindCategoryUuid_alertCreate"
+);
+const equipmentKindTypeUuid_alertCreate = inject(
+  "equipmentKindTypeUuid_alertCreate"
+);
 const options = ref([]);
 const equipmentKindTypes = ref([]);
 
-watch(equipmentKindCategoryUuid_alertCreate, newValue => {
+watch(equipmentKindCategoryUuid_alertCreate, (newValue) => {
   fnSearch(newValue);
 });
 
@@ -57,7 +74,7 @@ onMounted(() => {
  * 搜索器材类型
  * @param {string} equipmentKindCategoryUuid
  */
-const fnSearch = equipmentKindCategoryUuid => {
+const fnSearch = (equipmentKindCategoryUuid) => {
   equipmentKindTypes.value = [];
 
   if (equipmentKindCategoryUuid) {
@@ -67,13 +84,14 @@ const fnSearch = equipmentKindCategoryUuid => {
     })
       .then((res) => {
         if (res.content.equipment_kind_types.length > 0) {
-          equipmentKindTypes.value = res.content.equipment_kind_types
-            .map(equipmentKindType => {
+          equipmentKindTypes.value = res.content.equipment_kind_types.map(
+            (equipmentKindType) => {
               return {
                 label: equipmentKindType.name,
                 value: equipmentKindType.uuid,
-              }
-            });
+              };
+            }
+          );
         }
       })
       .catch((e) => errorNotify(e.msg));

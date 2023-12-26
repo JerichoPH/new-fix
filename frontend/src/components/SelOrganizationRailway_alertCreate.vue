@@ -1,20 +1,14 @@
 <template>
-  <q-select
-    outlined
-    use-input
-    clearable
-    v-model="organizationRailwayUuid_search"
-    :options="organizationRailways_search"
-    :label="labelName"
-    @filter="fnFilter"
-    emit-value
-    map-options
-  />
+  <q-select outlined use-input clearable v-model="organizationRailwayUuid_alertCreate"
+    :options="organizationRailways_search" :label="labelName" :option-disable="collect(organizationRailways).pluck('value', 'label').all()[
+      organizationRailwayUuid_alertCreate
+    ]
+      " @filter="fnFilter" emit-value map-options />
 </template>
 <script setup>
-import { inject, defineProps, onMounted, ref } from "vue";
-import { ajaxGetOrganizationRailways } from "/src/apis/organization";
+import { inject, defineProps, onMounted, ref, watch } from "vue";
 import collect from "collect.js";
+import { ajaxGetOrganizationRailways } from "/src/apis/organization";
 import { errorNotify } from "src/utils/notify";
 
 const props = defineProps({
@@ -33,7 +27,7 @@ const props = defineProps({
 
 const labelName = props.labelName;
 const ajaxParams = props.ajaxParams;
-const organizationRailwayUuid_search = inject("organizationRailwayUuid_search");
+const organizationRailwayUuid_alertCreate = inject("organizationRailwayUuid_alertCreate");
 const organizationRailways_search = ref([]);
 const organizationRailways = ref([]);
 
@@ -53,24 +47,22 @@ const fnFilter = (val, update) => {
 };
 
 onMounted(() => {
-  organizationRailways_search.value = [];
+  organizationRailways.value = [];
 
   ajaxGetOrganizationRailways(ajaxParams)
-    .then((res) => {
+    .then(res => {
       if (res.content.organization_railways.length > 0) {
-        organizationRailways.value = res.content.organization_railways.map(
-          (organizationRailway) => {
+        organizationRailways.value = collect(res.content.organization_railways)
+          .map(organizationRailway => {
             return {
               label: organizationRailway.short_name,
               value: organizationRailway.uuid,
             };
-          }
-        );
+          })
+          .all();
       }
     })
-    .catch((e) => {
-      errorNotify(e.msg);
-    });
+    .catch((e) => errorNotify(e.msg));
 });
 </script>
 src/utils/notify

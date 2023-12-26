@@ -7,7 +7,7 @@ const urlPrefix = "/rbac";
  * @param {{*}} params
  * @returns
  */
-export const ajaxGetRbacRoles = params => {
+export const ajaxGetRbacRoles = (params) => {
   return api.get(`${urlPrefix}/role`, { params });
 };
 
@@ -16,7 +16,7 @@ export const ajaxGetRbacRoles = params => {
  * @param {string} uuid
  * @returns
  */
-export const ajaxGetRbacRole = uuid => {
+export const ajaxGetRbacRole = (uuid) => {
   return api.get(`${urlPrefix}/role/${uuid}`);
 };
 
@@ -25,7 +25,7 @@ export const ajaxGetRbacRole = uuid => {
  * @param {{*}} params
  * @returns
  */
-export const ajaxStoreRbacRole = params => {
+export const ajaxStoreRbacRole = (params) => {
   return api.post(`${urlPrefix}/role`, params);
 };
 
@@ -44,7 +44,7 @@ export const ajaxUpdateRbacRole = (uuid, params) => {
  * @param {string} uuid
  * @returns
  */
-export const ajaxDestroyRbacRole = uuid => {
+export const ajaxDestroyRbacRole = (uuid) => {
   return api.delete(`${urlPrefix}/role/${uuid}`);
 };
 
@@ -53,8 +53,8 @@ export const ajaxDestroyRbacRole = uuid => {
  * @param {[string]} uuids
  * @returns
  */
-export const ajaxDestroyRbacRoles = uuids => {
-  if (uuids.length === 0) return Promise.reject('角色编号列表不能为空');
+export const ajaxDestroyRbacRoles = (uuids) => {
+  if (uuids.length === 0) return Promise.reject("角色编号列表不能为空");
   return api.post(`${urlPrefix}/role/destroyMany`, { uuids });
 };
 
@@ -109,10 +109,10 @@ export const ajaxDestroyRbacPermission = (uuid) => {
  * @param {[string]} uuids
  * @returns
  */
-export const ajaxDestroyRbacPermissions = uuids => {
-  if (uuids.length === 0) return Promise.reject('权限编号列表不能为空');
+export const ajaxDestroyRbacPermissions = (uuids) => {
+  if (uuids.length === 0) return Promise.reject("权限编号列表不能为空");
   return api.post(`${urlPrefix}/permission/destroyMany`, { uuids });
-}
+};
 
 /**
  * 菜单列表
@@ -166,7 +166,7 @@ export const ajaxDestroyRbacMenu = (uuid) => {
  * @param {[string]} uuids
  * @returns
  */
-export const ajaxDestroyRbacMenus = uuids => {
-  if (uuids.length === 0) return Promise.reject('菜单编号列表不能为空');
+export const ajaxDestroyRbacMenus = (uuids) => {
+  if (uuids.length === 0) return Promise.reject("菜单编号列表不能为空");
   return api.post(`${urlPrefix}/menu/destroyMany`, { uuids });
-}
+};

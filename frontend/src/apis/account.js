@@ -54,8 +54,8 @@ export const ajaxDestroyAccount = (uuid) => {
  * @param {[string]} uuids
  * @returns
  */
-export const ajaxDestroyAccounts = uuids => {
-  if (uuids.length === 0) return Promise.reject('账号编号列表不能为空');
+export const ajaxDestroyAccounts = (uuids) => {
+  if (uuids.length === 0) return Promise.reject("账号编号列表不能为空");
   return api.post(`${urlPrefix}/destroyMany`, { uuids });
 };
 
