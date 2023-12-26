@@ -29,6 +29,8 @@ type (
 		MySqlMdl
 		UniqueCode                string                      `gorm:"index;type:char(7);not null;comment:车间代码;" json:"unique_code"`
 		Name                      string                      `gorm:"index;type:varchar(128);not null;comment:车间名称;" json:"name"`
+		TypeCode                  string                      `gorm:"enum('','SCENE','FIX','ELECTRIC','HUMP','ON-BOARD');not null;default:'';comment:车间类型;" json:"type_code"`
+		TypeText                  string                      `gorm:"->;type:varchar(128) as ((case type_code when 'SCENE' then '现场车间' when 'FIX' then '检修车间' when 'ELECTRIC' then '电子车间' when 'HUMP' then '驼峰车间' when 'ON-BOARD' then '车载车间' else '无' end))" json:"type_text"`
 		OrganizationParagraphUuid string                      `gorm:"type:char(36);not null;" json:"organization_paragraph_uuid"`
 		OrganizationParagraph     *OrganizationParagraphMdl   `gorm:"foreignKey:organization_paragraph_uuid;references:uuid;comment:所属站段;" json:"organization_paragraph"`
 		OrganizationStations      []*OrganizationStationMdl   `gorm:"foreignKey:organization_workshop_uuid;references:uuid;comment:相关车站;" json:"organization_stations"`

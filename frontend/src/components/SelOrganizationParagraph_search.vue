@@ -1,16 +1,7 @@
 <template>
-  <q-select
-    outlined
-    use-input
-    clearable
-    v-model="organizationParagraphUuid_search"
-    :options="organizationParagraphs_search"
-    :label="labelName"
-    @filter="fnFilter"
-    emit-value
-    map-options
-    :disable="!organizationRailwayUuid_search"
-  />
+  <q-select outlined use-input clearable v-model="organizationParagraphUuid_search"
+    :options="organizationParagraphs_search" :display-value="organizationParagraphsMap[organizationParagraphUuid_search]"
+    :label="labelName" @filter="fnFilter" emit-value map-options :disable="!organizationRailwayUuid_search" />
 </template>
 <script setup>
 import { inject, defineProps, onMounted, ref, watch } from "vue";
@@ -35,11 +26,10 @@ const props = defineProps({
 const labelName = props.labelName;
 const ajaxParams = props.ajaxParams;
 const organizationRailwayUuid_search = inject("organizationRailwayUuid_search");
-const organizationParagraphUuid_search = inject(
-  "organizationParagraphUuid_search"
-);
+const organizationParagraphUuid_search = inject("organizationParagraphUuid_search");
 const organizationParagraphs_search = ref([]);
 const organizationParagraphs = ref([]);
+const organizationParagraphsMap = ref({});
 
 watch(organizationRailwayUuid_search, (newValue) => {
   fnSearch(newValue);
@@ -73,15 +63,16 @@ const fnSearch = (organizationRailwayUuid) => {
       organization_railway_uuid: organizationRailwayUuid,
     })
       .then((res) => {
-        if (res.content.organization_paragraphs.length > 0) {
-          organizationParagraphs.value =
-            res.content.organization_paragraphs.map((organizationParagraph) => {
+        organizationParagraphs.value =
+          collect(res.content.organization_paragraphs)
+            .map((organizationParagraph) => {
               return {
                 label: organizationParagraph.name,
                 value: organizationParagraph.uuid,
               };
-            });
-        }
+            })
+            .all();
+        organizationParagraphsMap.value = collect(organizationParagraphs.value).pluck('label', 'value').all();
       })
       .catch((e) => errorNotify(e.msg));
   }

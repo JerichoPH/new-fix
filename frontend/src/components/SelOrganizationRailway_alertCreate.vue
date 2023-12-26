@@ -1,9 +1,6 @@
 <template>
   <q-select outlined use-input clearable v-model="organizationRailwayUuid_alertCreate"
-    :options="organizationRailways_search" :label="labelName" :option-disable="collect(organizationRailways).pluck('value', 'label').all()[
-      organizationRailwayUuid_alertCreate
-    ]
-      " @filter="fnFilter" emit-value map-options />
+    :options="organizationRailways_alertCreate" :label="labelName" @filter="fnFilter" emit-value map-options />
 </template>
 <script setup>
 import { inject, defineProps, onMounted, ref, watch } from "vue";
@@ -28,19 +25,19 @@ const props = defineProps({
 const labelName = props.labelName;
 const ajaxParams = props.ajaxParams;
 const organizationRailwayUuid_alertCreate = inject("organizationRailwayUuid_alertCreate");
-const organizationRailways_search = ref([]);
+const organizationRailways_alertCreate = ref([]);
 const organizationRailways = ref([]);
 
 const fnFilter = (val, update) => {
   if (val === "") {
     update(() => {
-      organizationRailways_search.value = organizationRailways.value;
+      organizationRailways_alertCreate.value = organizationRailways.value;
     });
     return;
   }
 
   update(() => {
-    organizationRailways_search.value = organizationRailways.value.filter(
+    organizationRailways_alertCreate.value = organizationRailways.value.filter(
       (v) => v.label.toLowerCase().indexOf(val.toLowerCase()) > -1
     );
   });

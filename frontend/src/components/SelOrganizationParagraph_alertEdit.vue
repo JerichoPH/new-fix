@@ -1,6 +1,6 @@
 <template>
-  <q-select outlined use-input clearable v-model="organizationRailwayUuid_alertEdit"
-    :options="organizationRailways_alertEdit" :display-value="organizationRailwaysMap[organizationRailwayUuid_alertEdit]"
+  <q-select outlined use-input clearable v-model="organizationParagraphUuid_alertEdit"
+    :options="organizationParagraphs_alertEdit" :display-value="organizationParagraphsMap[organizationParagraphUuid_alertEdit]"
     :label="labelName" @filter="fnFilter" emit-value map-options />
 </template>
 <script setup>
@@ -25,21 +25,21 @@ const props = defineProps({
 
 const labelName = props.labelName;
 const ajaxParams = props.ajaxParams;
-const organizationRailwayUuid_alertEdit = inject("organizationRailwayUuid_alertEdit");
-const organizationRailways_alertEdit = ref([]);
-const organizationRailways = ref([]);
-const organizationRailwaysMap = ref({});
+const organizationParagraphUuid_alertEdit = inject("organizationParagraphUuid_alertEdit");
+const organizationParagraphs_alertEdit = ref([]);
+const organizationParagraphs = ref([]);
+const organizationParagraphsMap = ref({});
 
 const fnFilter = (val, update) => {
   if (val === "") {
     update(() => {
-      organizationRailways_alertEdit.value = organizationRailways.value;
+      organizationParagraphs_alertEdit.value = organizationParagraphs.value;
     });
     return;
   }
 
   update(() => {
-    organizationRailways_alertEdit.value = organizationRailways.value.filter(
+    organizationParagraphs_alertEdit.value = organizationParagraphs.value.filter(
       (v) => v.label.toLowerCase().indexOf(val.toLowerCase()) > -1
     );
   });
@@ -48,15 +48,15 @@ const fnFilter = (val, update) => {
 onMounted(() => {
   ajaxGetOrganizationRailways(ajaxParams)
     .then((res) => {
-      organizationRailways.value = collect(res.content.organization_railways)
-        .map((organizationRailway) => {
+      organizationParagraphs.value = collect(res.content.organization_paragraphs)
+        .map((organizationParagraph) => {
           return {
-            label: organizationRailway.short_name,
-            value: organizationRailway.uuid,
+            label: organizationParagraph.name,
+            value: organizationParagraph.uuid,
           };
         })
         .all();
-      organizationRailwaysMap.value = collect(organizationRailways.value).pluck('label', 'value').all();
+      organizationParagraphsMap.value = collect(organizationParagraphs.value).pluck('label', 'value').all();
     })
     .catch((e) => errorNotify(e.msg));
 });
