@@ -2,7 +2,7 @@
   <div class="q-pa-md">
     <q-card>
       <q-card-section>
-        <div class="q-mb-md">
+        <div class="row">
           <div class="col"><span :style="{ fontSize: '20px' }">搜索</span></div>
           <div class="col text-right">
             <q-btn-group>
@@ -196,7 +196,7 @@ onMounted(() => fnInit());
 /**
  * 初始化页面
  */
-const fnInit = () => { fnSearch(); };
+const fnInit = () => fnSearch();
 
 /**
  * 初始化搜索条件
