@@ -982,7 +982,6 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 
 	// 自动拼接preload
 	if preloads, exist := receiver.ctx.GetQueryArray(":~[]"); exist {
-		fmt.Println("preloads", preloads)
 		for _, preload := range preloads {
 			dbSession = dbSession.Preload(preload)
 		}

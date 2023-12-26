@@ -11,7 +11,7 @@
             </q-btn-group>
           </div>
         </div>
-        <div class="row">
+        <div class="row q-mt-md">
           <div class="col">
             <q-form>
               <div class="row q-pb-sm q-col-gutter-sm">
@@ -61,6 +61,9 @@
                   <q-th align="left" key="name" @click="(event) => fnColumnReverseSort(event, props, sortBy)">
                     名称
                   </q-th>
+                  <q-th align="left" key="typeText" @click="(event) => fnColumnReverseSort(event, props, sortBy)">
+                    类型
+                  </q-th>
                   <q-th align="left" key="organizationParagraph"
                     @click="(event) => fnColumnReverseSort(event, props, sortBy)">
                     所属站段
@@ -74,7 +77,13 @@
                   <q-td>{{ props.row.index }}</q-td>
                   <q-td key="uniqueCode" :props="props">{{ props.row.uniqueCode }}</q-td>
                   <q-td key="name" :props="props">{{ props.row.name }}</q-td>
-                  <q-td key="organizationParagraph" :props="props">{{ props.row.organizationParagraph.name }}</q-td>
+                  <q-td key="typeText" :props="props">{{ props.row.typeText }}</q-td>
+                  <q-td key="organizationParagraph" :props="props">
+                    {{ [
+                      props.row.organizationRailway.short_name,
+                      props.row.organizationParagraph.name,
+                    ].join(' - ') }}
+                  </q-td>
                   <q-td key="operation" :props="props">
                     <q-btn-group>
                       <q-btn @click="fnOpenAlertEditOrganizationWorkshop(props.row.operation)" color="warning"
@@ -97,8 +106,83 @@
 
   <!-- 弹窗 -->
   <!-- 新建车间弹窗 -->
-  
+  <q-dialog v-model="alertCreateOrganizationWorkshop">
+    <q-card style="width: 800px">
+      <q-card-section>
+        <div class="text-h6">新建车间</div>
+      </q-card-section>
+      <q-form class="q-gutter-md" @submit.prevent="fnStoreOrganizationWorkshop">
+        <q-card-section class="q-pt-none">
+          <div class="row">
+            <div class="col">
+              <q-input outlined clearable lazy-rules v-model="uniqueCode_alertCreateOrganizationWorkshop" label="代码"
+                :rules="[]" />
+            </div>
+          </div>
+          <div class="row q-mt-md">
+            <div class="col">
+              <q-input outlined clearable lazy-rules v-model="name_alertCreateOrganizationWorkshop" label="名称"
+                :rules="[]" />
+            </div>
+          </div>
+          <div class="row q-mt-md">
+            <div class="col">
+              <sel-organization-railway_alertCreate label-name="所属路局" />
+            </div>
+          </div>
+          <div class="row q-mt-md">
+            <div class="col">
+              <sel-organization-paragraph_alertCreate label-name="所属站段" />
+            </div>
+          </div>
+          <div class="row q-mt-md">
+            <div class="col">
+              <sel-organization-workshop-type-code_alertCreate label-name="车间类型" />
+            </div>
+          </div>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn type="submit" label="确定" icon="check" color="secondary" v-close-popup />
+        </q-card-actions>
+      </q-form>
+    </q-card>
+  </q-dialog>
   <!-- 编辑车间弹窗 -->
+  <q-dialog v-model="alertEditOrganizationWorkshop">
+    <q-card style="width: 800px">
+      <q-card-section>
+        <div class="text-h6">编辑车间</div>
+      </q-card-section>
+      <q-form class="q-gutter-md" @submit.prevent="fnUpdateOrganizationWorkshop">
+        <q-card-section class="q-pt-none">
+          <div class="row">
+            <div class="col">
+              <q-input outlined clearable lazy-rules v-model="name_alertEditOrganizationWorkshop" label="名称"
+                :rules="[]" />
+            </div>
+          </div>
+          <div class="row q-mt-md">
+            <div class="col">
+              <SelOrganizationRailway_alertEdit label-name="所属路局" />
+            </div>
+          </div>
+          <div class="row q-mt-md">
+            <div class="col">
+              <SelOrganizationParagraph_alertEdit label-name="所属站段" />
+            </div>
+          </div>
+          <div class="row q-mt-md">
+            <div class="col">
+              <organizationWorkshopTypeCode_alertEdit label-name="车间类型" />
+            </div>
+          </div>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn type="submit" label="确定" icon="check" color="secondary" v-close-popup />
+        </q-card-actions>
+      </q-form>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script setup>
@@ -119,9 +203,15 @@ import {
   actionNotify,
   destroyActions,
 } from "src/utils/notify";
-import fnColumnReverseSort from "src/utils/common";
+import { fnColumnReverseSort } from "src/utils/common";
 import SelOrganizationRailway_search from "src/components/SelOrganizationRailway_search.vue";
 import SelOrganizationParagraph_search from "src/components/SelOrganizationParagraph_search.vue";
+import SelOrganizationRailway_alertCreate from "src/components/SelOrganizationRailway_alertCreate.vue";
+import SelOrganizationParagraph_alertCreate from "src/components/SelOrganizationParagraph_alertCreate.vue";
+import SelOrganizationWorkshopTypeCode_alertCreate from "src/components/SelOrganizationWorkshopTypeCode_alertCreate.vue";
+import SelOrganizationRailway_alertEdit from "src/components/SelOrganizationRailway_alertEdit.vue";
+import SelOrganizationParagraph_alertEdit from "src/components/SelOrganizationParagraph_alertEdit.vue";
+import organizationWorkshopTypeCode_alertEdit from "src/components/SelOrganizationWorkshopTypeCode_alertEdit.vue";
 
 // 搜索栏数据
 const uniqueCode_search = ref("");
@@ -136,6 +226,28 @@ const rows = ref([]);
 const selected = ref([]);
 const sortBy = ref("");
 
+// 新建车间弹窗数据
+const alertCreateOrganizationWorkshop = ref(false);
+const uniqueCode_alertCreateOrganizationWorkshop = ref("");
+const name_alertCreateOrganizationWorkshop = ref("");
+const organizationRailwayUuid_alertCreateOrganizationWorkshop = ref("");
+provide("organizationRailwayUuid_alertCreate", organizationRailwayUuid_alertCreateOrganizationWorkshop);
+const organizationParagraphUuid_alertCreateOrganizationWorkshop = ref("");
+provide("organizationParagraphUuid_alertCreate", organizationParagraphUuid_alertCreateOrganizationWorkshop);
+const organizationWorkshopTypeCode_alertCreateOrganizationWorkshop = ref("");
+provide("organizationWorkshopTypeCode_alertCreate", organizationWorkshopTypeCode_alertCreateOrganizationWorkshop);
+
+// 编辑车间弹窗数据
+const currentUuid = ref("");
+const alertEditOrganizationWorkshop = ref(false);
+const name_alertEditOrganizationWorkshop = ref("");
+const organizationRailwayUuid_alertEditOrganizationWorkshop = ref("");
+provide("organizationRailwayUuid_alertEdit", organizationRailwayUuid_alertEditOrganizationWorkshop);
+const organizationParagraphUuid_alertEditOrganizationWorkshop = ref("");
+provide("organizationParagraphUuid_alertEdit", organizationParagraphUuid_alertEditOrganizationWorkshop);
+const organizationWorkshopTypeCode_alertEditOrganizationWorkshop = ref("");
+provide("organizationWorkshopTypeCode_alertEdit", organizationWorkshopTypeCode_alertEditOrganizationWorkshop);
+
 onMounted(() => fnInit());
 
 const fnInit = () => fnSearch();
@@ -149,6 +261,7 @@ const fnResetSearch = () => {
 
 const fnSearch = () => {
   ajaxGetOrganizationWorkshops({
+    ":~[]": ["OrganizationParagraph", "OrganizationParagraph.OrganizationRailway"],
     unique_code: uniqueCode_search.value,
     name: name_search.value,
     organization_railway_uuid: organizationRailwayUuid_search.value,
@@ -160,9 +273,11 @@ const fnSearch = () => {
           return {
             index: idx + 1,
             uuid: organizationWorkshop.uuid,
-            unique_code: organizationWorkshop.unique_code,
+            uniqueCode: organizationWorkshop.unique_code,
             name: organizationWorkshop.name,
+            typeText: organizationWorkshop.type_text,
             organizationParagraph: organizationWorkshop.organization_paragraph,
+            organizationRailway: organizationWorkshop.organization_paragraph.organization_railway,
             operation: { uuid: organizationWorkshop.uuid },
           }
         })
@@ -172,11 +287,66 @@ const fnSearch = () => {
 };
 
 const fnResetAlertCreateOrganizationWorkshop = () => {
-
+  uniqueCode_alertCreateOrganizationWorkshop.value = "";
+  name_alertCreateOrganizationWorkshop.value = "";
+  organizationRailwayUuid_alertCreateOrganizationWorkshop.value = "";
+  organizationParagraphUuid_alertCreateOrganizationWorkshop.value = "";
 };
 
-const fnOpenAlertCreateOrganizationWorkshop = () => { };
-const fnOpenAlertEditOrganizationWorkshop = params => { };
+const fnOpenAlertCreateOrganizationWorkshop = () => {
+  alertCreateOrganizationWorkshop.value = true;
+};
+
+const fnStoreOrganizationWorkshop = () => {
+  ajaxStoreOrganizationWorkshop({
+    unique_code: uniqueCode_alertCreateOrganizationWorkshop.value,
+    name: name_alertCreateOrganizationWorkshop.value,
+    organization_paragraph_uuid: organizationParagraphUuid_alertCreateOrganizationWorkshop.value,
+    type_code: organizationWorkshopTypeCode_alertCreateOrganizationWorkshop.value,
+  })
+    .then(res => {
+      successNotify(res.msg);
+      fnResetAlertCreateOrganizationWorkshop();
+      fnSearch();
+    })
+    .catch(e => errorNotify(e.msg));
+};
+
+const fnOpenAlertEditOrganizationWorkshop = params => {
+  if (!params["uuid"]) return;
+  currentUuid.value = params.uuid;
+
+  ajaxGetOrganizationWorkshop(currentUuid.value, {
+    ":~[]": ["OrganizationParagraph", "OrganizationParagraph.OrganizationRailway"],
+  })
+    .then(res => {
+      name_alertEditOrganizationWorkshop.value = res.content.organization_workshop.name;
+      organizationRailwayUuid_alertEditOrganizationWorkshop.value = res.content.organization_workshop.organization_paragraph.organization_railway.uuid;
+      organizationParagraphUuid_alertEditOrganizationWorkshop.value = res.content.organization_workshop.organization_paragraph.uuid;
+      organizationWorkshopTypeCode_alertEditOrganizationWorkshop.value = res.content.organization_workshop.type_code;
+      alertEditOrganizationWorkshop.value = true;
+    })
+    .catch(e => errorNotify(e.msg));
+};
+
+const fnUpdateOrganizationWorkshop = () => {
+  if (!currentUuid.value) return;
+
+  const loading = loadingNotify();
+  ajaxUpdateOrganizationWorkshop(currentUuid.value, {
+    name: name_alertEditOrganizationWorkshop.value,
+    organization_paragraph_uuid: organizationParagraphUuid_alertEditOrganizationWorkshop.value,
+    type_code: organizationWorkshopTypeCode_alertEditOrganizationWorkshop.value,
+  })
+    .then(res => {
+      successNotify(res.msg);
+      fnSearch();
+    })
+    .catch(e => errorNotify(e.msg))
+    .finally(() => loading());
+};
+
 const fnDestroyOrganizationWorkshop = params => { };
+
 const fnDestroyOrganizationWorkshops = () => { };
 </script>

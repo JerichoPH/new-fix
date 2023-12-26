@@ -145,7 +145,7 @@
           </div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn type="submit" label="确定" icon="check" color="secondary" v-close-popup />
+          <q-btn type="submit" label="确定" icon="check" color="warning" v-close-popup />
         </q-card-actions>
       </q-form>
     </q-card>
@@ -155,12 +155,12 @@
 import { ref, onMounted, provide } from "vue";
 import collect from "collect.js";
 import {
-  ajaxGetOrganizationPragraphs,
-  ajaxGetOrganizationPragraph,
-  ajaxStoreOrganizationPragraph,
-  ajaxUpdateOrganizationPragraph,
-  ajaxDestroyOrganizationPragraph,
-  ajaxDestroyOrganizationPragraphs,
+  ajaxGetOrganizationParagraphs,
+  ajaxGetOrganizationParagraph,
+  ajaxStoreOrganizationParagraph,
+  ajaxUpdateOrganizationParagraph,
+  ajaxDestroyOrganizationParagraph,
+  ajaxDestroyOrganizationParagraphs,
 } from "src/apis/organization";
 import {
   loadingNotify,
@@ -216,7 +216,7 @@ const fnSearch = () => {
   rows.value = [];
   selected.value = [];
 
-  ajaxGetOrganizationPragraphs({
+  ajaxGetOrganizationParagraphs({
     ":~[]": ["OrganizationRailway"],
     unique_code: uniqueCode_search.value,
     name: name_search.value,
@@ -253,7 +253,7 @@ const fnOpenAlertCreateOrganizationParagraph = () => {
 const fnStoreOrganizationParagraph = () => {
   const loading = loadingNotify();
 
-  ajaxStoreOrganizationPragraph({
+  ajaxStoreOrganizationParagraph({
     unique_code: uniqueCode_alertCreateOrganizationParagraph.value,
     name: name_alertCreateOrganizationParagraph.value,
     organization_railway_uuid: organizationRailwayUuid_alertCreateOrganizationParagraph.value,
@@ -272,7 +272,7 @@ const fnOpenAlertEditOrganizationParagraph = params => {
 
   currentUuid.value = params["uuid"];
 
-  ajaxGetOrganizationPragraph(currentUuid.value, {
+  ajaxGetOrganizationParagraph(currentUuid.value, {
     ":~[]": ["OrganizationRailway"],
   })
     .then(res => {
@@ -304,7 +304,7 @@ const fnDestroyOrganizationParagraph = params => {
 
   actionNotify(
     destroyActions(() => {
-      ajaxDestroyOrganizationPragraph(params["uuid"])
+      ajaxDestroyOrganizationParagraph(params["uuid"])
         .then(res => {
           successNotify("删除成功");
           fnSearch();
@@ -317,7 +317,7 @@ const fnDestroyOrganizationParagraph = params => {
 const fnDestroyOrganizationParagraphs = () => {
   actionNotify(
     destroyActions(() => {
-      ajaxDestroyOrganizationPragraphs(selected.value)
+      ajaxDestroyOrganizationParagraphs(selected.value)
         .then(res => {
           successNotify("删除成功");
           fnSearch();

@@ -5,7 +5,7 @@
 </template>
 <script setup>
 import { inject, defineProps, onMounted, ref, watch } from "vue";
-import { ajaxGetOrganizationPragraphs } from "/src/apis/organization";
+import { ajaxGetOrganizationParagraphs } from "/src/apis/organization";
 import collect from "collect.js";
 import { errorNotify } from "src/utils/notify";
 

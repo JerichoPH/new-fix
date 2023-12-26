@@ -59,27 +59,27 @@ export const ajaxDestroyOrganizationRailways = (uuids) => {
   return api.post(`${apiPrefix}/railway/destroyMany`, { uuids });
 };
 
-export const ajaxGetOrganizationPragraphs = (params) => {
+export const ajaxGetOrganizationParagraphs = (params) => {
   return api.get(`${apiPrefix}/paragraph`, { params });
 };
 
-export const ajaxGetOrganizationPragraph = (uuid, params) => {
+export const ajaxGetOrganizationParagraph = (uuid, params) => {
   return api.get(`${apiPrefix}/paragraph/${uuid}`, { params });
 };
 
-export const ajaxStoreOrganizationPragraph = (params) => {
+export const ajaxStoreOrganizationParagraph = (params) => {
   return api.post(`${apiPrefix}/paragraph`, params);
 };
 
-export const ajaxUpdateOrganizationPragraph = (uuid, params) => {
+export const ajaxUpdateOrganizationParagraph = (uuid, params) => {
   return api.put(`${apiPrefix}/paragraph/${uuid}`, params);
 };
 
-export const ajaxDestroyOrganizationPragraph = (uuid) => {
+export const ajaxDestroyOrganizationParagraph = (uuid) => {
   return api.delete(`${apiPrefix}/paragraph/${uuid}`);
 };
 
-export const ajaxDestroyOrganizationPragraphs = (uuids) => {
+export const ajaxDestroyOrganizationParagraphs = (uuids) => {
   if (uuids.length === 0) return Promise.reject("路局段编号列表不能为空");
   return api.post(`${apiPrefix}/paragraph/destroyMany`, { uuids });
 };
@@ -102,6 +102,10 @@ export const ajaxUpdateOrganizationWorkshop = (uuid, params) => {
 
 export const ajaxDestroyOrganizationWorkshop = (uuid) => {
   return api.delete(`${apiPrefix}/workshop/${uuid}`);
+};
+
+export const ajaxGetOrganizationWorkshopTypeCodesMap = () => {
+  return api.get(`${apiPrefix}/workshop/typeCodesMap`);
 };
 
 export const ajaxDestroyOrganizationWorkshops = (uuids) => {

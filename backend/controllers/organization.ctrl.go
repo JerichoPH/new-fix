@@ -35,6 +35,20 @@ type (
 	OrganizaitonParagraphDestroyManyForm struct {
 		Uuids []string `json:"uuids"`
 	}
+	// OrganizationWorkshopCtrl 车间控制器
+	OrganizationWorkshopCtrl struct{}
+	// OrganizationWorkshopStoreForm 车间表单
+	OrganizationWorkshopStoreForm struct {
+		UniqueCode                string `json:"unique_code"`
+		Name                      string `json:"name"`
+		OrganizationParagraphUuid string `json:"organization_paragraph_uuid"`
+		organizationParagraph     *models.OrganizationParagraphMdl
+		TypeCode                  string `json:"type_code"`
+	}
+	// OrganizationWorkshopDestroyManyForm 批量删除车间表单
+	OrganizationWorkshopDestroyManyForm struct {
+		Uuids []string `json:"uuids"`
+	}
 )
 
 // ShouldBind 绑定表单（路局）
@@ -100,6 +114,41 @@ func (receiver OrganizaitonParagraphDestroyManyForm) ShouldBind(ctx *gin.Context
 	if len(receiver.Uuids) == 0 {
 		wrongs.ThrowValidate("站段编号必填")
 	}
+	return receiver
+}
+
+// ShouldBind 绑定表单（车间）
+func (receiver OrganizationWorkshopStoreForm) ShouldBind(ctx *gin.Context) OrganizationWorkshopStoreForm {
+	if err := ctx.ShouldBind(&receiver); err != nil {
+		wrongs.ThrowValidate("表单绑定失败：%s", err.Error())
+	}
+	if receiver.UniqueCode == "" {
+		wrongs.ThrowValidate("车间代码必填")
+	}
+	if receiver.Name == "" {
+		wrongs.ThrowValidate("车间名称必填")
+	}
+	if receiver.OrganizationParagraphUuid == "" {
+		wrongs.ThrowValidate("站段编号必填")
+	} else {
+		models.NewOrganizationParagraphMdl().GetDb("").Where("uuid = ?", receiver.OrganizationParagraphUuid).First(&receiver.organizationParagraph)
+	}
+	if !tools.InString(receiver.TypeCode, models.OrganizationWorkshopMdl{}.GetTypeCodes()) {
+		wrongs.ThrowValidate("车间类型代码错误")
+	}
+	return receiver
+}
+
+// ShouldBind 表单绑定（批量删除车间）
+func (receiver OrganizationWorkshopDestroyManyForm) ShouldBind(ctx *gin.Context) OrganizationWorkshopDestroyManyForm {
+	if err := ctx.ShouldBind(&receiver); err != nil {
+		wrongs.ThrowValidate("表单绑定失败：%s", err.Error())
+	}
+
+	if len(receiver.Uuids) == 0 {
+		wrongs.ThrowValidate("车间编号必填")
+	}
+
 	return receiver
 }
 
@@ -449,4 +498,180 @@ func (receiver OrganizationParagraphCtrl) ListJdt(ctx *gin.Context) {
 			).
 			ToGinResponse(),
 	)
+}
+
+// NewOrganizationWorkshopCtrl 构造函数
+func NewOrganizationWorkshopCtrl() *OrganizationWorkshopCtrl {
+	return &OrganizationWorkshopCtrl{}
+}
+
+// Store 新建
+func (OrganizationWorkshopCtrl) Store(ctx *gin.Context) {
+	var (
+		ret    *gorm.DB
+		repeat *models.OrganizationWorkshopMdl
+	)
+
+	// 表单
+	form := OrganizationWorkshopStoreForm{}.ShouldBind(ctx)
+
+	// 查重
+	ret = models.NewOrganizationWorkshopMdl().
+		GetDb("").
+		Where("unique_code = ?", form.UniqueCode).
+		First(&repeat)
+	wrongs.ThrowWhenNotEmpty(ret, "车间代码")
+	ret = models.NewOrganizationWorkshopMdl().
+		GetDb("").
+		Where("name = ?", form.Name).
+		First(&repeat)
+	wrongs.ThrowWhenNotEmpty(ret, "车间名称")
+
+	// 新建
+	organizationWorkshop := &models.OrganizationWorkshopMdl{
+		UniqueCode:                form.UniqueCode,
+		Name:                      form.Name,
+		OrganizationParagraphUuid: form.organizationParagraph.Uuid,
+		TypeCode:                  form.TypeCode,
+	}
+	if ret = models.NewOrganizationWorkshopMdl().
+		GetDb("").
+		Create(&organizationWorkshop); ret.Error != nil {
+		wrongs.ThrowForbidden(ret.Error.Error())
+	}
+
+	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Created(map[string]any{"organization_workshop": organizationWorkshop}).ToGinResponse())
+}
+
+// Destroy 删除
+func (OrganizationWorkshopCtrl) Destroy(ctx *gin.Context) {
+	var (
+		ret                  *gorm.DB
+		organizationWorkshop *models.OrganizationWorkshopMdl
+	)
+
+	// 查询
+	ret = models.NewOrganizationWorkshopMdl().
+		GetDb("").
+		Where("uuid = ?", ctx.Param("uuid")).
+		First(&organizationWorkshop)
+	wrongs.ThrowWhenEmpty(ret, "车间")
+
+	// 删除
+	if ret := models.NewOrganizationWorkshopMdl().
+		GetDb("").
+		Where("uuid = ?", ctx.Param("uuid")).
+		Delete(&organizationWorkshop); ret.Error != nil {
+		wrongs.ThrowForbidden(ret.Error.Error())
+	}
+
+	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+}
+
+// DestroyMany 批量删除
+func (OrganizationWorkshopCtrl) DestroyMany(ctx *gin.Context) {
+	form := OrganizationWorkshopDestroyManyForm{}.ShouldBind(ctx)
+	if ret := models.NewOrganizationWorkshopMdl().GetDb("").Where("uuid in ?", form.Uuids).Delete(nil); ret.Error != nil {
+		wrongs.ThrowForbidden("删除失败：%s", ret.Error.Error())
+	}
+	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+}
+
+// Update 编辑
+func (OrganizationWorkshopCtrl) Update(ctx *gin.Context) {
+	var (
+		ret                          *gorm.DB
+		organizationWorkshop, repeat *models.OrganizationWorkshopMdl
+	)
+
+	// 表单
+	form := OrganizationWorkshopStoreForm{}.ShouldBind(ctx)
+
+	// 查重
+	ret = models.NewOrganizationWorkshopMdl().
+		GetDb("").
+		Where("unique_code = ? and uuid <> ?", form.UniqueCode, ctx.Param("uuid")).
+		First(&repeat)
+	wrongs.ThrowWhenNotEmpty(ret, "车间代码")
+	ret = models.NewOrganizationWorkshopMdl().
+		GetDb("").
+		Where("name = ? and uuid <> ?", form.Name, ctx.Param("uuid")).
+		First(&repeat)
+	wrongs.ThrowWhenNotEmpty(ret, "车间名称")
+
+	// 查询
+	ret = models.NewOrganizationWorkshopMdl().
+		GetDb("").
+		Where("uuid = ?", ctx.Param("uuid")).
+		First(&organizationWorkshop)
+	wrongs.ThrowWhenEmpty(ret, "车间")
+
+	// 编辑
+	organizationWorkshop.UniqueCode = form.UniqueCode
+	organizationWorkshop.Name = form.Name
+	organizationWorkshop.OrganizationParagraphUuid = form.organizationParagraph.Uuid
+	organizationWorkshop.TypeCode = form.TypeCode
+	if ret = models.NewOrganizationWorkshopMdl().
+		GetDb("").
+		Where("uuid = ?", ctx.Param("uuid")).
+		Save(&organizationWorkshop); ret.Error != nil {
+		wrongs.ThrowForbidden(ret.Error.Error())
+	}
+
+	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"organization_workshop": organizationWorkshop}).ToGinResponse())
+}
+
+// Detail 详情
+func (OrganizationWorkshopCtrl) Detail(ctx *gin.Context) {
+	var (
+		ret                  *gorm.DB
+		organizationWorkshop *models.OrganizationWorkshopMdl
+	)
+	ret = models.NewOrganizationWorkshopMdl().
+		SetCtx(ctx).
+		GetDbUseQuery("").
+		Where("uuid = ?", ctx.Param("uuid")).
+		First(&organizationWorkshop)
+	wrongs.ThrowWhenEmpty(ret, "车间")
+
+	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"organization_workshop": organizationWorkshop}).ToGinResponse())
+}
+
+// List 列表
+func (receiver OrganizationWorkshopCtrl) List(ctx *gin.Context) {
+	var organizationWorkshops []*models.OrganizationWorkshopMdl
+
+	ctx.JSON(
+		tools.NewCorrectWithGinContext("", ctx).
+			DataForPager(
+				models.OrganizationWorkshopMdl{}.GetListByQuery(ctx),
+				func(db *gorm.DB) map[string]any {
+					db.Find(&organizationWorkshops)
+					return map[string]any{"organization_workshops": organizationWorkshops}
+				},
+			).
+			ToGinResponse(),
+	)
+}
+
+// ListJdt jquery-dataTable后端分页数据
+func (receiver OrganizationWorkshopCtrl) ListJdt(ctx *gin.Context) {
+	var organizationWorkshops []*models.OrganizationWorkshopMdl
+
+	ctx.JSON(
+		tools.NewCorrectWithGinContext("", ctx).
+			DataForJqueryDataTable(
+				models.OrganizationWorkshopMdl{}.GetListByQuery(ctx),
+				func(db *gorm.DB) map[string]any {
+					db.Find(&organizationWorkshops)
+					return map[string]any{"organization_workshops": organizationWorkshops}
+				},
+			).
+			ToGinResponse(),
+	)
+}
+
+// GetTypeCodes 获取车间类型代码
+func (OrganizationWorkshopCtrl) GetTypeCodesMap(ctx *gin.Context) {
+	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"type_codes_map": models.OrganizationWorkshopMdl{}.GetTypeCodesMap()}).ToGinResponse())
 }

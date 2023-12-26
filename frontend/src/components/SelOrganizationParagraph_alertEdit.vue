@@ -6,7 +6,7 @@
 <script setup>
 import { inject, defineProps, onMounted, ref } from "vue";
 import collect from "collect.js";
-import { ajaxGetOrganizationRailways } from "/src/apis/organization";
+import { ajaxGetOrganizationParagraphs } from "/src/apis/organization";
 import { errorNotify } from "src/utils/notify";
 
 const props = defineProps({
@@ -46,7 +46,7 @@ const fnFilter = (val, update) => {
 };
 
 onMounted(() => {
-  ajaxGetOrganizationRailways(ajaxParams)
+  ajaxGetOrganizationParagraphs(ajaxParams)
     .then((res) => {
       organizationParagraphs.value = collect(res.content.organization_paragraphs)
         .map((organizationParagraph) => {

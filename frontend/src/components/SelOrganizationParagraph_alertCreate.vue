@@ -1,6 +1,7 @@
 <template>
   <q-select outlined use-input clearable v-model="organizationParagraphUuid_alertCreate"
-    :options="organizationParagraphs_alertCreate" :label="labelName" @filter="fnFilter" emit-value map-options />
+    :options="organizationParagraphs_alertCreate" :label="labelName" @filter="fnFilter" emit-value map-options
+    :disable="!organizationRailwayUuid_alertCreate" />
 </template>
 <script setup>
 import { inject, defineProps, onMounted, ref, watch } from "vue";
@@ -24,9 +25,12 @@ const props = defineProps({
 
 const labelName = props.labelName;
 const ajaxParams = props.ajaxParams;
+const organizationRailwayUuid_alertCreate = inject("organizationRailwayUuid_alertCreate");
 const organizationParagraphUuid_alertCreate = inject("organizationParagraphUuid_alertCreate");
 const organizationParagraphs_alertCreate = ref([]);
 const organizationParagraphs = ref([]);
+
+watch(organizationRailwayUuid_alertCreate, newValue => { fnSearch(newValue); });
 
 const fnFilter = (val, update) => {
   if (val === "") {
@@ -44,11 +48,18 @@ const fnFilter = (val, update) => {
 };
 
 onMounted(() => {
+  fnSearch("");
+});
+
+const fnSearch = paragraphRailwayUuid => {
   organizationParagraphs.value = [];
 
-  ajaxGetOrganizationParagraphs(ajaxParams)
-    .then(res => {
-      if (res.content.organization_paragraphs.length > 0) {
+  if (paragraphRailwayUuid) {
+    ajaxGetOrganizationParagraphs({
+      ...ajaxParams,
+      organization_railway_uuid: paragraphRailwayUuid,
+    })
+      .then(res => {
         organizationParagraphs.value = collect(res.content.organization_paragraphs)
           .map(organizationParagraph => {
             return {
@@ -57,9 +68,9 @@ onMounted(() => {
             };
           })
           .all();
-      }
-    })
-    .catch((e) => errorNotify(e.msg));
-});
+      })
+      .catch((e) => errorNotify(e.msg));
+  }
+};
 </script>
 src/utils/notify

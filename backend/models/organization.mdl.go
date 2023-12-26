@@ -20,6 +20,7 @@ type (
 		UniqueCode              string                     `gorm:"index;type:char(4);not null;comment:站段代码;" json:"unique_code"`
 		Name                    string                     `gorm:"index;type:varchar(128);not null;comment:站段名称;" json:"name"`
 		OrganizationRailwayUuid string                     `gorm:"type:char(36);not null;" json:"organization_railway_uuid"`
+		FullName                string                     `gorm:"-"`
 		OrganizationRailway     *OrganizationRailwayMdl    `gorm:"foreignKey:organization_railway_uuid;references:uuid;comment:所属路局;" json:"organization_railway"`
 		OrganizationWorkshops   []*OrganizationWorkshopMdl `gorm:"foreignKey:organization_paragraph_uuid;references:uuid;comment:相关车间;" json:"organization_workshops"`
 		OrganizationLines       []*OrganizationLineMdl     `gorm:"foreignKey:organization_paragraph_uuid;references:uuid;comment:相关线别;" json:"organization_lines"`
@@ -157,7 +158,7 @@ func (receiver OrganizationParagraphMdl) GetListByQuery(ctx *gin.Context) *gorm.
 		SetCtx(ctx).
 		GetDbUseQuery("").
 		Table("organization_paragraphs as op").
-		Joins("join organization_railways as ora on op.organization_railway_uuid = ora.uuid")
+		Joins("join organization_railways ora on op.organization_railway_uuid = ora.uuid")
 }
 
 // TableName 组织结构-车间表名称
@@ -178,11 +179,46 @@ func (receiver OrganizationWorkshopMdl) GetListByQuery(ctx *gin.Context) *gorm.D
 			"name": "ow.name like ?",
 		}).
 		SetWheresDateBetween("ow.created_at", "ow.updated_at", "ow.deleted_at").
-		SetWheresExtraHasValue(map[string]func(string, *gorm.DB) *gorm.DB{}).
+		SetWheresExtraHasValue(map[string]func(string, *gorm.DB) *gorm.DB{
+			"unique_code": func(value string, db *gorm.DB) *gorm.DB {
+				return db.Where("ow.unique_code = ?", value)
+			},
+			"organization_paragraph_uuid": func(value string, db *gorm.DB) *gorm.DB {
+				return db.Where("op.uuid = ?", value)
+			},
+			"organization_railway_uuid": func(value string, db *gorm.DB) *gorm.DB {
+				return db.Where("ora.uuid = ?", value)
+			},
+		}).
 		SetWheresExtraHasValues(map[string]func([]string, *gorm.DB) *gorm.DB{}).
 		SetCtx(ctx).
 		GetDbUseQuery("").
-		Table("organization_workshops as ow")
+		Table("organization_workshops as ow").
+		Joins("join organization_paragraphs op on ow.organization_paragraph_uuid = op.uuid").
+		Joins("join organization_railways ora on op.organization_railway_uuid = ora.uuid")
+}
+
+// GetTypeCodes 获取车间类型代码列表
+func (OrganizationWorkshopMdl) GetTypeCodes() []string {
+	return []string{
+		"",
+		"SCENE",
+		"FIX",
+		"ELECTRIC",
+		"HUMP",
+		"ON-BOARD",
+	}
+}
+
+// GetTypeCodesMap 获取车间类型代码映射
+func (OrganizationWorkshopMdl) GetTypeCodesMap() map[string]string {
+	return map[string]string{
+		"SCENE":    "现场车间",
+		"FIX":      "检修车间",
+		"ELECTRIC": "电子车间",
+		"HUMP":     "驼峰车间",
+		"ON-BOARD": "车载车间",
+	}
 }
 
 // TableName 组织结构-站场表名称
@@ -203,11 +239,28 @@ func (receiver OrganizationStationMdl) GetListByQuery(ctx *gin.Context) *gorm.DB
 			"name": "os.name like ?",
 		}).
 		SetWheresDateBetween("os.created_at", "os.updated_at", "os.deleted_at").
-		SetWheresExtraHasValue(map[string]func(string, *gorm.DB) *gorm.DB{}).
+		SetWheresExtraHasValue(map[string]func(string, *gorm.DB) *gorm.DB{
+			"organization_workshop_uuid": func(value string, db *gorm.DB) *gorm.DB {
+				return db.Where("ow.uuid = ?", value)
+			},
+			"organization_paragraph_uuid": func(value string, db *gorm.DB) *gorm.DB {
+				return db.Where("op.uuid = ?", value)
+			},
+			"organization_railway_uuid": func(value string, db *gorm.DB) *gorm.DB {
+				return db.Where("ora.uuid = ?", value)
+			},
+			"organization_line_uuid": func(value string, db *gorm.DB) *gorm.DB {
+				return db.Where("ol.uuid = ?", value)
+			},
+		}).
 		SetWheresExtraHasValues(map[string]func([]string, *gorm.DB) *gorm.DB{}).
 		SetCtx(ctx).
 		GetDbUseQuery("").
-		Table("organization_stations as os")
+		Table("organization_stations as os").
+		Joins("join organization_lines ol on os.organization_line_uuid = ol.uuid").
+		Joins("join organization_workshops ow os.organization_workshop_uuid = ow.uuid").
+		Joins("join organization_paragraphs op on ow.organization_paragraph_uuid = op.uuid").
+		Joins("join organization_railways ora on op.organization_railway_uuid = ora.uuid")
 }
 
 // TableName 组织结构-道口表名称
@@ -228,11 +281,31 @@ func (receiver OrganizationCrossroadMdl) GetListByQuery(ctx *gin.Context) *gorm.
 			"name": "ocr.name like ?",
 		}).
 		SetWheresDateBetween("ocr.created_at", "ocr.updated_at", "ocr.deleted_at").
-		SetWheresExtraHasValue(map[string]func(string, *gorm.DB) *gorm.DB{}).
+		SetWheresExtraHasValue(map[string]func(string, *gorm.DB) *gorm.DB{
+			"unique_code": func(value string, db *gorm.DB) *gorm.DB {
+				return db.Where("ocr.unique_code = ?", value)
+			},
+			"organization_workshop_uuid": func(value string, db *gorm.DB) *gorm.DB {
+				return db.Where("ow.uuid = ?", value)
+			},
+			"organization_paragraph_uuid": func(value string, db *gorm.DB) *gorm.DB {
+				return db.Where("op.uuid = ?", value)
+			},
+			"organization_railway_uuid": func(value string, db *gorm.DB) *gorm.DB {
+				return db.Where("ora.uuid = ?", value)
+			},
+			"organization_line_uuid": func(value string, db *gorm.DB) *gorm.DB {
+				return db.Where("ol.uuid = ?", value)
+			},
+		}).
 		SetWheresExtraHasValues(map[string]func([]string, *gorm.DB) *gorm.DB{}).
 		SetCtx(ctx).
 		GetDbUseQuery("").
-		Table("organization_crossroads as ocr")
+		Table("organization_crossroads as ocr").
+		Joins("join organization_lines ol on ocr.organization_line_uuid = ol.uuid").
+		Joins("join organization_workshops ow on ocr.organization_workshop_uuid = ow.uuid").
+		Joins("join organization_paragraphs op on ow.organization_paragraph_uuid = op.uuid").
+		Joins("join organization_railways ora on op.organization_railway_uuid = ora.uuid")
 }
 
 // TableName 组织结构-中心表名称
@@ -253,11 +326,28 @@ func (receiver OrganizationCenterMdl) GetListByQuery(ctx *gin.Context) *gorm.DB 
 			"name": "oct.name like ?",
 		}).
 		SetWheresDateBetween("oct.created_at", "oct.updated_at", "oct.deleted_at").
-		SetWheresExtraHasValue(map[string]func(string, *gorm.DB) *gorm.DB{}).
+		SetWheresExtraHasValue(map[string]func(string, *gorm.DB) *gorm.DB{
+			"unique_code": func(value string, db *gorm.DB) *gorm.DB {
+				return db.Where("oct.unique_code = ?", value)
+			},
+			"organization_workshop_uuid": func(value string, db *gorm.DB) *gorm.DB {
+				return db.Where("ow.uuid = ?", value)
+			},
+			"organization_paragraph_uuid": func(value string, db *gorm.DB) *gorm.DB {
+				return db.Where("op.uuid = ?", value)
+			},
+			"organization_line_uuid": func(value string, db *gorm.DB) *gorm.DB {
+				return db.Where("ol.uuid = ?", value)
+			},
+		}).
 		SetWheresExtraHasValues(map[string]func([]string, *gorm.DB) *gorm.DB{}).
 		SetCtx(ctx).
 		GetDbUseQuery("").
-		Table("organization_centers as oct")
+		Table("organization_centers as oct").
+		Joins("join organization_lines ol on oct.organization_line_uuid = ol.uuid").
+		Joins("join organization_workshops ow on oct.organization_workshop_uuid = ow.uuid").
+		Joins("join organization_paragraphs op on ow.organization_paragraph_uuid = op.uuid").
+		Joins("join organization_railways ora on op.organization_railway_uuid = ora.uuid")
 }
 
 // TableName 组织结构-工区表名称
@@ -278,11 +368,27 @@ func (receiver OrganizationWorkAreaMdl) GetListByQuery(ctx *gin.Context) *gorm.D
 			"name": "owa.name like ?",
 		}).
 		SetWheresDateBetween("owa.created_at", "owa.updated_at", "owa.deleted_at").
-		SetWheresExtraHasValue(map[string]func(string, *gorm.DB) *gorm.DB{}).
+		SetWheresExtraHasValue(map[string]func(string, *gorm.DB) *gorm.DB{
+			"unique_code": func(value string, db *gorm.DB) *gorm.DB {
+				return db.Where("owa.unique_code = ?", value)
+			},
+			"organization_workshop_uuid": func(value string, db *gorm.DB) *gorm.DB {
+				return db.Where("ow.uuid = ?", value)
+			},
+			"organization_paragraph_uuid": func(value string, db *gorm.DB) *gorm.DB {
+				return db.Where("op.uuid = ?", value)
+			},
+			"organization_railway_uuid": func(value string, db *gorm.DB) *gorm.DB {
+				return db.Where("ora.uuid = ?", value)
+			},
+		}).
 		SetWheresExtraHasValues(map[string]func([]string, *gorm.DB) *gorm.DB{}).
 		SetCtx(ctx).
 		GetDbUseQuery("").
-		Table("organization_work_areas as owa")
+		Table("organization_work_areas as owa").
+		Joins("join organization_workshops ow on owa.organization_workshop_uuid = ow.uuid").
+		Joins("join organization_paragraphs op on ow.organization_paragraph_uuid = op.uuid").
+		Joins("join organization_railways ora on op.organization_railway_uuid = ora.uuid")
 }
 
 // TableName 组织结构-线别表名称
@@ -303,9 +409,37 @@ func (receiver OrganizationLineMdl) GetListByQuery(ctx *gin.Context) *gorm.DB {
 			"name": "ol.name like ?",
 		}).
 		SetWheresDateBetween("ol.created_at", "ol.updated_at", "ol.deleted_at").
-		SetWheresExtraHasValue(map[string]func(string, *gorm.DB) *gorm.DB{}).
+		SetWheresExtraHasValue(map[string]func(string, *gorm.DB) *gorm.DB{
+			"unique_code": func(value string, db *gorm.DB) *gorm.DB {
+				return db.Where("ol.unique_code = ?", value)
+			},
+			"organization_station_uuid": func(value string, db *gorm.DB) *gorm.DB {
+				return db.Where("os.uuid = ?", value)
+			},
+			"organization_crossroad_uuid": func(value string, db *gorm.DB) *gorm.DB {
+				return db.Where("ocr.uuid = ?", value)
+			},
+			"organization_center_uuid": func(value string, db *gorm.DB) *gorm.DB {
+				return db.Where("oct.uuid = ?", value)
+			},
+			"organization_workshop_uuid": func(value string, db *gorm.DB) *gorm.DB {
+				return db.Where("ow.uuid = ?", value)
+			},
+			"organization_paragraph_uuid": func(value string, db *gorm.DB) *gorm.DB {
+				return db.Where("op.uuid = ?", value)
+			},
+			"organization_railway_uuid": func(value string, db *gorm.DB) *gorm.DB {
+				return db.Where("ora.uuid = ?", value)
+			},
+		}).
 		SetWheresExtraHasValues(map[string]func([]string, *gorm.DB) *gorm.DB{}).
 		SetCtx(ctx).
 		GetDbUseQuery("").
-		Table("organization_lines as ol")
+		Table("organization_lines as ol").
+		Joins("organization_stations os on ol.organization_station_uuid = os.uuid").
+		Joins("organization_crossroads ocr on ol.organization_crossroad_uuid = ocr.uuid").
+		Joins("organization_centers oct on ol.organization_center_uuid = oct.uuid").
+		Joins("organization_workshops ow on ol.organization_workshop_uuid = ow.uuid").
+		Joins("organization_paragraphs op on ow.organization_paragraph_uuid = op.uuid").
+		Joins("organization_railways ora on op.organization_railway_uuid = ora.uuid")
 }
