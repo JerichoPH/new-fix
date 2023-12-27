@@ -18,8 +18,7 @@ type (
 	}
 	// EquipmentKindCategoryDestroyManyForm 器材种类批量删除表单
 	EquipmentKindCategoryDestroyManyForm struct {
-		Uuids                   []string `json:"uuids"`
-		equipmentKindCategories []*models.EquipmentKindCategoryMdl
+		Uuids []string `json:"uuids"`
 	}
 
 	// EquipmentKindTypeCtrl 器材类型控制器
@@ -36,8 +35,7 @@ type (
 	}
 	// EquipmentKindTypeDestroyManyForm 器材类型批量删除表单
 	EquipmentKindTypeDestroyManyForm struct {
-		Uuids              []string `json:"uuids"`
-		equipmentKindTypes []*models.EquipmentKindTypeMdl
+		Uuids []string `json:"uuids"`
 	}
 
 	// EquipmentKindModelCtrl 器材型号控制器
@@ -54,8 +52,7 @@ type (
 	}
 	// EquipmentKindModelDestroyManyForm 器材型号批量删除表单
 	EquipmentKindModelDestroyManyForm struct {
-		Uuids               []string `json:"uuids"`
-		equipmentKindModels []*models.EquipmentKindModelMdl
+		Uuids []string `json:"uuids"`
 	}
 )
 

@@ -993,7 +993,7 @@ func (OrganizationCrossroadCtrl) Store(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Created(map[string]any{"organizationCrossroad": organizationCrossroad}).ToGinResponse())
+	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Created(map[string]any{"organization_crossroad": organizationCrossroad}).ToGinResponse())
 }
 
 // Destroy 删除
@@ -1070,7 +1070,7 @@ func (OrganizationCrossroadCtrl) Update(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"organizationCrossroad": organizationCrossroad}).ToGinResponse())
+	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"organization_crossroad": organizationCrossroad}).ToGinResponse())
 }
 
 // Detail 详情
@@ -1086,7 +1086,7 @@ func (OrganizationCrossroadCtrl) Detail(ctx *gin.Context) {
 		First(&organizationCrossroad)
 	wrongs.ThrowWhenEmpty(ret, "道口")
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"organizationCrossroad": organizationCrossroad}).ToGinResponse())
+	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"organization_crossroad": organizationCrossroad}).ToGinResponse())
 }
 
 // List 列表
@@ -1099,7 +1099,7 @@ func (receiver OrganizationCrossroadCtrl) List(ctx *gin.Context) {
 				models.OrganizationCrossroadMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
 					db.Find(&organizationCrossroads)
-					return map[string]any{"organizationCrossroads": organizationCrossroads}
+					return map[string]any{"organization_crossroads": organizationCrossroads}
 				},
 			).
 			ToGinResponse(),
@@ -1116,7 +1116,7 @@ func (receiver OrganizationCrossroadCtrl) ListJdt(ctx *gin.Context) {
 				models.OrganizationCrossroadMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
 					db.Find(&organizationCrossroads)
-					return map[string]any{"organizationCrossroads": organizationCrossroads}
+					return map[string]any{"organization_crossroads": organizationCrossroads}
 				},
 			).
 			ToGinResponse(),
