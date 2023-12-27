@@ -60,6 +60,8 @@ type (
 		Name                     string `json:"name"`
 		OrganizationWorkshopUuid string `json:"organization_workshop_uuid"`
 		organizationWorkshop     *models.OrganizationWorkshopMdl
+		OrganizationLineUuid     string `json:"organization_line_uuid"`
+		organizationLine         *models.OrganizationLineMdl
 	}
 	// OrganizationStationDestroyManyForm 批量删除站场表单
 	OrganizationStationDestroyManyForm struct {
@@ -75,7 +77,7 @@ type (
 		OrganizationWorkshopUuid string `json:"organization_workshop_uuid"`
 		organizationWorkshop     *models.OrganizationWorkshopMdl
 		OrganizationLineUuid     string `json:"organization_line_uuid"`
-		organizationLineMdl      *models.OrganizationLineMdl
+		organizationLine         *models.OrganizationLineMdl
 	}
 	// OrganizationCrossroadDestroyManyForm 批量删除道口表单
 	OrganizationCrossroadDestroyManyForm struct {
@@ -204,6 +206,9 @@ func (receiver OrganizationStationStoreForm) ShouldBind(ctx *gin.Context) Organi
 	} else {
 		models.NewOrganizationWorkshopMdl().GetDb("").Where("uuid = ?", receiver.OrganizationWorkshopUuid).First(&receiver.organizationWorkshop)
 	}
+	if receiver.OrganizationLineUuid != "" {
+		models.NewOrganizationLineMdl().GetDb("").Where("uuid = ?", receiver.OrganizationLineUuid).First(&receiver.organizationLine)
+	}
 	return receiver
 }
 
@@ -225,9 +230,21 @@ func (receiver OrganizationCrossroadStoreForm) ShouldBind(ctx *gin.Context) Orga
 	}
 	if receiver.UniqueCode == "" {
 		wrongs.ThrowValidate("道口代码必填")
+	} else {
+		if len(receiver.UniqueCode) != 5 {
+			wrongs.ThrowValidate("道口代码必须是6位")
+		}
 	}
 	if receiver.Name == "" {
 		wrongs.ThrowValidate("道口名称必填")
+	}
+	if receiver.OrganizationWorkshopUuid == "" {
+		wrongs.ThrowValidate("所属车间编号不能为空")
+	} else {
+		models.NewOrganizationWorkshopMdl().GetDb("").Where("uuid = ?", receiver.OrganizationWorkshopUuid).First(&receiver.organizationWorkshop)
+	}
+	if receiver.OrganizationLineUuid != "" {
+		models.NewOrganizationLineMdl().GetDb("").Where("uuid = ?", receiver.OrganizationLineUuid).First(&receiver.organizationLine)
 	}
 	return receiver
 }
@@ -965,7 +982,11 @@ func (OrganizationCrossroadCtrl) Store(ctx *gin.Context) {
 	wrongs.ThrowWhenNotEmpty(ret, "道口名称")
 
 	// 新建
-	organizationCrossroad := &models.OrganizationCrossroadMdl{}
+	organizationCrossroad := &models.OrganizationCrossroadMdl{
+		UniqueCode:               form.UniqueCode,
+		Name:                     form.Name,
+		OrganizationWorkshopUuid: form.organizationWorkshop.Uuid,
+	}
 	if ret = models.NewOrganizationCrossroadMdl().
 		GetDb("").
 		Create(&organizationCrossroad); ret.Error != nil {
@@ -1000,6 +1021,15 @@ func (OrganizationCrossroadCtrl) Destroy(ctx *gin.Context) {
 	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
+// 批量删除
+func (OrganizationCrossroadCtrl) DestroyMany(ctx *gin.Context) {
+	form := OrganizationCrossroadDestroyManyForm{}.ShouldBind(ctx)
+	if ret := models.NewOrganizationCrossroadMdl().GetDb("").Where("uuid in ?", form.Uuids).Delete(nil); ret.Error != nil {
+		wrongs.ThrowForbidden("删除失败：%s", ret.Error.Error())
+	}
+	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+}
+
 // Update 编辑
 func (OrganizationCrossroadCtrl) Update(ctx *gin.Context) {
 	var (
@@ -1030,10 +1060,9 @@ func (OrganizationCrossroadCtrl) Update(ctx *gin.Context) {
 	wrongs.ThrowWhenEmpty(ret, "道口")
 
 	// 编辑
-	organizationCrossroad.Sort = form.Sort
 	organizationCrossroad.UniqueCode = form.UniqueCode
 	organizationCrossroad.Name = form.Name
-	organizationCrossroad.BeEnable = form.BeEnable
+	organizationCrossroad.OrganizationWorkshopUuid = form.organizationWorkshop.Uuid
 	if ret = models.NewOrganizationCrossroadMdl().
 		GetDb("").
 		Where("uuid = ?", ctx.Param("uuid")).

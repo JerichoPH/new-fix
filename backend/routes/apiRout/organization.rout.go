@@ -108,5 +108,27 @@ func (OrganizationRout) Load(engine *gin.Engine) {
 			// jquery-dataTable数据列表
 			stationRout.GET(".jdt", controllers.NewOrganizationStationCtrl().ListJdt)
 		}
+
+		crossroadRout := organizationRout.Group(
+			"crossroad",
+			middlewares.CheckAuth(),
+			middlewares.CheckPermission(),
+		)
+		{
+			// 新建
+			crossroadRout.POST("", controllers.NewOrganizationCrossroadCtrl().Store)
+			// 批量删除
+			crossroadRout.POST("destroyMany", controllers.NewOrganizationCrossroadCtrl().DestroyMany)
+			// 删除
+			crossroadRout.DELETE(":uuid", controllers.NewOrganizationCrossroadCtrl().Destroy)
+			// 编辑
+			crossroadRout.PUT(":uuid", controllers.NewOrganizationCrossroadCtrl().Update)
+			// 详情
+			crossroadRout.GET(":uuid", controllers.NewOrganizationCrossroadCtrl().Detail)
+			// 列表
+			crossroadRout.GET("", controllers.NewOrganizationCrossroadCtrl().List)
+			// jquery-dataTable数据列表
+			crossroadRout.GET(".jdt", controllers.NewOrganizationCrossroadCtrl().ListJdt)
+		}
 	}
 }

@@ -16,6 +16,7 @@ import OrganizationRailwayPage from "src/pages/organization/RailwayPage.vue";
 import OrganizationParagraphPage from "src/pages/organization/ParagraphPage.vue";
 import OrganizationWorkshopPage from "src/pages/organization/WorkshopPage.vue";
 import OrganizationStationPage from "src/pages/organization/StationPage.vue";
+import OrganizationCrossroadPage from "src/pages/organization/CrossroadPage.vue";
 
 const routes = [
   {
@@ -98,6 +99,11 @@ const routes = [
         path: "station",
         name: "organizationStation:index",
         component: OrganizationStationPage,
+      },
+      {
+        path: "crossroad",
+        name: "organizationCrossroad:index",
+        component: OrganizationCrossroadPage,
       },
     ],
   },
