@@ -31,9 +31,7 @@ const organizationParagraphs_search = ref([]);
 const organizationParagraphs = ref([]);
 const organizationParagraphsMap = ref({});
 
-watch(organizationRailwayUuid_search, (newValue) => {
-  fnSearch(newValue);
-});
+watch(organizationRailwayUuid_search, (newValue) => fnSearch(newValue));
 
 const fnFilter = (val, update) => {
   if (val === "") {
@@ -50,32 +48,29 @@ const fnFilter = (val, update) => {
   });
 };
 
-onMounted(() => {
-  fnSearch("");
-});
+onMounted(() => fnSearch(""));
 
 const fnSearch = (organizationRailwayUuid) => {
   organizationParagraphs_search.value = [];
 
-  if (organizationRailwayUuid) {
-    ajaxGetOrganizationParagraphs({
-      ...ajaxParams,
-      organization_railway_uuid: organizationRailwayUuid,
+  if (!organizationRailwayUuid) return;
+  ajaxGetOrganizationParagraphs({
+    ...ajaxParams,
+    organization_railway_uuid: organizationRailwayUuid,
+  })
+    .then((res) => {
+      organizationParagraphs.value =
+        collect(res.content.organization_paragraphs)
+          .map((organizationParagraph) => {
+            return {
+              label: organizationParagraph.name,
+              value: organizationParagraph.uuid,
+            };
+          })
+          .all();
+      organizationParagraphsMap.value = collect(organizationParagraphs.value).pluck('label', 'value').all();
     })
-      .then((res) => {
-        organizationParagraphs.value =
-          collect(res.content.organization_paragraphs)
-            .map((organizationParagraph) => {
-              return {
-                label: organizationParagraph.name,
-                value: organizationParagraph.uuid,
-              };
-            })
-            .all();
-        organizationParagraphsMap.value = collect(organizationParagraphs.value).pluck('label', 'value').all();
-      })
-      .catch((e) => errorNotify(e.msg));
-  }
+    .catch((e) => errorNotify(e.msg));
 };
 </script>
 src/utils/notify

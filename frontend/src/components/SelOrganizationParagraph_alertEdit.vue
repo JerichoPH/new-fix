@@ -1,10 +1,10 @@
 <template>
   <q-select outlined use-input clearable v-model="organizationParagraphUuid_alertEdit"
-    :options="organizationParagraphs_alertEdit" :display-value="organizationParagraphsMap[organizationParagraphUuid_alertEdit]"
-    :label="labelName" @filter="fnFilter" emit-value map-options />
+    :options="organizationParagraphs_alertEdit" :label="labelName" @filter="fnFilter"
+    :display-value="organizationParagraphsMap[organizationParagraphUuid_alertEdit]" emit-value map-options />
 </template>
 <script setup>
-import { inject, defineProps, onMounted, ref } from "vue";
+import { inject, defineProps, onMounted, ref, watch } from "vue";
 import collect from "collect.js";
 import { ajaxGetOrganizationParagraphs } from "/src/apis/organization";
 import { errorNotify } from "src/utils/notify";
@@ -25,10 +25,13 @@ const props = defineProps({
 
 const labelName = props.labelName;
 const ajaxParams = props.ajaxParams;
+const organizationRailwayUuid_alertEdit = inject("organizationRailwayUuid_alertEdit");
 const organizationParagraphUuid_alertEdit = inject("organizationParagraphUuid_alertEdit");
 const organizationParagraphs_alertEdit = ref([]);
 const organizationParagraphs = ref([]);
 const organizationParagraphsMap = ref({});
+
+watch(organizationRailwayUuid_alertEdit, newValue => fnSearch(newValue));
 
 const fnFilter = (val, update) => {
   if (val === "") {
@@ -46,10 +49,18 @@ const fnFilter = (val, update) => {
 };
 
 onMounted(() => {
+  fnSearch("");
+});
+
+const fnSearch = organizationRailwayUuid => {
+  organizationParagraphs.value = [];
+
+  if (organizationRailwayUuid) ajaxParams["organization_railway_uuid"] = organizationRailwayUuid;
+
   ajaxGetOrganizationParagraphs(ajaxParams)
-    .then((res) => {
+    .then(res => {
       organizationParagraphs.value = collect(res.content.organization_paragraphs)
-        .map((organizationParagraph) => {
+        .map(organizationParagraph => {
           return {
             label: organizationParagraph.name,
             value: organizationParagraph.uuid,
@@ -59,6 +70,6 @@ onMounted(() => {
       organizationParagraphsMap.value = collect(organizationParagraphs.value).pluck('label', 'value').all();
     })
     .catch((e) => errorNotify(e.msg));
-});
+};
 </script>
 src/utils/notify

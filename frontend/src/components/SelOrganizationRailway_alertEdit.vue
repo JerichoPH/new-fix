@@ -1,7 +1,7 @@
 <template>
   <q-select outlined use-input clearable v-model="organizationRailwayUuid_alertEdit"
-    :options="organizationRailways_alertEdit" :display-value="organizationRailwaysMap[organizationRailwayUuid_alertEdit]"
-    :label="labelName" @filter="fnFilter" emit-value map-options />
+    :options="organizationRailways_alertEdit" :label="labelName" @filter="fnFilter" emit-value map-options
+    :display-value="organizationRailwaysMap[organizationRailwayUuid_alertEdit]" />
 </template>
 <script setup>
 import { inject, defineProps, onMounted, ref } from "vue";

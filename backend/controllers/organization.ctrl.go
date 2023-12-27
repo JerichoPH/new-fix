@@ -176,12 +176,17 @@ func (receiver OrganizationStationStoreForm) ShouldBind(ctx *gin.Context) Organi
 	if receiver.UniqueCode == "" {
 		wrongs.ThrowValidate("站场代码必填")
 	} else {
-		if len(receiver.UniqueCode) != 5 {
-			wrongs.ThrowValidate("站场代码必须是8位")
+		if len(receiver.UniqueCode) != 6 {
+			wrongs.ThrowValidate("站场代码必须是6位")
 		}
 	}
 	if receiver.Name == "" {
 		wrongs.ThrowValidate("站场名称必填")
+	}
+	if receiver.OrganizationWorkshopUuid == "" {
+		wrongs.ThrowValidate("所属车间编号不能为空")
+	} else {
+		models.NewOrganizationWorkshopMdl().GetDb("").Where("uuid = ?", receiver.OrganizationWorkshopUuid).First(&receiver.organizationWorkshop)
 	}
 	return receiver
 }
@@ -269,6 +274,7 @@ func (OrganizationRailwayCtrl) Destroy(ctx *gin.Context) {
 	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
+// DestroyMany 批量删除
 func (OrganizationRailwayCtrl) DestroyMany(ctx *gin.Context) {
 	form := OrganizaitonRailwayDestroyManyForm{}.ShouldBind(ctx)
 

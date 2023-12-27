@@ -1,6 +1,7 @@
 <template>
   <q-select outlined use-input clearable v-model="organizationParagraphUuid_alertCreate"
     :options="organizationParagraphs_alertCreate" :label="labelName" @filter="fnFilter" emit-value map-options
+    :display-value="organizationParagraphsMap[organizationParagraphUuid_alertCreate]"
     :disable="!organizationRailwayUuid_alertCreate" />
 </template>
 <script setup>
@@ -29,6 +30,7 @@ const organizationRailwayUuid_alertCreate = inject("organizationRailwayUuid_aler
 const organizationParagraphUuid_alertCreate = inject("organizationParagraphUuid_alertCreate");
 const organizationParagraphs_alertCreate = ref([]);
 const organizationParagraphs = ref([]);
+const organizationParagraphsMap = ref({});
 
 watch(organizationRailwayUuid_alertCreate, newValue => { fnSearch(newValue); });
 
@@ -51,13 +53,13 @@ onMounted(() => {
   fnSearch("");
 });
 
-const fnSearch = paragraphRailwayUuid => {
+const fnSearch = organizationRailwayUuid => {
   organizationParagraphs.value = [];
 
-  if (paragraphRailwayUuid) {
+  if (organizationRailwayUuid) {
     ajaxGetOrganizationParagraphs({
       ...ajaxParams,
-      organization_railway_uuid: paragraphRailwayUuid,
+      organization_railway_uuid: organizationRailwayUuid,
     })
       .then(res => {
         organizationParagraphs.value = collect(res.content.organization_paragraphs)
@@ -68,6 +70,7 @@ const fnSearch = paragraphRailwayUuid => {
             };
           })
           .all();
+        organizationParagraphsMap.value = collect(organizationParagraphs.value).pluck('label', 'value').all();
       })
       .catch((e) => errorNotify(e.msg));
   }

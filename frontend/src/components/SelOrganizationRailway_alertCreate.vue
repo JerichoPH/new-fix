@@ -1,6 +1,7 @@
 <template>
   <q-select outlined use-input clearable v-model="organizationRailwayUuid_alertCreate"
-    :options="organizationRailways_alertCreate" :label="labelName" @filter="fnFilter" emit-value map-options />
+    :options="organizationRailways_alertCreate" :label="labelName" @filter="fnFilter" emit-value map-options
+    :display-value="organizationRailwaysMap[organizationRailwayUuid_alertCreate]" />
 </template>
 <script setup>
 import { inject, defineProps, onMounted, ref, watch } from "vue";
@@ -27,6 +28,7 @@ const ajaxParams = props.ajaxParams;
 const organizationRailwayUuid_alertCreate = inject("organizationRailwayUuid_alertCreate");
 const organizationRailways_alertCreate = ref([]);
 const organizationRailways = ref([]);
+const organizationRailwaysMap = ref({});
 
 const fnFilter = (val, update) => {
   if (val === "") {
@@ -57,6 +59,7 @@ onMounted(() => {
             };
           })
           .all();
+        organizationRailwaysMap.value = collect(organizationRailways).pluck('label', 'value').all();
       }
     })
     .catch((e) => errorNotify(e.msg));

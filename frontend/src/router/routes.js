@@ -15,6 +15,7 @@ import EquipmentKindModelPage from "src/pages/equipmentKind/ModelPage.vue";
 import OrganizationRailwayPage from "src/pages/organization/RailwayPage.vue";
 import OrganizationParagraphPage from "src/pages/organization/ParagraphPage.vue";
 import OrganizationWorkshopPage from "src/pages/organization/WorkshopPage.vue";
+import OrganizationStationPage from "src/pages/organization/StationPage.vue";
 
 const routes = [
   {
@@ -92,6 +93,11 @@ const routes = [
         path: "workshop",
         name: "organizationWorkshop:index",
         component: OrganizationWorkshopPage,
+      },
+      {
+        path: "station",
+        name: "organizationStation:index",
+        component: OrganizationStationPage,
       },
     ],
   },

@@ -1,15 +1,6 @@
 <template>
-  <q-select
-    outlined
-    use-input
-    clearable
-    v-model="organizationRailwayUuid_search"
-    :options="organizationRailways_search"
-    :label="labelName"
-    @filter="fnFilter"
-    emit-value
-    map-options
-  />
+  <q-select outlined use-input clearable v-model="organizationRailwayUuid_search" :options="organizationRailways_search"
+    :label="labelName" @filter="fnFilter" emit-value map-options />
 </template>
 <script setup>
 import { inject, defineProps, onMounted, ref } from "vue";
@@ -52,25 +43,25 @@ const fnFilter = (val, update) => {
   });
 };
 
-onMounted(() => {
+onMounted(() => fnSearch());
+
+const fnSearch = () => {
   organizationRailways_search.value = [];
 
   ajaxGetOrganizationRailways(ajaxParams)
     .then((res) => {
-      if (res.content.organization_railways.length > 0) {
-        organizationRailways.value = res.content.organization_railways.map(
-          (organizationRailway) => {
-            return {
-              label: organizationRailway.short_name,
-              value: organizationRailway.uuid,
-            };
-          }
-        );
-      }
+      organizationRailways.value = collect(res.content.organization_railways)
+        .map(organizationRailway => {
+          return {
+            label: organizationRailway.short_name,
+            value: organizationRailway.uuid,
+          };
+        })
+        .all();
     })
     .catch((e) => {
       errorNotify(e.msg);
     });
-});
+};
 </script>
 src/utils/notify

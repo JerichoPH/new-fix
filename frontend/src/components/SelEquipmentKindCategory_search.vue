@@ -1,20 +1,8 @@
 <template>
-  <q-select
-    outlined
-    use-input
-    clearable
-    v-model="equipmentKindCategoryUuid_search"
+  <q-select outlined use-input clearable v-model="equipmentKindCategoryUuid_search"
     :options="equipmentKindCategories_search"
-    :display-value="
-      collect(equipmentKindCategories_search).pluck('value', 'label')[
-        equipmentKindCategoryUuid_search
-      ]
-    "
-    :label="labelName"
-    @filter="fnFilter"
-    emit-value
-    map-options
-  />
+    :display-value="collect(equipmentKindCategories_search).pluck('value', 'label')[equipmentKindCategoryUuid_search]"
+    :label="labelName" @filter="fnFilter" emit-value map-options />
 </template>
 
 <script setup>
@@ -39,11 +27,10 @@ const props = defineProps({
 
 const labelName = props.labelName;
 const ajaxParams = props.ajaxParams;
-const equipmentKindCategoryUuid_search = inject(
-  "equipmentKindCategoryUuid_search"
-);
+const equipmentKindCategoryUuid_search = inject("equipmentKindCategoryUuid_search");
 const equipmentKindCategories_search = ref([]);
 const equipmentKindCategories = ref([]);
+const equipmentKindCategoriesMap = ref({});
 
 const fnFilter = (val, update) => {
   if (val === "") {
@@ -60,21 +47,22 @@ const fnFilter = (val, update) => {
   });
 };
 
-onMounted(() => {
+onMounted(() => fnSearch());
+
+const fnSearch = () => {
   equipmentKindCategories_search.value = [];
 
   ajaxGetEquipmentKindCategories(ajaxParams)
     .then((res) => {
-      if (res.content.equipment_kind_categories.length > 0) {
-        equipmentKindCategories.value =
-          res.content.equipment_kind_categories.map((equipmentKindCategory) => {
-            return {
-              label: equipmentKindCategory.name,
-              value: equipmentKindCategory.uuid,
-            };
-          });
-      }
+      equipmentKindCategories.value = (res.content.equipment_kind_categories)
+        .map(equipmentKindCategory => {
+          return {
+            label: equipmentKindCategory.name,
+            value: equipmentKindCategory.uuid,
+          };
+        });
+      equipmentKindCategoriesMap.value = collect(equipmentKindCategories.value).pluck('label', 'value').all();
     })
     .catch((e) => errorNotify(e.msg));
-});
+};
 </script>

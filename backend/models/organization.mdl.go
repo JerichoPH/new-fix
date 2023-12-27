@@ -20,7 +20,6 @@ type (
 		UniqueCode              string                     `gorm:"index;type:char(4);not null;comment:站段代码;" json:"unique_code"`
 		Name                    string                     `gorm:"index;type:varchar(128);not null;comment:站段名称;" json:"name"`
 		OrganizationRailwayUuid string                     `gorm:"type:char(36);not null;" json:"organization_railway_uuid"`
-		FullName                string                     `gorm:"-"`
 		OrganizationRailway     *OrganizationRailwayMdl    `gorm:"foreignKey:organization_railway_uuid;references:uuid;comment:所属路局;" json:"organization_railway"`
 		OrganizationWorkshops   []*OrganizationWorkshopMdl `gorm:"foreignKey:organization_paragraph_uuid;references:uuid;comment:相关车间;" json:"organization_workshops"`
 		OrganizationLines       []*OrganizationLineMdl     `gorm:"foreignKey:organization_paragraph_uuid;references:uuid;comment:相关线别;" json:"organization_lines"`
@@ -43,7 +42,7 @@ type (
 	// OrganizationStationMdl 组织结构-站场模型
 	OrganizationStationMdl struct {
 		MySqlMdl
-		UniqueCode               string                   `gorm:"index;type:char(8);not null;comment:车站代码;" json:"unique_code"`
+		UniqueCode               string                   `gorm:"index;type:char(6);not null;comment:车站代码;" json:"unique_code"`
 		Name                     string                   `gorm:"index;type:varchar(128);not null;comment:车站名称;" json:"name"`
 		OrganizationWorkshopUuid string                   `gorm:"type:char(36);not null;" json:"organization_workshop_uuid"`
 		OrganizationWorkshop     *OrganizationWorkshopMdl `gorm:"foreignKey:organization_workshop_uuid;references:uuid;comment:所属车间;" json:"organization_workshop"`
@@ -240,6 +239,9 @@ func (receiver OrganizationStationMdl) GetListByQuery(ctx *gin.Context) *gorm.DB
 		}).
 		SetWheresDateBetween("os.created_at", "os.updated_at", "os.deleted_at").
 		SetWheresExtraHasValue(map[string]func(string, *gorm.DB) *gorm.DB{
+			"unique_code": func(value string, db *gorm.DB) *gorm.DB {
+				return db.Where("os.unique_code = ?", value)
+			},
 			"organization_workshop_uuid": func(value string, db *gorm.DB) *gorm.DB {
 				return db.Where("ow.uuid = ?", value)
 			},
@@ -257,8 +259,8 @@ func (receiver OrganizationStationMdl) GetListByQuery(ctx *gin.Context) *gorm.DB
 		SetCtx(ctx).
 		GetDbUseQuery("").
 		Table("organization_stations as os").
-		Joins("join organization_lines ol on os.organization_line_uuid = ol.uuid").
-		Joins("join organization_workshops ow os.organization_workshop_uuid = ow.uuid").
+		Joins("left join organization_lines ol on os.organization_line_uuid = ol.uuid").
+		Joins("join organization_workshops ow on os.organization_workshop_uuid = ow.uuid").
 		Joins("join organization_paragraphs op on ow.organization_paragraph_uuid = op.uuid").
 		Joins("join organization_railways ora on op.organization_railway_uuid = ora.uuid")
 }
@@ -302,7 +304,7 @@ func (receiver OrganizationCrossroadMdl) GetListByQuery(ctx *gin.Context) *gorm.
 		SetCtx(ctx).
 		GetDbUseQuery("").
 		Table("organization_crossroads as ocr").
-		Joins("join organization_lines ol on ocr.organization_line_uuid = ol.uuid").
+		Joins("left join organization_lines ol on ocr.organization_line_uuid = ol.uuid").
 		Joins("join organization_workshops ow on ocr.organization_workshop_uuid = ow.uuid").
 		Joins("join organization_paragraphs op on ow.organization_paragraph_uuid = op.uuid").
 		Joins("join organization_railways ora on op.organization_railway_uuid = ora.uuid")
@@ -344,7 +346,7 @@ func (receiver OrganizationCenterMdl) GetListByQuery(ctx *gin.Context) *gorm.DB 
 		SetCtx(ctx).
 		GetDbUseQuery("").
 		Table("organization_centers as oct").
-		Joins("join organization_lines ol on oct.organization_line_uuid = ol.uuid").
+		Joins("left join organization_lines ol on oct.organization_line_uuid = ol.uuid").
 		Joins("join organization_workshops ow on oct.organization_workshop_uuid = ow.uuid").
 		Joins("join organization_paragraphs op on ow.organization_paragraph_uuid = op.uuid").
 		Joins("join organization_railways ora on op.organization_railway_uuid = ora.uuid")
