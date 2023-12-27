@@ -86,5 +86,27 @@ func (OrganizationRout) Load(engine *gin.Engine) {
 			// 获取车间类型代码映射
 			workshopRout.GET("typeCodesMap", controllers.NewOrganizationWorkshopCtrl().GetTypeCodesMap)
 		}
+
+		stationRout := organizationRout.Group(
+			"station",
+			middlewares.CheckAuth(),
+			middlewares.CheckPermission(),
+		)
+		{
+			// 新建
+			stationRout.POST("", controllers.NewOrganizationStationCtrl().Store)
+			// 批量删除
+			stationRout.POST("destroyMany", controllers.NewOrganizationStationCtrl().DestroyMany)
+			// 删除
+			stationRout.DELETE(":uuid", controllers.NewOrganizationStationCtrl().Destroy)
+			// 编辑
+			stationRout.PUT(":uuid", controllers.NewOrganizationStationCtrl().Update)
+			// 详情
+			stationRout.GET(":uuid", controllers.NewOrganizationStationCtrl().Detail)
+			// 列表
+			stationRout.GET("", controllers.NewOrganizationStationCtrl().List)
+			// jquery-dataTable数据列表
+			stationRout.GET(".jdt", controllers.NewOrganizationStationCtrl().ListJdt)
+		}
 	}
 }

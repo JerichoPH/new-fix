@@ -1,6 +1,7 @@
 <template>
   <q-select outlined use-input clearable v-model="organizationWorkshopTypeCode_alertCreate"
-    :options="organizationWorkshopTypeCodes_alertCreate" :label="labelName" @filter="fnFilter" emit-value map-options />
+    :options="organizationWorkshopTypeCodes_alertCreate" :label="labelName" @filter="fnFilter" emit-value map-options
+    :display-value="organizationWorkshopTypeCodesMap[organizationWorkshopTypeCode_alertCreate]"/>
 </template>
 <script setup>
 import { inject, defineProps, onMounted, ref } from "vue";
@@ -27,6 +28,7 @@ const ajaxParams = props.ajaxParams;
 const organizationWorkshopTypeCode_alertCreate = inject("organizationWorkshopTypeCode_alertCreate");
 const organizationWorkshopTypeCodes_alertCreate = ref([]);
 const organizationWorkshopTypeCodes = ref([]);
+const organizationWorkshopTypeCodesMap = ref({});
 
 
 const fnFilter = (val, update) => {
@@ -54,13 +56,14 @@ const fnSearch = () => {
   ajaxGetOrganizationWorkshopTypeCodesMap(ajaxParams)
     .then(res => {
       collect(res.content.type_codes_map)
-        .map((typeText, typeCode) => {
+        .map(item => {
           organizationWorkshopTypeCodes.value.push({
-            label: typeText,
-            value: typeCode,
+            label: item.text,
+            value: item.code,
           });
         })
         .all();
+      organizationWorkshopTypeCodesMap.value = collect(organizationWorkshopTypeCodes.value).pluck('label', 'value').all();
     })
     .catch((e) => errorNotify(e.msg));
 };

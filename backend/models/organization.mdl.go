@@ -211,13 +211,13 @@ func (OrganizationWorkshopMdl) GetTypeCodes() []string {
 }
 
 // GetTypeCodesMap 获取车间类型代码映射
-func (OrganizationWorkshopMdl) GetTypeCodesMap() map[string]string {
-	return map[string]string{
-		"SCENE":    "现场车间",
-		"FIX":      "检修车间",
-		"ELECTRIC": "电子车间",
-		"HUMP":     "驼峰车间",
-		"ON-BOARD": "车载车间",
+func (OrganizationWorkshopMdl) GetTypeCodesMap() []map[string]string {
+	return []map[string]string{
+		{"code": "SCENE", "text": "现场车间"},
+		{"code": "FIX", "text": "检修车间"},
+		{"code": "ELECTRIC", "text": "电子车间"},
+		{"code": "HUMP", "text": "驼峰车间"},
+		{"code": "ON-BOARD", "text": "车载车间"},
 	}
 }
 

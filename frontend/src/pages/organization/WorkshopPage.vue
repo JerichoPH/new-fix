@@ -157,6 +157,12 @@
         <q-card-section class="q-pt-none">
           <div class="row">
             <div class="col">
+              <q-input outlined clearable lazy-rules v-model="uniqueCode_alertEditOrganizationWorkshop" label="代码"
+                :rules="[]" />
+            </div>
+          </div>
+          <div class="row q-mt-md">
+            <div class="col">
               <q-input outlined clearable lazy-rules v-model="name_alertEditOrganizationWorkshop" label="名称"
                 :rules="[]" />
             </div>
@@ -240,6 +246,7 @@ provide("organizationWorkshopTypeCode_alertCreate", organizationWorkshopTypeCode
 // 编辑车间弹窗数据
 const currentUuid = ref("");
 const alertEditOrganizationWorkshop = ref(false);
+const uniqueCode_alertEditOrganizationWorkshop = ref("");
 const name_alertEditOrganizationWorkshop = ref("");
 const organizationRailwayUuid_alertEditOrganizationWorkshop = ref("");
 provide("organizationRailwayUuid_alertEdit", organizationRailwayUuid_alertEditOrganizationWorkshop);
@@ -320,6 +327,7 @@ const fnOpenAlertEditOrganizationWorkshop = params => {
     ":~[]": ["OrganizationParagraph", "OrganizationParagraph.OrganizationRailway"],
   })
     .then(res => {
+      uniqueCode_alertEditOrganizationWorkshop.value = res.content.organization_workshop.unique_code;
       name_alertEditOrganizationWorkshop.value = res.content.organization_workshop.name;
       organizationRailwayUuid_alertEditOrganizationWorkshop.value = res.content.organization_workshop.organization_paragraph.organization_railway.uuid;
       organizationParagraphUuid_alertEditOrganizationWorkshop.value = res.content.organization_workshop.organization_paragraph.uuid;
@@ -334,6 +342,7 @@ const fnUpdateOrganizationWorkshop = () => {
 
   const loading = loadingNotify();
   ajaxUpdateOrganizationWorkshop(currentUuid.value, {
+    unique_code: uniqueCode_alertEditOrganizationWorkshop.value,
     name: name_alertEditOrganizationWorkshop.value,
     organization_paragraph_uuid: organizationParagraphUuid_alertEditOrganizationWorkshop.value,
     type_code: organizationWorkshopTypeCode_alertEditOrganizationWorkshop.value,
@@ -346,7 +355,37 @@ const fnUpdateOrganizationWorkshop = () => {
     .finally(() => loading());
 };
 
-const fnDestroyOrganizationWorkshop = params => { };
+const fnDestroyOrganizationWorkshop = params => {
+  if (!params["uuid"]) return;
 
-const fnDestroyOrganizationWorkshops = () => { };
+  actionNotify(
+    destroyActions(() => {
+      const loading = loadingNotify();
+
+      ajaxDestroyOrganizationWorkshop(params.uuid)
+        .then(() => {
+          successNotify("删除成功");
+          fnSearch();
+        })
+        .catch(e => errorNotify(e.msg))
+        .finally(() => loading());
+    })
+  );
+};
+
+const fnDestroyOrganizationWorkshops = () => {
+  actionNotify(
+    destroyActions(() => {
+      const loading = loadingNotify();
+
+      ajaxDestroyOrganizationWorkshops(collect(selected.value).pluck("uuid").all())
+        .then(() => {
+          successNotify("删除成功");
+          fnSearch();
+        })
+        .catch(e => errorNotify(e.msg))
+        .finally(() => loading());
+    })
+  )
+};
 </script>

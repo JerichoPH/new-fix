@@ -56,14 +56,14 @@ const fnSearch = () => {
   ajaxGetOrganizationWorkshopTypeCodesMap(ajaxParams)
     .then(res => {
       collect(res.content.type_codes_map)
-        .map((typeText, typeCode) => {
+        .map(item => {
           organizationWorkshopTypeCodes.value.push({
-            label: typeText,
-            value: typeCode,
+            label: item.text,
+            value: item.code,
           });
         })
         .all();
-      organizationWorkshopTypeCodesMap.value = res.content.type_codes_map;
+      organizationWorkshopTypeCodesMap.value = collect(organizationWorkshopTypeCodes.value).pluck('label', 'value').all();
     })
     .catch((e) => errorNotify(e.msg));
 };

@@ -58,7 +58,7 @@ const fnSearch = (organizationRailwayUuid) => {
   organizationParagraphs_search.value = [];
 
   if (organizationRailwayUuid) {
-    ajaxGetOrganizationPragraphs({
+    ajaxGetOrganizationParagraphs({
       ...ajaxParams,
       organization_railway_uuid: organizationRailwayUuid,
     })
