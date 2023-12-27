@@ -65,6 +65,22 @@ type (
 	OrganizationStationDestroyManyForm struct {
 		Uuids []string `json:"uuids"`
 	}
+
+	// OrganizationCrossroadCtrl
+	OrganizationCrossroadCtrl struct{}
+	// OrganizationCrossroadStoreForm 道口表单
+	OrganizationCrossroadStoreForm struct {
+		UniqueCode               string `json:"unique_code"`
+		Name                     string `json:"name"`
+		OrganizationWorkshopUuid string `json:"organization_workshop_uuid"`
+		organizationWorkshop     *models.OrganizationWorkshopMdl
+		OrganizationLineUuid     string `json:"organization_line_uuid"`
+		organizationLineMdl      *models.OrganizationLineMdl
+	}
+	// OrganizationCrossroadDestroyManyForm 批量删除道口表单
+	OrganizationCrossroadDestroyManyForm struct {
+		Uuids []string `json:"uuids"`
+	}
 )
 
 // ShouldBind 绑定表单（路局）
@@ -198,6 +214,31 @@ func (receiver OrganizationStationDestroyManyForm) ShouldBind(ctx *gin.Context) 
 	}
 	if len(receiver.Uuids) == 0 {
 		wrongs.ThrowValidate("站场编号必填")
+	}
+	return receiver
+}
+
+// ShouldBind 绑定表单（道口）
+func (receiver OrganizationCrossroadStoreForm) ShouldBind(ctx *gin.Context) OrganizationCrossroadStoreForm {
+	if err := ctx.ShouldBind(&receiver); err != nil {
+		wrongs.ThrowValidate("表单绑定失败：%s", err.Error())
+	}
+	if receiver.UniqueCode == "" {
+		wrongs.ThrowValidate("道口代码必填")
+	}
+	if receiver.Name == "" {
+		wrongs.ThrowValidate("道口名称必填")
+	}
+	return receiver
+}
+
+// ShouldBind 表单绑定（批量删除道口）
+func (receiver OrganizationCrossroadDestroyManyForm) ShouldBind(ctx *gin.Context) OrganizationCrossroadDestroyManyForm {
+	if err := ctx.ShouldBind(&receiver); err != nil {
+		wrongs.ThrowValidate("表单绑定失败：%s", err.Error())
+	}
+	if len(receiver.Uuids) == 0 {
+		wrongs.ThrowValidate("道口编号必填")
 	}
 	return receiver
 }
@@ -890,6 +931,163 @@ func (receiver OrganizationStationCtrl) ListJdt(ctx *gin.Context) {
 				func(db *gorm.DB) map[string]any {
 					db.Find(&organizationStations)
 					return map[string]any{"organization_stations": organizationStations}
+				},
+			).
+			ToGinResponse(),
+	)
+}
+
+// NewOrganizationCrossroadCtrl 构造函数
+func NewOrganizationCrossroadCtrl() *OrganizationCrossroadCtrl {
+	return &OrganizationCrossroadCtrl{}
+}
+
+// Store 新建
+func (OrganizationCrossroadCtrl) Store(ctx *gin.Context) {
+	var (
+		ret    *gorm.DB
+		repeat *models.OrganizationCrossroadMdl
+	)
+
+	// 表单
+	form := OrganizationCrossroadStoreForm{}.ShouldBind(ctx)
+
+	// 查重
+	ret = models.NewOrganizationCrossroadMdl().
+		GetDb("").
+		Where("unique_code = ?", form.UniqueCode).
+		First(&repeat)
+	wrongs.ThrowWhenNotEmpty(ret, "道口代码")
+	ret = models.NewOrganizationCrossroadMdl().
+		GetDb("").
+		Where("name = ?", form.Name).
+		First(&repeat)
+	wrongs.ThrowWhenNotEmpty(ret, "道口名称")
+
+	// 新建
+	organizationCrossroad := &models.OrganizationCrossroadMdl{}
+	if ret = models.NewOrganizationCrossroadMdl().
+		GetDb("").
+		Create(&organizationCrossroad); ret.Error != nil {
+		wrongs.ThrowForbidden(ret.Error.Error())
+	}
+
+	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Created(map[string]any{"organizationCrossroad": organizationCrossroad}).ToGinResponse())
+}
+
+// Destroy 删除
+func (OrganizationCrossroadCtrl) Destroy(ctx *gin.Context) {
+	var (
+		ret                   *gorm.DB
+		organizationCrossroad *models.OrganizationCrossroadMdl
+	)
+
+	// 查询
+	ret = models.NewOrganizationCrossroadMdl().
+		GetDb("").
+		Where("uuid = ?", ctx.Param("uuid")).
+		First(&organizationCrossroad)
+	wrongs.ThrowWhenEmpty(ret, "道口")
+
+	// 删除
+	if ret := models.NewOrganizationCrossroadMdl().
+		GetDb("").
+		Where("uuid = ?", ctx.Param("uuid")).
+		Delete(&organizationCrossroad); ret.Error != nil {
+		wrongs.ThrowForbidden(ret.Error.Error())
+	}
+
+	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+}
+
+// Update 编辑
+func (OrganizationCrossroadCtrl) Update(ctx *gin.Context) {
+	var (
+		ret                           *gorm.DB
+		organizationCrossroad, repeat *models.OrganizationCrossroadMdl
+	)
+
+	// 表单
+	form := OrganizationCrossroadStoreForm{}.ShouldBind(ctx)
+
+	// 查重
+	ret = models.NewOrganizationCrossroadMdl().
+		GetDb("").
+		Where("unique_code = ? and uuid <> ?", form.UniqueCode, ctx.Param("uuid")).
+		First(&repeat)
+	wrongs.ThrowWhenNotEmpty(ret, "道口代码")
+	ret = models.NewOrganizationCrossroadMdl().
+		GetDb("").
+		Where("name = ? and uuid <> ?", form.Name, ctx.Param("uuid")).
+		First(&repeat)
+	wrongs.ThrowWhenNotEmpty(ret, "道口名称")
+
+	// 查询
+	ret = models.NewOrganizationCrossroadMdl().
+		GetDb("").
+		Where("uuid = ?", ctx.Param("uuid")).
+		First(&organizationCrossroad)
+	wrongs.ThrowWhenEmpty(ret, "道口")
+
+	// 编辑
+	organizationCrossroad.Sort = form.Sort
+	organizationCrossroad.UniqueCode = form.UniqueCode
+	organizationCrossroad.Name = form.Name
+	organizationCrossroad.BeEnable = form.BeEnable
+	if ret = models.NewOrganizationCrossroadMdl().
+		GetDb("").
+		Where("uuid = ?", ctx.Param("uuid")).
+		Save(&organizationCrossroad); ret.Error != nil {
+		wrongs.ThrowForbidden(ret.Error.Error())
+	}
+
+	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"organizationCrossroad": organizationCrossroad}).ToGinResponse())
+}
+
+// Detail 详情
+func (OrganizationCrossroadCtrl) Detail(ctx *gin.Context) {
+	var (
+		ret                   *gorm.DB
+		organizationCrossroad *models.OrganizationCrossroadMdl
+	)
+	ret = models.NewOrganizationCrossroadMdl().
+		SetCtx(ctx).
+		GetDbUseQuery("").
+		Where("uuid = ?", ctx.Param("uuid")).
+		First(&organizationCrossroad)
+	wrongs.ThrowWhenEmpty(ret, "道口")
+
+	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"organizationCrossroad": organizationCrossroad}).ToGinResponse())
+}
+
+// List 列表
+func (receiver OrganizationCrossroadCtrl) List(ctx *gin.Context) {
+	var organizationCrossroads []*models.OrganizationCrossroadMdl
+
+	ctx.JSON(
+		tools.NewCorrectWithGinContext("", ctx).
+			DataForPager(
+				models.OrganizationCrossroadMdl{}.GetListByQuery(ctx),
+				func(db *gorm.DB) map[string]any {
+					db.Find(&organizationCrossroads)
+					return map[string]any{"organizationCrossroads": organizationCrossroads}
+				},
+			).
+			ToGinResponse(),
+	)
+}
+
+// ListJdt jquery-dataTable后端分页数据
+func (receiver OrganizationCrossroadCtrl) ListJdt(ctx *gin.Context) {
+	var organizationCrossroads []*models.OrganizationCrossroadMdl
+
+	ctx.JSON(
+		tools.NewCorrectWithGinContext("", ctx).
+			DataForJqueryDataTable(
+				models.OrganizationCrossroadMdl{}.GetListByQuery(ctx),
+				func(db *gorm.DB) map[string]any {
+					db.Find(&organizationCrossroads)
+					return map[string]any{"organizationCrossroads": organizationCrossroads}
 				},
 			).
 			ToGinResponse(),
