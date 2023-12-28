@@ -141,12 +141,17 @@
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <SelOrganizationRailway_alertCreate label-name="所属路局" :ajax-params="{}" />
+              <sel-organization-railway_alert-create label-name="所属路局" :ajax-params="{}" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <SelOrganizationParagraph_alertCreate label-name="所属站段" :ajax-params="{}" />
+              <sel-organization-paragraph_alert-create label-name="所属站段" :ajax-params="{}" />
+            </div>
+          </div>
+          <div class="row q-mt-md">
+            <div class="col">
+              <sel-organization-workshop_alert-create label-name="所属车间" :ajax-params="{}" />
             </div>
           </div>
           <div class="row q-mt-md">
@@ -171,7 +176,7 @@
         <q-card-section class="q-pt-none">
           <div class="row">
             <div class="col">
-              <q-input outlined clearable lazy-rules v-model="uniqueCode_alertEditOrganizationLine" label="名称"
+              <q-input outlined clearable lazy-rules v-model="uniqueCode_alertEditOrganizationLine" label="代码"
                 :rules="[]" />
             </div>
           </div>
@@ -188,6 +193,11 @@
           <div class="row q-mt-md">
             <div class="col">
               <sel-organization-paragraph_alert-edit label-name="所属站段" :ajax-params="{}" />
+            </div>
+          </div>
+          <div class="row q-mt-md">
+            <div class="col">
+              <sel-organization-workshop_alert-edit label-name="所属车间" :ajax-params="{}" />
             </div>
           </div>
           <div class="row q-mt-md">
@@ -231,9 +241,11 @@ import SelOrganizationCrossroad_search from "src/components/SelOrganizationCross
 import SelOrganizationCenter_search from "src/components/SelOrganizationCenter_search.vue";
 import SelOrganizationRailway_alertCreate from "src/components/SelOrganizationRailway_alertCreate.vue";
 import SelOrganizationParagraph_alertCreate from "src/components/SelOrganizationParagraph_alertCreate.vue";
+import SelOrganizationWorkshop_alertCreate from "src/components/SelOrganizationWorkshop_alertCreate.vue";
 import ChkOrganizationStation_alertCreate from "src/components/ChkOrganizationStation_alertCreate.vue";
 import SelOrganizationRailway_alertEdit from "src/components/SelOrganizationRailway_alertEdit.vue";
 import SelOrganizationParagraph_alertEdit from "src/components/SelOrganizationParagraph_alertEdit.vue";
+import SelOrganizationWorkshop_alertEdit from "src/components/SelOrganizationWorkshop_alertEdit.vue";
 import ChkOrganizationStation_alertEdit from "src/components/ChkOrganizationStation_alertEdit.vue";
 
 // 搜索栏数据
@@ -265,18 +277,22 @@ const organizationRailwayUuid_alertCreateOrganizationLine = ref("");
 provide("organizationRailwayUuid_alertCreate", organizationRailwayUuid_alertCreateOrganizationLine);
 const organizationParagraphUuid_alertCreateOrganizationLine = ref("");
 provide("organizationParagraphUuid_alertCreate", organizationParagraphUuid_alertCreateOrganizationLine);
+const organizationWorkshopUuid_alertCreateOrganizationLine = ref("");
+provide("organizationWorkshopUuid_alertCreate", organizationWorkshopUuid_alertCreateOrganizationLine);
 const checkedOrganizationStationUuids_alertCreateOrganizationLine = ref([]);
 provide("checkedOrganizationStationUuids_alertCreate", checkedOrganizationStationUuids_alertCreateOrganizationLine);
 
 // 编辑线别数据
 const currentUuid = ref("");
-const alertEditOrganizationLine = ref("");
+const alertEditOrganizationLine = ref(false);
 const uniqueCode_alertEditOrganizationLine = ref("");
 const name_alertEditOrganizationLine = ref("");
 const organizationRailwayUuid_alertEditOrganizationLine = ref("");
 provide("organizationRailwayUuid_alertEdit", organizationRailwayUuid_alertEditOrganizationLine);
 const organizationParagraphUuid_alertEditOrganizationLine = ref("");
 provide("organizationParagraphUuid_alertEdit", organizationParagraphUuid_alertEditOrganizationLine);
+const organizationWorkshopUuid_alertEditOrganizationLine = ref("");
+provide("organizationWorkshopUuid_alertEdit", organizationWorkshopUuid_alertEditOrganizationLine);
 const checkedOrganizationStationUuids_alertEditOrganizationLine = ref([]);
 provide("checkedOrganizationStationUuids_alertEdit", checkedOrganizationStationUuids_alertEditOrganizationLine);
 
@@ -348,6 +364,8 @@ const fnOpenAlertCreateCreateOrganizationLine = () => {
 };
 
 const fnStoreOrganizationLine = () => {
+  const loading = loadingNotify();
+
   ajaxStoreOrganizationLine({
     unique_code: uniqueCode_alertCreateOrganizationLine.value,
     name: name_alertCreateOrganizationLine.value,
@@ -359,7 +377,8 @@ const fnStoreOrganizationLine = () => {
       fnResetAlertCreateOrganizationLine();
       fnSearch();
     })
-    .catch(e => errorNotify(e.msg));
+    .catch(e => errorNotify(e.msg))
+    .finally(() => loading());
 };
 
 const fnOpenAlertEditCreateOrganizationLine = params => {
@@ -379,17 +398,68 @@ const fnOpenAlertEditCreateOrganizationLine = params => {
     ]
   })
     .then(res => {
-      uniqueCode_alertEditOrganizationLine.value = res.content.organization_line.uniqueCode;
+      uniqueCode_alertEditOrganizationLine.value = res.content.organization_line.unique_code;
       name_alertEditOrganizationLine.value = res.content.organization_line.name;
       organizationRailwayUuid_alertEditOrganizationLine.value = res.content.organization_line.organization_paragraph.organization_railway.uuid;
       organizationParagraphUuid_alertEditOrganizationLine.value = res.content.organization_line.organization_paragraph.uuid;
+      checkedOrganizationStationUuids_alertEditOrganizationLine.value = collect(res.content.organization_line.organization_stations).pluck('uuid').all();
+
+      alertEditOrganizationLine.value = true;
     })
     .catch(e => errorNotify(e.msg));
 };
 
-const fnUpdateOrganizationLine = () => { };
+const fnUpdateOrganizationLine = () => {
+  if (!currentUuid.value) return;
 
-const fnDestroyCreateOrganizationLines = () => { };
+  const loading = loadingNotify();
 
-const fnDestroyCreateOrganizationLine = params => { };
+  ajaxUpdateOrganizationLine(currentUuid.value, {
+    unique_code: uniqueCode_alertEditOrganizationLine.value,
+    name: name_alertEditOrganizationLine.value,
+    organization_paragraph_uuid: organizationParagraphUuid_alertEditOrganizationLine.value,
+    organization_station_uuids: checkedOrganizationStationUuids_alertEditOrganizationLine.value,
+  })
+    .then(res => {
+      successNotify(res.msg);
+      fnSearch();
+    })
+    .catch(e => errorNotify(e.msg))
+    .finally(() => loading());
+};
+
+const fnDestroyCreateOrganizationLines = () => {
+  actionNotify(
+    destroyActions(() => {
+      const loading = loadingNotify();
+
+      ajaxDestroyOrganizationLines(collect(selected.value).pluck("uuid").all())
+        .then(() => {
+          successNotify("删除成功");
+          fnSearch();
+        })
+        .catch(e => errorNotify(e.msg))
+        .finally(() => loading());
+    })
+  );
+};
+
+const fnDestroyCreateOrganizationLine = params => {
+  if (!params["uuid"]) return;
+
+  actionNotify(
+    destroyActions(() => {
+      const loading = loadingNotify();
+
+      ajaxDestroyOrganizationLine(params.uuid)
+        .then(() => {
+          successNotify("删除成功");
+          fnSearch();
+        })
+        .catch(e => errorNotify(e.msg))
+        .finally(() => loading());
+    })
+  )
+
+};
 </script>

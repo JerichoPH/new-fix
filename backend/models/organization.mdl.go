@@ -157,6 +157,7 @@ func (receiver OrganizationParagraphMdl) GetListByQuery(ctx *gin.Context) *gorm.
 		SetCtx(ctx).
 		GetDbUseQuery("").
 		Table("organization_paragraphs as op").
+		Distinct("op.*").
 		Joins("join organization_railways ora on op.organization_railway_uuid = ora.uuid")
 }
 
@@ -196,6 +197,7 @@ func (receiver OrganizationWorkshopMdl) GetListByQuery(ctx *gin.Context) *gorm.D
 		SetCtx(ctx).
 		GetDbUseQuery("").
 		Table("organization_workshops as ow").
+		Distinct("ow.*").
 		Joins("join organization_paragraphs op on ow.organization_paragraph_uuid = op.uuid").
 		Joins("join organization_railways ora on op.organization_railway_uuid = ora.uuid")
 }
@@ -261,6 +263,7 @@ func (receiver OrganizationStationMdl) GetListByQuery(ctx *gin.Context) *gorm.DB
 		SetCtx(ctx).
 		GetDbUseQuery("").
 		Table("organization_stations as os").
+		Distinct("os.*").
 		Joins("left join organization_lines ol on os.organization_line_uuid = ol.uuid").
 		Joins("join organization_workshops ow on os.organization_workshop_uuid = ow.uuid").
 		Joins("join organization_paragraphs op on ow.organization_paragraph_uuid = op.uuid").
@@ -306,6 +309,7 @@ func (receiver OrganizationCrossroadMdl) GetListByQuery(ctx *gin.Context) *gorm.
 		SetCtx(ctx).
 		GetDbUseQuery("").
 		Table("organization_crossroads as ocr").
+		Distinct("ocr.*").
 		Joins("left join organization_lines ol on ocr.organization_line_uuid = ol.uuid").
 		Joins("join organization_workshops ow on ocr.organization_workshop_uuid = ow.uuid").
 		Joins("join organization_paragraphs op on ow.organization_paragraph_uuid = op.uuid").
@@ -348,6 +352,7 @@ func (receiver OrganizationCenterMdl) GetListByQuery(ctx *gin.Context) *gorm.DB 
 		SetCtx(ctx).
 		GetDbUseQuery("").
 		Table("organization_centers as oct").
+		Distinct("oct.*").
 		Joins("left join organization_lines ol on oct.organization_line_uuid = ol.uuid").
 		Joins("join organization_workshops ow on oct.organization_workshop_uuid = ow.uuid").
 		Joins("join organization_paragraphs op on ow.organization_paragraph_uuid = op.uuid").
@@ -393,6 +398,7 @@ func (receiver OrganizationWorkAreaMdl) GetListByQuery(ctx *gin.Context) *gorm.D
 		SetCtx(ctx).
 		GetDbUseQuery("").
 		Table("organization_work_areas as owa").
+		Distinct("owa.*").
 		Joins("join organization_workshops ow on owa.organization_workshop_uuid = ow.uuid").
 		Joins("join organization_paragraphs op on ow.organization_paragraph_uuid = op.uuid").
 		Joins("join organization_railways ora on op.organization_railway_uuid = ora.uuid")
@@ -459,6 +465,7 @@ func (receiver OrganizationLineMdl) GetListByQuery(ctx *gin.Context) *gorm.DB {
 		SetCtx(ctx).
 		GetDbUseQuery("").
 		Table("organization_lines as ol").
+		Distinct("ol.*").
 		Joins("left join organization_stations os on ol.uuid = os.organization_line_uuid").
 		Joins("left join organization_crossroads ocr on ol.uuid = ocr.organization_line_uuid").
 		Joins("left join organization_centers oct on ol.uuid = oct.organization_line_uuid").

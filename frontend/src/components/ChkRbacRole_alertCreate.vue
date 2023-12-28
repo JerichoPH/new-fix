@@ -2,20 +2,13 @@
   <q-card flat bordered>
     <q-card-section>
       <p class="text-body1">{{ labelName }}</p>
+      <q-separator class="q-mb-md" />
+
       <div class="row" v-for="(items, idx) in rbacRoles" :key="idx">
-        <div
-          class="col-3"
-          v-for="(rbacRole, rbacRoleIdx) in items"
-          :key="rbacRoleIdx"
-        >
+        <div class="col-3" v-for="(rbacRole, rbacRoleIdx) in items" :key="rbacRoleIdx">
           <q-checkbox-group>
-            <q-checkbox
-              v-model="checkedRbacRoleUuids_alertCreate"
-              :val="rbacRole.uuid"
-              :key="rbacRole.uuid"
-              :label="rbacRole.name"
-              :true-value="false"
-            />
+            <q-checkbox v-model="checkedRbacRoleUuids_alertCreate" :val="rbacRole.uuid" :key="rbacRole.uuid"
+              :label="rbacRole.name" />
           </q-checkbox-group>
         </div>
       </div>
