@@ -324,7 +324,7 @@ const fnSearch = () => {
   selected.value = [];
 
   ajaxGetEquipmentKindTypes({
-    ":~[]": ["EquipmentKindCategory"],
+    "@~[]": ["EquipmentKindCategory"],
     name: name_search.value,
     equipment_kind_category_uuid: equipmentKindCategoryUuid_search.value,
   }).then((res) => {
@@ -409,7 +409,7 @@ const fnOpenAlertEditEquipmentKindType = (params) => {
   currentUuid.value = params.uuid;
 
   ajaxGetEquipmentKindType(params.uuid, {
-    ":~[]": ["EquipmentKindCategory"],
+    "@~[]": ["EquipmentKindCategory"],
   })
     .then((res) => {
       name_alertEditEquipmentKindType.value =

@@ -521,7 +521,7 @@ const fnSearch = () => {
   selected.value = [];
 
   ajaxGetAccounts({
-    ":~[]": ["Avatar", "RbacRoles"],
+    "@~[]": ["Avatar", "RbacRoles"],
     username: username_search.value,
     nickname: nickname_search.value,
     rbac_role_uuid_search: rbacRoleUuid_search.value,
@@ -624,7 +624,7 @@ const fnOpenAlertEditAccount = (params = {}) => {
 
   currentUuid.value = params.uuid;
 
-  ajaxGetAccount(currentUuid.value, { ":~[]": ["Avatar", "RbacRoles"] })
+  ajaxGetAccount(currentUuid.value, { "@~[]": ["Avatar", "RbacRoles"] })
     .then((res) => {
       username_alertEditAccount.value = res.content.account.username;
       nickname_alertEditAccount.value = res.content.account.nickname;

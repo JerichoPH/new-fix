@@ -419,7 +419,7 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	}
 
 	// 拼接WhereMap条件 (string)
-	if m, exist := receiver.ctx.GetQueryMap(":=="); exist {
+	if m, exist := receiver.ctx.GetQueryMap("@=="); exist {
 		for whereMapField, whereMapValue := range m {
 			if _, exist := ignoreFields[whereMapField]; !exist {
 				if whereMapValue != "" {
@@ -430,7 +430,7 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	}
 
 	// 拼接WhereMap条件 (int)
-	if m, exist := receiver.ctx.GetQueryMap(":==i"); exist {
+	if m, exist := receiver.ctx.GetQueryMap("@==i"); exist {
 		for whereMapField, whereMapValue := range m {
 			if _, exist := ignoreFields[whereMapField]; !exist {
 				if whereMapValue != "" {
@@ -445,7 +445,7 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	}
 
 	// 拼接WhereMap条件 (float)
-	if m, exist := receiver.ctx.GetQueryMap(":==f"); exist {
+	if m, exist := receiver.ctx.GetQueryMap("@==f"); exist {
 		for whereMapField, whereMapValue := range m {
 			if _, exist := ignoreFields[whereMapField]; !exist {
 				if whereMapValue != "" {
@@ -460,7 +460,7 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	}
 
 	// 拼接WhereMap条件 (bool)
-	if m, exist := receiver.ctx.GetQueryMap(":==b"); exist {
+	if m, exist := receiver.ctx.GetQueryMap("@==b"); exist {
 		for whereMapField, whereMapValue := range m {
 			if _, exist := ignoreFields[whereMapField]; !exist {
 				if whereMapValue != "" {
@@ -475,7 +475,7 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	}
 
 	// 拼接OrWhereMap条件 (string)
-	if m, exist := receiver.ctx.GetQueryMap(":||&=="); exist {
+	if m, exist := receiver.ctx.GetQueryMap("@||&=="); exist {
 		for orWhereMapField, orWhereMapValue := range m {
 			if _, exist := ignoreFields[orWhereMapField]; !exist {
 				if orWhereMapValue != "" {
@@ -486,7 +486,7 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	}
 
 	// 拼接OrWhereMap条件 (int)
-	if m, exist := receiver.ctx.GetQueryMap(":||&==i"); exist {
+	if m, exist := receiver.ctx.GetQueryMap("@||&==i"); exist {
 		for orWhereMapField, orWhereMapValue := range m {
 			if _, exist := ignoreFields[orWhereMapField]; !exist {
 				if orWhereMapValue != "" {
@@ -501,7 +501,7 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	}
 
 	// 拼接OrWhereMap条件 (float)
-	if m, exist := receiver.ctx.GetQueryMap(":||&==f"); exist {
+	if m, exist := receiver.ctx.GetQueryMap("@||&==f"); exist {
 		for orWhereMapField, orWhereMapValue := range m {
 			if _, exist := ignoreFields[orWhereMapField]; !exist {
 				if orWhereMapValue != "" {
@@ -516,7 +516,7 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	}
 
 	// 拼接OrWhereMap条件 (bool)
-	if m, exist := receiver.ctx.GetQueryMap(":||&==b"); exist {
+	if m, exist := receiver.ctx.GetQueryMap("@||&==b"); exist {
 		for orWhereMapField, orWhereMapValue := range m {
 			if _, exist := ignoreFields[orWhereMapField]; !exist {
 				if orWhereMapValue != "" {
@@ -531,7 +531,7 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	}
 
 	// 拼接NotWhereMap条件 (string)
-	if m, exist := receiver.ctx.GetQueryMap(":<>&=="); exist {
+	if m, exist := receiver.ctx.GetQueryMap("@<>&=="); exist {
 		for orWhereMapField, orWhereMapValue := range m {
 			if _, exist := ignoreFields[orWhereMapField]; !exist {
 				if orWhereMapValue != "" {
@@ -542,7 +542,7 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	}
 
 	// 拼接NotWhereMap条件 (int)
-	if m, exist := receiver.ctx.GetQueryMap(":<>&==i"); exist {
+	if m, exist := receiver.ctx.GetQueryMap("@<>&==i"); exist {
 		for orWhereMapField, notWhereMapValue := range m {
 			if _, exist := ignoreFields[orWhereMapField]; !exist {
 				if notWhereMapValue != "" {
@@ -557,7 +557,7 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	}
 
 	// 拼接NotWhereMap条件 (float)
-	if m, exist := receiver.ctx.GetQueryMap(":<>&==f"); exist {
+	if m, exist := receiver.ctx.GetQueryMap("@<>&==f"); exist {
 		for orWhereMapField, notWhereMapValue := range m {
 			if _, exist := ignoreFields[orWhereMapField]; !exist {
 				if notWhereMapValue != "" {
@@ -572,7 +572,7 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	}
 
 	// 拼接NotWhereMap条件 (bool)
-	if m, exist := receiver.ctx.GetQueryMap(":<>&==b"); exist {
+	if m, exist := receiver.ctx.GetQueryMap("@<>&==b"); exist {
 		for orWhereMapField, notWhereMapValue := range m {
 			if _, exist := ignoreFields[orWhereMapField]; !exist {
 				if notWhereMapValue != "" {
@@ -588,7 +588,7 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	dbSession = dbSession.Where(wheres).Not(notWheres).Or(orWheres)
 
 	// 拼接自定义条件（like）
-	if m, exist := receiver.ctx.GetQueryMap(":<<>>"); exist {
+	if m, exist := receiver.ctx.GetQueryMap("@<<>>"); exist {
 		for field, value := range m {
 			if _, exist := ignoreFields[field]; !exist {
 				if value != "" {
@@ -599,7 +599,7 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	}
 
 	// 拼接自定义条件（左like）
-	if m, exist := receiver.ctx.GetQueryMap(":<<"); exist {
+	if m, exist := receiver.ctx.GetQueryMap("@<<"); exist {
 		for field, value := range m {
 			if _, exist := ignoreFields[field]; !exist {
 				if value != "" {
@@ -610,7 +610,7 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	}
 
 	// 拼接自定义条件（右like）
-	if m, exist := receiver.ctx.GetQueryMap(":>>"); exist {
+	if m, exist := receiver.ctx.GetQueryMap("@>>"); exist {
 		for field, value := range m {
 			if _, exist := ignoreFields[field]; !exist {
 				if value != "" {
@@ -621,7 +621,7 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	}
 
 	// 拼接自定义条件（等于空字符串）
-	if fields, exist := receiver.ctx.GetQueryArray(":== []"); exist {
+	if fields, exist := receiver.ctx.GetQueryArray("@== []"); exist {
 		for _, field := range fields {
 			if _, exist := ignoreFields[field]; !exist {
 				dbSession = dbSession.Where(fmt.Sprintf("%s = ''", field))
@@ -630,7 +630,7 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	}
 
 	// 拼接自定义条件（不等于空字符串）
-	if fields, exist := receiver.ctx.GetQueryArray(":<> []"); exist {
+	if fields, exist := receiver.ctx.GetQueryArray("@<> []"); exist {
 		for _, field := range fields {
 			if _, exist := ignoreFields[field]; !exist {
 				dbSession = dbSession.Where(fmt.Sprintf("%s <> ''", field))
@@ -639,7 +639,7 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	}
 
 	// 拼接自定义条件（等于空）
-	if fields, exist := receiver.ctx.GetQueryArray(":==![]"); exist {
+	if fields, exist := receiver.ctx.GetQueryArray("@==![]"); exist {
 		for _, field := range fields {
 			if _, exist := ignoreFields[field]; !exist {
 				dbSession = dbSession.Where(fmt.Sprintf("%s is null", field))
@@ -648,7 +648,7 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	}
 
 	// 拼接自定义条件（非空）
-	if fields, exist := receiver.ctx.GetQueryArray(":<>![]"); exist {
+	if fields, exist := receiver.ctx.GetQueryArray("@<>![]"); exist {
 		for _, field := range fields {
 			if _, exist := ignoreFields[field]; !exist {
 				dbSession = dbSession.Where(fmt.Sprintf("%s is not null", field))
@@ -668,7 +668,7 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	}
 
 	// 拼接自定义条件（小于）(int)
-	if m, exist := receiver.ctx.GetQueryMap(":<i"); exist {
+	if m, exist := receiver.ctx.GetQueryMap("@<i"); exist {
 		for field, value := range m {
 			if _, exist := ignoreFields[field]; !exist {
 				if value != "" {
@@ -683,7 +683,7 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	}
 
 	// 拼接自定义条件（小于）(float)
-	if m, exist := receiver.ctx.GetQueryMap(":<f"); exist {
+	if m, exist := receiver.ctx.GetQueryMap("@<f"); exist {
 		for field, value := range m {
 			if _, exist := ignoreFields[field]; !exist {
 				if value != "" {
@@ -698,7 +698,7 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	}
 
 	// 拼接自定义条件（大于）(string)
-	if m, exist := receiver.ctx.GetQueryMap(":>"); exist {
+	if m, exist := receiver.ctx.GetQueryMap("@>"); exist {
 		for field, value := range m {
 			if _, exist := ignoreFields[field]; !exist {
 				if value != "" {
@@ -709,7 +709,7 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	}
 
 	// 拼接自定义条件（大于）(int)
-	if m, exist := receiver.ctx.GetQueryMap(":>i"); exist {
+	if m, exist := receiver.ctx.GetQueryMap("@>i"); exist {
 		for field, value := range m {
 			if _, exist := ignoreFields[field]; !exist {
 				if value != "" {
@@ -724,7 +724,7 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	}
 
 	// 拼接自定义条件（大于）(fkoat)
-	if m, exist := receiver.ctx.GetQueryMap(":>f"); exist {
+	if m, exist := receiver.ctx.GetQueryMap("@>f"); exist {
 		for field, value := range m {
 			if _, exist := ignoreFields[field]; !exist {
 				if value != "" {
@@ -739,7 +739,7 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	}
 
 	// 拼接自定义条件（不等于）(string)
-	if m, exist := receiver.ctx.GetQueryMap(":<>"); exist {
+	if m, exist := receiver.ctx.GetQueryMap("@<>"); exist {
 		for field, value := range m {
 			if _, exist := ignoreFields[field]; !exist {
 				if value != "" {
@@ -750,7 +750,7 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	}
 
 	// 拼接自定义条件（不等于）(int)
-	if m, exist := receiver.ctx.GetQueryMap(":<>i"); exist {
+	if m, exist := receiver.ctx.GetQueryMap("@<>i"); exist {
 		for field, value := range m {
 			if _, exist := ignoreFields[field]; !exist {
 				if value != "" {
@@ -765,7 +765,7 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	}
 
 	// 拼接自定义条件（不等于）(float)
-	if m, exist := receiver.ctx.GetQueryMap(":<>f"); exist {
+	if m, exist := receiver.ctx.GetQueryMap("@<>f"); exist {
 		for field, value := range m {
 			if _, exist := ignoreFields[field]; !exist {
 				if value != "" {
@@ -780,7 +780,7 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	}
 
 	// 拼接自定义条件（不等于）(bool)
-	if m, exist := receiver.ctx.GetQueryMap(":<>b"); exist {
+	if m, exist := receiver.ctx.GetQueryMap("@<>b"); exist {
 		for field, value := range m {
 			if _, exist := ignoreFields[field]; !exist {
 				if value != "" {
@@ -795,7 +795,7 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	}
 
 	// 拼接自定义条件（小于等于）(string)
-	if m, exist := receiver.ctx.GetQueryMap(":<="); exist {
+	if m, exist := receiver.ctx.GetQueryMap("@<="); exist {
 		for field, value := range m {
 			if _, exist := ignoreFields[field]; !exist {
 				if value != "" {
@@ -806,7 +806,7 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	}
 
 	// 拼接自定义条件（小于等于）(int)
-	if m, exist := receiver.ctx.GetQueryMap(":<=i"); exist {
+	if m, exist := receiver.ctx.GetQueryMap("@<=i"); exist {
 		for field, value := range m {
 			if _, exist := ignoreFields[field]; !exist {
 				if value != "" {
@@ -821,7 +821,7 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	}
 
 	// 拼接自定义条件（小于等于）(float)
-	if m, exist := receiver.ctx.GetQueryMap(":<=f"); exist {
+	if m, exist := receiver.ctx.GetQueryMap("@<=f"); exist {
 		for field, value := range m {
 			if _, exist := ignoreFields[field]; !exist {
 				if value != "" {
@@ -836,7 +836,7 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	}
 
 	// 拼接自定义条件（大于等于）(string)
-	if m, exist := receiver.ctx.GetQueryMap(":>="); exist {
+	if m, exist := receiver.ctx.GetQueryMap("@>="); exist {
 		for field, value := range m {
 			if _, exist := ignoreFields[field]; !exist {
 				if value != "" {
@@ -847,7 +847,7 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	}
 
 	// 拼接自定义条件（大于等于）(int)
-	if m, exist := receiver.ctx.GetQueryMap(":>=i"); exist {
+	if m, exist := receiver.ctx.GetQueryMap("@>=i"); exist {
 		for field, value := range m {
 			if _, exist := ignoreFields[field]; !exist {
 				if value != "" {
@@ -862,7 +862,7 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	}
 
 	// 拼接自定义条件（大于等于）(float)
-	if m, exist := receiver.ctx.GetQueryMap(":>=f"); exist {
+	if m, exist := receiver.ctx.GetQueryMap("@>=f"); exist {
 		for field, value := range m {
 			if _, exist := ignoreFields[field]; !exist {
 				if value != "" {
@@ -877,7 +877,7 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	}
 
 	// 拼接自定义条件（in）(string)
-	if m, exist := receiver.ctx.GetQueryMap(":[]"); exist {
+	if m, exist := receiver.ctx.GetQueryMap("@[]"); exist {
 		for field, value := range m {
 			if _, exist := ignoreFields[field]; !exist {
 				values := strings.Split(value, ",")
@@ -889,7 +889,7 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	}
 
 	// 拼接自定义条件（in）(int)
-	if m, exist := receiver.ctx.GetQueryMap(":[i]"); exist {
+	if m, exist := receiver.ctx.GetQueryMap("@[i]"); exist {
 		for field, value := range m {
 			if _, exist := ignoreFields[field]; !exist {
 				values := strings.Split(value, ",")
@@ -909,7 +909,7 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	}
 
 	// 拼接自定义条件（in）(float)
-	if m, exist := receiver.ctx.GetQueryMap(":[f]"); exist {
+	if m, exist := receiver.ctx.GetQueryMap("@[f]"); exist {
 		for field, value := range m {
 			if _, exist := ignoreFields[field]; !exist {
 				values := strings.Split(value, ",")
@@ -929,7 +929,7 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	}
 
 	// 拼接自定义条件（between）
-	if m, exist := receiver.ctx.GetQueryMap(":,"); exist {
+	if m, exist := receiver.ctx.GetQueryMap("-,"); exist {
 		for field, values := range m {
 			if _, exist := ignoreFields[field]; !exist {
 				values := strings.Split(values, ",")
@@ -941,7 +941,7 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	}
 
 	// 自动拼接条件（between int）
-	if m, exist := receiver.ctx.GetQueryMap(":,i"); exist {
+	if m, exist := receiver.ctx.GetQueryMap("@,i"); exist {
 		for field, values := range m {
 			if _, exist := ignoreFields[field]; !exist {
 				values := strings.Split(values, ",")
@@ -961,7 +961,7 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	}
 
 	// 自动拼接条件（between float）
-	if m, exist := receiver.ctx.GetQueryMap(":,f"); exist {
+	if m, exist := receiver.ctx.GetQueryMap("@,f"); exist {
 		for field, values := range m {
 			if _, exist := ignoreFields[field]; !exist {
 				values := strings.Split(values, ",")
@@ -981,7 +981,7 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	}
 
 	// 自动拼接preload
-	if preloads, exist := receiver.ctx.GetQueryArray(":~[]"); exist {
+	if preloads, exist := receiver.ctx.GetQueryArray("@~[]"); exist {
 		for _, preload := range preloads {
 			dbSession = dbSession.Preload(preload)
 		}
@@ -1115,12 +1115,12 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	}
 
 	// 排序
-	if order, exist := receiver.ctx.GetQuery(":."); exist {
+	if order, exist := receiver.ctx.GetQuery("@."); exist {
 		dbSession.Order(order)
 	}
 
 	// 指定排序
-	if orderField, exist := receiver.ctx.GetQueryArray(":..."); exist {
+	if orderField, exist := receiver.ctx.GetQueryArray("@..."); exist {
 		if len(orderField) > 2 {
 			dbSession.Order(fmt.Sprintf("field (%s,'%s')", orderField[0], strings.Join(orderField[1:], "','")))
 		}

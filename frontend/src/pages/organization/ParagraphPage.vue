@@ -217,7 +217,7 @@ const fnSearch = () => {
   selected.value = [];
 
   ajaxGetOrganizationParagraphs({
-    ":~[]": ["OrganizationRailway"],
+    "@~[]": ["OrganizationRailway"],
     unique_code: uniqueCode_search.value,
     name: name_search.value,
     organization_railway_uuid: organizationRailwayUuid_search.value,
@@ -273,7 +273,7 @@ const fnOpenAlertEditOrganizationParagraph = params => {
   currentUuid.value = params["uuid"];
 
   ajaxGetOrganizationParagraph(currentUuid.value, {
-    ":~[]": ["OrganizationRailway"],
+    "@~[]": ["OrganizationRailway"],
   })
     .then(res => {
       name_alertEditOrganizationParagraph.value = res.content.organization_paragraph.name;

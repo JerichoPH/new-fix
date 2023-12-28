@@ -299,7 +299,7 @@ const fnResetSearch = () => {
 
 const fnSearch = () => {
   ajaxGetOrganizationWorkAreas({
-    ":~[]": ["OrganizationWorkshop", "OrganizationWorkshop.OrganizationParagraph", "OrganizationWorkshop.OrganizationParagraph.OrganizationRailway"],
+    "@~[]": ["OrganizationWorkshop", "OrganizationWorkshop.OrganizationParagraph", "OrganizationWorkshop.OrganizationParagraph.OrganizationRailway"],
     unique_code: uniqueCode_search.value,
     name: name_search.value,
     organization_railway_uuid: organizationRailwayUuid_search.value,
@@ -365,7 +365,7 @@ const fnOpenAlertEditCreateOrganizationWorkArea = params => {
   currentUuid.value = params.uuid;
 
   ajaxGetOrganizationWorkArea(currentUuid.value, {
-    ":~[]": ["OrganizationWorkshop", "OrganizationWorkshop.OrganizationParagraph", "OrganizationWorkshop.OrganizationParagraph.OrganizationRailway"],
+    "@~[]": ["OrganizationWorkshop", "OrganizationWorkshop.OrganizationParagraph", "OrganizationWorkshop.OrganizationParagraph.OrganizationRailway"],
   })
     .then(res => {
       uniqueCode_alertEditOrganizationWorkArea.value = res.content.organization_work_area.unique_code;

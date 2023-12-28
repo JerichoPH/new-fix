@@ -270,7 +270,7 @@ const fnResetSearch = () => {
 
 const fnSearch = () => {
   ajaxGetOrganizationStations({
-    ":~[]": ["OrganizationWorkshop", "OrganizationWorkshop.OrganizationParagraph", "OrganizationWorkshop.OrganizationParagraph.OrganizationRailway"],
+    "@~[]": ["OrganizationWorkshop", "OrganizationWorkshop.OrganizationParagraph", "OrganizationWorkshop.OrganizationParagraph.OrganizationRailway"],
     unique_code: uniqueCode_search.value,
     name: name_search.value,
     organization_railway_uuid: organizationRailwayUuid_search.value,
@@ -332,7 +332,7 @@ const fnOpenAlertEditCreateOrganizationStation = params => {
   currentUuid.value = params.uuid;
 
   ajaxGetOrganizationStation(currentUuid.value, {
-    ":~[]": ["OrganizationWorkshop", "OrganizationWorkshop.OrganizationParagraph", "OrganizationWorkshop.OrganizationParagraph.OrganizationRailway"],
+    "@~[]": ["OrganizationWorkshop", "OrganizationWorkshop.OrganizationParagraph", "OrganizationWorkshop.OrganizationParagraph.OrganizationRailway"],
   })
     .then(res => {
       uniqueCode_alertEditOrganizationStation.value = res.content.organization_station.unique_code;

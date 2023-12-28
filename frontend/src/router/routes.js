@@ -19,6 +19,7 @@ import OrganizationStationPage from "src/pages/organization/StationPage.vue";
 import OrganizationCrossroadPage from "src/pages/organization/CrossroadPage.vue";
 import OrganizationCenterPage from "src/pages/organization/CenterPage.vue";
 import OrganizationWorkAreaPage from "src/pages/organization/WorkAreaPage.vue";
+import OrganizationLinePage from "src/pages/organization/LinePage.vue";
 
 const routes = [
   {
@@ -105,6 +106,10 @@ const routes = [
       path: "workArea",
       name: "organizationWorkArea:index",
       component: OrganizationWorkAreaPage,
+    },{
+      path: "line",
+      name: "organizationLine:index",
+      component: OrganizationLinePage,
     },],
   },
   // Always leave this as last one,

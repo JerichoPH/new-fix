@@ -171,8 +171,8 @@ const fnInit = () => {
 
   // 加载当前用户菜单
   ajaxGetCurrentAccountMenus({
-    ":~[]": ["Subs"],
-    ":== []": ["parent_uuid"],
+    "@~[]": ["Subs"],
+    "@== []": ["parent_uuid"],
   })
     .then((res) => {
       if (res.content.rbac_menus.length > 0) {

@@ -271,7 +271,7 @@ const fnResetSearch = () => {
 
 const fnSearch = () => {
   ajaxGetOrganizationCrossroads({
-    ":~[]": ["OrganizationWorkshop", "OrganizationWorkshop.OrganizationParagraph", "OrganizationWorkshop.OrganizationParagraph.OrganizationRailway"],
+    "@~[]": ["OrganizationWorkshop", "OrganizationWorkshop.OrganizationParagraph", "OrganizationWorkshop.OrganizationParagraph.OrganizationRailway"],
     unique_code: uniqueCode_search.value,
     name: name_search.value,
     organization_railway_uuid: organizationRailwayUuid_search.value,
@@ -336,7 +336,7 @@ const fnOpenAlertEditCreateOrganizationCrossroad = params => {
   currentUuid.value = params.uuid;
 
   ajaxGetOrganizationCrossroad(currentUuid.value, {
-    ":~[]": ["OrganizationWorkshop", "OrganizationWorkshop.OrganizationParagraph", "OrganizationWorkshop.OrganizationParagraph.OrganizationRailway"],
+    "@~[]": ["OrganizationWorkshop", "OrganizationWorkshop.OrganizationParagraph", "OrganizationWorkshop.OrganizationParagraph.OrganizationRailway"],
   })
     .then(res => {
       uniqueCode_alertEditOrganizationCrossroad.value = res.content.organization_crossroad.unique_code;

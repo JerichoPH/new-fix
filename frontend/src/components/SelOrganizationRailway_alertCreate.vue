@@ -50,7 +50,6 @@ onMounted(() => {
 
   ajaxGetOrganizationRailways(ajaxParams)
     .then(res => {
-      console.log('ajaxGetOrganizationRailways',res.content.organization_railways);
       organizationRailways.value = collect(res.content.organization_railways)
         .map(organizationRailway => {
           return {

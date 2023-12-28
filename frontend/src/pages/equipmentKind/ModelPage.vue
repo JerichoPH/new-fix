@@ -326,7 +326,7 @@ const fnSearch = () => {
   selected.value = [];
 
   ajaxGetEquipmentKindModels({
-    ":~[]": ["EquipmentKindType", "EquipmentKindType.EquipmentKindCategory"],
+    "@~[]": ["EquipmentKindType", "EquipmentKindType.EquipmentKindCategory"],
     name: name_search.value,
     equipment_kind_category_uuid: equipmentKindCategoryUuid_search.value,
     equipment_kind_type_uuid: equipmentKindTypeUuid_search.value,

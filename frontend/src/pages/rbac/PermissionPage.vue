@@ -392,7 +392,7 @@ const fnSearch = () => {
   selected.value = [];
 
   ajaxGetRbacPermissions({
-    ":~[]": ["RbacRoles"],
+    "@~[]": ["RbacRoles"],
     name: name_search.value,
     uri: uri_search.value,
     description: description_search.value,
@@ -478,7 +478,7 @@ const fnOpenAlertEditRbacPermission = (params = {}) => {
 
   currentUuid.value = params.uuid;
 
-  ajaxGetRbacPermission(params.uuid, { ":~[]": ["RbacRoles"] })
+  ajaxGetRbacPermission(params.uuid, { "@~[]": ["RbacRoles"] })
     .then((res) => {
       name_alertEditRbacPermission.value = res.content.rbac_permission.name;
       uri_alertEditRbacPermission.value = res.content.rbac_permission.uri;

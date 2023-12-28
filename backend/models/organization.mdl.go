@@ -451,24 +451,55 @@ func (receiver OrganizationLineMdl) GetListByQuery(ctx *gin.Context) *gorm.DB {
 			"organization_center_uuid": func(value string, db *gorm.DB) *gorm.DB {
 				return db.Where("oct.uuid = ?", value)
 			},
-			"organization_workshop_uuid": func(value string, db *gorm.DB) *gorm.DB {
-				return db.Where("ow.uuid = ?", value)
-			},
 			"organization_paragraph_uuid": func(value string, db *gorm.DB) *gorm.DB {
 				return db.Where("op.uuid = ?", value)
-			},
-			"organization_railway_uuid": func(value string, db *gorm.DB) *gorm.DB {
-				return db.Where("ora.uuid = ?", value)
 			},
 		}).
 		SetWheresExtraHasValues(map[string]func([]string, *gorm.DB) *gorm.DB{}).
 		SetCtx(ctx).
 		GetDbUseQuery("").
 		Table("organization_lines as ol").
-		Joins("organization_stations os on ol.organization_station_uuid = os.uuid").
-		Joins("organization_crossroads ocr on ol.organization_crossroad_uuid = ocr.uuid").
-		Joins("organization_centers oct on ol.organization_center_uuid = oct.uuid").
-		Joins("organization_workshops ow on ol.organization_workshop_uuid = ow.uuid").
-		Joins("organization_paragraphs op on ow.organization_paragraph_uuid = op.uuid").
-		Joins("organization_railways ora on op.organization_railway_uuid = ora.uuid")
+		Joins("left join organization_stations os on ol.uuid = os.organization_line_uuid").
+		Joins("left join organization_crossroads ocr on ol.uuid = ocr.organization_line_uuid").
+		Joins("left join organization_centers oct on ol.uuid = oct.organization_line_uuid").
+		Joins("left join organization_paragraphs op on ol.organization_paragraph_uuid = op.uuid")
+}
+
+// 线别绑定站场
+func (receiver OrganizationLineMdl) BindOrganizationStations(organizationStations []*OrganizationStationMdl) {
+	// 解绑所有已绑定的站场
+	NewOrganizationStationMdl().GetDb("").Where("organization_line_uuid = ?", receiver.Uuid).Update("organization_line_uuid", "")
+
+	if len(organizationStations) > 0 {
+		for _, organizationStation := range organizationStations {
+			organizationStation.OrganizationLineUuid = receiver.Uuid
+			NewOrganizationStationMdl().GetDb("").Where("uuid = ?", organizationStation.Uuid).Update("organization_line_uuid", receiver.Uuid)
+		}
+	}
+}
+
+// 线别绑定站场
+func (receiver OrganizationLineMdl) BindOrganizationCrossroads(organizationCrossroads []*OrganizationCrossroadMdl) {
+	// 解绑所有已绑定的站场
+	NewOrganizationCrossroadMdl().GetDb("").Where("organization_line_uuid = ?", receiver.Uuid).Update("organization_line_uuid", "")
+
+	if len(organizationCrossroads) > 0 {
+		for _, organizationCrossroad := range organizationCrossroads {
+			organizationCrossroad.OrganizationLineUuid = receiver.Uuid
+			NewOrganizationCrossroadMdl().GetDb("").Where("uuid = ?", organizationCrossroad.Uuid).Update("organization_line_uuid", receiver.Uuid)
+		}
+	}
+}
+
+// 线别绑定中心
+func (receiver OrganizationLineMdl) BindOrganizationCenters(organizationCenters []*OrganizationCenterMdl) {
+	// 解绑所有已绑定的中心
+	NewOrganizationCenterMdl().GetDb("").Where("organization_line_uuid = ?", receiver.Uuid).Update("organization_line_uuid", "")
+
+	if len(organizationCenters) > 0 {
+		for _, organizationCenter := range organizationCenters {
+			organizationCenter.OrganizationLineUuid = receiver.Uuid
+			NewOrganizationCenterMdl().GetDb("").Where("uuid = ?", organizationCenter.Uuid).Update("organization_line_uuid", receiver.Uuid)
+		}
+	}
 }

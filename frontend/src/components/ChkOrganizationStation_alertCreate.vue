@@ -1,20 +1,20 @@
 <template>
-  <q-card>
+  <q-card flat bordered>
     <q-card-section>
       <p class="text-body1">{{ labelName }}</p>
       <div class="row" v-for="(items, idx) in organizationStations" :key="idx">
-        <div class="col-3" v-for="(organizationStation, idx) in items" :key="idx">
+        <div class="col-3" v-for="(organizationStation, idx2) in items" :key="idx2">
           <q-checkbox v-model="checkedOrganizationStationUuids_alertCreate" :val="organizationStation.uuid"
-            :key="organizationStation.uuid" :label="organizationStation.name" />
+            :key="organizationStation.uuid" :label="organizationStation.name" :true-value="organizationStation.uuid" />
         </div>
       </div>
     </q-card-section>
   </q-card>
 </template>
 <script setup>
-import { ref, onMounted, inject, defineProps, watch } from "vue";
+import { ref, onMounted, inject, defineProps } from "vue";
 import collect from "collect.js";
-import { ajaxGetOrganizationStations } from "src/apis/rbac";
+import { ajaxGetOrganizationStations } from "src/apis/organization";
 import { errorNotify } from "src/utils/notify";
 
 const props = defineProps({
@@ -32,10 +32,7 @@ const props = defineProps({
 const labelName = props.labelName;
 const ajaxParams = props.ajaxParams;
 const organizationStations = ref([]);
-const organizationWorkshopUuid_alertCreate = inject("organizationWorkshopUuid_alertCreate");
 const checkedOrganizationStationUuids_alertCreate = inject("checkedOrganizationStationUuids_alertCreate");
-
-watch(organizationWorkshopUuid_alertCreate, newValue => fnSearch(newValue));
 
 onMounted(() => fnSearch(""));
 
@@ -45,12 +42,16 @@ const fnSearch = organizationWorkshopUuid => {
   if (!organizationWorkshopUuid) return;
   ajaxGetOrganizationStations({
     ...ajaxParams,
-    organization_workshop_uuid: organizationWorkshopUuid,
+    "@~[]": ["OrganizationWorkshop"],
   })
-    .then((res) => {
-      organizationStations.value = collect(res.content.rbac_roles).chunk(4).all();
+    .then(res => {
+      organizationStations.value = collect(res.content.organization_stations)
+        .groupBy(item => item.organization_workshop.name).
+        each(items => items.chunk(4).all())
+        .all();
+        console.log('ok',organizationStations.value);
     })
-    .catch((e) => errorNotify(e.msg));
+    .catch(e => errorNotify(e.msg));
 };
 </script>
 src/utils/notify

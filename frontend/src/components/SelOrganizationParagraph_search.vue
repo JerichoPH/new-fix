@@ -61,7 +61,7 @@ const fnSearch = (organizationRailwayUuid) => {
     .then((res) => {
       organizationParagraphs.value =
         collect(res.content.organization_paragraphs)
-          .map((organizationParagraph) => {
+          .map(organizationParagraph => {
             return {
               label: organizationParagraph.name,
               value: organizationParagraph.uuid,

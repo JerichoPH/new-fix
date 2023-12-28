@@ -441,7 +441,7 @@ const fnSearch = () => {
   selected.value = [];
 
   ajaxGetRbacMenus({
-    ":~[]": ["Parent", "RbacRoles"],
+    "@~[]": ["Parent", "RbacRoles"],
     name: name_search.value,
     uri: uri_search.value,
     description: description_search.value,
@@ -544,7 +544,7 @@ const fnOpenAlertEditRbacMenu = (params = {}) => {
   currentUuid.value = params.uuid;
 
   ajaxGetRbacMenu(currentUuid.value, {
-    ":~[]": ["Parent", "RbacRoles"],
+    "@~[]": ["Parent", "RbacRoles"],
   })
     .then((res) => {
       name_alertEditRbacMenu.value = res.content.rbac_menu.name;

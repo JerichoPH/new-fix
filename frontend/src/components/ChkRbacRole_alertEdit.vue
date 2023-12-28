@@ -1,5 +1,5 @@
 <template>
-  <q-card>
+  <q-card flat bordered>
     <q-card-section>
       <p class="text-body1">{{ labelName }}</p>
       <div class="row" v-for="(items, idx) in rbacRoles" :key="idx">
