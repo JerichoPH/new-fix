@@ -50,19 +50,20 @@ onMounted(() => {
 
   ajaxGetOrganizationRailways(ajaxParams)
     .then(res => {
-      if (res.content.organization_railways.length > 0) {
-        organizationRailways.value = collect(res.content.organization_railways)
-          .map(organizationRailway => {
-            return {
-              label: organizationRailway.short_name,
-              value: organizationRailway.uuid,
-            };
-          })
-          .all();
-        organizationRailwaysMap.value = collect(organizationRailways).pluck('label', 'value').all();
-      }
+      console.log('ajaxGetOrganizationRailways',res.content.organization_railways);
+      organizationRailways.value = collect(res.content.organization_railways)
+        .map(organizationRailway => {
+          return {
+            label: organizationRailway.short_name,
+            value: organizationRailway.uuid,
+          };
+        })
+        .all();
+      organizationRailwaysMap.value = collect(organizationRailways.value).pluck('label', 'value').all();
     })
-    .catch((e) => errorNotify(e.msg));
+    .catch((e) => {
+      errorNotify(e.msg);
+    });
 });
 </script>
 src/utils/notify

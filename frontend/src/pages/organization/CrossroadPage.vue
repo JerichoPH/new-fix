@@ -162,7 +162,8 @@
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <q-input outlined clearable lazy-rules v-model="name_alertEditOrganizationCrossroad" label="名称" :rules="[]" />
+              <q-input outlined clearable lazy-rules v-model="name_alertEditOrganizationCrossroad" label="名称"
+                :rules="[]" />
             </div>
           </div>
           <div class="row q-mt-md">
@@ -300,7 +301,7 @@ const fnResetAlertCreateStation = () => {
   uniqueCode_alertCreateOrganizationCrossroad.value = "";
   name_alertCreateOrganizationCrossroad.value = "";
   organizationRailwayUuid_alertCreateOrganizationCrossroad.value = "";
-  organizationParagraphUuid_alertCreateOrganizationCrossroad.value = ""; n
+  organizationParagraphUuid_alertCreateOrganizationCrossroad.value = "";
   organizationWorkshopUuid_alertCreateOrganizationCrossroad.value = "";
 };
 
@@ -323,7 +324,10 @@ const fnStoreOrganizationCrossroad = () => {
       fnResetAlertCreateStation();
       fnSearch();
     })
-    .catch(e => errorNotify(e.msg))
+    .catch(e => {
+      console.error('ajaxStoreOrganizationCrossroad', e);
+      errorNotify(e.msg);
+    })
     .finally(() => loading());
 };
 
@@ -335,15 +339,18 @@ const fnOpenAlertEditCreateOrganizationCrossroad = params => {
     ":~[]": ["OrganizationWorkshop", "OrganizationWorkshop.OrganizationParagraph", "OrganizationWorkshop.OrganizationParagraph.OrganizationRailway"],
   })
     .then(res => {
-      uniqueCode_alertEditOrganizationCrossroad.value = res.content.organization_station.unique_code;
-      name_alertEditOrganizationCrossroad.value = res.content.organization_station.name;
-      organizationRailwayUuid_alertEditOrganizationCrossroad.value = res.content.organization_station.organization_workshop.organization_paragraph.organization_railway.uuid;
-      organizationParagraphUuid_alertEditOrganizationCrossroad.value = res.content.organization_station.organization_workshop.organization_paragraph.uuid;
-      organizationWorkshopUuid_alertEditOrganizationCrossroad.value = res.content.organization_station.organization_workshop.uuid;
+      uniqueCode_alertEditOrganizationCrossroad.value = res.content.organization_crossroad.unique_code;
+      name_alertEditOrganizationCrossroad.value = res.content.organization_crossroad.name;
+      organizationRailwayUuid_alertEditOrganizationCrossroad.value = res.content.organization_crossroad.organization_workshop.organization_paragraph.organization_railway.uuid;
+      organizationParagraphUuid_alertEditOrganizationCrossroad.value = res.content.organization_crossroad.organization_workshop.organization_paragraph.uuid;
+      organizationWorkshopUuid_alertEditOrganizationCrossroad.value = res.content.organization_crossroad.organization_workshop.uuid;
 
       alertEditOrganizationCrossroad.value = true;
     })
-    .catch(e => errorNotify(e.msg));
+    .catch(e => {
+      console.error('ajaxGetOrganizationCrossroad', e);
+      errorNotify(e.msg);
+    });
 };
 
 const fnUpdateOrganizationCrossroad = () => {
