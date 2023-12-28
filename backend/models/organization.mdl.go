@@ -77,8 +77,8 @@ type (
 		MySqlMdl
 		UniqueCode                 string                   `gorm:"index;type:char(8);not null;comment:工区代码;" json:"unique_code"` // B048D001
 		Name                       string                   `gorm:"index;type:varchar(128);not null;comment:工区名称;" json:"name"`
-		CategoryCode               string                   `gorm:"type:enum('','SCENE','POINT-SWITCH','REPLY','SYNTHESIZE', 'POWER-SUPPLY-PANEL');not null;default:'';comment:工区类型;" json:"category_code"`
-		CategoryText               string                   `gorm:"->;type:varchar(128) as ((case category_code when 'SCENE' then '现场工区' when 'POINT-SWITCH' then '转辙机工区' when 'REPLY' then '继电器工区' when 'SYNTHESIZE' then '综合工区' when 'POWER-SUPPLY-PANEL' then '电源屏工区' else '无' end))" json:"category_text"`
+		TypeCode                   string                   `gorm:"type:enum('','SCENE','POINT-SWITCH','REPLY','SYNTHESIZE', 'POWER-SUPPLY-PANEL');not null;default:'';comment:工区类型;" json:"type_code"`
+		TypeText                   string                   `gorm:"->;type:varchar(128) as ((case type_code when 'SCENE' then '现场工区' when 'POINT-SWITCH' then '转辙机工区' when 'REPLY' then '继电器工区' when 'SYNTHESIZE' then '综合工区' when 'POWER-SUPPLY-PANEL' then '电源屏工区' else '无' end))" json:"type_text"`
 		OrganizationWorkshopUuid   string                   `gorm:"type:char(36);not null;" json:"organization_workshop_uuid"`
 		OrganizationWorkshop       *OrganizationWorkshopMdl `gorm:"foreignKey:organization_workshop_uuid;references:uuid;comment:所属车间;" json:"organization_workshop"`
 		EquipmentsByPropertyBelong []*EquipmentMdl          `gorm:"foreignKey:property_belong_organization_work_area_uuid;references:uuid;comment:相关器材（资产归属工区）;" json:"equipments_by_property_belong"`
@@ -188,6 +188,9 @@ func (receiver OrganizationWorkshopMdl) GetListByQuery(ctx *gin.Context) *gorm.D
 			"organization_railway_uuid": func(value string, db *gorm.DB) *gorm.DB {
 				return db.Where("ora.uuid = ?", value)
 			},
+			"type_code": func(value string, db *gorm.DB) *gorm.DB {
+				return db.Where("ow.type_code = ?", value)
+			},
 		}).
 		SetWheresExtraHasValues(map[string]func([]string, *gorm.DB) *gorm.DB{}).
 		SetCtx(ctx).
@@ -200,7 +203,6 @@ func (receiver OrganizationWorkshopMdl) GetListByQuery(ctx *gin.Context) *gorm.D
 // GetTypeCodes 获取车间类型代码列表
 func (OrganizationWorkshopMdl) GetTypeCodes() []string {
 	return []string{
-		"",
 		"SCENE",
 		"FIX",
 		"ELECTRIC",
@@ -383,6 +385,9 @@ func (receiver OrganizationWorkAreaMdl) GetListByQuery(ctx *gin.Context) *gorm.D
 			"organization_railway_uuid": func(value string, db *gorm.DB) *gorm.DB {
 				return db.Where("ora.uuid = ?", value)
 			},
+			"type_code": func(value string, d *gorm.DB) *gorm.DB {
+				return d.Where("owa.type_code = ?", value)
+			},
 		}).
 		SetWheresExtraHasValues(map[string]func([]string, *gorm.DB) *gorm.DB{}).
 		SetCtx(ctx).
@@ -391,6 +396,28 @@ func (receiver OrganizationWorkAreaMdl) GetListByQuery(ctx *gin.Context) *gorm.D
 		Joins("join organization_workshops ow on owa.organization_workshop_uuid = ow.uuid").
 		Joins("join organization_paragraphs op on ow.organization_paragraph_uuid = op.uuid").
 		Joins("join organization_railways ora on op.organization_railway_uuid = ora.uuid")
+}
+
+// GetTypeCodes 获取工区类型代码列表
+func (OrganizationWorkAreaMdl) GetTypeCodes() []string {
+	return []string{
+		"SCENE",
+		"POINT-SWITCH",
+		"REPLY",
+		"SYNTHESIZE",
+		"POWER-SUPPLY-PANEL",
+	}
+}
+
+// GetTypeCodesMap 获取工区类型代码映射
+func (OrganizationWorkAreaMdl) GetTypeCodesMap() []map[string]string {
+	return []map[string]string{
+		{"code": "SCENE", "text": "现场工区"},
+		{"code": "POINT-SWITCH", "text": "转辙机工区"},
+		{"code": "REPLY", "text": "继电器工区"},
+		{"code": "SYNTHESIZE", "text": "综合工区"},
+		{"code": "POWER-SUPPLY-PANEL", "text": "电源屏工区"},
+	}
 }
 
 // TableName 组织结构-线别表名称

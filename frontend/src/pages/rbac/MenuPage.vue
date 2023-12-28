@@ -251,11 +251,11 @@
                 class="q-mt-md"
               />
               <sel-rbac-menu_alert-create
-                labelName="所属父级"
+                label-name="所属父级"
                 class="q-mt-md"
               />
               <chk-rbac-role_alert-create
-                labelName="所属角色"
+                label-name="所属角色"
                 class="q-mt-md"
               />
             </div>
@@ -320,14 +320,14 @@
                 class="q-mt-md"
               />
               <sel-rbac-menu_alert-edit
-                labelName="所属父级"
+                label-name="所属父级"
                 :ajaxParams="{
                   ':<>*': { uuid: currentUuid },
                   not_has_subs: currentUuid,
                 }"
                 class="q-mt-md"
               />
-              <chk-rbac-role_alert-edit labelName="所属角色" class="q-mt-md" />
+              <chk-rbac-role_alert-edit label-name="所属角色" class="q-mt-md" />
             </div>
           </div>
         </q-form>

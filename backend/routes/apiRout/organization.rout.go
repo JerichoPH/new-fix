@@ -130,5 +130,51 @@ func (OrganizationRout) Load(engine *gin.Engine) {
 			// jquery-dataTable数据列表
 			crossroadRout.GET(".jdt", controllers.NewOrganizationCrossroadCtrl().ListJdt)
 		}
+
+		centerRout := organizationRout.Group(
+			"center",
+			middlewares.CheckAuth(),
+			middlewares.CheckPermission(),
+		)
+		{
+			// 新建
+			centerRout.POST("", controllers.NewOrganizationCenterCtrl().Store)
+			// 批量删除
+			centerRout.POST("destroyMany", controllers.NewOrganizationCenterCtrl().DestroyMany)
+			// 删除
+			centerRout.DELETE(":uuid", controllers.NewOrganizationCenterCtrl().Destroy)
+			// 编辑
+			centerRout.PUT(":uuid", controllers.NewOrganizationCenterCtrl().Update)
+			// 详情
+			centerRout.GET(":uuid", controllers.NewOrganizationCenterCtrl().Detail)
+			// 列表
+			centerRout.GET("", controllers.NewOrganizationCenterCtrl().List)
+			// jquery-dataTable数据列表
+			centerRout.GET(".jdt", controllers.NewOrganizationCenterCtrl().ListJdt)
+		}
+
+		workAreaRout := organizationRout.Group(
+			"workArea",
+			middlewares.CheckAuth(),
+			middlewares.CheckPermission(),
+		)
+		{
+			// 新建
+			workAreaRout.POST("", controllers.NewOrganizationWorkAreaCtrl().Store)
+			// 批量删除
+			workAreaRout.POST("destroyMany", controllers.NewOrganizationWorkAreaCtrl().DestroyMany)
+			// 删除
+			workAreaRout.DELETE(":uuid", controllers.NewOrganizationWorkAreaCtrl().Destroy)
+			// 编辑
+			workAreaRout.PUT(":uuid", controllers.NewOrganizationWorkAreaCtrl().Update)
+			// 详情
+			workAreaRout.GET(":uuid", controllers.NewOrganizationWorkAreaCtrl().Detail)
+			// 列表
+			workAreaRout.GET("", controllers.NewOrganizationWorkAreaCtrl().List)
+			// jquery-dataTable数据列表
+			workAreaRout.GET(".jdt", controllers.NewOrganizationWorkAreaCtrl().ListJdt)
+			// 获取车间类型代码映射
+			workAreaRout.GET("typeCodesMap", controllers.NewOrganizationWorkAreaCtrl().GetTypeCodesMap)
+		}
 	}
 }

@@ -181,6 +181,10 @@ export const ajaxDestroyOrganizationWorkAreas = (uuids) => {
   return api.post(`${apiPrefix}/workArea/destroyMany`, { uuids });
 };
 
+export const ajaxGetOrganizationWorkAreaTypeCodesMap = () => {
+  return api.get(`${apiPrefix}/workArea/typeCodesMap`);
+};
+
 export const ajaxGetOrganizationLines = (params) => {
   return api.get(`${apiPrefix}/line`, { params });
 };

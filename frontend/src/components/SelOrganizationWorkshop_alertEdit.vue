@@ -55,7 +55,6 @@ const fnSearch = organizationParagraphUuid => {
 
   ajaxGetOrganizationWorkshops(ajaxParams)
     .then((res) => {
-      console.log('ok1',res.content.organization_workshops);
       organizationWorkshops.value = collect(res.content.organization_workshops)
         .map(organizationWorkshop => {
           return {

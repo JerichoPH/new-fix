@@ -14,7 +14,7 @@
         <div class="row q-mt-md">
           <div class="col">
             <q-form>
-              <div class="row q-pb-sm q-col-gutter-sm">
+              <div class="row q-col-gutter-sm">
                 <div class="col-3">
                   <q-input outlined clearable lazy-rules v-model="uniqueCode_search" label="代码" :rules="[]"
                     class="q-mb-md" />
@@ -27,6 +27,11 @@
                 </div>
                 <div class="col-3">
                   <sel-organization-paragraph_search label-name="所属站段" />
+                </div>
+              </div>
+              <div class="row q-col-gutter-sm">
+                <div class="col-3">
+                  <sel-organization-workshop-type-code_alertCreate label-name="车间类型" />
                 </div>
               </div>
             </q-form>
@@ -137,7 +142,7 @@
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-organization-workshop-type-code_alertCreate label-name="车间类型" />
+              <sel-organization-workshop-type-code_search label-name="车间类型" />
             </div>
           </div>
         </q-card-section>
@@ -212,6 +217,7 @@ import {
 import { fnColumnReverseSort } from "src/utils/common";
 import SelOrganizationRailway_search from "src/components/SelOrganizationRailway_search.vue";
 import SelOrganizationParagraph_search from "src/components/SelOrganizationParagraph_search.vue";
+import SelOrganizationWorkshopTypeCode_search from "src/components/SelOrganizationWorkshopTypeCode_search.vue";
 import SelOrganizationRailway_alertCreate from "src/components/SelOrganizationRailway_alertCreate.vue";
 import SelOrganizationParagraph_alertCreate from "src/components/SelOrganizationParagraph_alertCreate.vue";
 import SelOrganizationWorkshopTypeCode_alertCreate from "src/components/SelOrganizationWorkshopTypeCode_alertCreate.vue";
@@ -226,6 +232,8 @@ const organizationRailwayUuid_search = ref("");
 provide("organizationRailwayUuid_search", organizationRailwayUuid_search);
 const organizationParagraphUuid_search = ref("");
 provide("organizationParagraphUuid_search", organizationParagraphUuid_search);
+const organizationWorkshopTypeCode_search = ref("");
+provide("organizationWorkshopTypeCode_search", organizationWorkshopTypeCode_search);
 
 // 表格数据
 const rows = ref([]);
@@ -264,6 +272,7 @@ const fnResetSearch = () => {
   name_search.value = "";
   organizationRailwayUuid_search.value = "";
   organizationParagraphUuid_search.value = "";
+  organizationWorkshopTypeCode_search.value = "";
 };
 
 const fnSearch = () => {
@@ -273,6 +282,7 @@ const fnSearch = () => {
     name: name_search.value,
     organization_railway_uuid: organizationRailwayUuid_search.value,
     organization_paragraph_uuid: organizationParagraphUuid_search.value,
+    type_code:organizationWorkshopTypeCode_search.value,
   })
     .then(res => {
       rows.value = collect(res.content.organization_workshops)

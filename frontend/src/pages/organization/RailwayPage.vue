@@ -14,7 +14,7 @@
         <div class="row">
           <div class="col">
             <q-form>
-              <div class="row q-pb-sm q-col-gutter-sm">
+              <div class="row q-col-gutter-sm">
                 <div class="col-3">
                   <q-input outlined clearable lazy-rules v-model="uniqueCode_search" label="代码" :rules="[]"
                     class="q-mb-md" />

@@ -41,17 +41,17 @@
     <q-card class="q-mt-md">
       <q-card-section>
         <div class="row">
-          <div class="col"><span :style="{ fontSize: '20px' }">站场列表</span></div>
+          <div class="col"><span :style="{ fontSize: '20px' }">中心列表</span></div>
           <div class="col text-right">
             <q-btn-group>
-              <q-btn color="secondary" label="新建站场" icon="add" @click="fnOpenAlertCreateCreateStation" />
-              <q-btn color="negative" label="删除站场" icon="deleted" @click="fnDestroyCreateStations" />
+              <q-btn color="secondary" label="新建中心" icon="add" @click="fnOpenAlertCreateCreateStation" />
+              <q-btn color="negative" label="删除中心" icon="deleted" @click="fnDestroyCreateStations" />
             </q-btn-group>
           </div>
         </div>
         <div class="row q-mt-md">
           <div class="col">
-            <q-table flat bordered title="站场列表" :rows="rows" row-key="uuid" :pagination="{ rowsPerPage: 200 }"
+            <q-table flat bordered title="中心列表" :rows="rows" row-key="uuid" :pagination="{ rowsPerPage: 200 }"
               :rows-per-page-options="[50, 100, 200, 0]" rows-per-page-label="分页" :selected-rows-label="() => { }"
               selection="multiple" v-model:selected="selected">
               <template v-slot:header="props">
@@ -84,11 +84,11 @@
                   ].join(' - ') }}</q-td>
                   <q-td key="operation" :props="props">
                     <q-btn-group>
-                      <q-btn @click="fnOpenAlertEditCreateOrganizationStation(props.row.operation)" color="warning"
+                      <q-btn @click="fnOpenAlertEditCreateOrganizationCenter(props.row.operation)" color="warning"
                         icon="edit">
                         编辑
                       </q-btn>
-                      <q-btn @click="fnDestroyCreateOrganizationStation(props.row.operation)" color="negative"
+                      <q-btn @click="fnDestroyCreateOrganizationCenter(props.row.operation)" color="negative"
                         icon="delete">
                         删除
                       </q-btn>
@@ -104,23 +104,23 @@
   </div>
 
   <!-- 弹窗 -->
-  <!-- 新建站场弹窗 -->
-  <q-dialog v-model="alertCreateOrganizationStation">
+  <!-- 新建中心弹窗 -->
+  <q-dialog v-model="alertCreateOrganizationCenter">
     <q-card style="width: 800px">
       <q-card-section>
-        <div class="text-h6">新建站场</div>
+        <div class="text-h6">新建中心</div>
       </q-card-section>
-      <q-form class="q-gutter-md" @submit.prevent="fnStoreOrganizationStation">
+      <q-form class="q-gutter-md" @submit.prevent="fnStoreOrganizationCenter">
         <q-card-section class="q-pt-none">
           <div class="row">
             <div class="col">
-              <q-input outlined clearable lazy-rules v-model="uniqueCode_alertCreateOrganizationStation" label="代码"
+              <q-input outlined clearable lazy-rules v-model="uniqueCode_alertCreateOrganizationCenter" label="代码"
                 :rules="[]" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <q-input outlined clearable lazy-rules v-model="name_alertCreateOrganizationStation" label="名称"
+              <q-input outlined clearable lazy-rules v-model="name_alertCreateOrganizationCenter" label="名称"
                 :rules="[]" />
             </div>
           </div>
@@ -146,23 +146,23 @@
       </q-form>
     </q-card>
   </q-dialog>
-  <!-- 编辑站场弹窗 -->
-  <q-dialog v-model="alertEditOrganizationStation">
+  <!-- 编辑中心弹窗 -->
+  <q-dialog v-model="alertEditOrganizationCenter">
     <q-card style="width: 800px">
       <q-card-section>
-        <div class="text-h6">编辑站场</div>
+        <div class="text-h6">编辑中心</div>
       </q-card-section>
-      <q-form class="q-gutter-md" @submit.prevent="fnUpdateOrganizationStation">
+      <q-form class="q-gutter-md" @submit.prevent="fnUpdateOrganizationCenter">
         <q-card-section class="q-pt-none">
           <div class="row">
             <div class="col">
-              <q-input outlined clearable lazy-rules v-model="uniqueCode_alertEditOrganizationStation" label="名称"
+              <q-input outlined clearable lazy-rules v-model="uniqueCode_alertEditOrganizationCenter" label="名称"
                 :rules="[]" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <q-input outlined clearable lazy-rules v-model="name_alertEditOrganizationStation" label="名称" :rules="[]" />
+              <q-input outlined clearable lazy-rules v-model="name_alertEditOrganizationCenter" label="名称" :rules="[]" />
             </div>
           </div>
           <div class="row q-mt-md">
@@ -194,12 +194,12 @@ import { ref, onMounted, provide } from "vue";
 import collect from "collect.js";
 import { fnColumnReverseSort } from "src/utils/common";
 import {
-  ajaxGetOrganizationStations,
-  ajaxGetOrganizationStation,
-  ajaxStoreOrganizationStation,
-  ajaxUpdateOrganizationStation,
-  ajaxDestroyOrganizationStation,
-  ajaxDestroyOrganizationStations,
+  ajaxGetOrganizationCenters,
+  ajaxGetOrganizationCenter,
+  ajaxStoreOrganizationCenter,
+  ajaxUpdateOrganizationCenter,
+  ajaxDestroyOrganizationCenter,
+  ajaxDestroyOrganizationCenters,
 } from "src/apis/organization";
 import {
   loadingNotify,
@@ -233,28 +233,28 @@ const rows = ref([]);
 const selected = ref([]);
 const sortBy = ref("");
 
-// 新建站场弹窗数据
-const alertCreateOrganizationStation = ref(false);
-const uniqueCode_alertCreateOrganizationStation = ref("");
-const name_alertCreateOrganizationStation = ref("");
-const organizationRailwayUuid_alertCreateOrganizationStation = ref("");
-provide("organizationRailwayUuid_alertCreate", organizationRailwayUuid_alertCreateOrganizationStation);
-const organizationParagraphUuid_alertCreateOrganizationStation = ref("");
-provide("organizationParagraphUuid_alertCreate", organizationParagraphUuid_alertCreateOrganizationStation);
-const organizationWorkshopUuid_alertCreateOrganizationStation = ref("");
-provide("organizationWorkshopUuid_alertCreate", organizationWorkshopUuid_alertCreateOrganizationStation);
+// 新建中心弹窗数据
+const alertCreateOrganizationCenter = ref(false);
+const uniqueCode_alertCreateOrganizationCenter = ref("");
+const name_alertCreateOrganizationCenter = ref("");
+const organizationRailwayUuid_alertCreateOrganizationCenter = ref("");
+provide("organizationRailwayUuid_alertCreate", organizationRailwayUuid_alertCreateOrganizationCenter);
+const organizationParagraphUuid_alertCreateOrganizationCenter = ref("");
+provide("organizationParagraphUuid_alertCreate", organizationParagraphUuid_alertCreateOrganizationCenter);
+const organizationWorkshopUuid_alertCreateOrganizationCenter = ref("");
+provide("organizationWorkshopUuid_alertCreate", organizationWorkshopUuid_alertCreateOrganizationCenter);
 
-// 编辑站场弹窗数据
+// 编辑中心弹窗数据
 const currentUuid = ref("");
-const alertEditOrganizationStation = ref(false);
-const uniqueCode_alertEditOrganizationStation = ref("");
-const name_alertEditOrganizationStation = ref("");
-const organizationRailwayUuid_alertEditOrganizationStation = ref("");
-provide("organizationRailwayUuid_alertEdit", organizationRailwayUuid_alertEditOrganizationStation);
-const organizationParagraphUuid_alertEditOrganizationStation = ref("");
-provide("organizationParagraphUuid_alertEdit", organizationParagraphUuid_alertEditOrganizationStation);
-const organizationWorkshopUuid_alertEditOrganizationStation = ref("");
-provide("organizationWorkshopUuid_alertEdit", organizationWorkshopUuid_alertEditOrganizationStation);
+const alertEditOrganizationCenter = ref(false);
+const uniqueCode_alertEditOrganizationCenter = ref("");
+const name_alertEditOrganizationCenter = ref("");
+const organizationRailwayUuid_alertEditOrganizationCenter = ref("");
+provide("organizationRailwayUuid_alertEdit", organizationRailwayUuid_alertEditOrganizationCenter);
+const organizationParagraphUuid_alertEditOrganizationCenter = ref("");
+provide("organizationParagraphUuid_alertEdit", organizationParagraphUuid_alertEditOrganizationCenter);
+const organizationWorkshopUuid_alertEditOrganizationCenter = ref("");
+provide("organizationWorkshopUuid_alertEdit", organizationWorkshopUuid_alertEditOrganizationCenter);
 
 onMounted(() => fnInit());
 
@@ -269,7 +269,7 @@ const fnResetSearch = () => {
 };
 
 const fnSearch = () => {
-  ajaxGetOrganizationStations({
+  ajaxGetOrganizationCenters({
     ":~[]": ["OrganizationWorkshop", "OrganizationWorkshop.OrganizationParagraph", "OrganizationWorkshop.OrganizationParagraph.OrganizationRailway"],
     unique_code: uniqueCode_search.value,
     name: name_search.value,
@@ -278,17 +278,17 @@ const fnSearch = () => {
     organization_workshop_uuid: organizationWorkshopUuid_search.value,
   })
     .then(res => {
-      rows.value = collect(res.content.organization_stations)
-        .map((organizationStation, idx) => {
+      rows.value = collect(res.content.organization_centers)
+        .map((organizationCenter, idx) => {
           return {
             index: idx + 1,
-            uuid: organizationStation.uuid,
-            uniqueCode: organizationStation.unique_code,
-            name: organizationStation.name,
-            organizationRailway: organizationStation.organization_workshop.organization_paragraph.organization_railway,
-            organizationParagraph: organizationStation.organization_workshop.organization_paragraph,
-            organizationWorkshop: organizationStation.organization_workshop,
-            operation: { uuid: organizationStation.uuid },
+            uuid: organizationCenter.uuid,
+            uniqueCode: organizationCenter.unique_code,
+            name: organizationCenter.name,
+            organizationRailway: organizationCenter.organization_workshop.organization_paragraph.organization_railway,
+            organizationParagraph: organizationCenter.organization_workshop.organization_paragraph,
+            organizationWorkshop: organizationCenter.organization_workshop,
+            operation: { uuid: organizationCenter.uuid },
           }
         })
         .all();
@@ -297,26 +297,26 @@ const fnSearch = () => {
 };
 
 const fnResetAlertCreateStation = () => {
-  uniqueCode_alertCreateOrganizationStation.value = "";
-  name_alertCreateOrganizationStation.value = "";
-  organizationRailwayUuid_alertCreateOrganizationStation.value = "";
-  organizationParagraphUuid_alertCreateOrganizationStation.value = "";
-  organizationWorkshopUuid_alertCreateOrganizationStation.value = "";
+  uniqueCode_alertCreateOrganizationCenter.value = "";
+  name_alertCreateOrganizationCenter.value = "";
+  organizationRailwayUuid_alertCreateOrganizationCenter.value = "";
+  organizationParagraphUuid_alertCreateOrganizationCenter.value = "";
+  organizationWorkshopUuid_alertCreateOrganizationCenter.value = "";
 };
 
 const fnOpenAlertCreateCreateStation = () => {
-  alertCreateOrganizationStation.value = true;
+  alertCreateOrganizationCenter.value = true;
 };
 
-const fnStoreOrganizationStation = () => {
+const fnStoreOrganizationCenter = () => {
   const loading = loadingNotify();
 
-  ajaxStoreOrganizationStation({
-    unique_code: uniqueCode_alertCreateOrganizationStation.value,
-    name: name_alertCreateOrganizationStation.value,
-    organization_railway_uuid: organizationRailwayUuid_alertCreateOrganizationStation.value,
-    organization_paragraph_uuid: organizationParagraphUuid_alertCreateOrganizationStation.value,
-    organization_workshop_uuid: organizationWorkshopUuid_alertCreateOrganizationStation.value,
+  ajaxStoreOrganizationCenter({
+    unique_code: uniqueCode_alertCreateOrganizationCenter.value,
+    name: name_alertCreateOrganizationCenter.value,
+    organization_railway_uuid: organizationRailwayUuid_alertCreateOrganizationCenter.value,
+    organization_paragraph_uuid: organizationParagraphUuid_alertCreateOrganizationCenter.value,
+    organization_workshop_uuid: organizationWorkshopUuid_alertCreateOrganizationCenter.value,
   })
     .then(res => {
       successNotify(res.msg);
@@ -327,33 +327,33 @@ const fnStoreOrganizationStation = () => {
     .finally(() => loading());
 };
 
-const fnOpenAlertEditCreateOrganizationStation = params => {
+const fnOpenAlertEditCreateOrganizationCenter = params => {
   if (!params["uuid"]) return;
   currentUuid.value = params.uuid;
 
-  ajaxGetOrganizationStation(currentUuid.value, {
+  ajaxGetOrganizationCenter(currentUuid.value, {
     ":~[]": ["OrganizationWorkshop", "OrganizationWorkshop.OrganizationParagraph", "OrganizationWorkshop.OrganizationParagraph.OrganizationRailway"],
   })
     .then(res => {
-      uniqueCode_alertEditOrganizationStation.value = res.content.organization_station.unique_code;
-      name_alertEditOrganizationStation.value = res.content.organization_station.name;
-      organizationRailwayUuid_alertEditOrganizationStation.value = res.content.organization_station.organization_workshop.organization_paragraph.organization_railway.uuid;
-      organizationParagraphUuid_alertEditOrganizationStation.value = res.content.organization_station.organization_workshop.organization_paragraph.uuid;
-      organizationWorkshopUuid_alertEditOrganizationStation.value = res.content.organization_station.organization_workshop.uuid;
+      uniqueCode_alertEditOrganizationCenter.value = res.content.organization_center.unique_code;
+      name_alertEditOrganizationCenter.value = res.content.organization_center.name;
+      organizationRailwayUuid_alertEditOrganizationCenter.value = res.content.organization_center.organization_workshop.organization_paragraph.organization_railway.uuid;
+      organizationParagraphUuid_alertEditOrganizationCenter.value = res.content.organization_center.organization_workshop.organization_paragraph.uuid;
+      organizationWorkshopUuid_alertEditOrganizationCenter.value = res.content.organization_center.organization_workshop.uuid;
 
-      alertEditOrganizationStation.value = true;
+      alertEditOrganizationCenter.value = true;
     })
     .catch(e => errorNotify(e.msg));
 };
 
-const fnUpdateOrganizationStation = () => {
+const fnUpdateOrganizationCenter = () => {
   if (!currentUuid.value) return;
 
   const loading = loadingNotify();
-  ajaxUpdateOrganizationStation(currentUuid.value, {
-    unique_code: uniqueCode_alertEditOrganizationStation.value,
-    name: name_alertEditOrganizationStation.value,
-    organization_workshop_uuid: organizationWorkshopUuid_alertEditOrganizationStation.value,
+  ajaxUpdateOrganizationCenter(currentUuid.value, {
+    unique_code: uniqueCode_alertEditOrganizationCenter.value,
+    name: name_alertEditOrganizationCenter.value,
+    organization_workshop_uuid: organizationWorkshopUuid_alertEditOrganizationCenter.value,
   })
     .then(res => {
       successNotify(res.msg);
@@ -363,14 +363,14 @@ const fnUpdateOrganizationStation = () => {
     .finally(() => loading());
 };
 
-const fnDestroyCreateOrganizationStation = params => {
+const fnDestroyCreateOrganizationCenter = params => {
   if (!params["uuid"]) return;
 
   actionNotify(
     destroyActions(() => {
       const loading = loadingNotify();
 
-      ajaxDestroyOrganizationStation(params.uuid)
+      ajaxDestroyOrganizationCenter(params.uuid)
         .then(() => {
           successNotify("删除成功");
           fnSearch();
@@ -385,7 +385,7 @@ const fnDestroyCreateStations = () => {
     destroyActions(() => {
       const loading = loadingNotify();
 
-      ajaxDestroyOrganizationStations(collect(selected.value).pluck("uuid").all())
+      ajaxDestroyOrganizationCenters(collect(selected.value).pluck("uuid").all())
         .then(() => {
           successNotify("删除成功");
           fnSearch();

@@ -14,7 +14,7 @@
         <div class="row q-mt-md">
           <div class="col">
             <q-form>
-              <div class="row q-pb-sm q-col-gutter-sm">
+              <div class="row q-col-gutter-sm">
                 <div class="col">
                   <q-input outlined clearable lazy-rules v-model="uniqueCode_search" label="代码" :rules="[]"
                     class="q-mb-md" />
@@ -23,13 +23,13 @@
                   <q-input outlined clearable lazy-rules v-model="name_search" label="名称" :rules="[]" class="q-mb-md" />
                 </div>
                 <div class="col">
-                  <sel-organization-railway_search labelName="所属路局" :ajaxParams="{}" />
+                  <sel-organization-railway_search label-name="所属路局" :ajaxParams="{}" />
                 </div>
                 <div class="col">
-                  <sel-organization-paragraph_search labelName="所属站段" :ajaxParams="{}" />
+                  <sel-organization-paragraph_search label-name="所属站段" :ajaxParams="{}" />
                 </div>
                 <div class="col">
-                  <sel-organization-workshop_search labelName="所属车间" :ajaxParams="{}" />
+                  <sel-organization-workshop_search label-name="所属车间" :ajaxParams="{}" />
                 </div>
               </div>
             </q-form>
@@ -126,17 +126,17 @@
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-organization-railway_alert-create labelName="所属路局" :ajaxParams="{}" />
+              <sel-organization-railway_alert-create label-name="所属路局" :ajaxParams="{}" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-organization-paragraph_alert-create labelName="所属站段" :ajaxParams="{}" />
+              <sel-organization-paragraph_alert-create label-name="所属站段" :ajaxParams="{}" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-organization-workshop_alert-create labelName="所属车间" :ajaxParams="{}" />
+              <sel-organization-workshop_alert-create label-name="所属车间" :ajaxParams="{}" />
             </div>
           </div>
         </q-card-section>
@@ -168,17 +168,17 @@
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-organization-railway_alert-edit labelName="所属路局" :ajaxParams="{}" />
+              <sel-organization-railway_alert-edit label-name="所属路局" :ajaxParams="{}" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-organization-paragraph_alert-edit labelName="所属站段" :ajaxParams="{}" />
+              <sel-organization-paragraph_alert-edit label-name="所属站段" :ajaxParams="{}" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-organization-workshop_alert-edit labelName="所属车间" :ajaxParams="{}" />
+              <sel-organization-workshop_alert-edit label-name="所属车间" :ajaxParams="{}" />
             </div>
           </div>
         </q-card-section>

@@ -19,7 +19,7 @@
         <div class="row">
           <div class="col">
             <q-form>
-              <div class="row q-pb-sm q-col-gutter-sm">
+              <div class="row q-col-gutter-sm">
                 <div class="col-3">
                   <q-input
                     outlined
@@ -33,7 +33,7 @@
                 </div>
                 <div class="col-3">
                   <sel-equipment-kind-category_search
-                    labelName="所属种类"
+                    label-name="所属种类"
                     v-model="equipmentKindCategoryUuid_search"
                   />
                 </div>
@@ -186,7 +186,7 @@
           <div class="row q-mt-md">
             <div class="col">
               <sel-equipment-kind-category_alert-create
-                labelName="所属种类"
+                label-name="所属种类"
                 v-model="equipmentKindCategoryUuid_alertCreateEquipmentKindType"
               />
             </div>
@@ -227,7 +227,7 @@
           <div class="row">
             <div class="col">
               <sel-equipment-kind-categrory_alert-edit
-                labelName="所属种类"
+                label-name="所属种类"
                 v-model="equipmentKindCategoryUuid_alertEditEquipmentKindType"
               />
             </div>
