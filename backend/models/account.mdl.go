@@ -12,13 +12,17 @@ type (
 	// AccountMdl 用户模型
 	AccountMdl struct {
 		MySqlMdl
-		Username   string         `gorm:"unique;type:varchar(64);not null;comment:账号;" json:"username"`
-		Password   string         `gorm:"type:varchar(255);not null;comment:密码;" json:"-"`
-		Nickname   string         `gorm:"unique;type:varchar(64);not null;comment:昵称;" json:"nickname"`
-		BeAdmin    bool           `gorm:"type:boolean;not null;default:0;comment:是否是管理员" json:"be_admin"`
-		AvatarUuid string         `gorm:"index;type:char(36);not null;default:'';comment:用户头像文件uuid;" json:"avatar_uuid"`
-		Avatar     *FileMdl       `gorm:"foreignKey:avatar_uuid;references:uuid" json:"avatar"`
-		RbacRoles  []*RbacRoleMdl `gorm:"many2many:pivot_rbac_roles__accounts;foreignKey:uuid;joinForeignKey:account_uuid;references:uuid;joinReferences:rbac_role_uuid;" json:"rbac_roles"`
+		Username                     string          `gorm:"unique;type:varchar(64);not null;comment:账号;" json:"username"`
+		Password                     string          `gorm:"type:varchar(255);not null;comment:密码;" json:"-"`
+		Nickname                     string          `gorm:"unique;type:varchar(64);not null;comment:昵称;" json:"nickname"`
+		BeAdmin                      bool            `gorm:"type:boolean;not null;default:0;comment:是否是管理员" json:"be_admin"`
+		AvatarUuid                   string          `gorm:"index;type:char(36);not null;default:'';comment:用户头像文件uuid;" json:"avatar_uuid"`
+		Avatar                       *FileMdl        `gorm:"foreignKey:avatar_uuid;references:uuid" json:"avatar"`
+		RbacRoles                    []*RbacRoleMdl  `gorm:"many2many:pivot_rbac_roles__accounts;foreignKey:uuid;joinForeignKey:account_uuid;references:uuid;joinReferences:rbac_role_uuid;" json:"rbac_roles"`
+		EquipmentsByRepairPerson     []*EquipmentMdl `gorm:"foreignKey:repair_person_uuid;references:uuid;comment:检修人;" json:"equipments_by_repair_person"`
+		EquipmentsByAcceptancePerson []*EquipmentMdl `gorm:"foreignKey:acceptance_person_uuid;references:uuid;comment:验收人;" json:"equipments_by_acceptance_person"`
+		EquipmentsBySnapAcceptance   []*EquipmentMdl `gorm:"foreignKey:snap_acceptance_person_uuid;references:uuid;comment:抽验人;" json:"equipments_by_snap_acceptance"`
+		EquipmentsByScrappedPerson   []*EquipmentMdl `gorm:"foreignKey:scrapped_person_uuid;references:uuid;comment:报废人;" json:"equipments_by_scrapped_person"`
 	}
 )
 

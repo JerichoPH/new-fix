@@ -17,27 +17,29 @@ type (
 	// OrganizationParagraphMdl 组织结构-站段模型
 	OrganizationParagraphMdl struct {
 		MySqlMdl
-		UniqueCode              string                     `gorm:"index;type:char(4);not null;comment:站段代码;" json:"unique_code"`
-		Name                    string                     `gorm:"index;type:varchar(128);not null;comment:站段名称;" json:"name"`
-		OrganizationRailwayUuid string                     `gorm:"type:char(36);not null;" json:"organization_railway_uuid"`
-		OrganizationRailway     *OrganizationRailwayMdl    `gorm:"foreignKey:organization_railway_uuid;references:uuid;comment:所属路局;" json:"organization_railway"`
-		OrganizationWorkshops   []*OrganizationWorkshopMdl `gorm:"foreignKey:organization_paragraph_uuid;references:uuid;comment:相关车间;" json:"organization_workshops"`
-		OrganizationLines       []*OrganizationLineMdl     `gorm:"foreignKey:organization_paragraph_uuid;references:uuid;comment:相关线别;" json:"organization_lines"`
+		UniqueCode                 string                     `gorm:"index;type:char(4);not null;comment:站段代码;" json:"unique_code"`
+		Name                       string                     `gorm:"index;type:varchar(128);not null;comment:站段名称;" json:"name"`
+		OrganizationRailwayUuid    string                     `gorm:"type:char(36);not null;" json:"organization_railway_uuid"`
+		OrganizationRailway        *OrganizationRailwayMdl    `gorm:"foreignKey:organization_railway_uuid;references:uuid;comment:所属路局;" json:"organization_railway"`
+		OrganizationWorkshops      []*OrganizationWorkshopMdl `gorm:"foreignKey:organization_paragraph_uuid;references:uuid;comment:相关车间;" json:"organization_workshops"`
+		OrganizationLines          []*OrganizationLineMdl     `gorm:"foreignKey:organization_paragraph_uuid;references:uuid;comment:相关线别;" json:"organization_lines"`
+		EquipmentsByPropertyBelong []*EquipmentMdl            `gorm:"foreignKey:property_belong_organization_paragraph_uuid;references:uuid;comment:相关器材（资产归属站段）;" json:"equipments_by_property_belong"`
 	}
 	// OrganizationWorkshopMdl 组织结构-车间模型
 	OrganizationWorkshopMdl struct {
 		MySqlMdl
-		UniqueCode                string                      `gorm:"index;type:char(7);not null;comment:车间代码;" json:"unique_code"`
-		Name                      string                      `gorm:"index;type:varchar(128);not null;comment:车间名称;" json:"name"`
-		TypeCode                  string                      `gorm:"enum('','SCENE','FIX','ELECTRIC','HUMP','ON-BOARD');not null;default:'';comment:车间类型;" json:"type_code"`
-		TypeText                  string                      `gorm:"->;type:varchar(128) as ((case type_code when 'SCENE' then '现场车间' when 'FIX' then '检修车间' when 'ELECTRIC' then '电子车间' when 'HUMP' then '驼峰车间' when 'ON-BOARD' then '车载车间' else '无' end))" json:"type_text"`
-		OrganizationParagraphUuid string                      `gorm:"type:char(36);not null;" json:"organization_paragraph_uuid"`
-		OrganizationParagraph     *OrganizationParagraphMdl   `gorm:"foreignKey:organization_paragraph_uuid;references:uuid;comment:所属站段;" json:"organization_paragraph"`
-		OrganizationStations      []*OrganizationStationMdl   `gorm:"foreignKey:organization_workshop_uuid;references:uuid;comment:相关车站;" json:"organization_stations"`
-		OrganizationCrossroads    []*OrganizationCrossroadMdl `gorm:"foreignKey:organization_workshop_uuid;references:uuid;comment:相关道口;" json:"organization_crossroads"`
-		OrganizationCenters       []*OrganizationCenterMdl    `gorm:"foreignKey:organization_workshop_uuid;references:uuid;comment:相关中心;" json:"organization_centers"`
-		OrganizationWorkAreas     []*OrganizationWorkAreaMdl  `gorm:"foreignKey:organization_workshop_uuid;references:uuid;comment:相关工区;" json:"organization_work_areas"`
-		EquipmentsByUseBelong     []*EquipmentMdl             `gorm:"foreignKey:use_belong_organizaiton_workshop_uuid;references:uuid;comment:相关器材（使用归属车间）;" json:"equipments_by_use_belong"`
+		UniqueCode                 string                      `gorm:"index;type:char(7);not null;comment:车间代码;" json:"unique_code"`
+		Name                       string                      `gorm:"index;type:varchar(128);not null;comment:车间名称;" json:"name"`
+		TypeCode                   string                      `gorm:"enum('','SCENE','FIX','ELECTRIC','HUMP','ON-BOARD');not null;default:'';comment:车间类型;" json:"type_code"`
+		TypeText                   string                      `gorm:"->;type:varchar(128) as ((case type_code when 'SCENE' then '现场车间' when 'FIX' then '检修车间' when 'ELECTRIC' then '电子车间' when 'HUMP' then '驼峰车间' when 'ON-BOARD' then '车载车间' else '无' end))" json:"type_text"`
+		OrganizationParagraphUuid  string                      `gorm:"type:char(36);not null;" json:"organization_paragraph_uuid"`
+		OrganizationParagraph      *OrganizationParagraphMdl   `gorm:"foreignKey:organization_paragraph_uuid;references:uuid;comment:所属站段;" json:"organization_paragraph"`
+		OrganizationStations       []*OrganizationStationMdl   `gorm:"foreignKey:organization_workshop_uuid;references:uuid;comment:相关车站;" json:"organization_stations"`
+		OrganizationCrossroads     []*OrganizationCrossroadMdl `gorm:"foreignKey:organization_workshop_uuid;references:uuid;comment:相关道口;" json:"organization_crossroads"`
+		OrganizationCenters        []*OrganizationCenterMdl    `gorm:"foreignKey:organization_workshop_uuid;references:uuid;comment:相关中心;" json:"organization_centers"`
+		OrganizationWorkAreas      []*OrganizationWorkAreaMdl  `gorm:"foreignKey:organization_workshop_uuid;references:uuid;comment:相关工区;" json:"organization_work_areas"`
+		EquipmentsByPropertyBelong []*EquipmentMdl             `gorm:"foreignKey:property_belong_organization_workshop_uuid;references:uuid;comment:相关器材（资产归属车间）;" json:"equipments_by_property_belong"`
+		EquipmentsByUseBelong      []*EquipmentMdl             `gorm:"foreignKey:use_belong_organizaiton_workshop_uuid;references:uuid;comment:相关器材（使用归属车间）;" json:"equipments_by_use_belong"`
 	}
 	// OrganizationStationMdl 组织结构-站场模型
 	OrganizationStationMdl struct {
