@@ -1,6 +1,7 @@
 package models
 
 import (
+	"new-fix/tools"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -31,30 +32,26 @@ type EquipmentMdl struct {
 	UseBelongOrganizationWorkArea           *OrganizationWorkAreaMdl  `gorm:"foreignKey:use_belong_organization_work_area_uuid;references:uuid;comment:使用归属工区;" json:"use_belong_organization_work_area"`
 	UseBelongOrganizationLineUuid           string                    `gorm:"index;type:char(36);not null;default:'';comment:使用归属线别;" json:"use_belong_organization_line_uuid"`
 	UseBelongOrganizationLine               *OrganizationLineMdl      `gorm:"foreignKey:use_belong_organization_line_uuid;references:uuid;comment:使用归属线别;" json:"use_belong_organization_line"`
-	StatusCode                              string                    `gorm:"index;type:char(36);not null;default:'';comment:状态码;" json:"status_code"`
-	FactoryUuid                             string                    `gorm:"index;type:char(36);not null;default:'';comment:厂家编号;" json:"factory_uuid"`
-	Factory                                 *FactoryMdl               `gorm:"foreignKey:factory_uuid;references:uuid;comment:厂家;" json:"factory"`
-	MadeAt                                  *time.Time                `gorm:"type:date;comment:出厂日期;" json:"made_at"`
-	UsageWorkshopInOrderUuid                string                    `gorm:"index;type:char(36);not null;default:'';comment:入所单编号;" json:"in_workshop_order_uuid"`
-	UsageWorkshopOutOrderUuid               string                    `gorm:"index;type:char(36);not null;default:'';comment:出所单编号;" json:"out_workshop_order_uuid"`
-	UsageWarehouseInOrderUuid               string                    `gorm:"index;type:char(36);not null;default:'';comment:入库单编号;" json:"in_warehouse_order_uuid"`
-	UsageWarehouseOutOrderUuid              string                    `gorm:"index;type:char(36);not null;default:'';comment:出库单编号;" json:"out_warehouse_order_uuid"`
-	UsageRepairOrderUuid                    string                    `gorm:"index;type:char(36);not null;default:'';comment:检修单编号;" json:"repair_order_uuid"`
-	UsageScrapOrderUuid                     string                    `gorm:"index;type:char(36);not null;default:'';comment:报废单编号;" json:"scrap_order_uuid"`
-	UsageInstallOrderUuid                   string                    `gorm:"index;type:char(36);not null;default:'';comment:上道单编号;" json:"install_order_uuid"`
-	UsageUninstallOrderUuid                 string                    `gorm:"index;type:char(36);not null;default:'';comment:下道单编号;" json:"uninstall_order_uuid"`
-	UsageBeSpareOrderUuid                   string                    `gorm:"index;type:char(36);not null;default:'';comment:成为备品单编号;" json:"be_spare_order_uuid"`
-	// RepairAt                               *time.Time                `gorm:"type:datetime;comment:检修时间;" json:"repair_at"`
-	// AcceptanceAt                           *time.Time                `gorm:"type:datetime;comment:验收时间;" json:"acceptance_at"`
-	// SnapAcceptanceAt                       *time.Time                `gorm:"type:datetime;comment:抽验时间;" json:"snap_acceptance_at"`
-	// RepairPersonUuid                       string                    `gorm:"index;type:char(36);not null;default:'';comment:检修人;" json:"repair_person_uuid"`
-	// RepairPerson                           *AccountMdl               `gorm:"foreignKey:repair_person_uuid;references:uuid;comment:检修人;" json:"repair_person"`
-	// AcceptancePersonUuid                   string                    `gorm:"index;type:char(36);not null;default:'';comment:验收人;" json:"acceptance_person_uuid"`
-	// AcceptancePerson                       *AccountMdl               `gorm:"foreignKey:acceptance_person_uuid;references:uuid;comment:验收人;" json:"acceptance_person"`
-	// SnapAcceptancePersonUuid               string                    `gorm:"index;type:char(36);not null;default:'';comment:抽验人;" json:"snap_acceptance_person_uuid"`
-	// SnapAcceptancePerson                   *AccountMdl               `gorm:"foreignKey:snap_acceptance_person_uuid;references:uuid;comment:抽验人;" json:"snap_acceptance_person"`
-	// ScrapPersonUuid string      `gorm:"index;type:char(36);not null;default:'';comment:报废人;" json:"scrapped_person_uuid"`
-	// ScrapPerson     *AccountMdl `gorm:"foreignKey:scrapped_person_uuid;references:uuid;comment:报废人;" json:"scrapped_person"`
+	StatusCode                              string                    `gorm:"type:enum ('BUY_IN', 'INSTALLING', 'INSTALLED', 'FIXING', 'FIXED', 'RETURN_FACTORY', 'FACTORY_RETURN', 'SCRAP', 'TRANSFER_OUT', 'TRANSFER_IN', 'UNINSTALLED', 'FRMLOSS', 'SEND_REPAIR', 'REPAIRING', 'UNINSTALLED_BREAKDOWN');comment:状态代码" json:"status_code"`
+	// StatusText                              string                    `gorm:"->;type:varchar(128) as ((case entire_instances.status when '' then '无' when 'FIXING' then '待修' when 'FIXED' then '所内成品' when 'TRANSFER_OUT' then '出所在途' when 'INSTALLED' then '上道使用' when 'INSTALLING' then '备品' when 'TRANSFER_IN' then '入所在途' when 'UNINSTALLED' then '下道停用' when 'UNINSTALLED_BREAKDOWN' then '故障停用' when 'SEND_REPAIR' then '送修中' when 'SCRAP' then '报废' else '' end));comment:状态文字描述" json:"status_text"`
+	StatusText                 string             `gorm:"-"`
+	FactoryUuid                string             `gorm:"index;type:char(36);not null;default:'';comment:厂家编号;" json:"factory_uuid"`
+	Factory                    *FactoryMdl        `gorm:"foreignKey:factory_uuid;references:uuid;comment:厂家;" json:"factory"`
+	MadeAt                     *time.Time         `gorm:"type:date;comment:出厂日期;" json:"made_at"`
+	UsageWorkshopInOrderUuid   string             `gorm:"index;type:char(36);not null;default:'';comment:入所单编号;" json:"in_workshop_order_uuid"`
+	UsageWorkshopOutOrderUuid  string             `gorm:"index;type:char(36);not null;default:'';comment:出所单编号;" json:"out_workshop_order_uuid"`
+	UsageWarehouseInOrderUuid  string             `gorm:"index;type:char(36);not null;default:'';comment:入库单编号;" json:"in_warehouse_order_uuid"`
+	UsageWarehouseOutOrderUuid string             `gorm:"index;type:char(36);not null;default:'';comment:出库单编号;" json:"out_warehouse_order_uuid"`
+	UsageRepairOrderUuid       string             `gorm:"index;type:char(36);not null;default:'';comment:检修单编号;" json:"repair_order_uuid"`
+	UsageScrapOrderUuid        string             `gorm:"index;type:char(36);not null;default:'';comment:报废单编号;" json:"scrap_order_uuid"`
+	UsageInstallOrderUuid      string             `gorm:"index;type:char(36);not null;default:'';comment:上道单编号;" json:"install_order_uuid"`
+	UsageUninstallOrderUuid    string             `gorm:"index;type:char(36);not null;default:'';comment:下道单编号;" json:"uninstall_order_uuid"`
+	UsageBeSpareOrderUuid      string             `gorm:"index;type:char(36);not null;default:'';comment:成为备品单编号;" json:"be_spare_order_uuid"`
+	CanIWorkshopOut            bool               `gorm:"-" json:"can_i_workshop_out"`
+	CanIInstall                bool               `gorm:"-" json:"can_i_install"`
+	CanIUninstall              bool               `gorm:"-" json:"can_i_uninstall"`
+	CanIBeSpare                bool               `gorm:"-" json:"can_i_be_spare"`
+	BreakdonwLogs              []*BreakdownLogMdl `gorm:"foreignKey:equipment_uuid;references:uuid;comment:故障日志;" json:"breakdown_logs"`
 }
 
 // TableName 器材表名称
@@ -80,6 +77,81 @@ func (receiver EquipmentMdl) GetListByQuery(ctx *gin.Context) *gorm.DB {
 		SetCtx(ctx).
 		GetDbUseQuery("").
 		Table("equipments as e")
+}
+
+// GetStatusCodes 获取器材状态代码列表
+func (EquipmentMdl) GetStatusCodes() []string {
+	return []string{
+		"FIXING",
+		"FIXED",
+		"TRANSFER_OUT",
+		"INSTALLED",
+		"INSTALLING",
+		"TRANSFER_IN",
+		"UNINSTALLED",
+		"UNINSTALLED_BREAKDOWN",
+		"SEND_REPAIR",
+		"SCRAP",
+	}
+}
+
+// GetStatusCodesMap 获取器材状态代码映射
+func (EquipmentMdl) GetStatusCodesMap() []map[string]string {
+	return []map[string]string{
+		{"code": "FIXING", "text": "待修"},
+		{"code": "FIXED", "text": "所内成品"},
+		{"code": "TRANSFER_OUT", "text": "出所在途"},
+		{"code": "INSTALLED", "text": "上道使用"},
+		{"code": "INSTALLING", "text": "备品"},
+		{"code": "TRANSFER_IN", "text": "入所在途"},
+		{"code": "UNINSTALLED", "text": "下道停用"},
+		{"code": "UNINSTALLED_BREAKDOWN", "text": "故障停用"},
+		{"code": "SEND_REPAIR", "text": "送修中"},
+		{"code": "SCRAP", "text": "报废"},
+	}
+}
+
+// getStatusText 获取状态描述
+func (receiver *EquipmentMdl) getStatusText() {
+	var statusText string
+	for _, item := range receiver.GetStatusCodesMap() {
+		if item["code"] == receiver.StatusCode {
+			statusText = item["text"]
+			break
+		}
+	}
+	receiver.StatusText = statusText
+	return
+}
+
+// canIWorkshopOut 获取是否可以出所标记
+func (receiver *EquipmentMdl) getCanIWorkshopOut() {
+	receiver.CanIWorkshopOut = receiver.StatusCode == "FIXED"
+}
+
+// getCanIInstall 获取是否可以上道标记
+func (receiver *EquipmentMdl) getCanIInstall() {
+	receiver.CanIInstall = tools.InString(receiver.StatusCode, []string{"TRANSFER_OUT", "UNINSTALLED"})
+}
+
+// getCanIUninstall 获取是否可以下道标记
+func (receiver *EquipmentMdl) getCanIUninstall() {
+	receiver.CanIUninstall = tools.InString(receiver.StatusCode, []string{"INSTALLED", "INSTALLING"})
+}
+
+// getCanIBeSpare 获取是否可以成为备品标记
+func (receiver *EquipmentMdl) getCanIBeSpare() {
+	receiver.CanIBeSpare = tools.InString(receiver.StatusCode, []string{"TRANSFER_OUT", "UNINSTALLED"})
+}
+
+// AfterFind 查询后钩子
+func (receiver *EquipmentMdl) AfterFind(db *gorm.DB) (err error) {
+	receiver.getStatusText()
+	receiver.getCanIWorkshopOut()
+	receiver.getCanIInstall()
+	receiver.getCanIUninstall()
+	receiver.getCanIBeSpare()
+	return
 }
 
 // EquipmentLogMdl 器材日志模型

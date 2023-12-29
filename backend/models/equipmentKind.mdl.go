@@ -16,6 +16,7 @@ type (
 		UniqueCode         string                  `gorm:"unique;char(3);not null;comment:器材种类代码;" json:"unique_code"`
 		Name               string                  `gorm:"unique;varchar(128);not null;comment:器材种类名称;" json:"name"`
 		EquipmentKindTypes []*EquipmentKindTypeMdl `gorm:"foreignKey:equipment_kind_category_uuid;references:uuid;comment:相关器材类型;" json:"equipment_kind_types"`
+		BreakdownTypes     []*BreakdownTypeMdl     `gorm:"foreignKey:equipment_kind_category_uuid;references:uuid;comment:相关故障类型;" json:"breakdown_types"`
 	}
 	// EquipmentKindTypeMdl 器材类型模型
 	EquipmentKindTypeMdl struct {

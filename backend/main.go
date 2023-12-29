@@ -114,6 +114,8 @@ var autoMigrateList = []any{
 	models.OrganizationCenterMdl{},    // 组织结构-中心
 	models.OrganizationWorkAreaMdl{},  // 组织结构-工区
 	models.OrganizationLineMdl{},      // 组织结构-线别
+	models.BreakdownTypeMdl{},         // 故障-故障类型
+	models.BreakdownLogMdl{},          // 故障-故障日志
 }
 
 // 执行command命令

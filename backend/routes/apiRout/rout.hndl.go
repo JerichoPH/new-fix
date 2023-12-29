@@ -14,5 +14,6 @@ func (RoutHandle) Register(engine *gin.Engine) {
 	NewAccountRout().Load(engine)       // 用户
 	NewRbacRout().Load(engine)          // 权限
 	NewEquipmentKindRout().Load(engine) // 器材种类型
-	NewOrganizationRout().Load(engine)  // 路局
+	NewOrganizationRout().Load(engine)  // 组织结构
+	NewBreakdownRout().Load(engine)     // 故障
 }
