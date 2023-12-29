@@ -17,7 +17,7 @@ import (
 
 // MySqlMdl 基础模型
 type MySqlMdl struct {
-	Id                       uint64         `gorm:"primaryKey;autoIncrement;type:bigint unsigned auto_increment;" json:"id"`
+	Id                       uint64         `gorm:"primaryKey;autoIncrement;type:bigint unsigned auto_increment;" json:"-"`
 	CreatedAt                time.Time      `gorm:"<-:create;type:datetime;default:CURRENT_TIMESTAMP;comment:创建时间;" json:"created_at"`
 	UpdatedAt                time.Time      `gorm:"type:datetime;default:CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;comment:更新时间;" json:"updated_at"`
 	DeletedAt                gorm.DeletedAt `gorm:"index;type:datetime" json:"deleted_at"`
