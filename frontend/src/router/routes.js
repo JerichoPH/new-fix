@@ -20,6 +20,7 @@ import OrganizationCrossroadPage from "src/pages/organization/CrossroadPage.vue"
 import OrganizationCenterPage from "src/pages/organization/CenterPage.vue";
 import OrganizationWorkAreaPage from "src/pages/organization/WorkAreaPage.vue";
 import OrganizationLinePage from "src/pages/organization/LinePage.vue";
+import BreakdownTypePage from "src/pages/breakdown/TypePage.vue";
 
 const routes = [
   {
@@ -106,10 +107,19 @@ const routes = [
       path: "workArea",
       name: "organizationWorkArea:index",
       component: OrganizationWorkAreaPage,
-    },{
+    }, {
       path: "line",
       name: "organizationLine:index",
       component: OrganizationLinePage,
+    },],
+  },
+  {
+    path: "/breakdown",
+    component: () => MainLayoutVue,
+    children: [{
+      path: "type",
+      name: "breakdownType:index",
+      component: BreakdownTypePage,
     },],
   },
   // Always leave this as last one,

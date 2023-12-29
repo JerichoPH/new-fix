@@ -129,6 +129,13 @@ func (UpgradeCmd) init() []string {
 			{Name: "新建线别", Method: "post", Uri: "/api/organization/line"},
 			{Name: "编辑线别", Method: "put", Uri: "/api/organization/line/:uuid"},
 			{Name: "删除线别", Method: "delete", Uri: "/api/organization/line/:uuid"},
+			{Name: "故障类型列表", Method: "get", Uri: "/api/breakdown/type"},
+			{Name: "故障类型详情", Method: "get", Uri: "/api/breakdown/type/:uuid"},
+			{Name: "新建故障类型", Method: "post", Uri: "/api/breakdown/type"},
+			{Name: "编辑故障类型", Method: "put", Uri: "/api/breakdown/type/:uuid"},
+			{Name: "删除故障类型", Method: "delete", Uri: "/api/breakdown/type/:uuid"},
+			{Name: "故障日志列表", Method: "get", Uri: "/api/breakdown/log"},
+			{Name: "故障日志详情", Method: "get", Uri: "/api/breakdown/log/:uuid"},
 		})
 	if ret = models.NewRbacPermissionMdl().GetDb("").Create(&rbacPermissions); ret.Error != nil {
 		std.EchoLineWrong(fmt.Sprintf("错误：%v", ret.Error.Error()))
@@ -153,6 +160,7 @@ func (UpgradeCmd) init() []string {
 		{Name: "中心管理", Uri: "/organization/center", Icon: "fa fa-list", PageRouteName: "organizationCenter:index", ParentUuid: rbacMenu.Uuid},
 		{Name: "工区管理", Uri: "/organization/workArea", Icon: "fa fa-list", PageRouteName: "organizationWorkArea:index", ParentUuid: rbacMenu.Uuid},
 		{Name: "线别管理", Uri: "/organization/line", Icon: "fa fa-list", PageRouteName: "organizationLine:index", ParentUuid: rbacMenu.Uuid},
+		{Name: "故障类型管理", Uri: "/breakdown/type", Icon: "fa fa-list", PageRouteName: "breakdownType:index", ParentUuid: rbacMenu.Uuid},
 	})
 	rbacMenu = &models.RbacMenuMdl{Name: "系统管理", Icon: "fa fa-cogs"}
 	models.NewRbacMenuMdl().GetDb("").Create(rbacMenu)
