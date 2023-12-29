@@ -99,7 +99,7 @@ case $1 in
     ;;
 "script")
     # 第二个参数代表需要执行的t参数
-    ./new-fix -t=$2
+    ./new-fix -script=$2
     ;;
 *)
     echo "没有这个命令，请执行help命令查看帮助"

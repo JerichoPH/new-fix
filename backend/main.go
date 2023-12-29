@@ -236,7 +236,7 @@ func main() {
 		commandParams, tmp []string
 		daemon             bool
 	)
-	flag.StringVar(&title, "t", "", "命令终端参数")
+	flag.StringVar(&title, "script", "", "命令终端参数")
 	flag.BoolVar(&daemon, "daemon", false, "是否启动守护进程")
 	flag.Parse()
 

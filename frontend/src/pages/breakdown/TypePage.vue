@@ -1,34 +1,3 @@
-
-import { fasPlugCircleCheck } from '@quasar/extras/fontawesome-v6';
-
-import collect from 'collect.js';
-
-import { ajaxDestroyBreakdownType } from 'src/apis/breakdown';
-
-import { destroyActions } from 'src/utils/notify';
-
-import { actionNotify } from 'src/utils/notify';
-
-import { errorNotify } from 'src/utils/notify';
-
-import { bexContent } from 'quasar/wrappers';
-
-import collect from 'collect.js';
-
-import { ajaxGetBreakdownTypes } from 'src/apis/breakdown';
-
-import { ajaxGetBreakdownLogs } from 'src/apis/breakdown';
-
-import { onMounted } from 'vue';
-
-import { ref } from 'vue';
-
-import SelEquipmentKindCategory_searchVue from 'src/components/SelEquipmentKindCategory_search.vue';
-
-import { destroyActions } from 'src/utils/notify';
-
-import { actionNotify } from 'src/utils/notify';
-
 <template>
   <div class="q-pa-md">
     <q-card>
@@ -50,8 +19,7 @@ import { actionNotify } from 'src/utils/notify';
                   <q-input outlined clearable lazy-rules v-model="name_search" label="名称" :rules="[]" class="q-mb-md" />
                 </div>
                 <div class="col-3">
-                  <sel-equipment-kind-category-search v-model="equipmentKindCategoryUuid_search" label="所属设备种类"
-                    :rules="[]" class="q-mb-md" />
+                  <sel-equipment-kind-category_search lable-name="所属器材种类" />
                 </div>
               </div>
             </q-form>
@@ -83,6 +51,10 @@ import { actionNotify } from 'src/utils/notify';
                   <q-th align="left" key="name" @click="(event) => fnColumnReverseSort(event, props, sortBy)">
                     名称
                   </q-th>
+                  <q-th align="left" key="equipmentKindCategory"
+                    @click="(event) => fnColumnReverseSort(event, props, sortBy)">
+                    所属种类
+                  </q-th>
                   <q-th align="right"></q-th>
                 </q-tr>
               </template>
@@ -91,6 +63,7 @@ import { actionNotify } from 'src/utils/notify';
                   <q-td><q-checkbox :key="props.row.uuid" :value="props.row.uuid" v-model="props.selected" /></q-td>
                   <q-td>{{ props.row.index }}</q-td>
                   <q-td key="name" :props="props">{{ props.row.name }}</q-td>
+                  <q-td key="equipmentKindCategory" :props="props">{{ props.row.equipmentKindCategory.name }}</q-td>
                   <q-td key="operation" :props="props">
                     <q-btn-group>
                       <q-btn @click="fnOpenAlertEditBreakdownType(props.row.operation)" color="warning" icon="edit">
@@ -109,6 +82,58 @@ import { actionNotify } from 'src/utils/notify';
       </q-card-section>
     </q-card>
   </div>
+
+  <!-- 弹窗 -->
+  <!-- 新建故障类型弹窗 -->
+  <q-dialog v-model="alertCreateBreakdownType">
+    <q-card style="width: 800px">
+      <q-card-section>
+        <div class="text-h6">新建故障类型</div>
+      </q-card-section>
+      <q-form class="q-gutter-md" @submit.prevent="fnStoreBreakdownType">
+        <q-card-section class="q-pt-none">
+          <div class="row">
+            <div class="col">
+              <q-input outlined clearable lazy-rules v-model="name_alertCreateBreakdownType" label="名称" :rules="[]" />
+            </div>
+          </div>
+          <div class="row q-mt-md">
+            <div class="col">
+              <sel-equipment-kind-category_alert-create label-name="所属器材种类" />
+            </div>
+          </div>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn type="submit" label="确定" icon="check" color="secondary" v-close-popup />
+        </q-card-actions>
+      </q-form>
+    </q-card>
+  </q-dialog>
+  <!-- 编辑故障类型 -->
+  <q-dialog v-model="alertEditBreakdownType">
+    <q-card style="width: 800px">
+      <q-card-section>
+        <div class="text-h6">编辑故障类型</div>
+      </q-card-section>
+      <q-form class="q-gutter-md" @submit.prevent="fnUpdateBreakdownType">
+        <q-card-section class="q-pt-none">
+          <div class="row">
+            <div class="col">
+              <q-input outlined clearable lazy-rules v-model="name_alertEditBreakdownType" label="名称" :rules="[]" />
+            </div>
+          </div>
+          <div class="row q-mt-md">
+            <div class="col">
+              <sel-equipment-kind-category_alert-edit lable-name="所属器材种类" />
+            </div>
+          </div>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn type="submit" label="确定" icon="check" color="warning" v-close-popup />
+        </q-card-actions>
+      </q-form>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script setup>
@@ -131,26 +156,32 @@ import {
   destroyActions,
 } from "src/utils/notify";
 import SelEquipmentKindCategory_search from "src/components/SelEquipmentKindCategory_search.vue";
+import SelEquipmentKindCategory_alertCreate from "src/components/SelEquipmentKindCategory_alertCreate.vue"
+import SelEquipmentKindCategory_alertEdit from "src/components/SelEquipmentKindCategory_alertEdit.vue"
 
 // 搜索栏数据
 const name_search = ref("");
 const equipmentKindCategoryUuid_search = ref("");
+provide("equipmentKindCategoryUuid_search", equipmentKindCategoryUuid_search);
 
 // 表格数据
 const rows = ref([]);
 const selected = ref([]);
-const sortyBy = ref("");
+const sortBy = ref("");
 
-// 新建故障类型弹窗
+// 新建故障类型数据
 const alertCreateBreakdownType = ref(false);
-const name_alertCreate = ref("");
-const equipmentKindCategoryUuid_alertCreate = ref("");
+const name_alertCreateBreakdownType = ref("");
+const equipmentKindCategoryUuid_alertCreateBreakdownType = ref("");
+provide("equipmentKindCategoryUuid_alertCreate", equipmentKindCategoryUuid_alertCreateBreakdownType);
 
-// 编辑故障类型弹窗
+// 编辑故障类型数据
 const alertEditBreakdownType = ref(false);
 const currentUuid = ref("");
-const name_alertEdit = ref("");
-const equipmentKindCategoryUuid_alertEdit = ref("");
+const name_alertEditBreakdownType = ref("");
+const equipmentKindCategoryUuid_alertEditBreakdownType = ref("");
+provide("equipmentKindCategoryUuid_alertEdit", equipmentKindCategoryUuid_alertEditBreakdownType);
+
 
 onMounted(() => fnInit());
 
@@ -163,42 +194,45 @@ const fnResetSearch = () => {
 
 const fnSearch = () => {
   ajaxGetBreakdownTypes({
+    "@~[]": ["EquipmentKindCategory"],
     name: name_search.value,
-    equipmentKindCategoryUuid: equipmentKindCategoryUuid_search.value,
+    equipment_kind_category_uuid: equipmentKindCategoryUuid_search.value,
   })
-    .then((res) => {
+    .then(res => {
       rows.value = collect(res.content.breakdown_types)
-        .map(breakdownType => {
+        .map((breakdownType, idx) => {
           return {
+            index: idx + 1,
             uuid: breakdownType.uuid,
             name: breakdownType.name,
             equipmentKindCategory: breakdownType.equipment_kind_category,
             operation: { uuid: breakdownType.uuid },
           }
-        });
+        })
+        .all();
     })
     .catch(e => errorNotify(e.msg));
 };
+
 const fnResetAlertCreateBreakdownType = () => {
-  name_alertCreate.value = "";
-  equipmentKindCategoryUuid_alertCreate.value = "";
+  name_alertCreateBreakdownType.value = "";
+  equipmentKindCategoryUuid_alertCreateBreakdownType.value = "";
 };
 
 const fnOpenAlertCreateBreakdownType = () => {
-  alertcreateBreakdownType.value = true;
+  alertCreateBreakdownType.value = true;
 };
 
 const fnStoreBreakdownType = () => {
   const loading = loadingNotify();
 
   ajaxStoreBreakdownType({
-    name: name_alertCreate.value,
-    equipmentKindCategoryUuid: equipmentKindCategoryUuid_alertCreate.value,
+    name: name_alertCreateBreakdownType.value,
+    equipment_kind_category_uuid: equipmentKindCategoryUuid_alertCreateBreakdownType.value,
   })
-    .then((res) => {
+    .then(res => {
       successNotify(res.msg);
       fnSearch();
-      fnResetAlertCreateBreakdownType();
     })
     .catch(e => errorNotify(e.msg))
     .finally(() => loading());
@@ -208,17 +242,26 @@ const fnOpenAlertEditBreakdownType = params => {
   if (!params["uuid"]) return;
   currentUuid.value = params.uuid;
 
-  alerteditBreakdownType.value = true;
+  ajaxGetBreakdownType(currentUuid.value, {
+    "@~[]": ["EquipmentKindCategory"],
+  })
+    .then(res => {
+      name_alertEditBreakdownType.value = res.content.breakdown_type.name;
+      equipmentKindCategoryUuid_alertEditBreakdownType.value = res.content.breakdown_type.equipment_kind_category.uuid;
+
+      alertEditBreakdownType.value = true;
+    })
+    .catch(e => errorNotify(e.msg));
 };
 
 const fnUpdateBreakdownType = () => {
   const loading = loadingNotify();
 
   ajaxUpdateBreakdownType(currentUuid.value, {
-    name: name_alertEdit.value,
-    equipmentKindCategoryUuid: equipmentKindCategoryUuid_alertEdit.value,
+    name: name_alertEditBreakdownType.value,
+    equipment_kind_category_uuid: equipmentKindCategoryUuid_alertEditBreakdownType.value,
   })
-    .then((res) => {
+    .then(res => {
       successNotify(res.msg);
       fnSearch();
     })
@@ -239,10 +282,11 @@ const fnDestroyBreakdownType = params => {
           fnSearch();
         })
         .catch(e => errorNotify(e.msg))
-        .finally(() => loading());
+        .finally(loading());
     })
   );
 };
+
 const fnDestroyBreakdownTypes = () => {
   actionNotify(
     destroyActions(() => {
@@ -254,9 +298,8 @@ const fnDestroyBreakdownTypes = () => {
           fnSearch();
         })
         .catch(e => errorNotify(e.msg))
-        .finally(() => loading());
+        .finally(loading());
     })
   );
 };
-
 </script>

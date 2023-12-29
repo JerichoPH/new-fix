@@ -9,7 +9,7 @@ type (
 	// BreakdownTypeMdl 故障类型模型
 	BreakdownTypeMdl struct {
 		MySqlMdl
-		Name                      string                    `gorm:"type:varchar(128);not null;comment:故障类型名称;"`
+		Name                      string                    `gorm:"type:varchar(128);not null;comment:故障类型名称;" json:"name"`
 		EquipmentKindCategoryUuid string                    `gorm:"type:char(36);not null;comment:所属器材型号编号;" json:"equipment_kind_category_uuid"`
 		EquipmentKindCategory     *EquipmentKindCategoryMdl `gorm:"foreignKey:equipment_kind_category_uuid;references:uuid;comment:所属器材型号;" json:"equipment_kind_category"`
 		BreakdownLogs             []*BreakdownLogMdl        `gorm:"foreignKey:breakdown_type_uuid;references:uuid;comment:故障日志;" json:"breakdown_logs"`
