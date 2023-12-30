@@ -6,12 +6,7 @@
           <div class="col"><span :style="{ fontSize: '20px' }">搜索</span></div>
           <div class="col text-right">
             <q-btn-group>
-              <q-btn
-                color="primary"
-                label="搜索"
-                icon="search"
-                @click="fnSearch"
-              />
+              <q-btn color="primary" label="搜索" icon="search" @click="fnSearch" />
               <q-btn color="primary" label="重置" flat @click="fnResetSearch" />
             </q-btn-group>
           </div>
@@ -21,21 +16,10 @@
             <q-form>
               <div class="row q-col-gutter-sm">
                 <div class="col-3">
-                  <q-input
-                    outlined
-                    clearable
-                    lazy-rules
-                    v-model="name_search"
-                    label="名称"
-                    :rules="[]"
-                    class="q-mb-md"
-                  />
+                  <q-input outlined clearable lazy-rules v-model="name_search" label="名称" :rules="[]" class="q-mb-md" />
                 </div>
                 <div class="col-3">
-                  <sel-equipment-kind-category_search
-                    label-name="所属种类"
-                    v-model="equipmentKindCategoryUuid_search"
-                  />
+                  <sel-equipment-kind-category_search label-name="所属种类" v-model="equipmentKindCategoryUuid_search" />
                 </div>
               </div>
             </q-form>
@@ -52,66 +36,30 @@
           </div>
           <div class="col text-right">
             <q-btn-group>
-              <q-btn
-                color="secondary"
-                label="新建器材类型"
-                icon="add"
-                @click="fnOpenAlertCreateEquipmentKindType"
-              />
-              <q-btn
-                color="negative"
-                label="删除器材类型"
-                icon="deleted"
-                @click="fnDestroyEquipmentKindTypes"
-              />
+              <q-btn color="secondary" label="新建器材类型" icon="add" @click="fnOpenAlertCreateEquipmentKindType" />
+              <q-btn color="negative" label="删除器材类型" icon="deleted" @click="fnDestroyEquipmentKindTypes" />
             </q-btn-group>
           </div>
         </div>
         <div class="row q-mt-md">
           <div class="col">
-            <q-table
-              flat
-              bordered
-              title="器材类型列表"
-              :rows="rows"
-              row-key="uuid"
-              :pagination="{ rowsPerPage: 200 }"
-              :rows-per-page-options="[50, 100, 200, 0]"
-              rows-per-page-label="分页"
-              selection="multiple"
-              v-model:selected="selected"
-            >
+            <q-table flat bordered title="" :rows="rows" row-key="uuid" :pagination="{ rowsPerPage: 200 }"
+              :rows-per-page-options="[50, 100, 200, 0]" rows-per-page-label="分页" selection="multiple"
+              v-model:selected="selected">
               <template v-slot:header="props">
                 <q-tr :props="props">
-                  <q-th align="left"
-                    ><q-checkbox key="allCheck" v-model="props.selected"
-                  /></q-th>
+                  <q-th align="left"><q-checkbox key="allCheck" v-model="props.selected" /></q-th>
                   <q-th align="left">#</q-th>
-                  <q-th
-                    align="left"
-                    key="uniqueCode"
-                    @click="
-                      (event) => fnColumnReverseSort(event, props, sortBy)
-                    "
-                  >
+                  <q-th align="left" key="uniqueCode" @click="(event) => fnColumnReverseSort(event, props, sortBy)
+                    ">
                     代码
                   </q-th>
-                  <q-th
-                    align="left"
-                    key="name"
-                    @click="
-                      (event) => fnColumnReverseSort(event, props, sortBy)
-                    "
-                  >
+                  <q-th align="left" key="name" @click="(event) => fnColumnReverseSort(event, props, sortBy)
+                    ">
                     名称
                   </q-th>
-                  <q-th
-                    align="left"
-                    key="equipmentKindCategory"
-                    @click="
-                      (event) => fnColumnReverseSort(event, props, sortBy)
-                    "
-                  >
+                  <q-th align="left" key="equipmentKindCategory" @click="(event) => fnColumnReverseSort(event, props, sortBy)
+                    ">
                     所属种类
                   </q-th>
                   <q-th align="right"></q-th>
@@ -119,12 +67,7 @@
               </template>
               <template v-slot:body="props">
                 <q-tr :props="props">
-                  <q-td
-                    ><q-checkbox
-                      :key="props.row.uuid"
-                      :value="props.row.uuid"
-                      v-model="props.selected"
-                  /></q-td>
+                  <q-td><q-checkbox :key="props.row.uuid" :value="props.row.uuid" v-model="props.selected" /></q-td>
                   <q-td>{{ props.row.index }}</q-td>
                   <q-td key="uniqueCode" :props="props">{{
                     props.row.uniqueCode
@@ -135,20 +78,12 @@
                   }}</q-td>
                   <q-td key="operation" :props="props">
                     <q-btn-group>
-                      <q-btn
-                        @click="
-                          fnOpenAlertEditEquipmentKindType(props.row.operation)
-                        "
-                        color="warning"
-                        icon="edit"
-                      >
+                      <q-btn @click="
+                        fnOpenAlertEditEquipmentKindType(props.row.operation)
+                        " color="warning" icon="edit">
                         编辑
                       </q-btn>
-                      <q-btn
-                        @click="fnDestroyEquipmentKindType(props.row.operation)"
-                        color="negative"
-                        icon="delete"
-                      >
+                      <q-btn @click="fnDestroyEquipmentKindType(props.row.operation)" color="negative" icon="delete">
                         删除
                       </q-btn>
                     </q-btn-group>
@@ -173,33 +108,18 @@
         <q-card-section class="q-pt-none">
           <div class="row">
             <div class="col">
-              <q-input
-                outlined
-                clearable
-                lazy-rules
-                v-model="name_alertCreateEquipmentKindType"
-                label="名称"
-                :rules="[]"
-              />
+              <q-input outlined clearable lazy-rules v-model="name_alertCreateEquipmentKindType" label="名称" :rules="[]" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-equipment-kind-category_alert-create
-                label-name="所属种类"
-                v-model="equipmentKindCategoryUuid_alertCreateEquipmentKindType"
-              />
+              <sel-equipment-kind-category_alert-create label-name="所属种类"
+                v-model="equipmentKindCategoryUuid_alertCreateEquipmentKindType" />
             </div>
           </div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn
-            type="submit"
-            label="确定"
-            icon="check"
-            color="secondary"
-            v-close-popup
-          />
+          <q-btn type="submit" label="确定" icon="check" color="secondary" v-close-popup />
         </q-card-actions>
       </q-form>
     </q-card>
@@ -214,33 +134,18 @@
         <q-card-section class="q-pt-none">
           <div class="row">
             <div class="col">
-              <q-input
-                outlined
-                clearable
-                lazy-rules
-                v-model="name_alertEditEquipmentKindType"
-                label="名称"
-                :rules="[]"
-              />
+              <q-input outlined clearable lazy-rules v-model="name_alertEditEquipmentKindType" label="名称" :rules="[]" />
             </div>
           </div>
           <div class="row">
             <div class="col">
-              <sel-equipment-kind-categrory_alert-edit
-                label-name="所属种类"
-                v-model="equipmentKindCategoryUuid_alertEditEquipmentKindType"
-              />
+              <sel-equipment-kind-categrory_alert-edit label-name="所属种类"
+                v-model="equipmentKindCategoryUuid_alertEditEquipmentKindType" />
             </div>
           </div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn
-            type="submit"
-            label="确定"
-            icon="check"
-            color="secondary"
-            v-close-popup
-          />
+          <q-btn type="submit" label="确定" icon="check" color="secondary" v-close-popup />
         </q-card-actions>
       </q-form>
     </q-card>

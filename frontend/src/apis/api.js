@@ -1,9 +1,10 @@
 import axios from "axios";
+import settings from "src/settings";
 import { errorNotify } from "src/utils/notify";
 
 // 创建一个 axios 实例
 const api = axios.create({
-  baseURL: "http://localhost:18080/api", // 设置基础 URL
+  baseURL: settings.apiUrl,
   headers: {
     "Content-Type": "application/json", // 设置请求头中的 Content-Type
     Accept: "application/json", // 设置请求头中的 Accept
@@ -32,7 +33,6 @@ api.interceptors.response.use(
     if (e.response.status === 401) {
       // 如果响应的状态码为 401（未登陆）
       localStorage.removeItem("auth.token"); // 从 localStorage 中删除 token
-      errorNotify("未登录", 1000); // 显示通知，提示用户未登录
     } else {
       return Promise.reject({
         msg: e.response.data.msg || e.response.data,

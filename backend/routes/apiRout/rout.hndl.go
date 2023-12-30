@@ -16,4 +16,5 @@ func (RoutHandle) Register(engine *gin.Engine) {
 	NewEquipmentKindRout().Load(engine) // 器材种类型
 	NewOrganizationRout().Load(engine)  // 组织结构
 	NewBreakdownRout().Load(engine)     // 故障
+	NewFactoryRout().Load(engine)       // 厂家
 }

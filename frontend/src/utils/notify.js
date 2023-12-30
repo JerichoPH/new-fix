@@ -106,7 +106,11 @@ export const successNotify = (
   return n;
 };
 
-export const errorNotify = (message, handler = null) => {
+export const errorNotify = (
+  message = "意外错误",
+  handler = null,
+  params = {}
+) => {
   const n = Notify.create({
     position: "top",
     color: "negative",
@@ -116,7 +120,11 @@ export const errorNotify = (message, handler = null) => {
       {
         label: "关闭",
         color: "white",
-        handler,
+        handler: handler
+          ? () => {
+              handler(params);
+            }
+          : null,
       },
     ],
   });
@@ -144,7 +152,7 @@ export const actionNotify = (
 };
 
 export const notifies = {
-  getDestroyActions: destroyActions,
+  destroyActions,
   loadingNotify,
   infoNotify,
   successNotify,

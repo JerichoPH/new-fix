@@ -6,12 +6,7 @@
           <div class="col"><span style="font-size: 20px">搜索</span></div>
           <div class="col text-right">
             <q-btn-group>
-              <q-btn
-                color="primary"
-                label="搜索"
-                icon="search"
-                @click="fnSearch"
-              />
+              <q-btn color="primary" label="搜索" icon="search" @click="fnSearch" />
               <q-btn color="primary" label="重置" flat @click="fnResetSearch" />
             </q-btn-group>
           </div>
@@ -21,24 +16,10 @@
             <q-form>
               <div class="row q-col-gutter-sm">
                 <div class="col-3">
-                  <q-input
-                    outlined
-                    clearable
-                    lazy-rules
-                    v-model="username_search"
-                    label="账号"
-                    :rules="[]"
-                  />
+                  <q-input outlined clearable lazy-rules v-model="username_search" label="账号" :rules="[]" />
                 </div>
                 <div class="col-3">
-                  <q-input
-                    outlined
-                    clearable
-                    lazy-rules
-                    v-model="nickname_search"
-                    label="昵称"
-                    :rules="[]"
-                  />
+                  <q-input outlined clearable lazy-rules v-model="nickname_search" label="昵称" :rules="[]" />
                 </div>
                 <div class="col-3">
                   <sel-rbac-role_search label-name="所属角色" />
@@ -58,59 +39,26 @@
           </div>
           <div class="col text-right">
             <q-btn-group>
-              <q-btn
-                color="secondary"
-                label="新建用户"
-                icon="add"
-                @click="fnOpenAlertCreateAccount"
-              />
-              <q-btn
-                color="negative"
-                label="批量删除用户"
-                icon="delete"
-                @click="fnDestroyAccounts"
-              />
+              <q-btn color="secondary" label="新建用户" icon="add" @click="fnOpenAlertCreateAccount" />
+              <q-btn color="negative" label="批量删除用户" icon="delete" @click="fnDestroyAccounts" />
             </q-btn-group>
           </div>
         </div>
         <div class="row q-mt-md">
           <div class="col">
-            <q-table
-              flat
-              bordered
-              title="用列表"
-              :rows="rows"
-              row-key="uuid"
-              :pagination="{ rowsPerPage: 200 }"
-              :rows-per-page-options="[50, 100, 200, 0]"
-              rows-per-page-label="分页"
-              selection="multiple"
-              v-model:selected="selected"
-            >
+            <q-table flat bordered title="" :rows="rows" row-key="uuid" :pagination="{ rowsPerPage: 200 }"
+              :rows-per-page-options="[50, 100, 200, 0]" rows-per-page-label="分页" selection="multiple"
+              v-model:selected="selected">
               <template v-slot:header="props">
                 <q-tr :props="props">
-                  <q-th align="left"
-                    ><q-checkbox key="allCheck" v-model="props.selected"
-                  /></q-th>
+                  <q-th align="left"><q-checkbox key="allCheck" v-model="props.selected" /></q-th>
                   <q-th align="left">#</q-th>
-                  <q-th
-                    align="left"
-                    name="username"
-                    key="username"
-                    @click="
-                      (event) => fnColumnReverseSort(event, props, sortBy)
-                    "
-                  >
+                  <q-th align="left" name="username" key="username" @click="(event) => fnColumnReverseSort(event, props, sortBy)
+                    ">
                     用户名
                   </q-th>
-                  <q-th
-                    align="left"
-                    name="nickname"
-                    key="nickname"
-                    @click="
-                      (event) => fnColumnReverseSort(event, props, sortBy)
-                    "
-                  >
+                  <q-th align="left" name="nickname" key="nickname" @click="(event) => fnColumnReverseSort(event, props, sortBy)
+                    ">
                     昵称
                   </q-th>
                   <q-th align="left">头像</q-th>
@@ -120,55 +68,29 @@
               </template>
               <template v-slot:body="props">
                 <q-tr :props="props">
-                  <q-td
-                    ><q-checkbox
-                      :key="props.row.uuid"
-                      :value="props.row.uuid"
-                      v-model="props.selected"
-                  /></q-td>
+                  <q-td><q-checkbox :key="props.row.uuid" :value="props.row.uuid" v-model="props.selected" /></q-td>
                   <q-td>{{ props.row.index }}</q-td>
                   <q-td>{{ props.row.username }}</q-td>
                   <q-td>{{ props.row.nickname }}</q-td>
                   <q-td>
-                    <q-avatar
-                      key="avatar"
-                      :props="props"
-                      v-if="props.row.avatar"
-                    >
+                    <q-avatar key="avatar" :props="props" v-if="props.row.avatar">
                       <img size="50px" :src="props.row.avatar" />
                     </q-avatar>
                   </q-td>
                   <q-td>
-                    <q-chip
-                      v-for="(rbacRole, idx) in props.row.rbac_roles"
-                      :key="idx"
-                      color="primary"
-                      text-color="white"
-                    >
+                    <q-chip v-for="(rbacRole, idx) in props.row.rbac_roles" :key="idx" color="primary" text-color="white">
                       {{ rbacRole.name }}
                     </q-chip>
                   </q-td>
                   <q-td>
                     <q-btn-group>
-                      <q-btn
-                        @click="fnOpenAlertEditAccount(props.row.operation)"
-                        color="warning"
-                        icon="edit"
-                      >
+                      <q-btn @click="fnOpenAlertEditAccount(props.row.operation)" color="warning" icon="edit">
                         编辑
                       </q-btn>
-                      <q-btn
-                        @click="fnOpenAlertEditPassword(props.row.operation)"
-                        color="warning"
-                        icon="lock"
-                      >
+                      <q-btn @click="fnOpenAlertEditPassword(props.row.operation)" color="warning" icon="lock">
                         重置密码
                       </q-btn>
-                      <q-btn
-                        @click="fnDestroyAccount(props.row.operation)"
-                        color="negative"
-                        icon="delete"
-                      >
+                      <q-btn @click="fnDestroyAccount(props.row.operation)" color="negative" icon="delete">
                         删除
                       </q-btn>
                     </q-btn-group>
@@ -193,69 +115,22 @@
         <q-form class="q-gutter-md" @submit.prevent="">
           <div class="row">
             <div class="col">
-              <q-input
-                outlined
-                clearable
-                lazy-rules
-                v-model="username_alertCreateAccount"
-                label="账号"
-                :rules="[]"
-              />
-              <q-input
-                outlined
-                clearable
-                lazy-rules
-                v-model="nickname_alertCreateAccount"
-                label="昵称"
-                :rules="[]"
-                class="q-mt-md"
-              />
-              <q-input
-                outlined
-                clearable
-                lazy-rules
-                type="password"
-                v-model="password_alertCreateAccount"
-                label="密码"
-                :rules="[]"
-                class="q-mt-md"
-              />
-              <q-input
-                outlined
-                clearable
-                lazy-rules
-                type="password"
-                v-model="passwordConfirmation_alertCreateAccount"
-                label="确认密码"
-                :rules="[]"
-                class="q-mt-md"
-              />
-              <q-file
-                outlined
-                v-model="avatar_alertCreateAccount"
-                label="用户头像"
-                accept="image/*"
-                max-file-size="1048576"
-                counter
-                class="q-mt-md"
-              />
-              <chk-rbac-role_alert-create
-                label-name="所属角色"
-                class="q-mt-md"
-              />
+              <q-input outlined clearable lazy-rules v-model="username_alertCreateAccount" label="账号" :rules="[]" />
+              <q-input outlined clearable lazy-rules v-model="nickname_alertCreateAccount" label="昵称" :rules="[]"
+                class="q-mt-md" />
+              <q-input outlined clearable lazy-rules type="password" v-model="password_alertCreateAccount" label="密码"
+                :rules="[]" class="q-mt-md" />
+              <q-input outlined clearable lazy-rules type="password" v-model="passwordConfirmation_alertCreateAccount"
+                label="确认密码" :rules="[]" class="q-mt-md" />
+              <q-file outlined v-model="avatar_alertCreateAccount" label="用户头像" accept="image/*" max-file-size="1048576"
+                counter class="q-mt-md" />
+              <chk-rbac-role_alert-create label-name="所属角色" class="q-mt-md" />
             </div>
           </div>
         </q-form>
       </q-card-section>
       <q-card-actions align="right">
-        <q-btn
-          type="button"
-          label="确定"
-          icon="check"
-          color="secondary"
-          @click="fnStoreAccount"
-          v-close-popup
-        />
+        <q-btn type="button" label="确定" icon="check" color="secondary" @click="fnStoreAccount" v-close-popup />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -269,44 +144,18 @@
         <q-form class="q-gutter-md" @submit.prevent="">
           <div class="row">
             <div class="col">
-              <q-input
-                outlined
-                clearable
-                lazy-rules
-                v-model="username_alertEditAccount"
-                label="账号"
-                :rules="[]"
-              />
-              <q-input
-                outlined
-                clearable
-                lazy-rules
-                v-model="nickname_alertEditAccount"
-                label="昵称"
-                :rules="[]"
-                class="q-mt-md"
-              />
-              <q-avatar
-                key="avatar"
-                v-if="showAvatar_alertEditAccount"
-                class="q-mt-md"
-              >
+              <q-input outlined clearable lazy-rules v-model="username_alertEditAccount" label="账号" :rules="[]" />
+              <q-input outlined clearable lazy-rules v-model="nickname_alertEditAccount" label="昵称" :rules="[]"
+                class="q-mt-md" />
+              <q-avatar key="avatar" v-if="showAvatar_alertEditAccount" class="q-mt-md">
                 <img size="200px" :src="showAvatar_alertEditAccount" />
               </q-avatar>
               <!-- <q-file outlined v-model="avatar_alertEditAccount" label="用户头像" accept="image/*" max-file-size="1048576"
                 counter class="q-mt-md" /> -->
-              <q-uploader
-                :headers="[
-                  { name: 'Authorization', value: `JWT ${authToken}` },
-                ]"
-                field-name="avatar"
-                :url="`${settings.apiUrl}/account/${currentUuid}/updateAvatar`"
-                label="修改头像"
-                class="full-width q-mt-md"
-                @uploaded="fnOnUploadedAvatar($event)"
-                flat
-                bordered
-              >
+              <q-uploader :headers="[
+                { name: 'Authorization', value: `JWT ${authToken}` },
+              ]" field-name="avatar" :url="`${settings.apiUrl}/account/${currentUuid}/updateAvatar`" label="修改头像"
+                class="full-width q-mt-md" @uploaded="fnOnUploadedAvatar($event)" flat bordered>
                 <template v-slot:list="scope">
                   <q-list separator>
                     <q-item v-for="file in scope.files" :key="file.__key">
@@ -325,15 +174,7 @@
                         <img :src="file.__img.src" />
                       </q-item-section>
                       <q-item-section top side>
-                        <q-btn
-                          class="gt-xs"
-                          size="12px"
-                          flat
-                          dense
-                          round
-                          icon="delete"
-                          @click="scope.removeFile(file)"
-                        />
+                        <q-btn class="gt-xs" size="12px" flat dense round icon="delete" @click="scope.removeFile(file)" />
                       </q-item-section>
                     </q-item>
                   </q-list>
@@ -345,14 +186,7 @@
         </q-form>
       </q-card-section>
       <q-card-actions align="right">
-        <q-btn
-          type="button"
-          label="确定"
-          icon="check"
-          color="secondary"
-          @click="fnUpdateAccount"
-          v-close-popup
-        />
+        <q-btn type="button" label="确定" icon="check" color="secondary" @click="fnUpdateAccount" v-close-popup />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -366,46 +200,18 @@
         <q-form class="q-gutter-md" @submit.prevent="">
           <div class="row">
             <div class="col">
-              <q-input
-                outlined
-                clearable
-                lazy-rules
-                v-model="oldPassword_alertEditPassword"
-                label="旧密码"
-                :rules="[]"
-                class="q-mb-md"
-              />
-              <q-input
-                outlined
-                clearable
-                lazy-rules
-                v-model="password_alertEditPassword"
-                label="旧密码"
-                :rules="[]"
-                class="q-mb-md"
-              />
-              <q-input
-                outlined
-                clearable
-                lazy-rules
-                v-model="passwordConfirmation_alertEditPassword"
-                label="旧密码"
-                :rules="[]"
-                class="q-mb-md"
-              />
+              <q-input outlined clearable lazy-rules v-model="oldPassword_alertEditPassword" label="旧密码" :rules="[]"
+                class="q-mb-md" />
+              <q-input outlined clearable lazy-rules v-model="password_alertEditPassword" label="旧密码" :rules="[]"
+                class="q-mb-md" />
+              <q-input outlined clearable lazy-rules v-model="passwordConfirmation_alertEditPassword" label="旧密码"
+                :rules="[]" class="q-mb-md" />
             </div>
           </div>
         </q-form>
       </q-card-section>
       <q-card-actions align="right">
-        <q-btn
-          type="button"
-          label="确定"
-          icon="check"
-          color="negative"
-          @click="fnUpdatePassword"
-          v-close-popup
-        />
+        <q-btn type="button" label="确定" icon="check" color="negative" @click="fnUpdatePassword" v-close-popup />
       </q-card-actions>
     </q-card>
   </q-dialog>

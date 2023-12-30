@@ -2,14 +2,7 @@
   <q-layout view="hHh lpR fFf" class="bg-grey-1">
     <q-header elevated class="bg-primary text-white q-py-xs" height-hint="58">
       <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          @click="fnToggleLeftDrawer"
-          aria-label="Menu"
-          icon="menu"
-        />
+        <q-btn flat dense round @click="fnToggleLeftDrawer" aria-label="Menu" icon="menu" />
 
         <q-btn flat no-caps no-wrap class="q-ml-xs" v-if="$q.screen.gt.xs">
           <q-icon :name="fabYoutube" color="red" size="28px" />
@@ -21,54 +14,20 @@
         <q-space />
 
         <div class="YL__toolbar-input-container row no-wrap">
-          <q-input
-            dense
-            outlined
-            square
-            v-model="search"
-            placeholder="Search"
-            class="bg-white col"
-          />
-          <q-btn
-            class="YL__toolbar-input-btn"
-            color="white"
-            text-color="black"
-            icon="search"
-            unelevated
-          />
+          <q-input dense outlined square v-model="search" placeholder="Search" class="bg-white col" />
+          <q-btn class="YL__toolbar-input-btn" color="white" text-color="black" icon="search" unelevated />
         </div>
 
         <q-space />
 
         <div class="q-gutter-sm row items-center no-wrap">
-          <q-btn
-            round
-            dense
-            flat
-            color="white"
-            icon="video_call"
-            v-if="$q.screen.gt.sm"
-          >
+          <q-btn round dense flat color="white" icon="video_call" v-if="$q.screen.gt.sm">
             <q-tooltip>Create a video or post</q-tooltip>
           </q-btn>
-          <q-btn
-            round
-            dense
-            flat
-            color="white"
-            icon="apps"
-            v-if="$q.screen.gt.sm"
-          >
+          <q-btn round dense flat color="white" icon="apps" v-if="$q.screen.gt.sm">
             <q-tooltip>Apps</q-tooltip>
           </q-btn>
-          <q-btn
-            round
-            dense
-            flat
-            color="white"
-            icon="message"
-            v-if="$q.screen.gt.sm"
-          >
+          <q-btn round dense flat color="white" icon="message" v-if="$q.screen.gt.sm">
             <q-tooltip>Messages</q-tooltip>
           </q-btn>
           <q-btn round dense flat color="white" icon="notifications">
@@ -90,19 +49,10 @@
         <q-list link dense separator style="min-width: 200px">
           <template v-for="rbacMenu in rbacMenus" :key="rbacMenu.uuid">
             <template v-if="rbacMenu.subs.length > 0">
-              <q-expansion-item
-                group="menu"
-                :icon="rbacMenu.icon"
-                :label="rbacMenu.name"
-              >
+              <q-expansion-item group="menu" :icon="rbacMenu.icon" :label="rbacMenu.name">
                 <q-list dense>
-                  <q-item
-                    v-for="subMenu in rbacMenu.subs"
-                    clickable
-                    v-ripple
-                    :key="subMenu.uuid"
-                    @click="fnHref(subMenu.uri)"
-                  >
+                  <q-item v-for="subMenu in rbacMenu.subs" clickable v-ripple :key="subMenu.uuid"
+                    @click="fnHref(subMenu.uri)">
                     <q-item-section avatar>
                       <q-icon :name="subMenu.icon" />
                     </q-item-section>
@@ -112,12 +62,7 @@
               </q-expansion-item>
             </template>
             <template v-else>
-              <q-item
-                clickable
-                v-ripple
-                @click="fnHref(rbacMenu.uri)"
-                :key="rbacMenu.uuid"
-              >
+              <q-item clickable v-ripple @click="fnHref(rbacMenu.uri)" :key="rbacMenu.uuid">
                 <q-item-section avatar>
                   <q-icon :name="rbacMenu.icon" />
                 </q-item-section>
@@ -140,6 +85,7 @@ import { useRouter } from "vue-router";
 import { fabYoutube } from "@quasar/extras/fontawesome-v6";
 import { errorNotify } from "src/utils/notify";
 import { ajaxGetCurrentAccountMenus } from "src/apis/auth";
+import collect from "collect.js";
 
 const router = useRouter();
 
@@ -161,8 +107,7 @@ const fnInit = () => {
   if (!localStorage.getItem("auth.token")) {
     errorNotify(
       "未登录",
-      500,
-      (router) => {
+      router => {
         router.push("/auth/login");
       },
       router
@@ -174,14 +119,10 @@ const fnInit = () => {
     "@~[]": ["Subs"],
     "@== []": ["parent_uuid"],
   })
-    .then((res) => {
-      if (res.content.rbac_menus.length > 0) {
-        rbacMenus.value = res.content.rbac_menus;
-      }
+    .then(res => {
+      rbacMenus.value = collect(res.content.rbac_menus).all();
     })
-    .catch((e) => {
-      errorNotify(e.msg);
-    });
+    .catch((e) => errorNotify(e.msg));
 };
 /**
  * 切换左侧边栏

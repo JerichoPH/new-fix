@@ -6,12 +6,7 @@
           <div class="col"><span style="font-size: 20px">搜索</span></div>
           <div class="col text-right">
             <q-btn-group>
-              <q-btn
-                color="primary"
-                label="搜索"
-                icon="search"
-                @click="fnSearch"
-              />
+              <q-btn color="primary" label="搜索" icon="search" @click="fnSearch" />
               <q-btn color="primary" label="重置" flat @click="fnResetSearch" />
             </q-btn-group>
           </div>
@@ -21,40 +16,16 @@
             <q-form>
               <div class="row q-col-gutter-sm">
                 <div class="col-3">
-                  <q-input
-                    outlined
-                    clearable
-                    lazy-rules
-                    v-model="name_search"
-                    label="名称"
-                    :rules="[]"
-                  />
+                  <q-input outlined clearable lazy-rules v-model="name_search" label="名称" :rules="[]" />
                 </div>
                 <div class="col-3">
-                  <q-input
-                    outlined
-                    clearable
-                    lazy-rules
-                    v-model="uri_search"
-                    label="路由"
-                    :rules="[]"
-                  />
+                  <q-input outlined clearable lazy-rules v-model="uri_search" label="路由" :rules="[]" />
                 </div>
                 <div class="col-3">
-                  <q-input
-                    outlined
-                    clearable
-                    lazy-rules
-                    v-model="description_search"
-                    label="描述"
-                    :rules="[]"
-                  />
+                  <q-input outlined clearable lazy-rules v-model="description_search" label="描述" :rules="[]" />
                 </div>
                 <div class="col-3">
-                  <sel-rbac-menu_search
-                    label-name="所属父级"
-                    v-if="selRbacMenu_search_enable"
-                  />
+                  <sel-rbac-menu_search label-name="所属父级" v-if="selRbacMenu_search_enable" />
                 </div>
                 <div class="col-3">
                   <sel-rbac-role_search label-name="所属角色" />
@@ -74,58 +45,26 @@
           </div>
           <div class="col text-right">
             <q-btn-group>
-              <q-btn
-                color="secondary"
-                label="新建菜单"
-                icon="add"
-                @click="fnOpenAlertCreateRbacMenu"
-              />
-              <q-btn
-                color="negative"
-                label="删除菜单"
-                icon="delete"
-                @click="fnDestroyRbacMenus"
-              />
+              <q-btn color="secondary" label="新建菜单" icon="add" @click="fnOpenAlertCreateRbacMenu" />
+              <q-btn color="negative" label="删除菜单" icon="delete" @click="fnDestroyRbacMenus" />
             </q-btn-group>
           </div>
         </div>
         <div class="row q-mt-md">
           <div class="col">
-            <q-table
-              flat
-              bordered
-              title="菜单列表"
-              :rows="rows"
-              row-key="index"
-              virtual-scroll
-              :pagination="{ rowsPerPage: 200 }"
-              :rows-per-page-options="[50, 100, 200, 0]"
-              rows-per-page-label="分页"
-              selection="multiple"
-              v-model:selected="selected"
-            >
+            <q-table flat bordered title="" :rows="rows" row-key="index" virtual-scroll
+              :pagination="{ rowsPerPage: 200 }" :rows-per-page-options="[50, 100, 200, 0]" rows-per-page-label="分页"
+              selection="multiple" v-model:selected="selected">
               <template v-slot:header="props">
                 <q-tr :props="props">
-                  <q-th align="left"
-                    ><q-checkbox key="allCheck" v-model="props.selected"
-                  /></q-th>
+                  <q-th align="left"><q-checkbox key="allCheck" v-model="props.selected" /></q-th>
                   <q-th align="left">#</q-th>
-                  <q-th
-                    align="left"
-                    key="name"
-                    @click="
-                      (event) => fnColumnReverseSort(event, props, sortBy)
-                    "
-                  >
+                  <q-th align="left" key="name" @click="(event) => fnColumnReverseSort(event, props, sortBy)
+                    ">
                     名称
                   </q-th>
-                  <q-th
-                    align="left"
-                    key="uri"
-                    @click="
-                      (event) => fnColumnReverseSort(event, props, sortBy)
-                    "
-                  >
+                  <q-th align="left" key="uri" @click="(event) => fnColumnReverseSort(event, props, sortBy)
+                    ">
                     路由
                   </q-th>
                   <q-th align="left" key="description">描述</q-th>
@@ -137,12 +76,7 @@
               </template>
               <template v-slot:body="props">
                 <q-tr :props="props">
-                  <q-td
-                    ><q-checkbox
-                      :key="props.row.uuid"
-                      :value="props.row.uuid"
-                      v-model="props.selected"
-                  /></q-td>
+                  <q-td><q-checkbox :key="props.row.uuid" :value="props.row.uuid" v-model="props.selected" /></q-td>
                   <q-td>{{ props.row.index }}</q-td>
                   <q-td key="name" :props="props">{{ props.row.name }}</q-td>
                   <q-td key="uri" :props="props">{{
@@ -156,22 +90,14 @@
                     <span v-else>-</span>
                   </q-td>
                   <q-td key="parent" :props="props">
-                    <q-chip
-                      color="primary"
-                      text-color="white"
-                      v-if="props.row.parent"
-                    >
+                    <q-chip color="primary" text-color="white" v-if="props.row.parent">
                       {{ props.row.parent.name }}
                     </q-chip>
                   </q-td>
                   <q-td key="rbacRoles" :props="props">
                     <template v-if="props.row.rbacRoles.length > 0">
-                      <q-chip
-                        color="primary"
-                        text-color="white"
-                        v-for="(rbacRole, idx) in props.row.rbacRoles"
-                        :key="idx"
-                      >
+                      <q-chip color="primary" text-color="white" v-for="(rbacRole, idx) in props.row.rbacRoles"
+                        :key="idx">
                         {{ rbacRole.name }}
                       </q-chip>
                     </template>
@@ -179,18 +105,10 @@
                   </q-td>
                   <q-td key="operation" :props="props">
                     <q-btn-group>
-                      <q-btn
-                        @click="fnOpenAlertEditRbacMenu(props.row.operation)"
-                        color="warning"
-                        icon="edit"
-                      >
+                      <q-btn @click="fnOpenAlertEditRbacMenu(props.row.operation)" color="warning" icon="edit">
                         编辑
                       </q-btn>
-                      <q-btn
-                        @click="fnDeconsteRbacMenu(props.row.operation)"
-                        color="negative"
-                        icon="delete"
-                      >
+                      <q-btn @click="fnDeconsteRbacMenu(props.row.operation)" color="negative" icon="delete">
                         删除
                       </q-btn>
                     </q-btn-group>
@@ -215,62 +133,21 @@
         <q-form class="q-gutter-md" @submit.prevent="">
           <div class="row">
             <div class="col">
-              <q-input
-                outlined
-                clearable
-                lazy-rules
-                v-model="name_alertCreateRbacMenu"
-                label="名称"
-                :rules="[]"
-              />
-              <q-input
-                outlined
-                clearable
-                lazy-rules
-                v-model="uri_alertCreateRbacMenu"
-                label="路由"
-                :rules="[]"
-                class="q-mt-md"
-              />
-              <q-input
-                outlined
-                clearable
-                lazy-rules
-                v-model="description_alertCreateRbacMenu"
-                label="描述"
-                :rules="[]"
-                class="q-mt-md"
-              />
-              <q-input
-                outlined
-                clearable
-                lazy-rules
-                v-model="icon_alertCreateRbacMenu"
-                label="图标"
-                :rules="[]"
-                class="q-mt-md"
-              />
-              <sel-rbac-menu_alert-create
-                label-name="所属父级"
-                class="q-mt-md"
-              />
-              <chk-rbac-role_alert-create
-                label-name="所属角色"
-                class="q-mt-md"
-              />
+              <q-input outlined clearable lazy-rules v-model="name_alertCreateRbacMenu" label="名称" :rules="[]" />
+              <q-input outlined clearable lazy-rules v-model="uri_alertCreateRbacMenu" label="路由" :rules="[]"
+                class="q-mt-md" />
+              <q-input outlined clearable lazy-rules v-model="description_alertCreateRbacMenu" label="描述" :rules="[]"
+                class="q-mt-md" />
+              <q-input outlined clearable lazy-rules v-model="icon_alertCreateRbacMenu" label="图标" :rules="[]"
+                class="q-mt-md" />
+              <sel-rbac-menu_alert-create label-name="所属父级" class="q-mt-md" />
+              <chk-rbac-role_alert-create label-name="所属角色" class="q-mt-md" />
             </div>
           </div>
         </q-form>
       </q-card-section>
       <q-card-actions align="right">
-        <q-btn
-          type="button"
-          label="确定"
-          icon="check"
-          color="secondary"
-          @click="fnStoreRbacMenu"
-          v-close-popup
-        />
+        <q-btn type="button" label="确定" icon="check" color="secondary" @click="fnStoreRbacMenu" v-close-popup />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -284,63 +161,24 @@
         <q-form class="q-gutter-md" @submit.prevent="">
           <div class="row">
             <div class="col">
-              <q-input
-                outlined
-                clearable
-                lazy-rules
-                v-model="name_alertEditRbacMenu"
-                label="名称"
-                :rules="[]"
-              />
-              <q-input
-                outlined
-                clearable
-                lazy-rules
-                v-model="uri_alertEditRbacMenu"
-                label="路由"
-                :rules="[]"
-                class="q-mt-md"
-              />
-              <q-input
-                outlined
-                clearable
-                lazy-rules
-                v-model="description_alertEditRbacMenu"
-                label="描述"
-                :rules="[]"
-                class="q-mt-md"
-              />
-              <q-input
-                outlined
-                clearable
-                lazy-rules
-                v-model="icon_alertEditRbacMenu"
-                label="图标"
-                :rules="[]"
-                class="q-mt-md"
-              />
-              <sel-rbac-menu_alert-edit
-                label-name="所属父级"
-                :ajaxParams="{
-                  ':<>*': { uuid: currentUuid },
-                  not_has_subs: currentUuid,
-                }"
-                class="q-mt-md"
-              />
+              <q-input outlined clearable lazy-rules v-model="name_alertEditRbacMenu" label="名称" :rules="[]" />
+              <q-input outlined clearable lazy-rules v-model="uri_alertEditRbacMenu" label="路由" :rules="[]"
+                class="q-mt-md" />
+              <q-input outlined clearable lazy-rules v-model="description_alertEditRbacMenu" label="描述" :rules="[]"
+                class="q-mt-md" />
+              <q-input outlined clearable lazy-rules v-model="icon_alertEditRbacMenu" label="图标" :rules="[]"
+                class="q-mt-md" />
+              <sel-rbac-menu_alert-edit label-name="所属父级" :ajaxParams="{
+                ':<>*': { uuid: currentUuid },
+                not_has_subs: currentUuid,
+              }" class="q-mt-md" />
               <chk-rbac-role_alert-edit label-name="所属角色" class="q-mt-md" />
             </div>
           </div>
         </q-form>
       </q-card-section>
       <q-card-actions align="right">
-        <q-btn
-          type="button"
-          label="确定"
-          icon="check"
-          color="secondary"
-          @click="fnUpdateRbacMenu"
-          v-close-popup
-        />
+        <q-btn type="button" label="确定" icon="check" color="secondary" @click="fnUpdateRbacMenu" v-close-popup />
       </q-card-actions>
     </q-card>
   </q-dialog>

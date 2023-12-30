@@ -19,7 +19,7 @@
                   <q-input outlined clearable lazy-rules v-model="name_search" label="名称" :rules="[]" class="q-mb-md" />
                 </div>
                 <div class="col-3">
-                  <sel-equipment-kind-category_search lable-name="所属器材种类" />
+                  <sel-equipment-kind-category_search label-name="所属器材种类" />
                 </div>
               </div>
             </q-form>
@@ -41,7 +41,7 @@
         </div>
         <div class="row q-mt-md">
           <div class="col">
-            <q-table flat bordered title="故障类型列表" :rows="rows" row-key="uuid" :pagination="{ rowsPerPage: 200 }"
+            <q-table flat bordered title="" :rows="rows" row-key="uuid" :pagination="{ rowsPerPage: 200 }"
               :rows-per-page-options="[50, 100, 200, 0]" rows-per-page-label="分页" :selected-rows-label="() => { }"
               selection="multiple" v-model:selected="selected">
               <template v-slot:header="props">

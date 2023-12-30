@@ -44,7 +44,7 @@
         </div>
         <div class="row q-mt-md">
           <div class="col">
-            <q-table flat bordered title="路局列表" :rows="rows" row-key="uuid" :pagination="{ rowsPerPage: 200 }"
+            <q-table flat bordered title="" :rows="rows" row-key="uuid" :pagination="{ rowsPerPage: 200 }"
               :rows-per-page-options="[50, 100, 200, 0]" rows-per-page-label="分页" :selected-rows-label="() => { }"
               selection="multiple" v-model:selected="selected">
               <template v-slot:header="props">
@@ -231,22 +231,19 @@ const fnSearch = () => {
     unique_code: uniqueCode_search.value,
     name: name_search.value,
   })
-    .then((res) => {
+    .then(res => {
       rows.value = collect(res.content.organization_railways)
-        .map(
-          (organizationRailway, idx) => {
-            return {
-              index: idx + 1,
-              uniqueCode: organizationRailway.unique_code,
-              name: organizationRailway.name,
-              uuid: organizationRailway.uuid,
-              operation: { uuid: organizationRailway.uuid },
-            };
-          }
-        )
+        .map((organizationRailway, idx) => {
+          return {
+            index: idx + 1,
+            uniqueCode: organizationRailway.unique_code,
+            name: organizationRailway.name,
+            uuid: organizationRailway.uuid,
+            operation: { uuid: organizationRailway.uuid },
+          };
+        })
         .all();
-    })
-    .catch((e) => errorNotify(e.msg));
+    });
 };
 
 /**

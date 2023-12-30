@@ -1,14 +1,18 @@
 {
   "name": "quasar-learning",
   "version": "0.0.1",
-  "description": "A Quasar Project",
-  "productName": "Quasar App",
+  "description": "A New Fix Workshop Project",
+  "productName": "Rebirth Fix",
   "author": "jericho <jericho_ph@qq.com>",
   "private": true,
+  "main": "electron.js",
   "scripts": {
     "dev": "quasar dev",
+    "dev:electron": "quasar dev -m electron -- --no-sandbox --disable-setuid-sandbox",
     "build": "quasar build",
     "build:pwa": "quasar build -m pwa",
+    "build:electron": "quasar build -m electron",
+    "build:electron-dev": "quasar build -m electron -d",
     "serve": "quasar serve",
     "build:ssr": "quasar build -m ssr",
     "lint": "eslint --ext .js,.vue ./",
@@ -16,6 +20,7 @@
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
+    "@electron/remote": "^2.1.1",
     "@quasar/extras": "^1.0.0",
     "axios": "^1.2.1",
     "collect.js": "^4.36.1",
@@ -27,11 +32,20 @@
   "devDependencies": {
     "@quasar/app-vite": "^1.0.0",
     "autoprefixer": "^10.4.2",
+    "electron": "^28.1.0",
+    "electron-packager": "^17.1.2",
     "eslint": "^8.10.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-vue": "^9.0.0",
     "postcss": "^8.4.14",
-    "prettier": "^2.5.1"
+    "prettier": "^2.5.1",
+    "workbox-build": "^7.0.0",
+    "workbox-cacheable-response": "^7.0.0",
+    "workbox-core": "^7.0.0",
+    "workbox-expiration": "^7.0.0",
+    "workbox-precaching": "^7.0.0",
+    "workbox-routing": "^7.0.0",
+    "workbox-strategies": "^7.0.0"
   },
   "engines": {
     "node": "^18 || ^16 || ^14.19",

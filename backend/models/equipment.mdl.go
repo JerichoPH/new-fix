@@ -121,7 +121,6 @@ func (receiver *EquipmentMdl) getStatusText() {
 		}
 	}
 	receiver.StatusText = statusText
-	return
 }
 
 // canIWorkshopOut 获取是否可以出所标记

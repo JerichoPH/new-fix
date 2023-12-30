@@ -161,6 +161,7 @@ func (UpgradeCmd) init() []string {
 		{Name: "工区管理", Uri: "/organization/workArea", Icon: "fa fa-list", PageRouteName: "organizationWorkArea:index", ParentUuid: rbacMenu.Uuid},
 		{Name: "线别管理", Uri: "/organization/line", Icon: "fa fa-list", PageRouteName: "organizationLine:index", ParentUuid: rbacMenu.Uuid},
 		{Name: "故障类型管理", Uri: "/breakdown/type", Icon: "fa fa-list", PageRouteName: "breakdownType:index", ParentUuid: rbacMenu.Uuid},
+		{Name: "厂家管理", Uri: "/factory", Icon: "fa fa-list", PageRouteName: "vactory:index", ParentUuid: rbacMenu.Uuid},
 	})
 	rbacMenu = &models.RbacMenuMdl{Name: "系统管理", Icon: "fa fa-cogs"}
 	models.NewRbacMenuMdl().GetDb("").Create(rbacMenu)

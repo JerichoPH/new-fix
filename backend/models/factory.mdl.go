@@ -10,7 +10,7 @@ type FactoryMdl struct {
 	MySqlMdl
 	UniqueCode string          `gorm:"index;type:char(5);not null;comment:代码;" json:"unique_code"`
 	Name       string          `gorm:"index;type:varchar(64);not null;comment:名称;" json:"name"`
-	Equipments []*EquipmentMdl `gorm:"foreignKey:factory_uuid;references:uuid;comment:厂家;" json:"factory"`
+	Equipments []*EquipmentMdl `gorm:"foreignKey:factory_uuid;references:uuid;comment:厂家;" json:"equipments"`
 }
 
 // TableName 厂家表名称
