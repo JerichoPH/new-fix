@@ -17,4 +17,5 @@ func (RoutHandle) Register(engine *gin.Engine) {
 	NewOrganizationRout().Load(engine)  // 组织结构
 	NewBreakdownRout().Load(engine)     // 故障
 	NewFactoryRout().Load(engine)       // 厂家
+	NewSourceRout().Load(engine)        // 来源
 }

@@ -1,4 +1,5 @@
 import { api } from "src/boot/axios";
+import collect from "collect.js";
 
 const urlPrefix = "/rbac";
 
@@ -54,7 +55,7 @@ export const ajaxDestroyRbacRole = (uuid) => {
  * @returns
  */
 export const ajaxDestroyRbacRoles = (uuids) => {
-  if (uuids.length === 0) return Promise.reject("角色编号列表不能为空");
+  if (collect(uuids).isEmpty()) return Promise.reject("请选择需要删除的角色");
   return api.post(`${urlPrefix}/role/destroyMany`, { uuids });
 };
 
@@ -110,7 +111,7 @@ export const ajaxDestroyRbacPermission = (uuid) => {
  * @returns
  */
 export const ajaxDestroyRbacPermissions = (uuids) => {
-  if (uuids.length === 0) return Promise.reject("权限编号列表不能为空");
+  if(collect(uuids).isEmpty()) return Promise.reject("请选择需要删除的权限");
   return api.post(`${urlPrefix}/permission/destroyMany`, { uuids });
 };
 
@@ -167,6 +168,6 @@ export const ajaxDestroyRbacMenu = (uuid) => {
  * @returns
  */
 export const ajaxDestroyRbacMenus = (uuids) => {
-  if (uuids.length === 0) return Promise.reject("菜单编号列表不能为空");
+  if (collect(uuids).isEmpty()) return Promise.reject("请选择需要删除的菜单");
   return api.post(`${urlPrefix}/menu/destroyMany`, { uuids });
 };

@@ -1,4 +1,5 @@
 import { api } from "src/boot/axios";
+import collect from "collect.js";
 
 const urlPrefix = "/account";
 
@@ -55,7 +56,7 @@ export const ajaxDestroyAccount = (uuid) => {
  * @returns
  */
 export const ajaxDestroyAccounts = (uuids) => {
-  if (uuids.length === 0) return Promise.reject("账号编号列表不能为空");
+  if (collect(uuids).isEmpty()) return Promise.reject("请选择需要删除的用户");
   return api.post(`${urlPrefix}/destroyMany`, { uuids });
 };
 

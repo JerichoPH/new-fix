@@ -136,6 +136,21 @@ func (UpgradeCmd) init() []string {
 			{Name: "删除故障类型", Method: "delete", Uri: "/api/breakdown/type/:uuid"},
 			{Name: "故障日志列表", Method: "get", Uri: "/api/breakdown/log"},
 			{Name: "故障日志详情", Method: "get", Uri: "/api/breakdown/log/:uuid"},
+			{Name: "厂家列表", Method: "get", Uri: "/api/factory"},
+			{Name: "厂家详情", Method: "get", Uri: "/api/factory/:uuid"},
+			{Name: "新建厂家", Method: "post", Uri: "/api/factory"},
+			{Name: "编辑厂家", Method: "put", Uri: "/api/factory/:uuid"},
+			{Name: "删除厂家", Method: "delete", Uri: "/api/factory/:uuid"},
+			{Name: "来源类型列表", Method: "get", Uri: "/api/source/type"},
+			{Name: "来源类型详情", Method: "get", Uri: "/api/source/type/:uuid"},
+			{Name: "新建来源类型", Method: "post", Uri: "/api/source/type"},
+			{Name: "编辑来源类型", Method: "put", Uri: "/api/source/type/:uuid"},
+			{Name: "删除来源类型", Method: "delete", Uri: "/api/source/type/:uuid"},
+			{Name: "来源项目列表", Method: "get", Uri: "/api/source/project"},
+			{Name: "来源项目详情", Method: "get", Uri: "/api/source/project/:uuid"},
+			{Name: "新建来源项目", Method: "post", Uri: "/api/source/project"},
+			{Name: "编辑来源项目", Method: "put", Uri: "/api/source/project/:uuid"},
+			{Name: "删除来源项目", Method: "delete", Uri: "/api/source/project/:uuid"},
 		})
 	if ret = models.NewRbacPermissionMdl().GetDb("").Create(&rbacPermissions); ret.Error != nil {
 		std.EchoLineWrong(fmt.Sprintf("错误：%v", ret.Error.Error()))
@@ -161,7 +176,9 @@ func (UpgradeCmd) init() []string {
 		{Name: "工区管理", Uri: "/organization/workArea", Icon: "fa fa-list", PageRouteName: "organizationWorkArea:index", ParentUuid: rbacMenu.Uuid},
 		{Name: "线别管理", Uri: "/organization/line", Icon: "fa fa-list", PageRouteName: "organizationLine:index", ParentUuid: rbacMenu.Uuid},
 		{Name: "故障类型管理", Uri: "/breakdown/type", Icon: "fa fa-list", PageRouteName: "breakdownType:index", ParentUuid: rbacMenu.Uuid},
-		{Name: "厂家管理", Uri: "/factory", Icon: "fa fa-list", PageRouteName: "vactory:index", ParentUuid: rbacMenu.Uuid},
+		{Name: "厂家管理", Uri: "/factory", Icon: "fa fa-list", PageRouteName: "factory:index", ParentUuid: rbacMenu.Uuid},
+		{Name: "来源类型管理", Uri: "/source/type", Icon: "fa fa-list", PageRouteName: "sourceType:index", ParentUuid: rbacMenu.Uuid},
+		{Name: "来源项目管理", Uri: "/source/project", Icon: "fa fa-list", PageRouteName: "sourceProject:index", ParentUuid: rbacMenu.Uuid},
 	})
 	rbacMenu = &models.RbacMenuMdl{Name: "系统管理", Icon: "fa fa-cogs"}
 	models.NewRbacMenuMdl().GetDb("").Create(rbacMenu)

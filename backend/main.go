@@ -116,6 +116,10 @@ var autoMigrateList = []any{
 	models.OrganizationLineMdl{},      // 组织结构-线别
 	models.BreakdownTypeMdl{},         // 故障-故障类型
 	models.BreakdownLogMdl{},          // 故障-故障日志
+	models.SourceTypeMdl{},            // 来源-来源类型
+	models.SourceProjectMdl{},         // 来源-来源项目
+	models.FactoryMdl{},               // 厂家
+	models.EquipmentMdl{},             // 器材
 }
 
 // 执行command命令

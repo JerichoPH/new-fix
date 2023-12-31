@@ -1,4 +1,5 @@
 import { api } from "src/boot/axios";
+import collect from "collect.js";
 
 const urlPrefix = "/equipmentKind";
 
@@ -54,7 +55,7 @@ export const ajaxDestroyEquipmentKindCategory = (uuid) => {
  * @returns
  */
 export const ajaxDestroyEquipmentKindCategories = (uuids) => {
-  if (uuids.length === 0) return Promise.reject("器材种类编号列表不能为空");
+  if (collect(uuids).isEmpty()) return Promise.reject("请选择需要删除的器材种类");
   return api.post(`${urlPrefix}/category/destroyMany`, { uuids });
 };
 
@@ -111,7 +112,7 @@ export const ajaxDestroyEquipmentKindType = (uuid) => {
  * @returns
  */
 export const ajaxDestroyEquipmentKindTypes = (uuids) => {
-  if (uuids.length === 0) return Promise.reject("器材类型编号列表不能为空");
+  if (collect(uuids).isEmpty()) return Promise.reject("请选择需要删除的器材类型");
   return api.post(`${urlPrefix}/type/destroyMany`, { uuids });
 };
 
@@ -167,6 +168,6 @@ export const ajaxDestroyEquipmentKindModel = (uuid) => {
  * @returns
  */
 export const ajaxDestroyEquipmentKindModels = (uuids) => {
-  if (uuids.length === 0) return Promise.reject("器材型号编号列表不能为空");
+  if (collect(uuids).isEmpty()) return Promise.reject("请选择需要删除的器材型号");
   return api.post(`${urlPrefix}/model/destroyMany`, { uuids });
 };

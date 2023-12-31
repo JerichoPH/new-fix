@@ -16,6 +16,7 @@ import rbacRouters from "src/router/rbac";
 import equipmentKindRouters from "src/router/equipmentKind";
 import organizationRouters from "src/router/organization";
 import breakdownRouters from "src/router/breakdown";
+import sourceRouters from "src/router/source";
 
 const routes = [
   ...homeRouters,
@@ -27,6 +28,7 @@ const routes = [
   ...equipmentKindRouters,
   ...organizationRouters,
   ...breakdownRouters,
+  ...sourceRouters,
   // Always leave this as last one,
   // but you can also remove it
   ...errorNotFontRouters,

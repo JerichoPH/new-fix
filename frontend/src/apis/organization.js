@@ -1,4 +1,5 @@
 import { api } from "src/boot/axios";
+import collect  from "collect.js";
 
 const apiPrefix = "/organization";
 
@@ -23,7 +24,7 @@ export const ajaxDestroyOrganizationRailway = (uuid) => {
 };
 
 export const ajaxDestroyOrganizationRailways = (uuids) => {
-  if (uuids.length === 0) return Promise.reject("路局编号列表不能为空");
+  if(collect(uuids).isEmpty()) return Promise.reject("请选择需要删除的路局");
   return api.post(`${apiPrefix}/railway/destroyMany`, { uuids });
 };
 
@@ -48,7 +49,7 @@ export const ajaxDestroyOrganizationParagraph = (uuid) => {
 };
 
 export const ajaxDestroyOrganizationParagraphs = (uuids) => {
-  if (uuids.length === 0) return Promise.reject("路局段编号列表不能为空");
+  if(collect(uuids).isEmpty()) return Promise.reject("请选择需要删除的站段");
   return api.post(`${apiPrefix}/paragraph/destroyMany`, { uuids });
 };
 
@@ -77,7 +78,7 @@ export const ajaxGetOrganizationWorkshopTypeCodesMap = () => {
 };
 
 export const ajaxDestroyOrganizationWorkshops = (uuids) => {
-  if (uuids.length === 0) return Promise.reject("车间编号列表不能为空");
+  if (collect(uuids).isEmpty()) return Promise.reject("请选择需要删除的车间");
   return api.post(`${apiPrefix}/workshop/destroyMany`, { uuids });
 };
 
@@ -102,7 +103,7 @@ export const ajaxDestroyOrganizationStation = (uuid) => {
 };
 
 export const ajaxDestroyOrganizationStations = (uuids) => {
-  if (uuids.length === 0) return Promise.reject("车站编号列表不能为空");
+  if(collect(uuids).isEmpty()) return Promise.reject("请选择需要删除的车站");
   return api.post(`${apiPrefix}/station/destroyMany`, { uuids });
 };
 
@@ -127,7 +128,7 @@ export const ajaxDestroyOrganizationCrossroad = (uuid) => {
 };
 
 export const ajaxDestroyOrganizationCrossroads = (uuids) => {
-  if (uuids.length === 0) return Promise.reject("道口编号列表不能为空");
+  if (collect(uuids).isEmpty()) return Promise.reject("请选择需要删除的道口");
   return api.post(`${apiPrefix}/crossroad/destroyMany`, { uuids });
 };
 
@@ -152,7 +153,7 @@ export const ajaxDestroyOrganizationCenter = (uuid) => {
 };
 
 export const ajaxDestroyOrganizationCenters = (uuids) => {
-  if (uuids.length === 0) return Promise.reject("中心编号列表不能为空");
+  if(collect(uuids).isEmpty()) return Promise.reject("请选择需要删除的中心");
   return api.post(`${apiPrefix}/center/destroyMany`, { uuids });
 };
 
@@ -177,7 +178,7 @@ export const ajaxDestroyOrganizationWorkArea = (uuid) => {
 };
 
 export const ajaxDestroyOrganizationWorkAreas = (uuids) => {
-  if (uuids.length === 0) return Promise.reject("工区编号列表不能为空");
+  if (collect(uuids).isEmpty()) return Promise.reject("请选择需要删除的工区");
   return api.post(`${apiPrefix}/workArea/destroyMany`, { uuids });
 };
 
@@ -206,6 +207,6 @@ export const ajaxDestroyOrganizationLine = (uuid) => {
 };
 
 export const ajaxDestroyOrganizationLines = (uuids) => {
-  if (uuids.length === 0) return Promise.reject("线路编号列表不能为空");
+  if (collect(uuids).isEmpty()) return Promise.reject("请选择需要删除的线别");
   return api.post(`${apiPrefix}/line/destroyMany`, { uuids });
 };

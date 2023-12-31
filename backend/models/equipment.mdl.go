@@ -33,25 +33,28 @@ type EquipmentMdl struct {
 	UseBelongOrganizationLineUuid           string                    `gorm:"index;type:char(36);not null;default:'';comment:使用归属线别;" json:"use_belong_organization_line_uuid"`
 	UseBelongOrganizationLine               *OrganizationLineMdl      `gorm:"foreignKey:use_belong_organization_line_uuid;references:uuid;comment:使用归属线别;" json:"use_belong_organization_line"`
 	StatusCode                              string                    `gorm:"type:enum ('BUY_IN', 'INSTALLING', 'INSTALLED', 'FIXING', 'FIXED', 'RETURN_FACTORY', 'FACTORY_RETURN', 'SCRAP', 'TRANSFER_OUT', 'TRANSFER_IN', 'UNINSTALLED', 'FRMLOSS', 'SEND_REPAIR', 'REPAIRING', 'UNINSTALLED_BREAKDOWN');comment:状态代码" json:"status_code"`
-	// StatusText                              string                    `gorm:"->;type:varchar(128) as ((case entire_instances.status when '' then '无' when 'FIXING' then '待修' when 'FIXED' then '所内成品' when 'TRANSFER_OUT' then '出所在途' when 'INSTALLED' then '上道使用' when 'INSTALLING' then '备品' when 'TRANSFER_IN' then '入所在途' when 'UNINSTALLED' then '下道停用' when 'UNINSTALLED_BREAKDOWN' then '故障停用' when 'SEND_REPAIR' then '送修中' when 'SCRAP' then '报废' else '' end));comment:状态文字描述" json:"status_text"`
-	StatusText                 string             `gorm:"-"`
-	FactoryUuid                string             `gorm:"index;type:char(36);not null;default:'';comment:厂家编号;" json:"factory_uuid"`
-	Factory                    *FactoryMdl        `gorm:"foreignKey:factory_uuid;references:uuid;comment:厂家;" json:"factory"`
-	MadeAt                     *time.Time         `gorm:"type:date;comment:出厂日期;" json:"made_at"`
-	UsageWorkshopInOrderUuid   string             `gorm:"index;type:char(36);not null;default:'';comment:入所单编号;" json:"in_workshop_order_uuid"`
-	UsageWorkshopOutOrderUuid  string             `gorm:"index;type:char(36);not null;default:'';comment:出所单编号;" json:"out_workshop_order_uuid"`
-	UsageWarehouseInOrderUuid  string             `gorm:"index;type:char(36);not null;default:'';comment:入库单编号;" json:"in_warehouse_order_uuid"`
-	UsageWarehouseOutOrderUuid string             `gorm:"index;type:char(36);not null;default:'';comment:出库单编号;" json:"out_warehouse_order_uuid"`
-	UsageRepairOrderUuid       string             `gorm:"index;type:char(36);not null;default:'';comment:检修单编号;" json:"repair_order_uuid"`
-	UsageScrapOrderUuid        string             `gorm:"index;type:char(36);not null;default:'';comment:报废单编号;" json:"scrap_order_uuid"`
-	UsageInstallOrderUuid      string             `gorm:"index;type:char(36);not null;default:'';comment:上道单编号;" json:"install_order_uuid"`
-	UsageUninstallOrderUuid    string             `gorm:"index;type:char(36);not null;default:'';comment:下道单编号;" json:"uninstall_order_uuid"`
-	UsageBeSpareOrderUuid      string             `gorm:"index;type:char(36);not null;default:'';comment:成为备品单编号;" json:"be_spare_order_uuid"`
-	CanIWorkshopOut            bool               `gorm:"-" json:"can_i_workshop_out"`
-	CanIInstall                bool               `gorm:"-" json:"can_i_install"`
-	CanIUninstall              bool               `gorm:"-" json:"can_i_uninstall"`
-	CanIBeSpare                bool               `gorm:"-" json:"can_i_be_spare"`
-	BreakdonwLogs              []*BreakdownLogMdl `gorm:"foreignKey:equipment_uuid;references:uuid;comment:故障日志;" json:"breakdown_logs"`
+	StatusText                              string                    `gorm:"-"`
+	FactoryUuid                             string                    `gorm:"index;type:char(36);not null;default:'';comment:厂家编号;" json:"factory_uuid"`
+	Factory                                 *FactoryMdl               `gorm:"foreignKey:factory_uuid;references:uuid;comment:厂家;" json:"factory"`
+	MadeAt                                  *time.Time                `gorm:"type:date;comment:出厂日期;" json:"made_at"`
+	UsageWorkshopInOrderUuid                string                    `gorm:"index;type:char(36);not null;default:'';comment:入所单编号;" json:"in_workshop_order_uuid"`
+	UsageWorkshopOutOrderUuid               string                    `gorm:"index;type:char(36);not null;default:'';comment:出所单编号;" json:"out_workshop_order_uuid"`
+	UsageWarehouseInOrderUuid               string                    `gorm:"index;type:char(36);not null;default:'';comment:入库单编号;" json:"in_warehouse_order_uuid"`
+	UsageWarehouseOutOrderUuid              string                    `gorm:"index;type:char(36);not null;default:'';comment:出库单编号;" json:"out_warehouse_order_uuid"`
+	UsageRepairOrderUuid                    string                    `gorm:"index;type:char(36);not null;default:'';comment:检修单编号;" json:"repair_order_uuid"`
+	UsageScrapOrderUuid                     string                    `gorm:"index;type:char(36);not null;default:'';comment:报废单编号;" json:"scrap_order_uuid"`
+	UsageInstallOrderUuid                   string                    `gorm:"index;type:char(36);not null;default:'';comment:上道单编号;" json:"install_order_uuid"`
+	UsageUninstallOrderUuid                 string                    `gorm:"index;type:char(36);not null;default:'';comment:下道单编号;" json:"uninstall_order_uuid"`
+	UsageBeSpareOrderUuid                   string                    `gorm:"index;type:char(36);not null;default:'';comment:成为备品单编号;" json:"be_spare_order_uuid"`
+	CanIWorkshopOut                         bool                      `gorm:"-" json:"can_i_workshop_out"`
+	CanIInstall                             bool                      `gorm:"-" json:"can_i_install"`
+	CanIUninstall                           bool                      `gorm:"-" json:"can_i_uninstall"`
+	CanIBeSpare                             bool                      `gorm:"-" json:"can_i_be_spare"`
+	BreakdonwLogs                           []*BreakdownLogMdl        `gorm:"foreignKey:equipment_uuid;references:uuid;comment:故障日志;" json:"breakdown_logs"`
+	SourceTypeUuid                          string                    `gorm:"type:char(36);not null;default:'';comment:所属来源类型uuid;" json:"source_type_uuid"`
+	SourceType                              *SourceTypeMdl            `gorm:"foreignKey:source_type_uuid;references:uuid;comment:所属来源类型;" json:"source_type"`
+	SourceProjectUuid                       string                    `gorm:"type:char(36);not null;default:'';comment:所属来源项目uuid;" json:"source_project_uuid"`
+	SourceProject                           *SourceProjectMdl         `gorm:"foreignKey:source_project_uuid;references:uuid;comment:所属来源项目;" json:"source_project"`
 }
 
 // TableName 器材表名称

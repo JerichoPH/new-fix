@@ -1,4 +1,5 @@
 import { api } from "/src/boot/axios";
+import collect from "collect.js";
 
 const urlPrefix = "/breakdown";
 
@@ -23,7 +24,7 @@ export const ajaxDestroyBreakdownType = (uuid) => {
 };
 
 export const ajaxDestroyBreakdownTypes = (uuids) => {
-  if (uuids.length === 0) return Promise.reject("故障类型编号列表不能为空");
+  if (collect(uuids).isEmpty()) return Promise.reject("请选择需要删除的故障类型");
   return api.post(`${urlPrefix}/type/destroyMany`, { uuids });
 };
 
