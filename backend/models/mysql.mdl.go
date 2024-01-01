@@ -50,21 +50,6 @@ type MySqlMdl struct {
 	model                    interface{}
 }
 
-// JoinString 生成join语句
-func JoinString(slaveTableName, slaveShortTableName, slaveFieldName, masterFieldName string) string {
-	return fmt.Sprintf("join %s %s on %s = %s", slaveTableName, slaveShortTableName, slaveFieldName, masterFieldName)
-}
-
-// LeftJoinString 生成left join语句
-func LeftJoinString(slaveTableName, slaveShortTableName, slaveFieldName, masterFieldName string) string {
-	return "left " + JoinString(slaveTableName, slaveShortTableName, slaveFieldName, masterFieldName)
-}
-
-// RightJoinString 生成right join语句
-func RightJoinString(slaveTableName, slaveShortTableName, slaveFieldName, masterFieldName string) string {
-	return "right " + JoinString(slaveTableName, slaveShortTableName, slaveFieldName, masterFieldName)
-}
-
 // NewMySqlMdl 构造函数
 func NewMySqlMdl() *MySqlMdl {
 	return &MySqlMdl{}

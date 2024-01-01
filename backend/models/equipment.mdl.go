@@ -32,20 +32,22 @@ type EquipmentMdl struct {
 	UseBelongOrganizationWorkArea           *OrganizationWorkAreaMdl  `gorm:"foreignKey:use_belong_organization_work_area_uuid;references:uuid;comment:使用归属工区;" json:"use_belong_organization_work_area"`
 	UseBelongOrganizationLineUuid           string                    `gorm:"index;type:char(36);not null;default:'';comment:使用归属线别;" json:"use_belong_organization_line_uuid"`
 	UseBelongOrganizationLine               *OrganizationLineMdl      `gorm:"foreignKey:use_belong_organization_line_uuid;references:uuid;comment:使用归属线别;" json:"use_belong_organization_line"`
-	StatusCode                              string                    `gorm:"type:enum ('BUY_IN', 'INSTALLING', 'INSTALLED', 'FIXING', 'FIXED', 'RETURN_FACTORY', 'FACTORY_RETURN', 'SCRAP', 'TRANSFER_OUT', 'TRANSFER_IN', 'UNINSTALLED', 'FRMLOSS', 'SEND_REPAIR', 'REPAIRING', 'UNINSTALLED_BREAKDOWN');comment:状态代码" json:"status_code"`
+	StatusCode                              string                    `gorm:"type:enum ('BUY_IN', 'INSTALLING', 'INSTALLED', 'FIXING', 'FIXED', 'RETURN_FACTORY', 'FACTORY_RETURN', 'SCRAPED', 'TRANSFER_OUT', 'TRANSFER_IN', 'UNINSTALLED', 'FRMLOSS', 'SEND_REPAIR', 'REPAIRING', 'UNINSTALLED_BREAKDOWN');comment:状态代码" json:"status_code"`
 	StatusText                              string                    `gorm:"-"`
-	FactoryUuid                             string                    `gorm:"index;type:char(36);not null;default:'';comment:厂家编号;" json:"factory_uuid"`
+	FactoryUuid                             string                    `gorm:"index;type:char(36);not null;default:'';comment:厂家uuid;" json:"factory_uuid"`
 	Factory                                 *FactoryMdl               `gorm:"foreignKey:factory_uuid;references:uuid;comment:厂家;" json:"factory"`
 	MadeAt                                  *time.Time                `gorm:"type:date;comment:出厂日期;" json:"made_at"`
-	UsageWorkshopInOrderUuid                string                    `gorm:"index;type:char(36);not null;default:'';comment:入所单编号;" json:"in_workshop_order_uuid"`
-	UsageWorkshopOutOrderUuid               string                    `gorm:"index;type:char(36);not null;default:'';comment:出所单编号;" json:"out_workshop_order_uuid"`
-	UsageWarehouseInOrderUuid               string                    `gorm:"index;type:char(36);not null;default:'';comment:入库单编号;" json:"in_warehouse_order_uuid"`
-	UsageWarehouseOutOrderUuid              string                    `gorm:"index;type:char(36);not null;default:'';comment:出库单编号;" json:"out_warehouse_order_uuid"`
-	UsageRepairOrderUuid                    string                    `gorm:"index;type:char(36);not null;default:'';comment:检修单编号;" json:"repair_order_uuid"`
-	UsageScrapOrderUuid                     string                    `gorm:"index;type:char(36);not null;default:'';comment:报废单编号;" json:"scrap_order_uuid"`
-	UsageInstallOrderUuid                   string                    `gorm:"index;type:char(36);not null;default:'';comment:上道单编号;" json:"install_order_uuid"`
-	UsageUninstallOrderUuid                 string                    `gorm:"index;type:char(36);not null;default:'';comment:下道单编号;" json:"uninstall_order_uuid"`
-	UsageBeSpareOrderUuid                   string                    `gorm:"index;type:char(36);not null;default:'';comment:成为备品单编号;" json:"be_spare_order_uuid"`
+	WorkshopInOrderUuid                     string                    `gorm:"index;type:char(36);not null;default:'';comment:入所单uuid;" json:"workshop_in_order_uuid"`
+	WorkshopOutOrderUuid                    string                    `gorm:"index;type:char(36);not null;default:'';comment:出所单uuid;" json:"workshop_out_order_uuid"`
+	WarehouseInOrderUuid                    string                    `gorm:"index;type:char(36);not null;default:'';comment:入库单uuid;" json:"warehouse_in_order_uuid"`
+	WarehouseOutOrderUuid                   string                    `gorm:"index;type:char(36);not null;default:'';comment:出库单uuid;" json:"warehouse_out_order_uuid"`
+	RepairOrderUuid                         string                    `gorm:"index;type:char(36);not null;default:'';comment:检修单uuid;" json:"repair_order_uuid"`
+	ScrapOrderUuid                          string                    `gorm:"index;type:char(36);not null;default:'';comment:报废单uuid;" json:"scrap_order_uuid"`
+	InstallOrderUuid                        string                    `gorm:"index;type:char(36);not null;default:'';comment:上道单uuid;" json:"install_order_uuid"`
+	UninstallOrderUuid                      string                    `gorm:"index;type:char(36);not null;default:'';comment:下道单uuid;" json:"uninstall_order_uuid"`
+	BeSpareOrderUuid                        string                    `gorm:"index;type:char(36);not null;default:'';comment:成为备品单uuid;" json:"be_spare_order_uuid"`
+	WarehouseCellUuid                       string                    `gorm:"index;type:char(36);not null;default:'';comment:库房格位uuid;" json:"usage_warehouse_cell_uuid"`
+	WarehouseCell                           *WarehouseCellMdl         `gorm:"foreignKey:warehouse_cell_uuid;references:uuid;comment:库房格位;" json:"warehouse_cell"`
 	CanIWorkshopOut                         bool                      `gorm:"-" json:"can_i_workshop_out"`
 	CanIInstall                             bool                      `gorm:"-" json:"can_i_install"`
 	CanIUninstall                           bool                      `gorm:"-" json:"can_i_uninstall"`
@@ -64,7 +66,27 @@ func (EquipmentMdl) TableName() string {
 
 // NewEquipmentMdl 新建器材模型
 func NewEquipmentMdl() *MySqlMdl {
-	return NewMySqlMdl().SetModel(EquipmentMdl{})
+	return NewMySqlMdl().
+		SetModel(EquipmentMdl{}).
+		SetScopes(
+			EquipmentMdl{}.ScopeStatusCodeWithoutScrapd,
+			EquipmentMdl{}.ScopeWithAccountAuth,
+		)
+}
+
+// ScopeStatusCodeWithoutScrapd 获取状态代码不为SCRAPED的作用域
+func (receiver EquipmentMdl) ScopeStatusCodeWithoutScrapd(db *gorm.DB) *gorm.DB {
+	return db.Where("status_code <> 'SCRAPED'")
+}
+
+// ScopeStatusCodeAll 获取所有状态代码的作用域
+func (receiver EquipmentMdl) ScopeStatusCodeAll(db *gorm.DB) *gorm.DB {
+	return db.Where("status_code <> ''")
+}
+
+// ScopeWithAccountAuth 获取账号身份作用域
+func (receiver EquipmentMdl) ScopeWithAccountAuth(db *gorm.DB) *gorm.DB {
+	return db
 }
 
 // GetListByQuery 根据Query获取器材列表
