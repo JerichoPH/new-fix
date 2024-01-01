@@ -50,5 +50,5 @@ export const ajaxDestroySourceProject = (uuid) => {
 
 export const ajaxDestroySourceProjects = (uuids) => {
   if (collect(uuids).isEmpty()) new Promise.reject("请选择要删除的来源项目");
-  return api.delete(`${urlPrefix}/project`, { uuids });
+  return api.post(`${urlPrefix}/project/destroyMany`, { uuids });
 };

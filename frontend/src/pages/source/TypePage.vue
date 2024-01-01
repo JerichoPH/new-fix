@@ -111,29 +111,29 @@
   </q-dialog>
   <!-- 编辑来源类型 -->
   <q-dialog v-model="alertEditSourceType">
-      <q-card style="width: 800px">
-        <q-card-section>
-          <div class="text-h6">编辑来源类型</div>
+    <q-card style="width: 800px">
+      <q-card-section>
+        <div class="text-h6">编辑来源类型</div>
+      </q-card-section>
+      <q-form class="q-gutter-md" @submit.prevent="fnUpdateSourceType">
+        <q-card-section class="q-pt-none">
+          <div class="row">
+            <div class="col">
+              <q-input outlined clearable lazy-rules v-model="uniqueCode_alertEditSourceType" label="代码" :rules="[]" />
+            </div>
+          </div>
+          <div class="row q-mt-md">
+            <div class="col">
+              <q-input outlined clearable lazy-rules v-model="name_alertEditSourceType" label="名称" :rules="[]" />
+            </div>
+          </div>
         </q-card-section>
-        <q-form class="q-gutter-md" @submit.prevent="fnUpdateSourceType">
-          <q-card-section class="q-pt-none">
-            <div class="row">
-              <div class="col">
-                <q-input outlined clearable lazy-rules v-model="uniqueCode_alertEditSourceType" label="代码" :rules="[]" />
-              </div>
-            </div>
-            <div class="row q-mt-md">
-              <div class="col">
-                <q-input outlined clearable lazy-rules v-model="name_alertEditSourceType" label="名称" :rules="[]" />
-              </div>
-            </div>
-          </q-card-section>
-          <q-card-actions align="right">
-            <q-btn type="submit" label="确定" icon="check" color="secondary" v-close-popup />
-          </q-card-actions>
-        </q-form>
-      </q-card>
-    </q-dialog>
+        <q-card-actions align="right">
+          <q-btn type="submit" label="确定" icon="check" color="secondary" v-close-popup />
+        </q-card-actions>
+      </q-form>
+    </q-card>
+  </q-dialog>
 </template>
 <script setup>
 import { ref, onMounted } from "vue";
@@ -186,6 +186,7 @@ const fnResetSearch = () => {
 
 const fnSearch = () => {
   ajaxGetSourceTypes({
+    "@~[]": ["SourceProjects", "Equipments"],
     unique_code: uniqueCode_search.value,
     name: name_search.value,
   })
@@ -240,7 +241,8 @@ const fnOpenAlertEditCreateSourceType = params => {
       alertEditSourceType.value = true;
     })
     .catch(e => {
-      errorNotify(e.msg)});
+      errorNotify(e.msg)
+    });
 };
 
 const fnUpdateSourceType = () => {

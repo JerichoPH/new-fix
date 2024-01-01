@@ -67,9 +67,14 @@ func (receiver SourceProjectMdl) GetListByQuery(ctx *gin.Context) *gorm.DB {
 			"name": "sp.name like ?",
 		}).
 		SetWheresDateBetween("sp.created_at", "sp.updated_at", "sp.deleted_at").
-		SetWheresExtraHasValue(map[string]func(string, *gorm.DB) *gorm.DB{}).
+		SetWheresExtraHasValue(map[string]func(string, *gorm.DB) *gorm.DB{
+			"source_type_uuid": func(value string, db *gorm.DB) *gorm.DB {
+				return db.Where("sp.source_type_uuid = ?", value)
+			},
+		}).
 		SetWheresExtraHasValues(map[string]func([]string, *gorm.DB) *gorm.DB{}).
 		SetCtx(ctx).
 		GetDbUseQuery("").
-		Table("source_projects as sp")
+		Table("source_projects as sp").
+		Joins("join source_types st on st.uuid = sp.source_type_uuid")
 }
