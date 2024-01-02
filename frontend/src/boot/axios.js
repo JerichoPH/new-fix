@@ -39,7 +39,7 @@ export default boot(({ app, router }) => {
       if (e.response.status === 401) {
         // 如果响应的状态码为 401（未登陆）
         localStorage.removeItem("auth.token"); // 从 localStorage 中删除 token
-        router.push("auth:login");
+        router.push("/auth/login");
       } else {
         console.error("网络请求错误：", e);
         return Promise.reject({

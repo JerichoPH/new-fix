@@ -124,8 +124,8 @@
 
   <!-- 对话框 -->
   <!-- 新建菜单对话框 -->
-  <q-dialog v-model="alertCreateRbacMenu">
-    <q-card :style="{minWidth: '40vw'}">
+  <q-dialog v-model="alertCreateRbacMenu" no-backdrop-dismiss>
+    <q-card :style="{minWidth: '450px'}">
       <q-card-section>
         <div class="text-h6">新建菜单</div>
       </q-card-section>
@@ -147,13 +147,14 @@
         </q-form>
       </q-card-section>
       <q-card-actions align="right">
+        <q-btn type="submit" label="关闭" v-close-popup />
         <q-btn type="button" label="确定" icon="check" color="secondary" @click="fnStoreRbacMenu" v-close-popup />
       </q-card-actions>
     </q-card>
   </q-dialog>
   <!-- 编辑菜单对话框 -->
-  <q-dialog v-model="alertEditRbacMenu">
-    <q-card :style="{minWidth: '40vw'}">
+  <q-dialog v-model="alertEditRbacMenu" no-backdrop-dismiss>
+    <q-card :style="{minWidth: '450px'}">
       <q-card-section>
         <div class="text-h6">编辑菜单</div>
       </q-card-section>
@@ -178,6 +179,7 @@
         </q-form>
       </q-card-section>
       <q-card-actions align="right">
+        <q-btn type="submit" label="关闭" v-close-popup />
         <q-btn type="button" label="确定" icon="check" color="secondary" @click="fnUpdateRbacMenu" v-close-popup />
       </q-card-actions>
     </q-card>

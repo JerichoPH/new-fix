@@ -81,7 +81,7 @@
                     props.row.organizationParagraph.name,
                     props.row.organizationWorkshop.name,
                   ].join(" - ") }}</q-td>
-                  <q-td key="organizationWorkArea" :props="props">{{ props.row.organizationWorkArea.name }}</q-td>
+                  <q-td key="organizationWorkArea" :props="props">{{ props.row.organizationWorkArea ? props.row.organizationWorkArea.name : '' }}</q-td>
                   <q-td key="operation" :props="props">
                     <q-btn-group>
                       <q-btn @click="fnOpenAlertEditWarehouseStorehouse(props.row.operation)" color="warning" icon="edit">
@@ -103,8 +103,8 @@
 
   <!-- 弹窗 -->
   <!-- 新建仓库-库房弹窗 -->
-  <q-dialog v-model="alertCreateWarehouseStorehouse">
-    <q-card :style="{ minWidth: '40vw' }">
+  <q-dialog v-model="alertCreateWarehouseStorehouse" no-backdrop-dismiss>
+    <q-card :style="{ minWidth: '450px' }">
       <q-card-section>
         <div class="text-h6">新建仓库-库房</div>
       </q-card-section>
@@ -138,14 +138,15 @@
           </div>
         </q-card-section>
         <q-card-actions align="right">
+          <q-btn type="submit" label="关闭" v-close-popup />
           <q-btn type="submit" label="确定" icon="check" color="secondary" v-close-popup />
         </q-card-actions>
       </q-form>
     </q-card>
   </q-dialog>
   <!-- 编辑仓库-库房弹窗 -->
-  <q-dialog v-model="alertEditWarehouseStorehouse">
-    <q-card :style="{minWidth: '40vw'}">
+  <q-dialog v-model="alertEditWarehouseStorehouse" no-backdrop-dismiss>
+    <q-card :style="{minWidth: '450px'}">
       <q-card-section>
         <div class="text-h6">编辑仓库-库房</div>
       </q-card-section>
@@ -178,6 +179,7 @@
           </div>
         </q-card-section>
         <q-card-actions align="right">
+          <q-btn type="submit" label="关闭" v-close-popup />
           <q-btn type="submit" label="确定" icon="check" color="warning" v-close-popup />
         </q-card-actions>
       </q-form>
@@ -342,11 +344,12 @@ const fnOpenAlertEditWarehouseStorehouse = (params) => {
       organizationRailwayUuid_alertEditWarehouseStorehouse.value = res.content.warehouse_storehouse.organization_workshop.organization_paragraph.organization_railway.uuid;
       organizationParagraphUuid_alertEditWarehouseStorehouse.value = res.content.warehouse_storehouse.organization_workshop.organization_paragraph.uuid;
       organizationWorkshopUuid_alertEditWarehouseStorehouse.value = res.content.warehouse_storehouse.organization_workshop.uuid;
-      organizationWorkAreaUuid_alertEditWarehouseStorehouse.value = res.content.warehouse_storehouse.organization_work_area.uuid;
+      organizationWorkAreaUuid_alertEditWarehouseStorehouse.value = res.content.warehouse_storehouse.organization_work_area ? res.content.warehouse_storehouse.organization_work_area.uuid : '';
 
       alertEditWarehouseStorehouse.value = true;
     })
     .catch(e => {
+      console.log('err',e);
       errorNotify(e.msg);
     });
 };

@@ -107,7 +107,7 @@
   <!-- 对话框 -->
   <!-- 新建用户对话框 -->
   <q-dialog v-model="alertCreateAccount">
-    <q-card :style="{minWidth: '40vw'}">
+    <q-card :style="{minWidth: '450px'}">
       <q-card-section>
         <div class="text-h6">新建用户</div>
       </q-card-section>
@@ -136,7 +136,7 @@
   </q-dialog>
   <!-- 编辑用户对话框 -->
   <q-dialog v-model="alertEditAccount">
-    <q-card :style="{minWidth: '40vw'}">
+    <q-card :style="{minWidth: '450px'}">
       <q-card-section>
         <div class="text-h6">编辑用户</div>
       </q-card-section>
@@ -192,7 +192,7 @@
   </q-dialog>
   <!-- 编辑密码对话框 -->
   <q-dialog v-model="alertEditPassword">
-    <q-card :style="{minWidth: '40vw'}">
+    <q-card :style="{minWidth: '450px'}">
       <q-card-section>
         <div class="text-h6">编辑密码</div>
       </q-card-section>

@@ -101,8 +101,8 @@
 
   <!-- 弹窗 -->
   <!-- 新建站段弹窗 -->
-  <q-dialog v-model="alertCreateOrganizationParagraph">
-    <q-card :style="{minWidth: '40vw'}">
+  <q-dialog v-model="alertCreateOrganizationParagraph" no-backdrop-dismiss>
+    <q-card :style="{minWidth: '450px'}">
       <q-card-section>
         <div class="text-h6">新建站段</div>
       </q-card-section>
@@ -119,14 +119,15 @@
           </div>
         </q-card-section>
         <q-card-actions align="right">
+          <q-btn type="submit" label="关闭" v-close-popup />
           <q-btn type="submit" label="确定" icon="check" color="secondary" v-close-popup />
         </q-card-actions>
       </q-form>
     </q-card>
   </q-dialog>
   <!-- 编辑站段弹窗 -->
-  <q-dialog v-model="alertEditOrganizationParagraph">
-    <q-card :style="{minWidth: '40vw'}">
+  <q-dialog v-model="alertEditOrganizationParagraph" no-backdrop-dismiss>
+    <q-card :style="{minWidth: '450px'}">
       <q-card-section>
         <div class="text-h6">编辑站段</div>
       </q-card-section>
@@ -145,6 +146,7 @@
           </div>
         </q-card-section>
         <q-card-actions align="right">
+          <q-btn type="submit" label="关闭" v-close-popup />
           <q-btn type="submit" label="确定" icon="check" color="warning" v-close-popup />
         </q-card-actions>
       </q-form>

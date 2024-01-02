@@ -116,7 +116,7 @@
   <!-- 对话框 -->
   <!-- 新建权限对话框 -->
   <q-dialog v-model="alertCreateRbacPermission">
-    <q-card :style="{minWidth: '40vw'}">
+    <q-card :style="{minWidth: '450px'}">
       <q-card-section>
         <div class="text-h6">新建权限</div>
       </q-card-section>
@@ -141,7 +141,7 @@
   </q-dialog>
   <!-- 编辑权限对话框 -->
   <q-dialog v-model="alertEditRbacPermission">
-    <q-card :style="{minWidth: '40vw'}">
+    <q-card :style="{minWidth: '450px'}">
       <q-card-section>
         <div class="text-h6">编辑权限</div>
       </q-card-section>

@@ -97,8 +97,8 @@
 
   <!-- 弹窗 -->
   <!-- 新建路局弹窗 -->
-  <q-dialog v-model="alertCreateOrganizationRailway">
-    <q-card :style="{minWidth: '40vw'}">
+  <q-dialog v-model="alertCreateOrganizationRailway" no-backdrop-dismiss>
+    <q-card :style="{minWidth: '450px'}">
       <q-card-section>
         <div class="text-h6">新建路局</div>
       </q-card-section>
@@ -124,14 +124,15 @@
           </div>
         </q-card-section>
         <q-card-actions align="right">
+          <q-btn type="submit" label="关闭" v-close-popup />
           <q-btn type="submit" label="确定" icon="check" color="secondary" v-close-popup />
         </q-card-actions>
       </q-form>
     </q-card>
   </q-dialog>
   <!-- 编辑路局弹窗 -->
-  <q-dialog v-model="alertEditOrganizationrailway">
-    <q-card :style="{minWidth: '40vw'}">
+  <q-dialog v-model="alertEditOrganizationrailway" no-backdrop-dismiss>
+    <q-card :style="{minWidth: '450px'}">
       <q-card-section>
         <div class="text-h6">编辑路局</div>
       </q-card-section>
@@ -157,6 +158,7 @@
           </div>
         </q-card-section>
         <q-card-actions align="right">
+          <q-btn type="submit" label="关闭" v-close-popup />
           <q-btn type="submit" label="确定" icon="check" color="warning" v-close-popup />
         </q-card-actions>
       </q-form>
