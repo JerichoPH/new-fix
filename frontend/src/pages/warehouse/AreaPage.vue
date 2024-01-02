@@ -146,12 +146,58 @@
           </div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn type="submit" label="关闭" v-close-popup />
+          <q-btn type="button" label="关闭" v-close-popup />
           <q-btn type="submit" label="确定" icon="check" color="secondary" />
         </q-card-actions>
       </q-form>
     </q-card>
   </q-dialog>
+  <!-- 编辑仓库-库区弹窗-->
+  <q-dialog v-model="alertEditWarehouseArea" no-backdrop-dismiss>
+      <q-card :style="{ minWidth: '450px' }">
+        <q-card-section>
+          <div class="text-h6">编辑仓库-库区</div>
+        </q-card-section>
+        <q-form class="q-gutter-md" @submit.prevent="fnUpdateWarehouseArea">
+          <q-card-section class="q-pt-none">
+            <div class="row">
+              <div class="col">
+                <q-input outlined clearable lazy-rules v-model="name_alertEditWarehouseArea" label="名称" :rules="[]" />
+              </div>
+            </div>
+            <div class="row q-mt-md">
+              <div class="col">
+                <sel-organization-railway_alert-edit label-name="所属路局" :ajax-params="{}" />
+              </div>
+            </div>
+            <div class="row q-mt-md">
+              <div class="col">
+                <sel-organization-paragraph_alert-edit label-name="所属站段" :ajax-params="{}" />
+              </div>
+            </div>
+            <div class="row q-mt-dq">
+              <div class="col">
+                <sel-organization-workshop_alert-edit label-name="所属车间" :ajax-params="{}" />
+              </div>
+            </div>
+            <div class="row q-mt-md">
+              <div class="col">
+                <sel-organization-work-area_alert-edit label-name="所属工区" :ajax-params="{}" />
+              </div>
+            </div>
+            <div class="row q-mt-md">
+              <div class="col">
+                <sel-warehouse-storehouse_alert-edit label-name="所属仓库-库房" :ajax-params="{}" />
+              </div>
+            </div>
+          </q-card-section>
+          <q-card-actions align="right">
+            <q-btn type="button" label="关闭" v-close-popup />
+            <q-btn type="submit" label="确定" icon="check" color="warning" />
+          </q-card-actions>
+        </q-form>
+      </q-card>
+    </q-dialog>
 </template>
 <script setup>
 import { ref, onMounted, provide } from "vue";
@@ -186,6 +232,7 @@ import SelOrganizationRailway_alertEdit from "src/components/SelOrganizationRail
 import SelOrganizationParagraph_alertEdit from "src/components/SelOrganizationParagraph_alertEdit.vue";
 import SelOrganizationWorkshop_alertEdit from "src/components/SelOrganizationWorkshop_alertEdit.vue";
 import SelOrganizationWorkArea_alertEdit from "src/components/SelOrganizationWorkArea_alertEdit.vue";
+import SelWarehouseStorehouse_alertEdit from "src/components/SelWarehouseStorehouse_alertEdit.vue";
 
 // 搜索栏数据
 const name_search = ref("");
@@ -218,6 +265,21 @@ const organizationWorkAreaUuid_alertCreateWarehouseArea = ref("");
 provide("organizationWorkAreaUuid_alertCreate", organizationWorkAreaUuid_alertCreateWarehouseArea);
 const warehouseStorehouseUuid_alertCreateWarehouseArea = ref("");
 provide("warehouseStorehouseUuid_alertCreate", warehouseStorehouseUuid_alertCreateWarehouseArea);
+
+// 编辑库房-库区弹窗数据
+const alertEditWarehouseArea = ref(false);
+const currentUuid = ref("");
+const name_alertEditWarehouseArea = ref("");
+const organizationRailwayUuid_alertEditWarehouseArea = ref("");
+provide("organizationRailwayUuid_alertEdit", organizationRailwayUuid_alertEditWarehouseArea);
+const organizationParagraphUuid_alertEditWarehouseArea = ref("");
+provide("organizationParagraphUuid_alertEdit", organizationParagraphUuid_alertEditWarehouseArea);
+const organizationWorkshopUuid_alertEditWarehouseArea = ref("");
+provide("organizationWorkshopUuid_alertEdit", organizationWorkshopUuid_alertEditWarehouseArea);
+const organizationWorkAreaUuid_alertEditWarehouseArea = ref("");
+provide("organizationWorkAreaUuid_alertEdit", organizationWorkAreaUuid_alertEditWarehouseArea);
+const warehouseStorehouseUuid_alertEditWarehouseArea = ref("");
+provide("warehouseStorehouseUuid_alertEdit", warehouseStorehouseUuid_alertEditWarehouseArea);
 
 onMounted(() => fnInit());
 
@@ -294,11 +356,81 @@ const fnStoreWarehouseArea = () => {
     .finally(loading());
 };
 
-const fnOpenAlertEditWarehouseArea = (params) => { };
+const fnOpenAlertEditWarehouseArea = (params) => {
+  if (!params["uuid"]) return;
+  currentUuid.value = params.uuid;
 
-const fnUpdateWarehouseArea = () => { };
+  ajaxGetWarehouseArea(currentUuid.value, {
+    "@~[]": [
+      "WarehouseStorehouse",
+      "WarehouseStorehouse.OrganizationWorkshop",
+      "WarehouseStorehouse.OrganizationWorkArea",
+      "WarehouseStorehouse.OrganizationWorkshop.OrganizationParagraph",
+      "WarehouseStorehouse.OrganizationWorkshop.OrganizationParagraph.OrganizationRailway",
+    ],
+  })
+    .then(res => {
+      console.log('res',res);
+      name_alertEditWarehouseArea.value = res.content.warehouse_area.name;
+      organizationRailwayUuid_alertEditWarehouseArea.value = res.content.warehouse_area.warehouse_storehouse.organization_workshop.organization_paragraph.organization_railway.uuid;
+      organizationParagraphUuid_alertEditWarehouseArea.value = res.content.warehouse_area.warehouse_storehouse.organization_workshop.organization_paragraph.uuid;
+      organizationWorkshopUuid_alertEditWarehouseArea.value = res.content.warehouse_area.warehouse_storehouse.organization_workshop.uuid;
+      organizationWorkAreaUuid_alertEditWarehouseArea.value = res.content.warehouse_area.warehouse_storehouse.organization_work_area.uuid;
+      warehouseStorehouseUuid_alertEditWarehouseArea.value = res.content.warehouse_area.warehouse_storehouse.uuid;
 
-const fnDestroyWarehouseArea = (params) => { };
+      alertEditWarehouseArea.value = true;
+    })
+    .catch(e => {
+      errorNotify(e.msg)
+    });
+};
 
-const fnDestroyWarehouseAreas = () => { };
+const fnUpdateWarehouseArea = () => {
+  if (!currentUuid.value) return;
+
+  const loading = loadingNotify();
+  ajaxUpdateWarehouseArea(currentUuid.value, {
+    name: name_alertEditWarehouseArea.value,
+    warehouse_storehouse_uuid: warehouseStorehouseUuid_alertEditWarehouseArea.value,
+  })
+    .then(res => {
+      successNotify(res.msg);
+      fnSearch();
+      fnResetAlertCreateWarehouseArea();
+
+      alertEditWarehouseArea.value = false;
+    })
+    .catch(e => errorNotify(e.msg))
+    .finally(loading());
+};
+
+const fnDestroyWarehouseArea = (params) => {
+  if (!params["uuid"]) return;
+
+  confirmNotify(destroyActions(() => {
+    const loading = loadingNotify();
+
+    ajaxDestroyWarehouseArea(params.uuid)
+      .then(() => {
+        successNotify("删除成功");
+        fnSearch();
+      })
+      .catch(e => errorNotify(e.msg))
+      .finally(loading());
+  }));
+};
+
+const fnDestroyWarehouseAreas = () => {
+  confirmNotify(destroyActions(() => {
+    const loading = loadingNotify();
+
+    ajaxDestroyWarehouseAreas(collect(selected.value).pluck("uuid").all())
+      .then(() => {
+        successNotify("删除成功");
+        fnSearch();
+      })
+      .catch(e => errorNotify(e.msg))
+      .finally(loading());
+  }));
+};
 </script>

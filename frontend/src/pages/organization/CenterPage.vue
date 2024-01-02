@@ -141,7 +141,7 @@
           </div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn type="submit" label="关闭" v-close-popup />
+          <q-btn type="button" label="关闭" v-close-popup />
           <q-btn type="submit" label="确定" icon="check" color="secondary" />
         </q-card-actions>
       </q-form>
@@ -183,7 +183,7 @@
           </div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn type="submit" label="关闭" v-close-popup />
+          <q-btn type="button" label="关闭" v-close-popup />
           <q-btn type="submit" label="确定" icon="check" color="secondary" />
         </q-card-actions>
       </q-form>

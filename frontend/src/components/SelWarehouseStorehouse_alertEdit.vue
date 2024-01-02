@@ -1,8 +1,8 @@
 <template>
-  <q-select outlined use-input clearable v-model="warehouseStorehouseUuid_alertCreate"
-    :options="warehouseStorehouses_alertCreate" :label="labelName" @filter="fnFilter" emit-value map-options
-    :display-value="warehouseStorehousesMap[warehouseStorehouseUuid_alertCreate]"
-    :disable="!organizationWorkshopUuid_alertCreate && !organizationWorkAreaUuid_alertCreate" />
+  <q-select outlined use-input clearable v-model="warehouseStorehouseUuid_alertEdit"
+    :options="warehouseStorehouses_alertEdit" :label="labelName" @filter="fnFilter" emit-value map-options
+    :display-value="warehouseStorehousesMap[warehouseStorehouseUuid_alertEdit]"
+    :disable="!organizationWorkshopUuid_alertEdit && !organizationWorkAreaUuid_alertEdit" />
 </template>
 <script setup>
 import { inject, defineProps, onMounted, ref, watch } from "vue";
@@ -26,26 +26,26 @@ const props = defineProps({
 
 const labelName = props.labelName;
 const ajaxParams = props.ajaxParams;
-const organizationWorkshopUuid_alertCreate = inject("organizationWorkshopUuid_alertCreate");
-const organizationWorkAreaUuid_alertCreate = inject("organizationWorkAreaUuid_alertCreate");
-const warehouseStorehouseUuid_alertCreate = inject("warehouseStorehouseUuid_alertCreate");
-const warehouseStorehouses_alertCreate = ref([]);
+const organizationWorkshopUuid_alertEdit = inject("organizationWorkshopUuid_alertEdit");
+const organizationWorkAreaUuid_alertEdit = inject("organizationWorkAreaUuid_alertEdit");
+const warehouseStorehouseUuid_alertEdit = inject("warehouseStorehouseUuid_alertEdit");
+const warehouseStorehouses_alertEdit = ref([]);
 const warehouseStorehouses = ref([]);
 const warehouseStorehousesMap = ref({});
 
-watch(organizationWorkshopUuid_alertCreate, () => fnSearch());
-watch(organizationWorkAreaUuid_alertCreate, () => fnSearch());
+watch(organizationWorkshopUuid_alertEdit, () => fnSearch());
+watch(organizationWorkAreaUuid_alertEdit, () => fnSearch());
 
 const fnFilter = (val, update) => {
   if (val === "") {
     update(() => {
-      warehouseStorehouses_alertCreate.value = warehouseStorehouses.value;
+      warehouseStorehouses_alertEdit.value = warehouseStorehouses.value;
     });
     return;
   }
 
   update(() => {
-    warehouseStorehouses_alertCreate.value = warehouseStorehouses.value.filter(
+    warehouseStorehouses_alertEdit.value = warehouseStorehouses.value.filter(
       (v) => v.label.toLowerCase().indexOf(val.toLowerCase()) > -1
     );
   });
@@ -54,17 +54,17 @@ const fnFilter = (val, update) => {
 onMounted(() => fnSearch());
 
 const fnSearch = () => {
-  warehouseStorehouses_alertCreate.value = [];
+  warehouseStorehouses_alertEdit.value = [];
 
-  if (!organizationWorkshopUuid_alertCreate.value && !organizationWorkAreaUuid_alertCreate.value) {
-    warehouseStorehouseUuid_alertCreate.value = "";
+  if (!organizationWorkshopUuid_alertEdit.value && !organizationWorkAreaUuid_alertEdit.value) {
+    warehouseStorehouseUuid_alertEdit.value = "";
     return;
   }
 
   ajaxGetWarehouseStorehouses({
     ...ajaxParams,
-    organization_workshop_uuid: organizationWorkshopUuid_alertCreate.value,
-    organization_work_area_uuid: organizationWorkAreaUuid_alertCreate.value,
+    organization_workshop_uuid: organizationWorkshopUuid_alertEdit.value,
+    organization_work_area_uuid: organizationWorkAreaUuid_alertEdit.value,
   })
     .then((res) => {
       warehouseStorehouses.value = collect(res.content.warehouse_storehouses)
