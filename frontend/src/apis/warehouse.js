@@ -15,8 +15,8 @@ export const ajaxStoreWarehouseStorehouse = (params) => {
   return api.post(`${urlPrefix}/storehouse`, params);
 };
 
-export const ajaxUpdateWarehouseStorehouse = (params) => {
-  return api.put(`${urlPrefix}/storehouse`, params);
+export const ajaxUpdateWarehouseStorehouse = (uuid, params) => {
+  return api.put(`${urlPrefix}/storehouse/${uuid}`, params);
 };
 
 export const ajaxDestroyWarehouseStorehouse = (uuid) => {
@@ -25,7 +25,7 @@ export const ajaxDestroyWarehouseStorehouse = (uuid) => {
 
 export const ajaxDestroyWarehouseStorehouses = (uuids) => {
   if (collect(uuids).isEmpty()) new Promise.reject("请选择要删除的仓库-库房");
-  return api.post(`${urlPrefix}/storehouse`, { uuids });
+  return api.post(`${urlPrefix}/storehouse/destroyMany`, { uuids });
 };
 
 export const ajaxGetWarehouseAreas = (params) => {
@@ -40,8 +40,8 @@ export const ajaxStoreWarehouseArea = (params) => {
   return api.post(`${urlPrefix}/area`, params);
 };
 
-export const ajaxUpdateWarehouseArea = (params) => {
-  return api.put(`${urlPrefix}/area`, params);
+export const ajaxUpdateWarehouseArea = (uuid, params) => {
+  return api.put(`${urlPrefix}/area/${uuid}`, params);
 };
 
 export const ajaxDestroyWarehouseArea = (uuid) => {
@@ -50,7 +50,7 @@ export const ajaxDestroyWarehouseArea = (uuid) => {
 
 export const ajaxDestroyWarehouseAreas = (uuids) => {
   if (collect(uuids).isEmpty()) new Promise.reject("请选择要删除的仓库-库区");
-  return api.post(`${urlPrefix}/area`, { uuids });
+  return api.post(`${urlPrefix}/area/destroyMany`, { uuids });
 };
 
 export const ajaxGetWarehouseShelves = (params) => {
@@ -65,8 +65,8 @@ export const ajaxStoreWarehouseShelf = (params) => {
   return api.post(`${urlPrefix}/shelf`, params);
 };
 
-export const ajaxUpdateWarehouseShelf = (params) => {
-  return api.put(`${urlPrefix}/shelf`, params);
+export const ajaxUpdateWarehouseShelf = (uuid, params) => {
+  return api.put(`${urlPrefix}/shelf/${uuid}`, params);
 };
 
 export const ajaxDestroyWarehouseShelf = (uuid) => {
@@ -75,7 +75,7 @@ export const ajaxDestroyWarehouseShelf = (uuid) => {
 
 export const ajaxDestroyWarehouseShelves = (uuids) => {
   if (collect(uuids).isEmpty()) new Promise.reject("请选择要删除的仓库-货架");
-  return api.post(`${urlPrefix}/shelf`, { uuids });
+  return api.post(`${urlPrefix}/shelf/destroyMany`, { uuids });
 };
 
 export const ajaxGetWarehouseTiers = (params) => {
@@ -94,8 +94,8 @@ export const ajaxStoreWarehouseTiers = (params) => {
   return api.post(`${urlPrefix}/tier/storeMany`, params);
 };
 
-export const ajaxUpdateWarehouseTier = (params) => {
-  return api.put(`${urlPrefix}/tier`, params);
+export const ajaxUpdateWarehouseTier = (uuid, params) => {
+  return api.put(`${urlPrefix}/tier/${uuid}`, params);
 };
 
 export const ajaxDestroyWarehouseTier = (uuid) => {
@@ -104,7 +104,7 @@ export const ajaxDestroyWarehouseTier = (uuid) => {
 
 export const ajaxDestroyWarehouseTiers = (uuids) => {
   if (collect(uuids).isEmpty()) new Promise.reject("请选择要删除的仓库-层");
-  return api.post(`${urlPrefix}/tier`, { uuids });
+  return api.post(`${urlPrefix}/tier/destroyMany`, { uuids });
 };
 
 export const ajaxGetWarehouseCells = (params) => {
@@ -123,8 +123,8 @@ export const ajaxStoreWarehouseCells = (params) => {
   return api.post(`${urlPrefix}/cell/storeMany`, params);
 };
 
-export const ajaxUpdateWarehouseCell = (params) => {
-  return api.put(`${urlPrefix}/cell`, params);
+export const ajaxUpdateWarehouseCell = (uuid, params) => {
+  return api.put(`${urlPrefix}/cell/${uuid}`, params);
 };
 
 export const ajaxDestroyWarehouseCell = (uuid) => {
@@ -133,5 +133,5 @@ export const ajaxDestroyWarehouseCell = (uuid) => {
 
 export const ajaxDestroyWarehouseCells = (uuids) => {
   if (collect(uuids).isEmpty()) new Promise.reject("请选择要删除的仓库-位");
-  return api.post(`${urlPrefix}/cell`, { uuids });
+  return api.post(`${urlPrefix}/cell/destroyMany`, { uuids });
 };

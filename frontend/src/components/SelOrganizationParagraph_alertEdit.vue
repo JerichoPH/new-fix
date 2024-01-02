@@ -1,7 +1,8 @@
 <template>
   <q-select outlined use-input clearable v-model="organizationParagraphUuid_alertEdit"
     :options="organizationParagraphs_alertEdit" :label="labelName" @filter="fnFilter"
-    :display-value="organizationParagraphsMap[organizationParagraphUuid_alertEdit]" emit-value map-options />
+    :display-value="organizationParagraphsMap[organizationParagraphUuid_alertEdit]" emit-value map-options
+    :disable="!organizationRailwayUuid_alertEdit"/>
 </template>
 <script setup>
 import { inject, defineProps, onMounted, ref, watch } from "vue";
@@ -31,7 +32,7 @@ const organizationParagraphs_alertEdit = ref([]);
 const organizationParagraphs = ref([]);
 const organizationParagraphsMap = ref({});
 
-watch(organizationRailwayUuid_alertEdit, newValue => fnSearch(newValue));
+watch(organizationRailwayUuid_alertEdit, newValue => {fnSearch()});
 
 const fnFilter = (val, update) => {
   if (val === "") {
@@ -48,16 +49,20 @@ const fnFilter = (val, update) => {
   });
 };
 
-onMounted(() => {
-  fnSearch("");
-});
+onMounted(() => fnSearch());
 
-const fnSearch = organizationRailwayUuid => {
+const fnSearch = () => {
   organizationParagraphs.value = [];
 
-  if (organizationRailwayUuid) ajaxParams["organization_railway_uuid"] = organizationRailwayUuid;
+  if(!organizationRailwayUuid_alertEdit.value) {
+    organizationParagraphUuid_alertEdit.value = "";
+    return;
+  }
 
-  ajaxGetOrganizationParagraphs(ajaxParams)
+  ajaxGetOrganizationParagraphs({
+    ...ajaxParams,
+    organization_railway_uuid: organizationRailwayUuid_alertEdit.value,
+  })
     .then(res => {
       organizationParagraphs.value = collect(res.content.organization_paragraphs)
         .map(organizationParagraph => {

@@ -49,31 +49,32 @@ const fnFilter = (val, update) => {
   });
 };
 
-onMounted(() => {
-  fnSearch("");
-});
+onMounted(() => fnSearch());
 
-const fnSearch = organizationParagraphUuid => {
+const fnSearch = () => {
   organizationWorkshops.value = [];
 
-  if (organizationParagraphUuid) {
-    ajaxGetOrganizationWorkshops({
-      ...ajaxParams,
-      organization_paragarph_uuid: organizationParagraphUuid,
-    })
-      .then(res => {
-        organizationWorkshops.value = collect(res.content.organization_workshops)
-          .map(organizationWorkshop => {
-            return {
-              label: organizationWorkshop.name,
-              value: organizationWorkshop.uuid,
-            };
-          })
-          .all();
-        organizationWorkshopsMap.value = collect(organizationWorkshops.value).pluck('label', 'value').all();
-      })
-      .catch((e) => errorNotify(e.msg));
+  if (!organizationParagraphUuid_alertCreate) {
+    organizationWorkshopUuid_alertCreate.value = "";
+    return;
   }
+
+  ajaxGetOrganizationWorkshops({
+    ...ajaxParams,
+    organization_paragarph_uuid: organizationParagraphUuid_alertCreate.value,
+  })
+    .then(res => {
+      organizationWorkshops.value = collect(res.content.organization_workshops)
+        .map(organizationWorkshop => {
+          return {
+            label: organizationWorkshop.name,
+            value: organizationWorkshop.uuid,
+          };
+        })
+        .all();
+      organizationWorkshopsMap.value = collect(organizationWorkshops.value).pluck('label', 'value').all();
+    })
+    .catch((e) => errorNotify(e.msg));
 };
 </script>
 src/utils/notify

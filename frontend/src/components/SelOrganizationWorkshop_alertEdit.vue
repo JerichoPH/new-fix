@@ -5,7 +5,7 @@
     emit-value map-options />
 </template>
 <script setup>
-import { inject, defineProps, onMounted, ref } from "vue";
+import { inject, defineProps, onMounted, ref, watch } from "vue";
 import collect from "collect.js";
 import { ajaxGetOrganizationWorkshops } from "/src/apis/organization";
 import { errorNotify } from "src/utils/notify";
@@ -26,10 +26,13 @@ const props = defineProps({
 
 const labelName = props.labelName;
 const ajaxParams = props.ajaxParams;
+const organizationParagraphUuid_alertEdit = inject("organizationParagraphUuid_alertEdit");
 const organizationWorkshopUuid_alertEdit = inject("organizationWorkshopUuid_alertEdit");
 const organizationWorkshops_alertEdit = ref([]);
 const organizationWorkshops = ref([]);
 const organizationWorkshopsMap = ref({});
+
+watch(organizationParagraphUuid_alertEdit, () => fnSearch());
 
 const fnFilter = (val, update) => {
   if (val === "") {
@@ -46,14 +49,20 @@ const fnFilter = (val, update) => {
   });
 };
 
-onMounted(() => fnSearch(""));
+onMounted(() => fnSearch());
 
-const fnSearch = organizationParagraphUuid => {
+const fnSearch = () => {
   organizationWorkshops.value = [];
 
-  if (organizationParagraphUuid) ajaxParams["organization_paragraph_uuid"] = organizationParagraphUuid;
+  if (!organizationParagraphUuid_alertEdit.value) {
+    organizationWorkshopUuid_alertEdit.value = "";
+    return;
+  }
 
-  ajaxGetOrganizationWorkshops(ajaxParams)
+  ajaxGetOrganizationWorkshops({
+    ...ajaxParams,
+    organization_paragraph_uuid: organizationParagraphUuid_alertEdit.value,
+  })
     .then((res) => {
       organizationWorkshops.value = collect(res.content.organization_workshops)
         .map(organizationWorkshop => {
@@ -63,7 +72,7 @@ const fnSearch = organizationParagraphUuid => {
           };
         })
         .all();
-        organizationWorkshopsMap.value = collect(organizationWorkshops.value).pluck('label','value').all();
+      organizationWorkshopsMap.value = collect(organizationWorkshops.value).pluck('label', 'value').all();
     })
     .catch((e) => {
       console.error('err', e);

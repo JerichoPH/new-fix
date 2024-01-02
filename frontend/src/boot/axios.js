@@ -16,48 +16,39 @@ const api = axios.create({
   },
 });
 
-// 在请求发送之前进行拦截
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("auth.token"); // 从 localStorage 中获取 token
-  if (token) config.headers.Authorization = `JWT ${token}`; // 如果有 token，则将其添加到请求头中
+export default boot(({ app, router }) => {
+  // 在请求发送之前进行拦截
+  api.interceptors.request.use((config) => {
+    const token = localStorage.getItem("auth.token"); // 从 localStorage 中获取 token
+    if (token) config.headers.Authorization = `JWT ${token}`; // 如果有 token，则将其添加到请求头中
 
-  return config;
-});
+    return config;
+  });
 
-// 在响应拦截之后进行处理
-api.interceptors.response.use(
-  (resp) => {
-    return resp.data;
-  },
-  (e) => {
-    if (e.code === "ERR_NETWORK") {
-      return Promise.reject({
-        msg: "网络错误",
-      });
+  // 在响应拦截之后进行处理
+  api.interceptors.response.use(
+    (resp) => {
+      return resp.data;
+    },
+    (e) => {
+      if (e.code === "ERR_NETWORK") {
+        return Promise.reject({
+          msg: "网络错误",
+        });
+      }
+      if (e.response.status === 401) {
+        // 如果响应的状态码为 401（未登陆）
+        localStorage.removeItem("auth.token"); // 从 localStorage 中删除 token
+        router.push("auth:login");
+      } else {
+        console.error("网络请求错误：", e);
+        return Promise.reject({
+          msg: e.response.data.msg || e.response.data,
+          statusCode: e.response.status,
+        });
+      }
     }
-    if (e.response.status === 401) {
-      // 如果响应的状态码为 401（未登陆）
-      localStorage.removeItem("auth.token"); // 从 localStorage 中删除 token
-    } else {
-      console.error("网络请求错误：", e);
-      return Promise.reject({
-        msg: e.response.data.msg || e.response.data,
-        statusCode: e.response.status,
-      });
-    }
-  }
-);
-
-export default boot(({ app }) => {
-  // for use inside Vue files (Options API) through this.$axios and this.$api
-
-  app.config.globalProperties.$axios = axios;
-  // ^ ^ ^ this will allow you to use this.$axios (for Vue Options API form)
-  //       so you won't necessarily have to import axios in each vue file
-
-  app.config.globalProperties.$api = api;
-  // ^ ^ ^ this will allow you to use this.$api (for Vue Options API form)
-  //       so you can easily perform requests against your app's API
+  );
 });
 
 export { api };

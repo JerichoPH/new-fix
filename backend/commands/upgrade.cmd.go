@@ -209,10 +209,10 @@ func (UpgradeCmd) init() []string {
 		{Name: "厂家管理", Uri: "/factory", Icon: "fa fa-list", PageRouteName: "factory:index", ParentUuid: rbacMenu.Uuid},
 		{Name: "来源类型管理", Uri: "/source/type", Icon: "fa fa-list", PageRouteName: "sourceType:index", ParentUuid: rbacMenu.Uuid},
 		{Name: "来源项目管理", Uri: "/source/project", Icon: "fa fa-list", PageRouteName: "sourceProject:index", ParentUuid: rbacMenu.Uuid},
-		{Name: "仓库-库房管理", Uri: "/source/storehouse", Icon: "fa fa-list", PageRouteName: "sourceStorehouse:index", ParentUuid: rbacMenu.Uuid},
-		{Name: "仓库-库区管理", Uri: "/source/area", Icon: "fa fa-list", PageRouteName: "sourceArea:index", ParentUuid: rbacMenu.Uuid},
-		{Name: "仓库-排管理", Uri: "/source/platoon", Icon: "fa fa-list", PageRouteName: "sourcePlatoon:index", ParentUuid: rbacMenu.Uuid},
-		{Name: "仓库-架管理", Uri: "/source/shelf", Icon: "fa fa-list", PageRouteName: "sourceShelf:index", ParentUuid: rbacMenu.Uuid},
+		{Name: "仓库-库房管理", Uri: "/warehouse/storehouse", Icon: "fa fa-list", PageRouteName: "warehouseStorehouse:index", ParentUuid: rbacMenu.Uuid},
+		{Name: "仓库-库区管理", Uri: "/warehouse/area", Icon: "fa fa-list", PageRouteName: "warehouseArea:index", ParentUuid: rbacMenu.Uuid},
+		{Name: "仓库-排管理", Uri: "/warehouse/platoon", Icon: "fa fa-list", PageRouteName: "warehousePlatoon:index", ParentUuid: rbacMenu.Uuid},
+		{Name: "仓库-架管理", Uri: "/warehouse/shelf", Icon: "fa fa-list", PageRouteName: "warehouseShelf:index", ParentUuid: rbacMenu.Uuid},
 	})
 	rbacMenu = &models.RbacMenuMdl{Name: "系统管理", Icon: "fa fa-cogs"}
 	models.NewRbacMenuMdl().GetDb("").Create(rbacMenu)

@@ -46,12 +46,11 @@ const fnFilter = (val, update) => {
   });
 };
 
-onMounted(() => {
-  fnSearch();
-});
+onMounted(() => fnSearch());
 
 const fnSearch = () => {
   organizationWorkshopTypeCodes.value = [];
+  organizationWorkshopTypeCode_search.value = "";
 
   ajaxGetOrganizationWorkshopTypeCodesMap(ajaxParams)
     .then(res => {

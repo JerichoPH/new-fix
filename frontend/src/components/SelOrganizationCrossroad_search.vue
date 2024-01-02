@@ -31,7 +31,7 @@ const organizationCrossroads_search = ref([]);
 const organizationCrossroads = ref([]);
 const organizationCrossroadsMap = ref({});
 
-watch(organizationWorkshopUuid_search, (newValue) => fnSearch(newValue));
+watch(organizationWorkshopUuid_search, () => fnSearch());
 
 const fnFilter = (val, update) => {
   if (val === "") {
@@ -48,15 +48,19 @@ const fnFilter = (val, update) => {
   });
 };
 
-onMounted(() => fnSearch(""));
+onMounted(() => fnSearch());
 
-const fnSearch = (organizationWorkshopUuid) => {
+const fnSearch = () => {
   organizationCrossroads_search.value = [];
 
-  if (!organizationWorkshopUuid) return;
+  if (!organizationWorkshopUuid_search.value) {
+    organizationCrossroadUuid_search.value = "";
+    return;
+  }
+
   ajaxGetOrganizationCrossroads({
     ...ajaxParams,
-    organization_workshop_uuid: organizationWorkshopUuid,
+    organization_workshop_uuid: organizationWorkshopUuid_search.value,
   })
     .then((res) => {
       organizationCrossroads.value =

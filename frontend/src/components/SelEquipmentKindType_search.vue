@@ -32,7 +32,7 @@ const equipmentKindTypes_search = ref([]);
 const equipmentKindTypes = ref([]);
 const equipmentKindTypesMap = ref({});
 
-watch(equipmentKindCategoryUuid_search, (newValue) => fnSearch(newValue));
+watch(equipmentKindCategoryUuid_search, () => fnSearch());
 
 const fnFilter = (val, update) => {
   if (val === "") {
@@ -49,15 +49,18 @@ const fnFilter = (val, update) => {
   });
 };
 
-onMounted(() => fnSearch(""));
+onMounted(() => fnSearch());
 
-const fnSearch = (equipmentKindCategoryUuid) => {
+const fnSearch = () => {
   equipmentKindTypes_search.value = [];
 
-  if (!equipmentKindCategoryUuid) return;
+  if (!equipmentKindCategoryUuid_search.value) {
+    equipmentKindTypeUuid_search.value = "";
+    return;
+  }
   ajaxGetEquipmentKindTypes({
     ...ajaxParams,
-    equipment_kind_category_uuid: equipmentKindCategoryUuid,
+    equipment_kind_category_uuid: equipmentKindCategoryUuid_search.value,
   })
     .then((res) => {
       equipmentKindTypes.value = collect(res.content.equipment_kind_types)

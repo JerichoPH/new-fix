@@ -31,7 +31,7 @@ const organizationParagraphs_search = ref([]);
 const organizationParagraphs = ref([]);
 const organizationParagraphsMap = ref({});
 
-watch(organizationRailwayUuid_search, (newValue) => fnSearch(newValue));
+watch(organizationRailwayUuid_search, () => fnSearch());
 
 const fnFilter = (val, update) => {
   if (val === "") {
@@ -48,15 +48,19 @@ const fnFilter = (val, update) => {
   });
 };
 
-onMounted(() => fnSearch(""));
+onMounted(() => fnSearch());
 
-const fnSearch = (organizationRailwayUuid) => {
+const fnSearch = () => {
   organizationParagraphs_search.value = [];
 
-  if (!organizationRailwayUuid) return;
+  if (!organizationRailwayUuid_search.value) {
+    organizationParagraphUuid_search.value = "";
+    return;
+  }
+
   ajaxGetOrganizationParagraphs({
     ...ajaxParams,
-    organization_railway_uuid: organizationRailwayUuid,
+    organization_railway_uuid: organizationRailwayUuid_search.value,
   })
     .then((res) => {
       organizationParagraphs.value =

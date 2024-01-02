@@ -1,20 +1,9 @@
 <template>
-  <q-select
-    outlined
-    use-input
-    clearable
-    v-model="equipmentKindTypeUuid_alertCreate"
-    :options="options"
-    :label="labelName"
-    :option-disable="
-      collect(equipmentKindTypes).pluck('value', 'label').all()[
-        equipmentKindTypeUuid_alertCreate
-      ]
-    "
-    @filter="fnFilter"
-    emit-value
-    map-options
-  />
+  <q-select outlined use-input clearable v-model="equipmentKindTypeUuid_alertCreate" :options="options" :label="labelName"
+    :option-disable="collect(equipmentKindTypes).pluck('value', 'label').all()[
+      equipmentKindTypeUuid_alertCreate
+    ]
+      " @filter="fnFilter" emit-value map-options />
 </template>
 <script setup>
 import { inject, defineProps, onMounted, ref, watch } from "vue";
@@ -47,9 +36,7 @@ const equipmentKindTypeUuid_alertCreate = inject(
 const options = ref([]);
 const equipmentKindTypes = ref([]);
 
-watch(equipmentKindCategoryUuid_alertCreate, (newValue) => {
-  fnSearch(newValue);
-});
+watch(equipmentKindCategoryUuid_alertCreate, () => fnSearch());
 
 const fnFilter = (val, update) => {
   if (val === "") {
@@ -72,30 +59,32 @@ onMounted(() => {
 
 /**
  * 搜索器材类型
- * @param {string} equipmentKindCategoryUuid
  */
-const fnSearch = (equipmentKindCategoryUuid) => {
+const fnSearch = () => {
   equipmentKindTypes.value = [];
 
-  if (equipmentKindCategoryUuid) {
-    ajaxGetEquipmentKindTypes({
-      ...ajaxParams,
-      equipment_kind_category_uuid: equipmentKindCategoryUuid,
-    })
-      .then((res) => {
-        if (res.content.equipment_kind_types.length > 0) {
-          equipmentKindTypes.value = res.content.equipment_kind_types.map(
-            (equipmentKindType) => {
-              return {
-                label: equipmentKindType.name,
-                value: equipmentKindType.uuid,
-              };
-            }
-          );
-        }
-      })
-      .catch((e) => errorNotify(e.msg));
+  if (!equipmentKindCategoryUuid_alertCreate.value) {
+    equipmentKindTypeUuid_alertCreate.value = "";
+    return;
   }
+
+  ajaxGetEquipmentKindTypes({
+    ...ajaxParams,
+    equipment_kind_category_uuid: equipmentKindCategoryUuid_alertCreate.value,
+  })
+    .then((res) => {
+      if (res.content.equipment_kind_types.length > 0) {
+        equipmentKindTypes.value = res.content.equipment_kind_types.map(
+          (equipmentKindType) => {
+            return {
+              label: equipmentKindType.name,
+              value: equipmentKindType.uuid,
+            };
+          }
+        );
+      }
+    })
+    .catch((e) => errorNotify(e.msg));
 };
 </script>
 src/utils/notify

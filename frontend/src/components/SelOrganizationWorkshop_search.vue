@@ -48,15 +48,19 @@ const fnFilter = (val, update) => {
   });
 };
 
-onMounted(() => fnSearch(""));
+onMounted(() => fnSearch());
 
-const fnSearch = (organizationParagraphUuid) => {
+const fnSearch = () => {
   organizationWorkshops_search.value = [];
 
-  if (!organizationParagraphUuid) return;
+  if (!organizationParagraphUuid_search.value) {
+    organizationWorkshopUuid_search.value = "";
+    return;
+  }
+
   ajaxGetOrganizationWorkshops({
     ...ajaxParams,
-    organization_paragraph_uuid: organizationParagraphUuid,
+    organization_paragraph_uuid: organizationParagraphUuid_search.value,
   })
     .then((res) => {
       organizationWorkshops.value =

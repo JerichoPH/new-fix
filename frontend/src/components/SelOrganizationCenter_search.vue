@@ -31,7 +31,7 @@ const organizationCenters_search = ref([]);
 const organizationCenters = ref([]);
 const organizationCentersMap = ref({});
 
-watch(organizationWorkshopUuid_search, (newValue) => fnSearch(newValue));
+watch(organizationWorkshopUuid_search, () => fnSearch());
 
 const fnFilter = (val, update) => {
   if (val === "") {
@@ -48,15 +48,19 @@ const fnFilter = (val, update) => {
   });
 };
 
-onMounted(() => fnSearch(""));
+onMounted(() => fnSearch());
 
-const fnSearch = (organizationWorkshopUuid) => {
+const fnSearch = () => {
   organizationCenters_search.value = [];
 
-  if (!organizationWorkshopUuid) return;
+  if (!organizationWorkshopUuid_search.value) {
+    organizationCenterUuid_search.value = "";
+    return;
+  }
+
   ajaxGetOrganizationCenters({
     ...ajaxParams,
-    organization_workshop_uuid: organizationWorkshopUuid,
+    organization_workshop_uuid: organizationWorkshopUuid_search.value,
   })
     .then((res) => {
       organizationCenters.value =

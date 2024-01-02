@@ -46,9 +46,7 @@ const fnFilter = (val, update) => {
   });
 };
 
-onMounted(() => {
-  fnSearch();
-});
+onMounted(() => fnSearch());
 
 const fnSearch = () => {
   organizationWorkAreaTypeCodes.value = [];
