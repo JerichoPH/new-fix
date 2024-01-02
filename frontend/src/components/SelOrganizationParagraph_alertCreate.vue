@@ -59,7 +59,7 @@ const fnSearch = () => {
     return;
   }
 
-  if (organizationRailwayUuid) {
+  if (organizationRailwayUuid_alertCreate.value) {
     ajaxGetOrganizationParagraphs({
       ...ajaxParams,
       organization_railway_uuid: organizationRailwayUuid_alertCreate.value,

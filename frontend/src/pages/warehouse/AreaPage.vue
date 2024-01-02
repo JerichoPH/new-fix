@@ -119,27 +119,27 @@
               <q-input outlined clearable lazy-rules v-model="name_alertCreateWarehouseArea" label="名称" :rules="[]" />
             </div>
           </div>
-          <div class="row">
+          <div class="row q-mt-md">
             <div class="col">
               <sel-organization-railway_alert-create label-name="所属路局" :ajax-params="{}" />
             </div>
           </div>
-          <div class="row">
+          <div class="row q-mt-md">
             <div class="col">
               <sel-organization-paragraph_alert-create label-name="所属站段" :ajax-params="{}" />
             </div>
           </div>
-          <div class="row">
+          <div class="row q-mt-md">
             <div class="col">
               <sel-organization-workshop_alert-create label-name="所属车间" :ajax-params="{}" />
             </div>
           </div>
-          <div class="row">
+          <div class="row q-mt-md">
             <div class="col">
               <sel-organization-work-area_alert-create label-name="所属工区" :ajax-params="{}" />
             </div>
           </div>
-          <div class="row">
+          <div class="row q-mt-md">
             <div class="col">
               <sel-warehouse-storehouse_alert-create label-name="所属仓库-库房" :ajax-params="{}" />
             </div>
