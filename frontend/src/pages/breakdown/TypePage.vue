@@ -105,7 +105,7 @@
         </q-card-section>
         <q-card-actions align="right">
           <q-btn type="submit" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="secondary" v-close-popup />
+          <q-btn type="submit" label="确定" icon="check" color="secondary" />
         </q-card-actions>
       </q-form>
     </q-card>
@@ -131,7 +131,7 @@
         </q-card-section>
         <q-card-actions align="right">
           <q-btn type="submit" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="warning" v-close-popup />
+          <q-btn type="submit" label="确定" icon="check" color="warning" />
         </q-card-actions>
       </q-form>
     </q-card>
@@ -235,9 +235,12 @@ const fnStoreBreakdownType = () => {
     .then(res => {
       successNotify(res.msg);
       fnSearch();
+      fnResetAlertCreateBreakdownType();
+
+      alertCreateBreakdownType.value = false;
     })
     .catch(e => errorNotify(e.msg))
-    .finally(() => loading());
+    .finally(loading());
 };
 
 const fnOpenAlertEditBreakdownType = params => {
@@ -268,7 +271,7 @@ const fnUpdateBreakdownType = () => {
       fnSearch();
     })
     .catch(e => errorNotify(e.msg))
-    .finally(() => loading());
+    .finally(loading());
 };
 
 const fnDestroyBreakdownType = params => {
@@ -282,6 +285,8 @@ const fnDestroyBreakdownType = params => {
         .then(() => {
           successNotify("删除成功");
           fnSearch();
+
+          alertEditBreakdownType.value = false;
         })
         .catch(e => errorNotify(e.msg))
         .finally(loading());

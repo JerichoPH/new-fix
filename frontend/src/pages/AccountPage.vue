@@ -299,16 +299,12 @@ provide("rbacRoleUuid_search", rbacRoleUuid_search);
 provide("checkedRbacRoleUuids_alertCreate", rbacRoleUuids_alertCreateAccount);
 provide("checkedRbacRoleUuids_alertEdit", rbacRoleUuids_alertEditAccount);
 
-onMounted(() => {
-  fnInit();
-});
+onMounted(() => fnInit());
 
 /**
  * 初始化页面
  */
-const fnInit = () => {
-  fnSearch();
-};
+const fnInit = () => fnSearch();;
 
 /**
  * 重置搜索栏条件
@@ -351,9 +347,7 @@ const fnSearch = () => {
         });
       }
     })
-    .catch((e) => {
-      errorNotify(e.msg);
-    });
+    .catch((e) => errorNotify(e.msg));
 };
 
 /**
@@ -404,13 +398,11 @@ const fnStoreAccount = async () => {
       successNotify(res.msg);
       fnSearch();
       fnResetAlertCreateAccount();
+
+      alertCreateAccount.value = false;
     })
-    .catch((e) => {
-      errorNotify(e.msg);
-    })
-    .finally(() => {
-      loading();
-    });
+    .catch((e) => errorNotify(e.msg))
+    .finally(loading());
 };
 
 /**
@@ -437,16 +429,12 @@ const fnOpenAlertEditAccount = (params = {}) => {
       showAvatar_alertEditAccount.value = res.content.account.avatar
         ? `${settings.baseUrl}/${res.content.account.avatar.url}`
         : "";
-      rbacRoleUuids_alertEditAccount.value = collect(
-        res.content.account.rbac_roles
-      )
+      rbacRoleUuids_alertEditAccount.value = collect(res.content.account.rbac_roles)
         .pluck("uuid")
         .all();
       alertEditAccount.value = true;
     })
-    .catch((e) => {
-      errorNotify(e.msg);
-    });
+    .catch((e) => errorNotify(e.msg));
 };
 
 /**
@@ -479,13 +467,11 @@ const fnUpdateAccount = async () => {
       successNotify(res.msg);
       fnSearch();
       fnResetAlertEditAccount();
+
+      alertEditAccount.value = false;
     })
-    .catch((e) => {
-      errorNotify(e.msg);
-    })
-    .finally(() => {
-      loading();
-    });
+    .catch((e) => errorNotify(e.msg))
+    .finally(loading());
 };
 
 /**
@@ -504,12 +490,8 @@ const fnDestroyAccount = (params = {}) => {
           successNotify("删除成功");
           fnSearch();
         })
-        .catch((e) => {
-          errorNotify(e.msg);
-        })
-        .finally(() => {
-          loading();
-        });
+        .catch((e) => errorNotify(e.msg))
+        .finally(loading());
     })
   );
 };
@@ -529,12 +511,8 @@ const fnDestroyAccounts = () => {
           successNotify("删除成功");
           fnSearch();
         })
-        .catch((e) => {
-          errorNotify(e.msg);
-        })
-        .finally(() => {
-          loading();
-        });
+        .catch((e) => errorNotify(e.msg))
+        .finally(loading());
     })
   );
 };
@@ -574,12 +552,8 @@ const fnUpdatePassword = () => {
       fnSearch();
       fnResetAlertEditPassword();
     })
-    .catch((e) => {
-      errorNotify(e.msg);
-    })
-    .finally(() => {
-      loading();
-    });
+    .catch((e) => errorNotify(e.msg))
+    .finally(loading());
 };
 
 /**

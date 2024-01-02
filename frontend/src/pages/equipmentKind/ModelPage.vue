@@ -123,7 +123,7 @@
         </q-card-section>
         <q-card-actions align="right">
           <q-btn type="submit" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="secondary" v-close-popup />
+          <q-btn type="submit" label="确定" icon="check" color="secondary" />
         </q-card-actions>
       </q-form>
     </q-card>
@@ -144,7 +144,7 @@
         </q-card-section>
         <q-card-actions align="right">
           <q-btn type="submit" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="secondary" v-close-popup />
+          <q-btn type="submit" label="确定" icon="check" color="secondary" />
         </q-card-actions>
       </q-form>
     </q-card>
@@ -202,13 +202,9 @@ const currentUuid = ref("");
 const alertEditEquipmentKindModel = ref(false);
 const name_alertEditEquipmentKindModel = ref("");
 
-onMounted(() => {
-  fnInit();
-});
+onMounted(() => fnInit());
 
-const fnInit = () => {
-  fnSearch();
-};
+const fnInit = () => fnSearch();;
 
 /**
  * 重置搜索栏
@@ -253,9 +249,7 @@ const fnSearch = () => {
         );
       }
     })
-    .catch((e) => {
-      errorNotify(e.msg);
-    });
+    .catch((e) => errorNotify(e.msg));
 };
 
 /**
@@ -286,10 +280,10 @@ const fnStoreEquipomentKindModel = () => {
       successNotify(res.msg);
       fnResetAlertCreateEquipmentKindModel();
       fnSearch();
+
+      alertCreateEquipmentKindModel.value = false;
     })
-    .catch((e) => {
-      errorNotify(e.msg);
-    });
+    .catch((e) => errorNotify(e.msg));
 };
 
 /**
@@ -307,7 +301,7 @@ const fnDestroyEquipmentKindModels = (params) => {
           fnSearch();
         })
         .catch((e) => errorNotify(e.msg))
-        .finally(() => loading());
+        .finally(loading());
     })
   );
 };
@@ -341,8 +335,9 @@ const fnUpdateEquipmentKindModel = (params) => {
   })
     .then((res) => {
       successNotify(res.msg);
-      alertEditEquipmentKindModel.value = false;
       fnSearch();
+      
+      alertEditEquipmentKindModel.value = false;
     })
     .catch((e) => errorNotify(e.msg));
 };
@@ -363,7 +358,7 @@ const fnDestroyEquipmentKindModel = (params) => {
           fnSearch();
         })
         .catch((e) => errorNotify(e.msg))
-        .finally(() => loading());
+        .finally(loading());
     })
   );
 };

@@ -116,12 +116,12 @@
   <!-- 对话框 -->
   <!-- 新建权限对话框 -->
   <q-dialog v-model="alertCreateRbacPermission">
-    <q-card :style="{minWidth: '450px'}">
-      <q-card-section>
-        <div class="text-h6">新建权限</div>
-      </q-card-section>
-      <q-card-section class="q-pt-none">
-        <q-form class="q-gutter-md" @submit.prevent="">
+    <q-card :style="{ minWidth: '450px' }">
+      <q-form class="q-gutter-md" @submit.prevent="fnStoreRbacPermission">
+        <q-card-section>
+          <div class="text-h6">新建权限</div>
+        </q-card-section>
+        <q-card-section class="q-pt-none">
           <div class="row">
             <div class="col">
               <q-input outlined clearable lazy-rules v-model="name_alertCreateRbacPermission" label="名称" :rules="[]" />
@@ -132,21 +132,22 @@
               <chk-rbac-role_alert-create label-name="所属角色" class="q-mt-md" />
             </div>
           </div>
-        </q-form>
-      </q-card-section>
-      <q-card-actions align="right">
-        <q-btn type="button" label="确定" icon="check" color="secondary" @click="fnStoreRbacPermission" v-close-popup />
-      </q-card-actions>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn type="submit" label="关闭" v-close-popup />
+          <q-btn type="submit" label="确定" icon="check" color="secondary" />
+        </q-card-actions>
+      </q-form>
     </q-card>
   </q-dialog>
   <!-- 编辑权限对话框 -->
   <q-dialog v-model="alertEditRbacPermission">
-    <q-card :style="{minWidth: '450px'}">
-      <q-card-section>
-        <div class="text-h6">编辑权限</div>
-      </q-card-section>
-      <q-card-section class="q-pt-none">
-        <q-form class="q-gutter-md" @submit.prevent="">
+    <q-card :style="{ minWidth: '450px' }">
+      <q-form class="q-gutter-md" @submit.prevent="fnUpdateRbacPermission">
+        <q-card-section>
+          <div class="text-h6">编辑权限</div>
+        </q-card-section>
+        <q-card-section class="q-pt-none">
           <div class="row">
             <div class="col">
               <q-input outlined clearable lazy-rules v-model="name_alertEditRbacPermission" label="名称" :rules="[]" />
@@ -157,11 +158,12 @@
               <chk-rbac-role_alert-edit label-name="所属角色" class="q-mt-md" />
             </div>
           </div>
-        </q-form>
-      </q-card-section>
-      <q-card-actions align="right">
-        <q-btn type="button" label="确定" icon="check" color="warning" @click="fnUpdateRbacPermission" v-close-popup />
-      </q-card-actions>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn type="submit" label="关闭" v-close-popup />
+          <q-btn type="submit" label="确定" icon="check" color="warning" />
+        </q-card-actions>
+      </q-form>
     </q-card>
   </q-dialog>
 </template>
@@ -206,10 +208,7 @@ const name_alertCreateRbacPermission = ref("");
 const uri_alertCreateRbacPermission = ref("");
 const description_alertCreateRbacPermission = ref("");
 const rbacRoleUuids_alertCreateRbacPermission = ref([]);
-provide(
-  "checkedRbacRoleUuids_alertCreate",
-  rbacRoleUuids_alertCreateRbacPermission
-);
+provide("checkedRbacRoleUuids_alertCreate", rbacRoleUuids_alertCreateRbacPermission);
 
 // 编辑权限对话框
 const alertEditRbacPermission = ref(false);
@@ -218,21 +217,14 @@ const name_alertEditRbacPermission = ref("");
 const uri_alertEditRbacPermission = ref("");
 const description_alertEditRbacPermission = ref("");
 const rbacRoleUuids_alertEditRbacPermission = ref([]);
-provide(
-  "checkedRbacRoleUuids_alertEdit",
-  rbacRoleUuids_alertEditRbacPermission
-);
+provide("checkedRbacRoleUuids_alertEdit", rbacRoleUuids_alertEditRbacPermission);
 
-onMounted(() => {
-  fnInit();
-});
+onMounted(() => fnInit());
 
 /**
  * 初始化
  */
-const fnInit = () => {
-  fnSearch();
-};
+const fnInit = () => fnSearch();
 
 /**
  * 初始化搜索栏
@@ -273,9 +265,7 @@ const fnSearch = () => {
         });
       }
     })
-    .catch((e) => {
-      errorNotify(e.msg);
-    });
+    .catch((e) => errorNotify(e.msg));
 };
 
 /**
@@ -310,13 +300,11 @@ const fnStoreRbacPermission = () => {
       successNotify(res.msg);
       fnSearch();
       fnResetAlertCreateRbacPermission();
+
+      alertCreateRbacPermission.value = false;
     })
-    .catch((e) => {
-      errorNotify(e.msg);
-    })
-    .finally(() => {
-      loading();
-    });
+    .catch((e) => errorNotify(e.msg))
+    .finally(loading());
 };
 
 /**
@@ -342,21 +330,14 @@ const fnOpenAlertEditRbacPermission = (params = {}) => {
     .then((res) => {
       name_alertEditRbacPermission.value = res.content.rbac_permission.name;
       uri_alertEditRbacPermission.value = res.content.rbac_permission.uri;
-      description_alertEditRbacPermission.value =
-        res.content.rbac_permission.description;
+      description_alertEditRbacPermission.value = res.content.rbac_permission.description;
+      rbacRoleUuids_alertEditRbacPermission.value = collect(res.content.rbac_permission.rbac_roles)
+        .pluck("uuid")
+        .all();
 
       alertEditRbacPermission.value = true;
-      if (res.content.rbac_permission.rbac_roles.length > 0) {
-        rbacRoleUuids_alertEditRbacPermission.value = collect(
-          res.content.rbac_permission.rbac_roles
-        )
-          .pluck("uuid")
-          .all();
-      }
     })
-    .catch((e) => {
-      errorNotify(e.msg);
-    });
+    .catch((e) => errorNotify(e.msg));
 };
 
 /**
@@ -377,13 +358,11 @@ const fnUpdateRbacPermission = () => {
       successNotify(res.msg);
       fnSearch();
       fnResetAlertEditRbacPermission();
+
+      alertEditRbacPermission.value = false;
     })
-    .catch((e) => {
-      errorNotify(e.msg);
-    })
-    .finally(() => {
-      loading();
-    });
+    .catch((e) => errorNotify(e.msg))
+    .finally(loading());
 };
 
 /**
@@ -401,12 +380,8 @@ const fnDestroyRbacPermission = (params = {}) => {
           successNotify("删除成功");
           fnSearch();
         })
-        .catch((e) => {
-          errorNotify(e.msg);
-        })
-        .finally(() => {
-          loading();
-        });
+        .catch((e) => errorNotify(e.msg))
+        .finally(loading());
     })
   );
 };
@@ -426,12 +401,8 @@ const fnDestroyRbacPermissions = () => {
           successNotify("删除成功");
           fnSearch();
         })
-        .catch((e) => {
-          errorNotify(e.msg);
-        })
-        .finally(() => {
-          loading();
-        });
+        .catch((e) => errorNotify(e.msg))
+        .finally(loading());
     })
   );
 };

@@ -109,7 +109,7 @@
         </q-card-section>
         <q-card-actions align="right">
           <q-btn type="submit" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="secondary" v-close-popup />
+          <q-btn type="submit" label="确定" icon="check" color="secondary" />
         </q-card-actions>
       </q-form>
     </q-card>
@@ -131,7 +131,7 @@
         </q-card-section>
         <q-card-actions align="right">
           <q-btn type="submit" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="warning" v-close-popup />
+          <q-btn type="submit" label="确定" icon="check" color="warning" />
         </q-card-actions>
       </q-form>
     </q-card>
@@ -175,16 +175,12 @@ const alertEditEquipmentKindCategory = ref(false);
 const name_alertEditEquipmentKindCategory = ref("");
 const currentUuid = ref("");
 
-onMounted(() => {
-  fnInit();
-});
+onMounted(() => fnInit());
 
 /**
  * 初始化
  */
-const fnInit = () => {
-  fnSearch();
-};
+const fnInit = () => fnSearch();;
 
 /**
  * 重置搜索栏条件
@@ -247,13 +243,11 @@ const fnStoreEquipmentKindCategory = () => {
       successNotify(res.msg);
       fnSearch();
       fnRestAlertCreateEquipmentCategory();
+
+      alertCreateEquipmentKindCategory.value = false;
     })
-    .catch((e) => {
-      errorNotify(e.msg);
-    })
-    .finally(() => {
-      loading();
-    });
+    .catch((e) => errorNotify(e.msg))
+    .finally(loading());
 };
 
 /**
@@ -270,12 +264,8 @@ const fnOpenAlertEditEquipmentKindCategory = (params) => {
         res.content.equipment_kind_category.name;
       alertEditEquipmentKindCategory.value = true;
     })
-    .catch((e) => {
-      errorNotify(e.msg);
-    })
-    .finally(() => {
-      loading();
-    });
+    .catch((e) => errorNotify(e.msg))
+    .finally(loading());
 };
 
 /**
@@ -293,13 +283,11 @@ const fnUpdateEquipmentKindCategory = (params) => {
     .then((res) => {
       successNotify(res.msg);
       fnSearch();
+
+      alertEditEquipmentKindCategory.value = false;
     })
-    .catch((e) => {
-      errorNotify(e.msg);
-    })
-    .finally(() => {
-      loading();
-    });
+    .catch((e) => errorNotify(e.msg))
+    .finally(loading());
 };
 
 /**
@@ -318,12 +306,8 @@ const fnDestroyEquipmentKindCategory = (params) => {
           successNotify("删除成功");
           fnSearch();
         })
-        .catch((e) => {
-          errorNotify(e.msg);
-        })
-        .finally(() => {
-          loading();
-        });
+        .catch((e) => errorNotify(e.msg))
+        .finally(loading());
     })
   );
 };
@@ -341,12 +325,8 @@ const fnDestroyEquipmentKindCategories = () => {
           successNotify("删除成功");
           fnSearch();
         })
-        .catch((e) => {
-          errorNotify(e.msg);
-        })
-        .finally(() => {
-          loading();
-        });
+        .catch((e) => errorNotify(e.msg))
+        .finally(loading());
     })
   );
 };

@@ -125,7 +125,7 @@
         </q-card-section>
         <q-card-actions align="right">
           <q-btn type="submit" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="secondary" v-close-popup />
+          <q-btn type="submit" label="确定" icon="check" color="secondary" />
         </q-card-actions>
       </q-form>
     </q-card>
@@ -159,7 +159,7 @@
         </q-card-section>
         <q-card-actions align="right">
           <q-btn type="submit" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="warning" v-close-popup />
+          <q-btn type="submit" label="确定" icon="check" color="warning" />
         </q-card-actions>
       </q-form>
     </q-card>
@@ -278,9 +278,11 @@ const fnStoreOrganizationRailway = (params) => {
       successNotify(res.msg);
       fnResetAlertCreateOrganizationRailway();
       fnSearch();
+
+      alertCreateOrganizationRailway.value = false;
     })
     .catch((e) => errorNotify(e.msg))
-    .finally(() => loading());
+    .finally(loading());
 };
 
 /**
@@ -294,12 +296,9 @@ const fnOpenAlertEditOrganizationRailway = (params) => {
 
   ajaxGetOrganizationRailway(params.uuid)
     .then((res) => {
-      uniqueCode_alertEditOrganizationrailway.value =
-        res.content.organization_railway.unique_code;
-      name_alertEditOrganizationrailway.value =
-        res.content.organization_railway.name;
-      shortName_alertEditOrganizationrailway.value =
-        res.content.organization_railway.short_name;
+      uniqueCode_alertEditOrganizationrailway.value = res.content.organization_railway.unique_code;
+      name_alertEditOrganizationrailway.value = res.content.organization_railway.name;
+      shortName_alertEditOrganizationrailway.value = res.content.organization_railway.short_name;
       alertEditOrganizationrailway.value = true;
     })
     .catch((e) => errorNotify(e.msg));
@@ -323,9 +322,11 @@ const fnUpdateOrganizationRailway = () => {
     .then((res) => {
       successNotify(res.msg);
       fnSearch();
+
+      alertEditOrganizationrailway.value = false;
     })
     .catch((e) => errorNotify(e.msg))
-    .finally(() => loading());
+    .finally(loading());
 };
 
 /**
@@ -345,7 +346,7 @@ const fnDestroyOrganizationRailway = (params) => {
           fnSearch();
         })
         .catch((e) => errorNotify(e.msg))
-        .finally(() => loading());
+        .finally(loading());
     })
   );
 };
@@ -365,7 +366,7 @@ const fnDestroyOrganizationRailways = (uuids) => {
           fnSearch();
         })
         .catch((e) => errorNotify(e.msg))
-        .finally(() => loading());
+        .finally(loading());
     })
   );
 };

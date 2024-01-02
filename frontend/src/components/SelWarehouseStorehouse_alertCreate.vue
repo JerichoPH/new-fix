@@ -1,11 +1,11 @@
 <template>
-  <q-select outlined use-input clearable v-model="warehouseStorehouseUuid_alertCreate" :options="warehouseStorehouses_alertCreate"
-    :label="labelName" @filter="fnFilter" emit-value map-options
+  <q-select outlined use-input clearable v-model="warehouseStorehouseUuid_alertCreate"
+    :options="warehouseStorehouses_alertCreate" :label="labelName" @filter="fnFilter" emit-value map-options
     :display-value="warehouseStorehousesMap[warehouseStorehouseUuid_alertCreate]"
-    :disable="!organizationWorkshopUuid_alertCreate && !organizationWorkAreaUuid_alertCreate"/>
+    :disable="!organizationWorkshopUuid_alertCreate && !organizationWorkAreaUuid_alertCreate" />
 </template>
 <script setup>
-import { inject, defineProps, onMounted, ref } from "vue";
+import { inject, defineProps, onMounted, ref, watch } from "vue";
 import { ajaxGetWarehouseStorehouses } from "/src/apis/warehouse";
 import collect from "collect.js";
 import { errorNotify } from "src/utils/notify";
@@ -32,6 +32,9 @@ const warehouseStorehouseUuid_alertCreate = inject("warehouseStorehouseUuid_aler
 const warehouseStorehouses_alertCreate = ref([]);
 const warehouseStorehouses = ref([]);
 const warehouseStorehousesMap = ref({});
+
+watch(organizationWorkshopUuid_alertCreate, () => fnSearch());
+watch(organizationWorkAreaUuid_alertCreate, () => fnSearch());
 
 const fnFilter = (val, update) => {
   if (val === "") {
@@ -72,11 +75,10 @@ const fnSearch = () => {
           };
         })
         .all();
-        warehouseStorehousesMap.value = collect(warehouseStorehouses.value).pluck("label","value").all();
+        console.log('ok',warehouseStorehouses.value);
+      warehouseStorehousesMap.value = collect(warehouseStorehouses.value).pluck("label", "value").all();
     })
-    .catch((e) => {
-      errorNotify(e.msg);
-    });
+    .catch((e) => errorNotify(e.msg));
 };
 </script>
 src/utils/notify

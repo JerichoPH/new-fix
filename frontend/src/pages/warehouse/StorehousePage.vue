@@ -139,7 +139,7 @@
         </q-card-section>
         <q-card-actions align="right">
           <q-btn type="submit" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="secondary" v-close-popup />
+          <q-btn type="submit" label="确定" icon="check" color="secondary" />
         </q-card-actions>
       </q-form>
     </q-card>
@@ -180,7 +180,7 @@
         </q-card-section>
         <q-card-actions align="right">
           <q-btn type="submit" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="warning" v-close-popup />
+          <q-btn type="submit" label="确定" icon="check" color="warning" />
         </q-card-actions>
       </q-form>
     </q-card>
@@ -322,6 +322,8 @@ const fnStoreWarehouseStorehouse = () => {
       successNotify(res.msg);
       fnSearch();
       fnResetAlertCreateWarehouseStorehouse();
+
+      alertCreateWarehouseStorehouse.value = false;
     })
     .catch(e => errorNotify(e.msg))
     .finally(loading());
@@ -348,10 +350,7 @@ const fnOpenAlertEditWarehouseStorehouse = (params) => {
 
       alertEditWarehouseStorehouse.value = true;
     })
-    .catch(e => {
-      console.log('err',e);
-      errorNotify(e.msg);
-    });
+    .catch(e => errorNotify(e.msg));
 };
 
 const fnUpdateWarehouseStorehouse = () => {
@@ -366,6 +365,8 @@ const fnUpdateWarehouseStorehouse = () => {
     .then(res => {
       successNotify(res.msg);
       fnSearch();
+
+      alertEditWarehouseStorehouse.value = false;
     })
     .catch(e => errorNotify(e.msg))
     .finally(loading());

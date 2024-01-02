@@ -104,7 +104,7 @@
         </q-card-section>
         <q-card-actions align="right">
           <q-btn type="submit" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="secondary" v-close-popup />
+          <q-btn type="submit" label="确定" icon="check" color="secondary" />
         </q-card-actions>
       </q-form>
     </q-card>
@@ -130,7 +130,7 @@
         </q-card-section>
         <q-card-actions align="right">
           <q-btn type="submit" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="warning" v-close-popup />
+          <q-btn type="submit" label="确定" icon="check" color="warning" />
         </q-card-actions>
       </q-form>
     </q-card>
@@ -229,6 +229,8 @@ const fnStoreSourceProject = () => {
       successNotify(res.msg);
       fnResetAlertCreateSourceProject();
       fnSearch();
+
+      alertCreateSourceProject.value = false;
     })
     .catch(e => errorNotify(e.msg));
 };
@@ -259,6 +261,8 @@ const fnUpdateSourceProject = () => {
     .then(res => {
       successNotify(res.msg);
       fnSearch();
+
+      alertEditSourceProject.value = false;
     })
     .catch(e => errorNotify(e.msg));
 };

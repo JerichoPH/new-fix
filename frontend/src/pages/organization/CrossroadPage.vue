@@ -142,7 +142,7 @@
         </q-card-section>
         <q-card-actions align="right">
           <q-btn type="submit" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="secondary" v-close-popup />
+          <q-btn type="submit" label="确定" icon="check" color="secondary" />
         </q-card-actions>
       </q-form>
     </q-card>
@@ -185,7 +185,7 @@
         </q-card-section>
         <q-card-actions align="right">
           <q-btn type="submit" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="secondary" v-close-popup />
+          <q-btn type="submit" label="确定" icon="check" color="secondary" />
         </q-card-actions>
       </q-form>
     </q-card>
@@ -325,12 +325,14 @@ const fnStoreOrganizationCrossroad = () => {
       successNotify(res.msg);
       fnResetAlertCreateStation();
       fnSearch();
+
+      alertCreateOrganizationCrossroad.value = false;
     })
     .catch(e => {
       console.error('ajaxStoreOrganizationCrossroad', e);
       errorNotify(e.msg);
     })
-    .finally(() => loading());
+    .finally(loading());
 };
 
 const fnOpenAlertEditCreateOrganizationCrossroad = params => {
@@ -367,9 +369,11 @@ const fnUpdateOrganizationCrossroad = () => {
     .then(res => {
       successNotify(res.msg);
       fnSearch();
+
+      alertEditOrganizationCrossroad.value = false;
     })
     .catch(e => errorNotify(e.msg))
-    .finally(() => loading());
+    .finally(loading());
 };
 
 const fnDestroyCreateOrganizationCrossroad = params => {
@@ -385,7 +389,7 @@ const fnDestroyCreateOrganizationCrossroad = params => {
           fnSearch();
         })
         .catch(e => errorNotify(e.msg))
-        .finally(() => loading());
+        .finally(loading());
     })
   );
 };
@@ -400,7 +404,7 @@ const fnDestroyCreateStations = () => {
           fnSearch();
         })
         .catch(e => errorNotify(e.msg))
-        .finally(() => loading());
+        .finally(loading());
     })
   );
 };

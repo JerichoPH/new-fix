@@ -142,7 +142,7 @@
         </q-card-section>
         <q-card-actions align="right">
           <q-btn type="submit" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="secondary" v-close-popup />
+          <q-btn type="submit" label="确定" icon="check" color="secondary" />
         </q-card-actions>
       </q-form>
     </q-card>
@@ -184,7 +184,7 @@
         </q-card-section>
         <q-card-actions align="right">
           <q-btn type="submit" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="secondary" v-close-popup />
+          <q-btn type="submit" label="确定" icon="check" color="secondary" />
         </q-card-actions>
       </q-form>
     </q-card>
@@ -324,9 +324,11 @@ const fnStoreOrganizationStation = () => {
       successNotify(res.msg);
       fnResetAlertCreateStation();
       fnSearch();
+
+      alertCreateOrganizationStation.value = false;
     })
     .catch(e => errorNotify(e.msg))
-    .finally(() => loading());
+    .finally(loading());
 };
 
 const fnOpenAlertEditCreateOrganizationStation = params => {
@@ -360,9 +362,11 @@ const fnUpdateOrganizationStation = () => {
     .then(res => {
       successNotify(res.msg);
       fnSearch();
+
+      alertEditOrganizationStation.value = false;
     })
     .catch(e => errorNotify(e.msg))
-    .finally(() => loading());
+    .finally(loading());
 };
 
 const fnDestroyCreateOrganizationStation = params => {
@@ -378,7 +382,7 @@ const fnDestroyCreateOrganizationStation = params => {
           fnSearch();
         })
         .catch(e => errorNotify(e.msg))
-        .finally(() => loading());
+        .finally(loading());
     })
   );
 };
@@ -393,7 +397,7 @@ const fnDestroyCreateStations = () => {
           fnSearch();
         })
         .catch(e => errorNotify(e.msg))
-        .finally(() => loading());
+        .finally(loading());
     })
   );
 };

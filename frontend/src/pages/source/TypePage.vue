@@ -105,7 +105,7 @@
         </q-card-section>
         <q-card-actions align="right">
           <q-btn type="submit" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="secondary" v-close-popup />
+          <q-btn type="submit" label="确定" icon="check" color="secondary" />
         </q-card-actions>
       </q-form>
     </q-card>
@@ -131,7 +131,7 @@
         </q-card-section>
         <q-card-actions align="right">
           <q-btn type="submit" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="secondary" v-close-popup />
+          <q-btn type="submit" label="确定" icon="check" color="secondary" />
         </q-card-actions>
       </q-form>
     </q-card>
@@ -226,6 +226,8 @@ const fnStoreSourceType = () => {
       successNotify(res.msg);
       fnSearch();
       fnResetAlertCreateSourceType();
+
+      alertCreateSourceType.value = false;
     })
     .catch(e => errorNotify(e.msg))
     .finally(loading());
@@ -259,6 +261,8 @@ const fnUpdateSourceType = () => {
     .then(res => {
       successNotify(res.msg);
       fnSearch();
+
+      alertEditSourceType.value = false;
     })
     .catch(e => errorNotify(e.msg))
     .finally(loading());

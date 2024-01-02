@@ -120,7 +120,7 @@
         </q-card-section>
         <q-card-actions align="right">
           <q-btn type="submit" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="secondary" v-close-popup />
+          <q-btn type="submit" label="确定" icon="check" color="secondary" />
         </q-card-actions>
       </q-form>
     </q-card>
@@ -147,7 +147,7 @@
         </q-card-section>
         <q-card-actions align="right">
           <q-btn type="submit" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="warning" v-close-popup />
+          <q-btn type="submit" label="确定" icon="check" color="warning" />
         </q-card-actions>
       </q-form>
     </q-card>
@@ -264,9 +264,11 @@ const fnStoreOrganizationParagraph = () => {
       successNotify(res.message);
       fnResetAlertOrganizationParagraph();
       fnSearch();
+
+      alertCreateOrganizationParagraph.value = false;
     })
     .catch(e => errorNotify(e.msg))
-    .finally(() => loading());
+    .finally(loading());
 };
 
 const fnOpenAlertEditOrganizationParagraph = params => {
@@ -296,9 +298,11 @@ const fnUpdateOrganizationParagraph = () => {
     .then(res => {
       successNotify(res.msg);
       fnSearch();
+
+      alertEditOrganizationParagraph.value = false;
     })
     .catch(e => errorNotify(e.msg))
-    .finally(() => loading());
+    .finally(loading());
 };
 
 const fnDestroyOrganizationParagraph = params => {

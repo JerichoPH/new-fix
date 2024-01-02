@@ -148,7 +148,7 @@
         </q-card-section>
         <q-card-actions align="right">
           <q-btn type="submit" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="secondary" v-close-popup />
+          <q-btn type="submit" label="确定" icon="check" color="secondary" />
         </q-card-actions>
       </q-form>
     </q-card>
@@ -191,7 +191,7 @@
         </q-card-section>
         <q-card-actions align="right">
           <q-btn type="submit" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="secondary" v-close-popup />
+          <q-btn type="submit" label="确定" icon="check" color="secondary" />
         </q-card-actions>
       </q-form>
     </q-card>
@@ -327,6 +327,8 @@ const fnStoreOrganizationWorkshop = () => {
       successNotify(res.msg);
       fnResetAlertCreateOrganizationWorkshop();
       fnSearch();
+
+      alertCreateOrganizationWorkshop.value = false;
     })
     .catch(e => errorNotify(e.msg));
 };
@@ -362,9 +364,11 @@ const fnUpdateOrganizationWorkshop = () => {
     .then(res => {
       successNotify(res.msg);
       fnSearch();
+
+      alertEditOrganizationWorkshop.value = false;
     })
     .catch(e => errorNotify(e.msg))
-    .finally(() => loading());
+    .finally(loading());
 };
 
 const fnDestroyOrganizationWorkshop = params => {
@@ -380,7 +384,7 @@ const fnDestroyOrganizationWorkshop = params => {
           fnSearch();
         })
         .catch(e => errorNotify(e.msg))
-        .finally(() => loading());
+        .finally(loading());
     })
   );
 };
@@ -396,7 +400,7 @@ const fnDestroyOrganizationWorkshops = () => {
           fnSearch();
         })
         .catch(e => errorNotify(e.msg))
-        .finally(() => loading());
+        .finally(loading());
     })
   )
 };

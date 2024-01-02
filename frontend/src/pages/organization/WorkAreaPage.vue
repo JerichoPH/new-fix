@@ -155,7 +155,7 @@
         </q-card-section>
         <q-card-actions align="right">
           <q-btn type="submit" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="secondary" v-close-popup />
+          <q-btn type="submit" label="确定" icon="check" color="secondary" />
         </q-card-actions>
       </q-form>
     </q-card>
@@ -203,7 +203,7 @@
         </q-card-section>
         <q-card-actions align="right">
           <q-btn type="submit" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="secondary" v-close-popup />
+          <q-btn type="submit" label="确定" icon="check" color="secondary" />
         </q-card-actions>
       </q-form>
     </q-card>
@@ -357,9 +357,11 @@ const fnStoreOrganizationWorkArea = () => {
       successNotify(res.msg);
       fnResetAlertCreateStation();
       fnSearch();
+
+      alertCreateOrganizationWorkArea.value = false;
     })
     .catch(e => errorNotify(e.msg))
-    .finally(() => loading());
+    .finally(loading());
 };
 
 const fnOpenAlertEditCreateOrganizationWorkArea = params => {
@@ -395,9 +397,11 @@ const fnUpdateOrganizationWorkArea = () => {
     .then(res => {
       successNotify(res.msg);
       fnSearch();
+
+      alertEditOrganizationWorkArea.value = false;
     })
     .catch(e => errorNotify(e.msg))
-    .finally(() => loading());
+    .finally(loading());
 };
 
 const fnDestroyCreateOrganizationWorkArea = params => {
@@ -413,7 +417,7 @@ const fnDestroyCreateOrganizationWorkArea = params => {
           fnSearch();
         })
         .catch(e => errorNotify(e.msg))
-        .finally(() => loading());
+        .finally(loading());
     })
   );
 };
@@ -428,7 +432,7 @@ const fnDestroyCreateStations = () => {
           fnSearch();
         })
         .catch(e => errorNotify(e.msg))
-        .finally(() => loading());
+        .finally(loading());
     })
   );
 };

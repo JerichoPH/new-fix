@@ -52,9 +52,9 @@
         </div>
         <div class="row q-mt-md">
           <div class="col">
-            <q-table flat bordered title="" :rows="rows" row-key="index" virtual-scroll
-              :pagination="{ rowsPerPage: 200 }" :rows-per-page-options="[50, 100, 200, 0]" rows-per-page-label="分页"
-              selection="multiple" v-model:selected="selected">
+            <q-table flat bordered title="" :rows="rows" row-key="index" virtual-scroll :pagination="{ rowsPerPage: 200 }"
+              :rows-per-page-options="[50, 100, 200, 0]" rows-per-page-label="分页" selection="multiple"
+              v-model:selected="selected">
               <template v-slot:header="props">
                 <q-tr :props="props">
                   <q-th align="left"><q-checkbox key="allCheck" v-model="props.selected" /></q-th>
@@ -125,12 +125,12 @@
   <!-- 对话框 -->
   <!-- 新建菜单对话框 -->
   <q-dialog v-model="alertCreateRbacMenu" no-backdrop-dismiss>
-    <q-card :style="{minWidth: '450px'}">
-      <q-card-section>
-        <div class="text-h6">新建菜单</div>
-      </q-card-section>
-      <q-card-section class="q-pt-none">
-        <q-form class="q-gutter-md" @submit.prevent="">
+    <q-card :style="{ minWidth: '450px' }">
+      <q-form class="q-gutter-md" @submit.prevent="fnStoreRbacMenu">
+        <q-card-section>
+          <div class="text-h6">新建菜单</div>
+        </q-card-section>
+        <q-card-section class="q-pt-none">
           <div class="row">
             <div class="col">
               <q-input outlined clearable lazy-rules v-model="name_alertCreateRbacMenu" label="名称" :rules="[]" />
@@ -144,22 +144,22 @@
               <chk-rbac-role_alert-create label-name="所属角色" class="q-mt-md" />
             </div>
           </div>
-        </q-form>
-      </q-card-section>
-      <q-card-actions align="right">
-        <q-btn type="submit" label="关闭" v-close-popup />
-        <q-btn type="button" label="确定" icon="check" color="secondary" @click="fnStoreRbacMenu" v-close-popup />
-      </q-card-actions>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn type="submit" label="关闭" v-close-popup />
+          <q-btn type="button" label="确定" icon="check" color="secondary" />
+        </q-card-actions>
+      </q-form>
     </q-card>
   </q-dialog>
   <!-- 编辑菜单对话框 -->
   <q-dialog v-model="alertEditRbacMenu" no-backdrop-dismiss>
-    <q-card :style="{minWidth: '450px'}">
+    <q-card :style="{ minWidth: '450px' }">
       <q-card-section>
         <div class="text-h6">编辑菜单</div>
       </q-card-section>
       <q-card-section class="q-pt-none">
-        <q-form class="q-gutter-md" @submit.prevent="">
+        <q-form class="q-gutter-md" @submit.prevent="fnUpdateRbacMenu">
           <div class="row">
             <div class="col">
               <q-input outlined clearable lazy-rules v-model="name_alertEditRbacMenu" label="名称" :rules="[]" />
@@ -180,7 +180,7 @@
       </q-card-section>
       <q-card-actions align="right">
         <q-btn type="submit" label="关闭" v-close-popup />
-        <q-btn type="button" label="确定" icon="check" color="secondary" @click="fnUpdateRbacMenu" v-close-popup />
+        <q-btn type="button" label="确定" icon="check" color="warning" />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -251,16 +251,12 @@ provide("rbacRoleUuid_search", rbacRoleUuid_search);
 provide("checkedRbacRoleUuids_alertCreate", rbacRoleUuids_alertCreateRbacMenu);
 provide("checkedRbacRoleUuids_alertEdit", rbacRoleUuids_alertEditRbacMenu);
 
-onMounted(() => {
-  fnInit();
-});
+onMounted(() => fnInit());
 
 /**
  * 初始化页面
  */
-const fnInit = () => {
-  fnSearch();
-};
+const fnInit = () => fnSearch();;
 
 /**
  * 重置搜索栏
@@ -305,9 +301,7 @@ const fnSearch = () => {
         });
       }
     })
-    .catch((e) => {
-      errorNotify(e.msg);
-    })
+    .catch((e) => errorNotify(e.msg))
     .finally(() => {
       selRbacMenu_search_enable.value = false;
       selRbacMenu_search_enable.value = true;
@@ -348,16 +342,14 @@ const fnStoreRbacMenu = () => {
     rbac_role_uuids: rbacRoleUuids_alertCreateRbacMenu.value,
   })
     .then((res) => {
-      successNotify(res.msg, 500);
+      successNotify(res.msg);
       fnSearch();
       fnResetAlertCreateRbace();
+
+      alertCreateRbacMenu.value = false;
     })
-    .catch((err) => {
-      errorNotify(err.msg);
-    })
-    .finally(() => {
-      loading();
-    });
+    .catch((err) => errorNotify(err.msg))
+    .finally(loading());
 };
 
 /**
@@ -394,16 +386,13 @@ const fnOpenAlertEditRbacMenu = (params = {}) => {
       parentUuid_alertEditRbacMenu.value = res.content.rbac_menu.parent
         ? res.content.rbac_menu.parent.uuid
         : "";
-      rbacRoleUuids_alertEditRbacMenu.value = collect(
-        res.content.rbac_menu.rbac_roles
-      )
+      rbacRoleUuids_alertEditRbacMenu.value = collect(res.content.rbac_menu.rbac_roles)
         .pluck("uuid")
         .all();
+
       alertEditRbacMenu.value = true;
     })
-    .catch((e) => {
-      errorNotify(e.msg);
-    });
+    .catch((e) => errorNotify(e.msg));
 };
 
 /**
@@ -424,13 +413,11 @@ const fnUpdateRbacMenu = () => {
       successNotify(res.msg);
       fnSearch();
       fnResetAlertEditRbacMenu();
+
+      alertEditRbacMenu.value = false;
     })
-    .catch((e) => {
-      errorNotify(e.msg);
-    })
-    .finally(() => {
-      loading();
-    });
+    .catch((e) => errorNotify(e.msg))
+    .finally(loading());
 };
 
 /**
@@ -448,12 +435,8 @@ const fnDeconsteRbacMenu = (params = {}) => {
           successNotify("删除成功");
           fnSearch();
         })
-        .catch((e) => {
-          errorNotify(e.msg);
-        })
-        .finally(() => {
-          loading();
-        });
+        .catch((e) => errorNotify(e.msg))
+        .finally(loading());
     })
   );
 };
@@ -471,12 +454,8 @@ const fnDestroyRbacMenus = () => {
           successNotify("删除成功");
           fnSearch();
         })
-        .catch((e) => {
-          errorNotify(e.msg);
-        })
-        .finally(() => {
-          loading();
-        });
+        .catch((e) => errorNotify(e.msg))
+        .finally(loading());
     })
   );
 };

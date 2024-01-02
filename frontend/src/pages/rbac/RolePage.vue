@@ -81,32 +81,33 @@
   <!-- 对话框 -->
   <!-- 新建角色对话框 -->
   <q-dialog v-model="alertCreateRbacRole">
-    <q-card :style="{minWidth: '450px'}">
-      <q-card-section>
-        <div class="text-h6">新建角色</div>
-      </q-card-section>
-      <q-card-section class="q-pt-none">
-        <q-form class="q-gutter-md" @submit.prevent="">
+    <q-card :style="{ minWidth: '450px' }">
+      <q-form class="q-gutter-md" @submit.prevent="fnStoreRbacRole">
+        <q-card-section>
+          <div class="text-h6">新建角色</div>
+        </q-card-section>
+        <q-card-section class="q-pt-none">
           <div class="row">
             <div class="col">
               <q-input outlined clearable lazy-rules v-model="name_alertCreateRbacRole" label="名称" :rules="[]" />
             </div>
           </div>
-        </q-form>
-      </q-card-section>
-      <q-card-actions align="right">
-        <q-btn type="button" label="确定" icon="check" color="secondary" @click="fnStoreRbacRole" v-close-popup />
-      </q-card-actions>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn type="submit" label="关闭" v-close-popup />
+          <q-btn type="submit" label="确定" icon="check" color="secondary" />
+        </q-card-actions>
+      </q-form>
     </q-card>
   </q-dialog>
   <!-- 编辑角色对话框 -->
   <q-dialog v-model="alertEditRbacRole">
-    <q-card :style="{minWidth: '450px'}">
+    <q-card :style="{ minWidth: '450px' }">
       <q-card-section>
         <div class="text-h6">编辑角色</div>
       </q-card-section>
       <q-card-section class="q-pt-none">
-        <q-form class="q-gutter-md" @submit.prevent="">
+        <q-form class="q-gutter-md" @submit.prevent="fnUpdateRbacRole">
           <div class="row">
             <div class="col">
               <q-input outlined clearable lazy-rules v-model="name_alertEditRbacRole" label="名称" :rules="[]" />
@@ -115,7 +116,8 @@
         </q-form>
       </q-card-section>
       <q-card-actions align="right">
-        <q-btn type="button" label="确定" icon="check" color="warning" @click="fnUpdateRbacRole" v-close-popup />
+        <q-btn type="submit" label="关闭" v-close-popup />
+        <q-btn type="submit" label="确定" icon="check" color="warning" />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -151,16 +153,12 @@ const alertEditRbacRole = ref(false);
 const name_alertEditRbacRole = ref("");
 const currentUuid = ref("");
 
-onMounted(() => {
-  fnInit();
-});
+onMounted(() => fnInit());
 
 /**
  * 初始化页面
  */
-const fnInit = () => {
-  fnSearch();
-};
+const fnInit = () => fnSearch();;
 
 /**
  * 重置搜索栏
@@ -219,13 +217,11 @@ const fnStoreRbacRole = () => {
       successNotify(res.msg);
       fnSearch();
       fnResetAlertCreateRbacRole();
+
+      alertCreateRbacRole.value = false;
     })
-    .catch((e) => {
-      errorNotify(e.msg);
-    })
-    .finally(() => {
-      loading();
-    });
+    .catch((e) => errorNotify(e.msg))
+    .finally(loading());
 };
 
 /**
@@ -250,9 +246,7 @@ const fnOpenAlertEditRbacRole = (params = {}) => {
         alertEditRbacRole.value = true;
       }
     })
-    .catch((e) => {
-      errorNotify(e.msg);
-    });
+    .catch((e) => errorNotify(e.msg));
 };
 
 /**
@@ -268,10 +262,10 @@ const fnUpdateRbacRole = () => {
       successNotify(res.msg);
       fnSearch();
       fnResetAlertEditRbacRole();
+
+      alertEditRbacRole.value = false;
     })
-    .catch((e) => {
-      errorNotify(e.msg);
-    });
+    .catch((e) => errorNotify(e.msg));
 };
 
 /**
@@ -289,12 +283,8 @@ const fnDestroyRbacRole = (params = {}) => {
           successNotify("删除成功");
           fnSearch();
         })
-        .catch((e) => {
-          errorNotify(e.msg);
-        })
-        .finally(() => {
-          loading();
-        });
+        .catch((e) => errorNotify(e.msg))
+        .finally(loading());
     })
   );
 };
@@ -312,12 +302,8 @@ const fnDestroyRbacRoles = () => {
           successNotify("删除成功");
           fnSearch();
         })
-        .catch((e) => {
-          errorNotify(e.msg);
-        })
-        .finally(() => {
-          loading();
-        });
+        .catch((e) => errorNotify(e.msg))
+        .finally(loading());
     })
   );
 };

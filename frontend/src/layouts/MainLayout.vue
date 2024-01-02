@@ -96,9 +96,7 @@ const search = ref("");
 const leftDrawerOpen = ref(true);
 const rbacMenus = ref([]);
 
-onMounted(() => {
-  fnInit();
-});
+onMounted(() => fnInit());
 
 /**
  * 初始化
