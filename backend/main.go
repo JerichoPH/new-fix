@@ -77,7 +77,7 @@ var autoMigrateList = []any{
 	models.SourceProjectMdl{},         // 来源-来源项目
 	models.FactoryMdl{},               // 厂家
 	models.EquipmentMdl{},             // 器材
-	models.WarehouseStorehouseMdl{},   // 仓库-库房
+	models.WarehouseStorehouseMdl{},   // 库房-仓库
 	models.WarehouseAreaMdl{},         // 库房-库区
 	models.WarehousePlatoonMdl{},      // 库房-排
 	models.WarehouseShelfMdl{},        // 库房-架

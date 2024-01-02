@@ -40,6 +40,7 @@ type (
 		OrganizationWorkAreas      []*OrganizationWorkAreaMdl  `gorm:"foreignKey:organization_workshop_uuid;references:uuid;comment:相关工区;" json:"organization_work_areas"`
 		EquipmentsByPropertyBelong []*EquipmentMdl             `gorm:"foreignKey:property_belong_organization_workshop_uuid;references:uuid;comment:相关器材（资产归属车间）;" json:"equipments_by_property_belong"`
 		EquipmentsByUseBelong      []*EquipmentMdl             `gorm:"foreignKey:use_belong_organizaiton_workshop_uuid;references:uuid;comment:相关器材（使用归属车间）;" json:"equipments_by_use_belong"`
+		WarehouseStorehouses       []*WarehouseStorehouseMdl   `gorm:"foreignKey:organization_workshop_uuid;references:uuid;comment:相关仓库-库房;" json:"warehouse_storehouses"`
 	}
 	// OrganizationStationMdl 组织结构-站场模型
 	OrganizationStationMdl struct {
@@ -77,14 +78,15 @@ type (
 	// OrganizationWorkAreaMdl 组织结构-工区模型
 	OrganizationWorkAreaMdl struct {
 		MySqlMdl
-		UniqueCode                 string                   `gorm:"index;type:char(8);not null;comment:工区代码;" json:"unique_code"` // B048D001
-		Name                       string                   `gorm:"index;type:varchar(128);not null;comment:工区名称;" json:"name"`
-		TypeCode                   string                   `gorm:"type:enum('','SCENE','POINT-SWITCH','REPLY','SYNTHESIZE', 'POWER-SUPPLY-PANEL');not null;default:'';comment:工区类型;" json:"type_code"`
-		TypeText                   string                   `gorm:"->;type:varchar(128) as ((case type_code when 'SCENE' then '现场工区' when 'POINT-SWITCH' then '转辙机工区' when 'REPLY' then '继电器工区' when 'SYNTHESIZE' then '综合工区' when 'POWER-SUPPLY-PANEL' then '电源屏工区' else '无' end))" json:"type_text"`
-		OrganizationWorkshopUuid   string                   `gorm:"type:char(36);not null;" json:"organization_workshop_uuid"`
-		OrganizationWorkshop       *OrganizationWorkshopMdl `gorm:"foreignKey:organization_workshop_uuid;references:uuid;comment:所属车间;" json:"organization_workshop"`
-		EquipmentsByPropertyBelong []*EquipmentMdl          `gorm:"foreignKey:property_belong_organization_work_area_uuid;references:uuid;comment:相关器材（资产归属工区）;" json:"equipments_by_property_belong"`
-		EquipmentsByUseBelong      []*EquipmentMdl          `gorm:"foreignKey:use_belong_organization_work_area_uuid;references:uuid;comment:相关器材（使用归属工区）;" json:"equipments_by_use_belong"`
+		UniqueCode                 string                    `gorm:"index;type:char(8);not null;comment:工区代码;" json:"unique_code"` // B048D001
+		Name                       string                    `gorm:"index;type:varchar(128);not null;comment:工区名称;" json:"name"`
+		TypeCode                   string                    `gorm:"type:enum('','SCENE','POINT-SWITCH','REPLY','SYNTHESIZE', 'POWER-SUPPLY-PANEL');not null;default:'';comment:工区类型;" json:"type_code"`
+		TypeText                   string                    `gorm:"->;type:varchar(128) as ((case type_code when 'SCENE' then '现场工区' when 'POINT-SWITCH' then '转辙机工区' when 'REPLY' then '继电器工区' when 'SYNTHESIZE' then '综合工区' when 'POWER-SUPPLY-PANEL' then '电源屏工区' else '无' end))" json:"type_text"`
+		OrganizationWorkshopUuid   string                    `gorm:"type:char(36);not null;" json:"organization_workshop_uuid"`
+		OrganizationWorkshop       *OrganizationWorkshopMdl  `gorm:"foreignKey:organization_workshop_uuid;references:uuid;comment:所属车间;" json:"organization_workshop"`
+		EquipmentsByPropertyBelong []*EquipmentMdl           `gorm:"foreignKey:property_belong_organization_work_area_uuid;references:uuid;comment:相关器材（资产归属工区）;" json:"equipments_by_property_belong"`
+		EquipmentsByUseBelong      []*EquipmentMdl           `gorm:"foreignKey:use_belong_organization_work_area_uuid;references:uuid;comment:相关器材（使用归属工区）;" json:"equipments_by_use_belong"`
+		WarehouseStorehouses       []*WarehouseStorehouseMdl `gorm:"foreignKey:organization_work_area_uuid;references:uuid;comment:相关仓库-库房;" json:"warehouse_storehouses"`
 	}
 	// OrganizationLineMdl 组织结构-线别模型
 	OrganizationLineMdl struct {
