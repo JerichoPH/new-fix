@@ -59,7 +59,7 @@
         </div>
         <div class="row q-mt-md">
           <div class="col">
-            <q-table flat bordered title="仓库-库区列表" :rows="rows" row-key="uuid" :pagination="{ rowsPerPage: 200 }"
+            <q-table flat bordered title="" :rows="rows" row-key="uuid" :pagination="{ rowsPerPage: 200 }"
               :rows-per-page-options="[50, 100, 200, 0]" rows-per-page-label="分页" :selected-rows-label="() => { }"
               selection="multiple" v-model:selected="selected">
               <template v-slot:header="props">
@@ -104,6 +104,53 @@
       </q-card-section>
     </q-card>
   </div>
+
+  <!-- 弹窗 -->
+  <!-- 新建库房-库区弹窗 -->
+  <q-dialog v-model="alertCreateWarehouseArea">
+    <q-card :style="{ minWidth: '40vw' }">
+      <q-card-section>
+        <div class="text-h6">新建库房-库区</div>
+      </q-card-section>
+      <q-form class="q-gutter-md" @submit.prevent="fnStoreWarehouseArea">
+        <q-card-section class="q-pt-none">
+          <div class="row">
+            <div class="col">
+              <q-input outlined clearable lazy-rules v-model="name_alertCreateWarehouseArea" label="名称" :rules="[]" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <sel-organization-railway_alert-create label-name="所属路局" :ajax-params="{}" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <sel-organization-paragraph_alert-create label-name="所属站段" :ajax-params="{}" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <sel-organization-workshop_alert-create label-name="所属车间" :ajax-params="{}" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <sel-organization-work-area_alert-create label-name="所属工区" :ajax-params="{}" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <sel-warehouse-storehouse_alert-create label-name="所属仓库-库房" :ajax-params="{}" />
+            </div>
+          </div>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn type="submit" label="确定" icon="check" color="secondary" v-close-popup />
+        </q-card-actions>
+      </q-form>
+    </q-card>
+  </q-dialog>
 </template>
 <script setup>
 import { ref, onMounted, provide } from "vue";
@@ -133,6 +180,7 @@ import SelOrganizationRailway_alertCreate from "src/components/SelOrganizationRa
 import SelOrganizationParagraph_alertCreate from "src/components/SelOrganizationParagraph_alertCreate.vue";
 import SelOrganizationWorkshop_alertCreate from "src/components/SelOrganizationWorkshop_alertCreate.vue";
 import SelOrganizationWorkArea_alertCreate from "src/components/SelOrganizationWorkArea_alertCreate.vue";
+import SelWarehouseStorehouse_alertCreate from "src/components/SelWarehouseStorehouse_alertCreate.vue";
 import SelOrganizationRailway_alertEdit from "src/components/SelOrganizationRailway_alertEdit.vue";
 import SelOrganizationParagraph_alertEdit from "src/components/SelOrganizationParagraph_alertEdit.vue";
 import SelOrganizationWorkshop_alertEdit from "src/components/SelOrganizationWorkshop_alertEdit.vue";
@@ -155,6 +203,20 @@ provide("warehouseStorehouseUuid_search", warehouseStorehouseUuid_search);
 const rows = ref([]);
 const selected = ref([]);
 const sortBy = ref("");
+
+// 新建库房-库区弹窗数据
+const alertCreateWarehouseArea = ref(false);
+const name_alertCreateWarehouseArea = ref("");
+const organizationRailwayUuid_alertCreateWarehouseArea = ref("");
+provide("organizationRailwayUuid_alertCreate", organizationRailwayUuid_alertCreateWarehouseArea);
+const organizationParagraphUuid_alertCreateWarehouseArea = ref("");
+provide("organizationParagraphUuid_alertCreate", organizationParagraphUuid_alertCreateWarehouseArea);
+const organizationWorkshopUuid_alertCreateWarehouseArea = ref("");
+provide("organizationWorkshopUuid_alertCreate", organizationWorkshopUuid_alertCreateWarehouseArea);
+const organizationWorkAreaUuid_alertCreateWarehouseArea = ref("");
+provide("organizationWorkAreaUuid_alertCreate", organizationWorkAreaUuid_alertCreateWarehouseArea);
+const warehouseStorehouseUuid_alertCreateWarehouseArea = ref("");
+provide("warehouseStorehouseUuid_alertCreate", warehouseStorehouseUuid_alertCreateWarehouseArea);
 
 onMounted(() => fnInit());
 
@@ -199,15 +261,19 @@ const fnSearch = () => {
         })
         .all();
     })
-    .catch(e => {
-      console.error('err', e);
-      errorNotify(e.msg);
-    });
+    .catch(e => errorNotify(e.msg));
 };
 
-const fnResetAlertCreateWarehouseArea = () => { };
+const fnResetAlertCreateWarehouseArea = () => {
+  name_alertCreateWarehouseArea.value = "";
+  organizationRailwayUuid_alertCreateWarehouseArea.value = "";
+  organizationParagraphUuid_alertCreateWarehouseArea.value = "";
+  organizationWorkshopUuid_alertCreateWarehouseArea.value = "";
+  organizationWorkAreaUuid_alertCreateWarehouseArea.value = "";
+  warehouseStorehouseUuid_alertCreateWarehouseArea.value = "";
+};
 
-const fnOpenAlertCreateWarehouseArea = () => { };
+const fnOpenAlertCreateWarehouseArea = () => { alertCreateWarehouseArea.value = true; };
 
 const fnStoreWarehouseArea = () => { };
 
