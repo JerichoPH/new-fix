@@ -128,12 +128,12 @@ func (receiver WarehouseAreaMdl) GetListByQuery(ctx *gin.Context) *gorm.DB {
 			"name": "wa.name like ?",
 		}).
 		SetWheresDateBetween("wa.created_at", "wa.updated_at", "wa.deleted_at").
-		SetWheresExtraHasValue(map[string]func(string, *gorm.DB) *gorm.DB{}).
-		SetWheresExtraHasValues(map[string]func([]string, *gorm.DB) *gorm.DB{
-			"warehouse_storehouse_uuid": func(values []string, db *gorm.DB) *gorm.DB {
-				return db.Where("ws.uuid in ?", values)
+		SetWheresExtraHasValue(map[string]func(string, *gorm.DB) *gorm.DB{
+			"warehouse_storehouse_uuid": func(value string, db *gorm.DB) *gorm.DB {
+				return db.Where("ws.uuid = ?", value)
 			},
 		}).
+		SetWheresExtraHasValues(map[string]func([]string, *gorm.DB) *gorm.DB{}).
 		SetCtx(ctx).
 		GetDbUseQuery("").
 		Table("warehouse_areas as wa").

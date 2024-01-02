@@ -100,7 +100,7 @@
   <!-- 弹窗 -->
   <!-- 新建器材类型弹窗 -->
   <q-dialog v-model="alertCreateEquipmentKindType">
-    <q-card style="width: 800px">
+    <q-card :style="{minWidth: '40vw'}">
       <q-card-section>
         <div class="text-h6">新建器材类型</div>
       </q-card-section>
@@ -126,7 +126,7 @@
   </q-dialog>
   <!-- 编辑器材类型弹窗 -->
   <q-dialog v-model="alertEditEquipmentKindType">
-    <q-card style="width: 800px">
+    <q-card :style="{minWidth: '40vw'}">
       <q-card-section>
         <div class="text-h6">编辑器材类型</div>
       </q-card-section>
@@ -167,7 +167,7 @@ import {
   loadingNotify,
   successNotify,
   errorNotify,
-  actionNotify,
+  confirmNotify,
   destroyActions,
 } from "src/utils/notify";
 import SelEquipmentKindCategory_search from "src/components/SelEquipmentKindCategory_search.vue";
@@ -289,7 +289,7 @@ const fnStoreEquipmentKindType = () => {
  * 批量删除器材类型
  */
 const fnDestroyEquipmentKindTypes = (params) => {
-  actionNotify(
+  confirmNotify(
     destroyActions(() => {
       const loading = loadingNotify();
       ajaxDestroyEquipmentKindTypes(selected.value.map((item) => item.uuid))
@@ -358,7 +358,7 @@ const fnUpdateEquipmentKindType = () => {
 const fnDestroyEquipmentKindType = (params) => {
   if (!params["uuid"]) return;
 
-  actionNotify(
+  confirmNotify(
     destroyActions(() => {
       const loading = loadingNotify();
 

@@ -125,7 +125,7 @@
   <!-- 对话框 -->
   <!-- 新建菜单对话框 -->
   <q-dialog v-model="alertCreateRbacMenu">
-    <q-card style="width: 800px">
+    <q-card :style="{minWidth: '40vw'}">
       <q-card-section>
         <div class="text-h6">新建菜单</div>
       </q-card-section>
@@ -153,7 +153,7 @@
   </q-dialog>
   <!-- 编辑菜单对话框 -->
   <q-dialog v-model="alertEditRbacMenu">
-    <q-card style="width: 800px">
+    <q-card :style="{minWidth: '40vw'}">
       <q-card-section>
         <div class="text-h6">编辑菜单</div>
       </q-card-section>
@@ -197,7 +197,7 @@ import {
   successNotify,
   errorNotify,
   loadingNotify,
-  actionNotify,
+  confirmNotify,
   destroyActions,
 } from "src/utils/notify";
 import {
@@ -438,7 +438,7 @@ const fnUpdateRbacMenu = () => {
 const fnDeconsteRbacMenu = (params = {}) => {
   if (!params.uuid) return;
 
-  actionNotify(
+  confirmNotify(
     destroyActions(() => {
       const loading = loadingNotify();
       ajaxDestroyRbacMenu(params.uuid)
@@ -460,7 +460,7 @@ const fnDeconsteRbacMenu = (params = {}) => {
  * 批量删除菜单
  */
 const fnDestroyRbacMenus = () => {
-  actionNotify(
+  confirmNotify(
     destroyActions(() => {
       const loading = loadingNotify();
 

@@ -98,7 +98,7 @@
   <!-- 弹窗 -->
   <!-- 新建路局弹窗 -->
   <q-dialog v-model="alertCreateOrganizationRailway">
-    <q-card style="width: 800px">
+    <q-card :style="{minWidth: '40vw'}">
       <q-card-section>
         <div class="text-h6">新建路局</div>
       </q-card-section>
@@ -131,7 +131,7 @@
   </q-dialog>
   <!-- 编辑路局弹窗 -->
   <q-dialog v-model="alertEditOrganizationrailway">
-    <q-card style="width: 800px">
+    <q-card :style="{minWidth: '40vw'}">
       <q-card-section>
         <div class="text-h6">编辑路局</div>
       </q-card-section>
@@ -180,7 +180,7 @@ import {
   loadingNotify,
   successNotify,
   errorNotify,
-  actionNotify,
+  confirmNotify,
   destroyActions,
 } from "src/utils/notify";
 
@@ -333,7 +333,7 @@ const fnUpdateOrganizationRailway = () => {
 const fnDestroyOrganizationRailway = (params) => {
   if (!params["uuid"]) return;
 
-  actionNotify(
+  confirmNotify(
     destroyActions(() => {
       const loading = loadingNotify();
 
@@ -353,7 +353,7 @@ const fnDestroyOrganizationRailway = (params) => {
  * @param {[string]} uuids
  */
 const fnDestroyOrganizationRailways = (uuids) => {
-  actionNotify(
+  confirmNotify(
     destroyActions(() => {
       const loading = loadingNotify();
 

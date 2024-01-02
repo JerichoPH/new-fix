@@ -85,7 +85,7 @@
   <!-- 弹窗 -->
   <!-- 新建来源项目弹窗 -->
   <q-dialog v-model="alertCreateSourceProject">
-    <q-card style="width: 800px">
+    <q-card :style="{minWidth: '40vw'}">
       <q-card-section>
         <div class="text-h6">新建来源项目</div>
       </q-card-section>
@@ -110,7 +110,7 @@
   </q-dialog>
   <!-- 编辑来源项目弹窗 -->
   <q-dialog v-model="alertEditSourceProject">
-    <q-card style="width: 800px">
+    <q-card :style="{minWidth: '40vw'}">
       <q-card-section>
         <div class="text-h6">编辑来源项目</div>
       </q-card-section>
@@ -150,7 +150,7 @@ import {
   loadingNotify,
   successNotify,
   errorNotify,
-  actionNotify,
+  confirmNotify,
   destroyActions,
 } from "src/utils/notify";
 import SelSourceType_search from "src/components/SelSourceType_search.vue";
@@ -264,7 +264,7 @@ const fnUpdateSourceProject = () => {
 const fnDestroySourceProject = params => {
   if (!params["uuid"]) return;
 
-  actionNotify(destroyActions(() => {
+  confirmNotify(destroyActions(() => {
     const loading = loadingNotify();
 
     ajaxDestroySourceProject(params.uuid)
@@ -278,7 +278,7 @@ const fnDestroySourceProject = params => {
 };
 
 const fnDestroySourceProjects = () => {
-  actionNotify(destroyActions(() => {
+  confirmNotify(destroyActions(() => {
     const loading = loadingNotify();
 
     ajaxDestroySourceProjects(collect(selected.value).pluck("uuid").all())

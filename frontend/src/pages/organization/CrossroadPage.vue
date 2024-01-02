@@ -106,7 +106,7 @@
   <!-- 弹窗 -->
   <!-- 新建道口弹窗 -->
   <q-dialog v-model="alertCreateOrganizationCrossroad">
-    <q-card style="width: 800px">
+    <q-card :style="{minWidth: '40vw'}">
       <q-card-section>
         <div class="text-h6">新建道口</div>
       </q-card-section>
@@ -148,7 +148,7 @@
   </q-dialog>
   <!-- 编辑道口弹窗 -->
   <q-dialog v-model="alertEditOrganizationCrossroad">
-    <q-card style="width: 800px">
+    <q-card :style="{minWidth: '40vw'}">
       <q-card-section>
         <div class="text-h6">编辑道口</div>
       </q-card-section>
@@ -206,7 +206,7 @@ import {
   loadingNotify,
   successNotify,
   errorNotify,
-  actionNotify,
+  confirmNotify,
   destroyActions,
 } from "src/utils/notify";
 import SelOrganizationRailway_search from "src/components/SelOrganizationRailway_search.vue";
@@ -373,7 +373,7 @@ const fnUpdateOrganizationCrossroad = () => {
 const fnDestroyCreateOrganizationCrossroad = params => {
   if (!params["uuid"]) return;
 
-  actionNotify(
+  confirmNotify(
     destroyActions(() => {
       const loading = loadingNotify();
 
@@ -388,7 +388,7 @@ const fnDestroyCreateOrganizationCrossroad = params => {
   );
 };
 const fnDestroyCreateStations = () => {
-  actionNotify(
+  confirmNotify(
     destroyActions(() => {
       const loading = loadingNotify();
 

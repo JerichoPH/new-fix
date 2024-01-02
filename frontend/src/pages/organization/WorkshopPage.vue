@@ -112,7 +112,7 @@
   <!-- 弹窗 -->
   <!-- 新建车间弹窗 -->
   <q-dialog v-model="alertCreateOrganizationWorkshop">
-    <q-card style="width: 800px">
+    <q-card :style="{minWidth: '40vw'}">
       <q-card-section>
         <div class="text-h6">新建车间</div>
       </q-card-section>
@@ -154,7 +154,7 @@
   </q-dialog>
   <!-- 编辑车间弹窗 -->
   <q-dialog v-model="alertEditOrganizationWorkshop">
-    <q-card style="width: 800px">
+    <q-card :style="{minWidth: '40vw'}">
       <q-card-section>
         <div class="text-h6">编辑车间</div>
       </q-card-section>
@@ -211,7 +211,7 @@ import {
   loadingNotify,
   successNotify,
   errorNotify,
-  actionNotify,
+  confirmNotify,
   destroyActions,
 } from "src/utils/notify";
 import { fnColumnReverseSort } from "src/utils/common";
@@ -368,7 +368,7 @@ const fnUpdateOrganizationWorkshop = () => {
 const fnDestroyOrganizationWorkshop = params => {
   if (!params["uuid"]) return;
 
-  actionNotify(
+  confirmNotify(
     destroyActions(() => {
       const loading = loadingNotify();
 
@@ -384,7 +384,7 @@ const fnDestroyOrganizationWorkshop = params => {
 };
 
 const fnDestroyOrganizationWorkshops = () => {
-  actionNotify(
+  confirmNotify(
     destroyActions(() => {
       const loading = loadingNotify();
 

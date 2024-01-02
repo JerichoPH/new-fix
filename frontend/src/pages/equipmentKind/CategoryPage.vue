@@ -94,7 +94,7 @@
   <!-- 弹窗 -->
   <!-- 新建器材种类弹窗 -->
   <q-dialog v-model="alertCreateEquipmentKindCategory">
-    <q-card style="width: 800px">
+    <q-card :style="{minWidth: '40vw'}">
       <q-card-section>
         <div class="text-h6">新建器材种类</div>
       </q-card-section>
@@ -115,7 +115,7 @@
   </q-dialog>
   <!-- 编辑器材种类弹窗 -->
   <q-dialog v-model="alertEditEquipmentKindCategory">
-    <q-card style="width: 800px">
+    <q-card :style="{minWidth: '40vw'}">
       <q-card-section>
         <div class="text-h6">编辑器材种类</div>
       </q-card-section>
@@ -144,7 +144,7 @@ import {
   loadingNotify,
   successNotify,
   errorNotify,
-  actionNotify,
+  confirmNotify,
   destroyActions,
 } from "src/utils/notify";
 import {
@@ -307,7 +307,7 @@ const fnUpdateEquipmentKindCategory = (params) => {
 const fnDestroyEquipmentKindCategory = (params) => {
   if (!params["uuid"]) return;
 
-  actionNotify(
+  confirmNotify(
     destroyActions(() => {
       const loading = loadingNotify();
 
@@ -330,7 +330,7 @@ const fnDestroyEquipmentKindCategory = (params) => {
  * 批量删除器材种类
  */
 const fnDestroyEquipmentKindCategories = () => {
-  actionNotify(
+  confirmNotify(
     destroyActions(() => {
       ajaxDestroyEquipmentKindCategories(
         selected.value.map((item) => item.uuid)

@@ -82,7 +82,7 @@
   <!-- 弹窗 -->
   <!-- 新建厂家弹窗 -->
   <q-dialog v-model="alertCreateFactory">
-    <q-card style="width: 800px">
+    <q-card :style="{minWidth: '40vw'}">
       <q-card-section>
         <div class="text-h6">新建厂家</div>
       </q-card-section>
@@ -107,7 +107,7 @@
   </q-dialog>
   <!-- 编辑厂家弹窗 -->
   <q-dialog v-model="alertEditFactory">
-    <q-card style="width: 800px">
+    <q-card :style="{minWidth: '40vw'}">
       <q-card-section>
         <div class="text-h6">编辑厂家</div>
       </q-card-section>
@@ -148,7 +148,7 @@ import {
   loadingNotify,
   successNotify,
   errorNotify,
-  actionNotify,
+  confirmNotify,
   destroyActions,
 } from "src/utils/notify";
 
@@ -258,7 +258,7 @@ const fnUpdateFactory = () => {
 const fnDestroyFactory = params => {
   if (!params["uuid"]) return;
 
-  actionNotify(
+  confirmNotify(
     destroyActions(() => {
       const loading = loadingNotify();
 
@@ -274,7 +274,7 @@ const fnDestroyFactory = params => {
 };
 
 const fnDestroyFactories = () => {
-  actionNotify(
+  confirmNotify(
     destroyActions(() => {
       const loading = loadingNotify();
 

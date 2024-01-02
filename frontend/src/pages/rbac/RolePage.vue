@@ -81,7 +81,7 @@
   <!-- 对话框 -->
   <!-- 新建角色对话框 -->
   <q-dialog v-model="alertCreateRbacRole">
-    <q-card style="width: 800px">
+    <q-card :style="{minWidth: '40vw'}">
       <q-card-section>
         <div class="text-h6">新建角色</div>
       </q-card-section>
@@ -101,7 +101,7 @@
   </q-dialog>
   <!-- 编辑角色对话框 -->
   <q-dialog v-model="alertEditRbacRole">
-    <q-card style="width: 800px">
+    <q-card :style="{minWidth: '40vw'}">
       <q-card-section>
         <div class="text-h6">编辑角色</div>
       </q-card-section>
@@ -137,7 +137,7 @@ import {
   loadingNotify,
   errorNotify,
   successNotify,
-  actionNotify,
+  confirmNotify,
   destroyActions,
 } from "src/utils/notify";
 
@@ -280,7 +280,7 @@ const fnUpdateRbacRole = () => {
 const fnDestroyRbacRole = (params = {}) => {
   if (!params["uuid"]) return;
 
-  actionNotify(
+  confirmNotify(
     destroyActions(() => {
       const loading = loadingNotify();
 
@@ -303,7 +303,7 @@ const fnDestroyRbacRole = (params = {}) => {
  * 批量删除角色
  */
 const fnDestroyRbacRoles = () => {
-  actionNotify(
+  confirmNotify(
     destroyActions(() => {
       const loading = loadingNotify();
 

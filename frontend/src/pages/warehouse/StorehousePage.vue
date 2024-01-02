@@ -104,7 +104,7 @@
   <!-- 弹窗 -->
   <!-- 新建仓库-库房弹窗 -->
   <q-dialog v-model="alertCreateWarehouseStorehouse">
-    <q-card style="width: 800px">
+    <q-card :style="{ minWidth: '40vw' }">
       <q-card-section>
         <div class="text-h6">新建仓库-库房</div>
       </q-card-section>
@@ -145,7 +145,7 @@
   </q-dialog>
   <!-- 编辑仓库-库房弹窗 -->
   <q-dialog v-model="alertEditWarehouseStorehouse">
-    <q-card style="width: 800px">
+    <q-card :style="{minWidth: '40vw'}">
       <q-card-section>
         <div class="text-h6">编辑仓库-库房</div>
       </q-card-section>
@@ -200,7 +200,7 @@ import {
   loadingNotify,
   successNotify,
   errorNotify,
-  actionNotify,
+  confirmNotify,
   destroyActions,
 } from "src/utils/notify";
 import SelOrganizationRailway_search from "src/components/SelOrganizationRailway_search.vue";
@@ -371,7 +371,7 @@ const fnUpdateWarehouseStorehouse = () => {
 const fnDestroyWarehouseStorehouse = (params) => {
   if (!params["uuid"]) return;
 
-  actionNotify(destroyActions(() => {
+  confirmNotify(destroyActions(() => {
     const loading = loadingNotify();
 
     ajaxDestroyWarehouseStorehouse(params["uuid"])
@@ -385,7 +385,7 @@ const fnDestroyWarehouseStorehouse = (params) => {
 };
 
 const fnDestroyWarehouseStorehouses = () => {
-  actionNotify(destroyActions(() => {
+  confirmNotify(destroyActions(() => {
     const loading = loadingNotify();
 
     ajaxDestroyWarehouseStorehouses(collect(selected.value).pluck("uuid").all())

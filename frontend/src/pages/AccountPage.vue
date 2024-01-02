@@ -107,7 +107,7 @@
   <!-- 对话框 -->
   <!-- 新建用户对话框 -->
   <q-dialog v-model="alertCreateAccount">
-    <q-card style="width: 800px">
+    <q-card :style="{minWidth: '40vw'}">
       <q-card-section>
         <div class="text-h6">新建用户</div>
       </q-card-section>
@@ -136,7 +136,7 @@
   </q-dialog>
   <!-- 编辑用户对话框 -->
   <q-dialog v-model="alertEditAccount">
-    <q-card style="width: 800px">
+    <q-card :style="{minWidth: '40vw'}">
       <q-card-section>
         <div class="text-h6">编辑用户</div>
       </q-card-section>
@@ -192,7 +192,7 @@
   </q-dialog>
   <!-- 编辑密码对话框 -->
   <q-dialog v-model="alertEditPassword">
-    <q-card style="width: 800px">
+    <q-card :style="{minWidth: '40vw'}">
       <q-card-section>
         <div class="text-h6">编辑密码</div>
       </q-card-section>
@@ -233,7 +233,7 @@ import {
   loadingNotify,
   successNotify,
   errorNotify,
-  actionNotify,
+  confirmNotify,
   destroyActions,
 } from "src/utils/notify";
 import { fnColumnReverseSort } from "src/utils/common";
@@ -495,7 +495,7 @@ const fnUpdateAccount = async () => {
 const fnDestroyAccount = (params = {}) => {
   if (!params["uuid"]) return;
 
-  actionNotify(
+  confirmNotify(
     destroyActions(() => {
       const loading = loadingNotify();
 
@@ -520,7 +520,7 @@ const fnDestroyAccount = (params = {}) => {
 const fnDestroyAccounts = () => {
   if (selected.value.length === 0) return;
 
-  actionNotify(
+  confirmNotify(
     destroyActions(() => {
       const loading = loadingNotify();
 

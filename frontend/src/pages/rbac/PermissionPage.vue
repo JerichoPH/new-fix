@@ -116,7 +116,7 @@
   <!-- 对话框 -->
   <!-- 新建权限对话框 -->
   <q-dialog v-model="alertCreateRbacPermission">
-    <q-card style="width: 800px">
+    <q-card :style="{minWidth: '40vw'}">
       <q-card-section>
         <div class="text-h6">新建权限</div>
       </q-card-section>
@@ -141,7 +141,7 @@
   </q-dialog>
   <!-- 编辑权限对话框 -->
   <q-dialog v-model="alertEditRbacPermission">
-    <q-card style="width: 800px">
+    <q-card :style="{minWidth: '40vw'}">
       <q-card-section>
         <div class="text-h6">编辑权限</div>
       </q-card-section>
@@ -176,7 +176,7 @@ import {
   loadingNotify,
   successNotify,
   errorNotify,
-  actionNotify,
+  confirmNotify,
   destroyActions,
 } from "src/utils/notify";
 import {
@@ -394,7 +394,7 @@ const fnDestroyRbacPermission = (params = {}) => {
   if (!params["uuid"]) return;
 
   const loading = loadingNotify();
-  actionNotify(
+  confirmNotify(
     destroyActions(() => {
       ajaxDestroyRbacPermission(params.uuid)
         .then((res) => {
@@ -415,7 +415,7 @@ const fnDestroyRbacPermission = (params = {}) => {
  * 批量删除权限
  */
 const fnDestroyRbacPermissions = () => {
-  actionNotify(
+  confirmNotify(
     destroyActions(() => {
       const loading = loadingNotify();
 

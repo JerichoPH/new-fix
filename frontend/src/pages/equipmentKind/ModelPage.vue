@@ -106,7 +106,7 @@
   <!-- 弹窗 -->
   <!-- 新建器材型号弹窗 -->
   <q-dialog v-model="alertCreateEquipmentKindModel">
-    <q-card style="width: 800px">
+    <q-card :style="{minWidth: '40vw'}">
       <q-card-section>
         <div class="text-h6">新建器材型号</div>
       </q-card-section>
@@ -129,7 +129,7 @@
   </q-dialog>
   <!-- 编辑器材型号弹窗 -->
   <q-dialog v-model="alertEditEquipmentKindModel">
-    <q-card style="width: 800px">
+    <q-card :style="{minWidth: '40vw'}">
       <q-card-section>
         <div class="text-h6">编辑器材型号</div>
       </q-card-section>
@@ -163,7 +163,7 @@ import {
   loadingNotify,
   successNotify,
   errorNotify,
-  actionNotify,
+  confirmNotify,
   destroyActions,
 } from "src/utils/notify";
 import { fnColumnReverseSort } from "src/utils/common";
@@ -295,7 +295,7 @@ const fnStoreEquipomentKindModel = () => {
  * @param {{*}} params
  */
 const fnDestroyEquipmentKindModels = (params) => {
-  actionNotify(
+  confirmNotify(
     destroyActions(() => {
       const loading = loadingNotify();
 
@@ -351,7 +351,7 @@ const fnUpdateEquipmentKindModel = (params) => {
 const fnDestroyEquipmentKindModel = (params) => {
   if (!params["uuid"]) return;
 
-  actionNotify(
+  confirmNotify(
     destroyActions(() => {
       const loading = loadingNotify();
 

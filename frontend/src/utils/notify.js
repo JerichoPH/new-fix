@@ -137,7 +137,7 @@ export const errorNotify = (
  * @param {string} message 消息内容
  * @param {[{*}]} actions 行为
  */
-export const actionNotify = (
+export const confirmNotify = (
   actions = [],
   message = "删除不可恢复，是否继续？"
 ) => {
@@ -149,13 +149,4 @@ export const actionNotify = (
   });
 
   return n;
-};
-
-export const notifies = {
-  destroyActions,
-  loadingNotify,
-  infoNotify,
-  successNotify,
-  errorNotify,
-  actionNotify,
-};
+};actionNotify: confirmNotify

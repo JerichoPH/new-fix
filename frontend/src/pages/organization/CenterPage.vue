@@ -106,7 +106,7 @@
   <!-- 弹窗 -->
   <!-- 新建中心弹窗 -->
   <q-dialog v-model="alertCreateOrganizationCenter">
-    <q-card style="width: 800px">
+    <q-card :style="{minWidth: '40vw'}">
       <q-card-section>
         <div class="text-h6">新建中心</div>
       </q-card-section>
@@ -148,7 +148,7 @@
   </q-dialog>
   <!-- 编辑中心弹窗 -->
   <q-dialog v-model="alertEditOrganizationCenter">
-    <q-card style="width: 800px">
+    <q-card :style="{minWidth: '40vw'}">
       <q-card-section>
         <div class="text-h6">编辑中心</div>
       </q-card-section>
@@ -205,7 +205,7 @@ import {
   loadingNotify,
   successNotify,
   errorNotify,
-  actionNotify,
+  confirmNotify,
   destroyActions,
 } from "src/utils/notify";
 import SelOrganizationRailway_search from "src/components/SelOrganizationRailway_search.vue";
@@ -366,7 +366,7 @@ const fnUpdateOrganizationCenter = () => {
 const fnDestroyCreateOrganizationCenter = params => {
   if (!params["uuid"]) return;
 
-  actionNotify(
+  confirmNotify(
     destroyActions(() => {
       const loading = loadingNotify();
 
@@ -381,7 +381,7 @@ const fnDestroyCreateOrganizationCenter = params => {
   );
 };
 const fnDestroyCreateStations = () => {
-  actionNotify(
+  confirmNotify(
     destroyActions(() => {
       const loading = loadingNotify();
 

@@ -102,7 +102,7 @@
   <!-- 弹窗 -->
   <!-- 新建站段弹窗 -->
   <q-dialog v-model="alertCreateOrganizationParagraph">
-    <q-card style="width: 800px">
+    <q-card :style="{minWidth: '40vw'}">
       <q-card-section>
         <div class="text-h6">新建站段</div>
       </q-card-section>
@@ -126,7 +126,7 @@
   </q-dialog>
   <!-- 编辑站段弹窗 -->
   <q-dialog v-model="alertEditOrganizationParagraph">
-    <q-card style="width: 800px">
+    <q-card :style="{minWidth: '40vw'}">
       <q-card-section>
         <div class="text-h6">编辑站段</div>
       </q-card-section>
@@ -166,7 +166,7 @@ import {
   loadingNotify,
   successNotify,
   errorNotify,
-  actionNotify,
+  confirmNotify,
   destroyActions,
 } from "src/utils/notify";
 import { fnColumnReverseSort } from "src/utils/common";
@@ -302,7 +302,7 @@ const fnUpdateOrganizationParagraph = () => {
 const fnDestroyOrganizationParagraph = params => {
   if (!params["uuid"]) return;
 
-  actionNotify(
+  confirmNotify(
     destroyActions(() => {
       ajaxDestroyOrganizationParagraph(params["uuid"])
         .then(res => {
@@ -315,7 +315,7 @@ const fnDestroyOrganizationParagraph = params => {
 };
 
 const fnDestroyOrganizationParagraphs = () => {
-  actionNotify(
+  confirmNotify(
     destroyActions(() => {
       ajaxDestroyOrganizationParagraphs(selected.value)
         .then(res => {

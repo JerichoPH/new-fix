@@ -86,7 +86,7 @@
   <!-- 弹窗 -->
   <!-- 新建故障类型弹窗 -->
   <q-dialog v-model="alertCreateBreakdownType">
-    <q-card style="width: 800px">
+    <q-card :style="{minWidth: '40vw'}">
       <q-card-section>
         <div class="text-h6">新建故障类型</div>
       </q-card-section>
@@ -111,7 +111,7 @@
   </q-dialog>
   <!-- 编辑故障类型 -->
   <q-dialog v-model="alertEditBreakdownType">
-    <q-card style="width: 800px">
+    <q-card :style="{minWidth: '40vw'}">
       <q-card-section>
         <div class="text-h6">编辑故障类型</div>
       </q-card-section>
@@ -152,7 +152,7 @@ import {
   loadingNotify,
   successNotify,
   errorNotify,
-  actionNotify,
+  confirmNotify,
   destroyActions,
 } from "src/utils/notify";
 import SelEquipmentKindCategory_search from "src/components/SelEquipmentKindCategory_search.vue";
@@ -272,7 +272,7 @@ const fnUpdateBreakdownType = () => {
 const fnDestroyBreakdownType = params => {
   if (!params["uuid"]) return;
 
-  actionNotify(
+  confirmNotify(
     destroyActions(() => {
       const loading = loadingNotify();
 
@@ -288,7 +288,7 @@ const fnDestroyBreakdownType = params => {
 };
 
 const fnDestroyBreakdownTypes = () => {
-  actionNotify(
+  confirmNotify(
     destroyActions(() => {
       const loading = loadingNotify();
 
