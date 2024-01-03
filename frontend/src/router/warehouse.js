@@ -1,6 +1,7 @@
 import MainLayoutVue from "src/layouts/MainLayout.vue";
 import WarehouseStorehousePage from "src/pages/warehouse/StorehousePage.vue";
 import WareshouseAreaPage from "src/pages/warehouse/AreaPage.vue";
+import WarehousePlatoonPage from "src/pages/warehouse/PlatoonPage.vue";
 
 export default [
   {
@@ -16,6 +17,11 @@ export default [
         path: "area",
         name: "warehouseArea:index",
         component: WareshouseAreaPage,
+      },
+      {
+        path: "platoon",
+        name: "warehousePlatoon:index",
+        component: WarehousePlatoonPage,
       },
     ],
   },
