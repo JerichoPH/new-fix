@@ -83,7 +83,10 @@
                 <q-tr :props="props">
                   <q-td><q-checkbox :key="props.row.uuid" :value="props.row.uuid" v-model="props.selected" /></q-td>
                   <q-td>{{ props.row.index }}</q-td>
-                  <q-td key="name" :props="props">{{ props.row.name }}</q-td>
+                  <q-td key="name" :props="props">
+                    <a href="javascript:" @click="fnOpenAlertEditWarehouseShelfSubs(props.row.operation)">{{
+                      props.row.name }}</a>
+                  </q-td>
                   <q-td key="warehousePlatoon" :props="props">
                     <join-string :values="[
                       props.row.warehouseStorehouse.name,
@@ -93,8 +96,7 @@
                   </q-td>
                   <q-td key="operation" :props="props">
                     <q-btn-group>
-                      <q-btn @click="fnOpenAlertEditCreateWarehouseShelf(props.row.operation)" color="warning"
-                        icon="edit">
+                      <q-btn @click="fnOpenAlertEditWarehouseShelf(props.row.operation)" color="warning" icon="edit">
                         编辑
                       </q-btn>
                       <q-btn @click="fnDestroyCreateWarehouseShelf(props.row.operation)" color="negative" icon="delete">
@@ -168,7 +170,7 @@
       </q-form>
     </q-card>
   </q-dialog>
-
+  <!-- 编辑仓库-架弹窗 -->
   <q-dialog v-model="alertEditWarehouseShelf" no-backdrop-dismiss>
     <q-card :style="{ minWidth: '450px' }">
       <q-card-section>
@@ -224,9 +226,100 @@
       </q-form>
     </q-card>
   </q-dialog>
+  <!-- 编辑仓库-架正视图 -->
+  <q-dialog v-model="alertEditWarehouseShelfSubs" no-backdrop-dismiss>
+    <q-card :style="{ minWidth: '550px' }">
+      <q-card-section>
+        <div class="text-h6">编辑仓库-架正视图</div>
+      </q-card-section>
+      <q-form class="q-gutter-md" @submit.prevent="">
+        <q-card-section class="q-pt-none">
+          <div class="row">
+            <div class="col">
+              <q-input outlined clearable lazy-rules v-model="name_alertEditWarehouseShelfSubs" label="名称" :rules="[]"
+                @keydown="fnUpdateWarehouseShelfName($event)" />
+            </div>
+          </div>
+          <div class="row q-mt-md">
+            <div class="col">
+              <q-btn-group>
+                <q-btn @click="fnOpenAlertCreateWarehouseTiers" color="secondary" icon="add" label="新建层"></q-btn>
+                <q-btn @click="fnDestoryWarehouseTiers" color="negative" icon="delete" label="删除层"></q-btn>
+                <q-btn @click="fnOpenAlertCreateWarehouseCells" color="secondary" icon="add" label="新建位"></q-btn>
+              </q-btn-group>
+            </div>
+          </div>
+          <div class="row q-mt-md">
+            <div class="col">
+              <template v-if="warehouseShelf_alertEditWarehouseShelfSubs">
+                <q-card flat bordered
+                  v-for="(warehouseTier, idx) in collect(warehouseShelf_alertEditWarehouseShelfSubs.warehouse_tiers || []).reverse().all()"
+                  :key="idx">
+                  <q-card-section>
+                    <q-checkbox v-model="warehouseTierUuids_alertEditWarehouseShelfSubs" :label="warehouseTier.name"
+                      :val="warehouseTier.uuid" :key="warehouseTier.uuid" />
+                    <q-btn v-for="(warehouseCell, idx2) in warehouseTier.warehouse_cells" :key="idx2"
+                      :label="warehouseCell.name" color="primary" @click="fnDestroyWarehouseCell(warehouseCell.uuid)" />
+                  </q-card-section>
+                </q-card>
+              </template>
+            </div>
+          </div>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn type="button" label="关闭" v-close-popup />
+          <!-- <q-btn type="submit" label="确定" icon="check" color="secondary" /> -->
+        </q-card-actions>
+      </q-form>
+    </q-card>
+  </q-dialog>
+  <!-- 新建仓库-层弹窗 -->
+  <q-dialog v-model="alertCreateWarehouseTiers" no-backdrop-dismiss>
+    <q-card :style="{ minWidth: '450px' }">
+      <q-card-section>
+        <div class="text-h6">新建仓库-层</div>
+      </q-card-section>
+      <q-form class="q-gutter-md" @submit.prevent="fnStoreWarehouseTiers">
+        <q-card-section class="q-pt-none">
+          <div class="row">
+            <div class="col">
+              <q-input outlined clearable lazy-rules v-model="number_alertCreateWarehouseTiers" label="数量" :rules="[]"
+                type="number" />
+            </div>
+          </div>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn type="button" label="关闭" v-close-popup />
+          <q-btn type="submit" label="确定" icon="check" color="secondary" />
+        </q-card-actions>
+      </q-form>
+    </q-card>
+  </q-dialog>
+  <!-- 新建仓库-位弹窗 -->
+  <q-dialog v-model="alertCreateWarehouseCells" no-backdrop-dismiss>
+    <q-card :style="{ minWidth: '450px' }">
+      <q-card-section>
+        <div class="text-h6">新建仓库-位</div>
+      </q-card-section>
+      <q-form class="q-gutter-md" @submit.prevent="fnStoreWarehouseCells">
+        <q-card-section class="q-pt-none">
+          <div class="row">
+            <div class="col">
+              <q-input outlined clearable lazy-rules v-model="number_alertCreateWarehouseCells" label="数量" :rules="[]"
+                type="number" />
+            </div>
+          </div>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn type="button" label="关闭" v-close-popup />
+          <q-btn type="submit" label="确定" icon="check" color="secondary" />
+        </q-card-actions>
+      </q-form>
+    </q-card>
+  </q-dialog>
 </template>
 <script setup>
-import { ref, onMounted, provide } from "vue";
+import { ref, onMounted, provide, watch } from "vue";
 import collect from "collect.js";
 import { fnColumnReverseSort } from "src/utils/common";
 import {
@@ -236,7 +329,10 @@ import {
   ajaxUpdateWarehouseShelf,
   ajaxDestroyWarehouseShelf,
   ajaxDestroyWarehouseShelves,
-  ajaxStoreWarehousePlatoon,
+  ajaxStoreWarehouseTiers,
+  ajaxDestroyWarehouseTiers,
+  ajaxStoreWarehouseCells,
+  ajaxDestroyWarehouseCell,
 } from "src/apis/warehouse";
 import {
   loadingNotify,
@@ -327,12 +423,35 @@ provide("warehouseAreaUuid_alertEdit", warehouseAreaUuid_alertEditWarehouseShelf
 const warehousePlatoonUuid_alertEditWarehouseShelf = ref("");
 provide("warehousePlatoonUuid_alertEdit", warehousePlatoonUuid_alertEditWarehouseShelf);
 
+// 编辑仓库-架正视图数据
+const alertEditWarehouseShelfSubs = ref(false);
+const name_alertEditWarehouseShelfSubs = ref("");
+const warehouseShelf_alertEditWarehouseShelfSubs = ref(null);
+const warehouseTierUuids_alertEditWarehouseShelfSubs = ref([]);
+watch(warehouseTierUuids_alertEditWarehouseShelfSubs, newValue => console.log(newValue));
+
+// 新建仓库-层弹窗数据
+const alertCreateWarehouseTiers = ref(false);
+const number_alertCreateWarehouseTiers = ref(0);
+
+// 新建仓库-位弹窗数据
+const alertCreateWarehouseCells = ref(false);
+const number_alertCreateWarehouseCells = ref(0);
+
+
 onMounted(() => fnInit());
 
 const fnInit = () => fnSearch();
 
 const fnResetSearch = () => {
   name_search.value = "";
+  organizationRailwayUuid_search.value = "";
+  organizationParagraphUuid_search.value = "";
+  organizationWorkshopUuid_search.value = "";
+  organizationWorkAreaUuid_search.value = "";
+  warehouseStorehouseUuid_search.value = "";
+  warehouseAreaUuid_search.value = "";
+  warehousePlatoonUuid_search.value = "";
 };
 
 const fnSearch = () => {
@@ -408,7 +527,7 @@ const fnStoreWarehouseShelf = () => {
     .finally(loading());
 };
 
-const fnOpenAlertEditCreateWarehouseShelf = params => {
+const fnOpenAlertEditWarehouseShelf = params => {
   if (!params["uuid"]) return;
   currentUuid.value = params.uuid;
 
@@ -458,8 +577,166 @@ const fnUpdateWarehouseShelf = () => {
 };
 
 const fnDestroyCreateWarehouseShelf = params => {
-  if(!parmas["uuid"]) return;
+  if (!parmas["uuid"]) return;
+
+  confirmNotify(destroyActions(() => {
+    const loading = loadingNotify();
+
+    ajaxDestroyWarehouseShelf(params.uuid)
+      .then(() => {
+        successNotify("删除成功");
+        fnSearch();
+      })
+      .catch((e) => errorNotify(e.msg))
+      .finally(loading());
+  }));
 };
 
-const fnDestroyCreateWarehouseShelves = () => { };
+const fnDestroyCreateWarehouseShelves = () => {
+  confirmNotify(destroyActions(() => {
+    const loading = loadingNotify();
+
+    ajaxDestroyWarehouseShelves(collect(selected.value).pluck("uuid").all())
+      .then(() => {
+        successNotify("删除成功");
+        fnSearch();
+      })
+      .catch(e => errorNotify(e.msg))
+      .finally(loading());
+  }));
+};
+
+const fnUpdateWarehouseShelfName = (event) => {
+  if (event.keyCode !== 13) return;
+  if (!currentUuid.value) return;
+  if (!event.target.value) return;
+
+  const loading = loadingNotify();
+
+  ajaxUpdateWarehouseShelf(currentUuid.value, {
+    name: event.target.value,
+    warehouse_platoon_uuid: warehouseShelf_alertEditWarehouseShelfSubs.value.warehouse_platoon.uuid,
+  })
+    .then(res => {
+      successNotify(res.msg);
+      fnSearch();
+    })
+    .catch(e => errorNotify(e.msg))
+    .finally(loading());
+};
+
+const fnOpenAlertEditWarehouseShelfSubs = params => {
+  if (!params["uuid"]) return;
+  currentUuid.value = params.uuid;
+  warehouseShelf_alertEditWarehouseShelfSubs.value = null;
+  warehouseTierUuids_alertEditWarehouseShelfSubs.value = [];
+
+  ajaxGetWarehouseShelf(params.uuid, {
+    "@~[]": [
+      "WarehousePlatoon",
+      "WarehouseTiers",
+      "WarehouseTiers.WarehouseCells",
+    ],
+  })
+    .then(res => {
+      name_alertEditWarehouseShelfSubs.value = res.content.warehouse_shelf.name;
+      warehouseShelf_alertEditWarehouseShelfSubs.value = res.content.warehouse_shelf;
+      alertEditWarehouseShelfSubs.value = true;
+    })
+    .catch(e => errorNotify(e.msg));
+};
+
+const fnResetAlertCreateWarehouseTiers = () => {
+  number_alertCreateWarehouseTiers.value = 0;
+};
+
+const fnOpenAlertCreateWarehouseTiers = () => {
+  if (!currentUuid.value) return;
+
+  alertCreateWarehouseTiers.value = true;
+};
+
+const fnStoreWarehouseTiers = () => {
+  const loading = loadingNotify();
+
+  ajaxStoreWarehouseTiers({
+    warehouse_shelf_uuid: currentUuid.value,
+    number: parseInt(number_alertCreateWarehouseTiers.value),
+  })
+    .then(res => {
+      successNotify(res.msg);
+      fnOpenAlertEditWarehouseShelfSubs({ uuid: currentUuid.value });
+      fnResetAlertCreateWarehouseTiers();
+
+      alertCreateWarehouseTiers.value = false;
+    })
+    .catch(e => errorNotify(e.msg))
+    .finally(loading());
+};
+
+const fnDestoryWarehouseTiers = () => {
+  confirmNotify(destroyActions(() => {
+    const loading = loadingNotify();
+
+    ajaxDestroyWarehouseTiers(warehouseTierUuids_alertEditWarehouseShelfSubs.value)
+      .then(() => {
+        successNotify("删除成功");
+        fnOpenAlertEditWarehouseShelfSubs({ uuid: currentUuid.value });
+      })
+      .catch(e => errorNotify(e.msg))
+      .finally(loading());
+  }));
+};
+
+const fnRestAlertCreateWarehouseCells = () => {
+  number_alertCreateWarehouseCells.value = 0;
+};
+
+const fnOpenAlertCreateWarehouseCells = () => {
+  if (collect(warehouseTierUuids_alertEditWarehouseShelfSubs.value).isEmpty()) {
+    errorNotify("请勾选需要添加位的【层】");
+    return;
+  }
+
+  alertCreateWarehouseCells.value = true;
+};
+
+const fnStoreWarehouseCells = () => {
+  if (collect(warehouseTierUuids_alertEditWarehouseShelfSubs.value).isEmpty()) {
+    errorNotify("请勾选需要添加位的【层】");
+    return;
+  }
+
+  const loading = loadingNotify();
+  collect(warehouseTierUuids_alertEditWarehouseShelfSubs.value)
+    .each(warehouseTierUuid => {
+      ajaxStoreWarehouseCells({
+        warehouse_tier_uuid: warehouseTierUuid,
+        number: parseInt(number_alertCreateWarehouseCells.value),
+      })
+        .then(res => {
+          successNotify(res.msg);
+          fnOpenAlertEditWarehouseShelfSubs({ uuid: currentUuid.value });
+          fnRestAlertCreateWarehouseCells();
+
+          alertCreateWarehouseCells.value = false;
+        })
+        .catch(e => errorNotify(e.msg))
+        .finally(loading());
+    });
+};
+
+const fnDestroyWarehouseCell = uuid => {
+  confirmNotify(destroyActions(() => {
+    const loading = loadingNotify();
+
+    ajaxDestroyWarehouseCell(uuid)
+      .then(() => {
+        successNotify("删除成功");
+        fnOpenAlertEditWarehouseShelfSubs({ uuid: currentUuid.value });
+      })
+      .catch(e => errorNotify(e.msg))
+      .finally(loading());
+  }));
+};
 </script>
