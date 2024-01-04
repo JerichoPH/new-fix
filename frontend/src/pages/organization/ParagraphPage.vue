@@ -76,16 +76,11 @@
                   <q-td key="organizationRailway" :props="props">{{ props.row.organizationRailway.short_name }}</q-td>
                   <q-td key="operation" :props="props">
                     <q-btn-group>
-                      <q-btn @click="
-                        fnOpenAlertEditOrganizationParagraph(
-                          props.row.operation
-                        )
-                        " color="warning" icon="edit">
+                      <q-btn @click="fnOpenAlertEditOrganizationParagraph(props.row.operation)" color="warning"
+                        icon="edit">
                         编辑
                       </q-btn>
-                      <q-btn @click="
-                        fnDestroyOrganizationParagraph(props.row.operation)
-                        " color="negative" icon="delete">
+                      <q-btn @click="fnDestroyOrganizationParagraph(props.row.operation)" color="negative" icon="delete">
                         删除
                       </q-btn>
                     </q-btn-group>
@@ -102,7 +97,7 @@
   <!-- 弹窗 -->
   <!-- 新建站段弹窗 -->
   <q-dialog v-model="alertCreateOrganizationParagraph" no-backdrop-dismiss>
-    <q-card :style="{minWidth: '450px'}">
+    <q-card :style="{ minWidth: '450px' }">
       <q-card-section>
         <div class="text-h6">新建站段</div>
       </q-card-section>
@@ -127,7 +122,7 @@
   </q-dialog>
   <!-- 编辑站段弹窗 -->
   <q-dialog v-model="alertEditOrganizationParagraph" no-backdrop-dismiss>
-    <q-card :style="{minWidth: '450px'}">
+    <q-card :style="{ minWidth: '450px' }">
       <q-card-section>
         <div class="text-h6">编辑站段</div>
       </q-card-section>

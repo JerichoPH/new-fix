@@ -59,12 +59,10 @@
                 <q-tr :props="props">
                   <q-th align="left"><q-checkbox key="allCheck" v-model="props.selected" /></q-th>
                   <q-th align="left">#</q-th>
-                  <q-th align="left" key="name" @click="(event) => fnColumnReverseSort(event, props, sortBy)
-                    ">
+                  <q-th align="left" key="name" @click="(event) => fnColumnReverseSort(event, props, sortBy)">
                     名称
                   </q-th>
-                  <q-th align="left" key="uri" @click="(event) => fnColumnReverseSort(event, props, sortBy)
-                    ">
+                  <q-th align="left" key="uri" @click="(event) => fnColumnReverseSort(event, props, sortBy)">
                     路由
                   </q-th>
                   <q-th align="left" key="description">描述</q-th>
@@ -79,29 +77,14 @@
                   <q-td><q-checkbox :key="props.row.uuid" :value="props.row.uuid" v-model="props.selected" /></q-td>
                   <q-td>{{ props.row.index }}</q-td>
                   <q-td key="name" :props="props">{{ props.row.name }}</q-td>
-                  <q-td key="uri" :props="props">{{
-                    props.row.uri ?? "-"
-                  }}</q-td>
-                  <q-td key="description" :props="props">
-                    {{ props.row.description ?? "-" }}
-                  </q-td>
-                  <q-td>
-                    <q-icon :name="props.row.icon" v-if="props.row.icon" />
-                    <span v-else>-</span>
-                  </q-td>
+                  <q-td key="uri" :props="props">{{ props.row.uri }}</q-td>
+                  <q-td key="description" :props="props">{{ props.row.description }}</q-td>
+                  <q-td><q-icon :name="props.row.icon" /></q-td>
                   <q-td key="parent" :props="props">
-                    <q-chip color="primary" text-color="white" v-if="props.row.parent">
-                      {{ props.row.parent.name }}
-                    </q-chip>
+                    {{ props.row.parent ? props.row.parent.name : "" }}
                   </q-td>
                   <q-td key="rbacRoles" :props="props">
-                    <template v-if="props.row.rbacRoles.length > 0">
-                      <q-chip color="primary" text-color="white" v-for="(rbacRole, idx) in props.row.rbacRoles"
-                        :key="idx">
-                        {{ rbacRole.name }}
-                      </q-chip>
-                    </template>
-                    <template v-else><span>-</span></template>
+                    <join-string :values="collect(props.row.rbacRoles).pluck('name').all()" sseparator=", " />
                   </q-td>
                   <q-td key="operation" :props="props">
                     <q-btn-group>
@@ -170,7 +153,7 @@
               <q-input outlined clearable lazy-rules v-model="icon_alertEditRbacMenu" label="图标" :rules="[]"
                 class="q-mt-md" />
               <sel-rbac-menu_alert-edit label-name="所属父级" :ajaxParams="{
-                ':<>*': { uuid: currentUuid },
+                '@<>': { uuid: currentUuid },
                 not_has_subs: currentUuid,
               }" class="q-mt-md" />
               <chk-rbac-role_alert-edit label-name="所属角色" class="q-mt-md" />
@@ -187,14 +170,8 @@
 </template>
 <script setup>
 import { ref, onMounted, provide } from "vue";
-import { collect } from "collect.js";
+import collect from "collect.js";
 import { fnColumnReverseSort } from "src/utils/common.js";
-import SelRbacMenu_search from "src/components/SelRbacMenu_search.vue";
-import SelRbacMenu_alertCreate from "src/components/SelRbacMenu_alertCreate.vue";
-import SelRbacMenu_alertEdit from "src/components/SelRbacMenu_alertEdit.vue";
-import SelRbacRole_search from "src/components/SelRbacRole_search.vue";
-import ChkRbacRole_alertCreate from "src/components/ChkRbacRole_alertCreate.vue";
-import ChkRbacRole_alertEdit from "src/components/ChkRbacRole_alertEdit.vue";
 import {
   successNotify,
   errorNotify,
@@ -210,6 +187,13 @@ import {
   ajaxUpdateRbacMenu,
   ajaxDestroyRbacMenus,
 } from "src/apis/rbac";
+import SelRbacMenu_search from "src/components/SelRbacMenu_search.vue";
+import SelRbacMenu_alertCreate from "src/components/SelRbacMenu_alertCreate.vue";
+import SelRbacMenu_alertEdit from "src/components/SelRbacMenu_alertEdit.vue";
+import SelRbacRole_search from "src/components/SelRbacRole_search.vue";
+import ChkRbacRole_alertCreate from "src/components/ChkRbacRole_alertCreate.vue";
+import ChkRbacRole_alertEdit from "src/components/ChkRbacRole_alertEdit.vue";
+import JoinString from "src/components/JoinString.vue";
 
 // 表格数据
 const rows = ref([]);
@@ -285,21 +269,18 @@ const fnSearch = () => {
     rbac_role_uuid: rbacRoleUuid_search.value,
   })
     .then((res) => {
-      if (res.content.rbac_menus.length > 0) {
-        collect(res.content.rbac_menus).each((rbacMenu, idx) => {
-          rows.value.push({
+      rows.value = collect(res.content.rbac_menus)
+        .map((rbacMenu, idx) => {
+          return {
+            ...rbacMenu,
             index: idx + 1,
-            uuid: rbacMenu.uuid,
-            name: rbacMenu.name,
-            uri: rbacMenu.uri,
-            description: rbacMenu.description,
-            icon: rbacMenu.icon,
             parent: rbacMenu.parent,
-            rbacRoles: rbacMenu.rbac_roles || [],
+            rbacRoles: rbacMenu.rbac_roles,
             operation: { uuid: rbacMenu.uuid },
-          });
-        });
-      }
+          };
+        })
+        .all();
+        console.log('ok',rows.value);
     })
     .catch((e) => errorNotify(e.msg))
     .finally(() => {

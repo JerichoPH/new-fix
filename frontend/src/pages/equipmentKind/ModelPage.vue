@@ -53,16 +53,13 @@
                 <q-tr :props="props">
                   <q-th align="left"><q-checkbox key="allCheck" v-model="props.selected" /></q-th>
                   <q-th align="left">#</q-th>
-                  <q-th align="left" key="uniqueCode" @click="(event) => fnColumnReverseSort(event, props, sortBy)
-                    ">
+                  <q-th align="left" key="uniqueCode" @click="(event) => fnColumnReverseSort(event, props, sortBy)">
                     代码
                   </q-th>
-                  <q-th align="left" key="name" @click="(event) => fnColumnReverseSort(event, props, sortBy)
-                    ">
+                  <q-th align="left" key="name" @click="(event) => fnColumnReverseSort(event, props, sortBy)">
                     名称
                   </q-th>
-                  <q-th align="left" key="parent" @click="(event) => fnColumnReverseSort(event, props, sortBy)
-                    ">
+                  <q-th align="left" key="parent" @click="(event) => fnColumnReverseSort(event, props, sortBy)">
                     器材种类类型
                   </q-th>
                   <q-th align="right"></q-th>
@@ -77,19 +74,17 @@
                   }}</q-td>
                   <q-td key="name" :props="props">{{ props.row.name }}</q-td>
                   <q-td key="parent" :props="props">
-                    {{ props.row.parent.equipmentKindCategory.name }}
-                    {{ props.row.parent.equipmentKindType.name }}
+                    <join-string :values="[
+                      props.row.parent.equipmentKindCategory.name,
+                      props.row.parent.equipmentKindType.name
+                    ]" />
                   </q-td>
                   <q-td key="operation" :props="props">
                     <q-btn-group>
-                      <q-btn @click="
-                        fnOpenAlertEditEquipmentKindModel(props.row.operation)
-                        " color="warning" icon="edit">
+                      <q-btn @click="fnOpenAlertEditEquipmentKindModel(props.row.operation)" color="warning" icon="edit">
                         编辑
                       </q-btn>
-                      <q-btn @click="
-                        fnDestroyEquipmentKindModel(props.row.operation)
-                        " color="negative" icon="delete">
+                      <q-btn @click="fnDestroyEquipmentKindModel(props.row.operation)" color="negative" icon="delete">
                         删除
                       </q-btn>
                     </q-btn-group>
@@ -106,7 +101,7 @@
   <!-- 弹窗 -->
   <!-- 新建器材型号弹窗 -->
   <q-dialog v-model="alertCreateEquipmentKindModel" no-backdrop-dismiss>
-    <q-card :style="{minWidth: '450px'}">
+    <q-card :style="{ minWidth: '450px' }">
       <q-card-section>
         <div class="text-h6">新建器材型号</div>
       </q-card-section>
@@ -130,7 +125,7 @@
   </q-dialog>
   <!-- 编辑器材型号弹窗 -->
   <q-dialog v-model="alertEditEquipmentKindModel" no-backdrop-dismiss>
-    <q-card :style="{minWidth: '450px'}">
+    <q-card :style="{ minWidth: '450px' }">
       <q-card-section>
         <div class="text-h6">编辑器材型号</div>
       </q-card-section>
@@ -153,6 +148,8 @@
 
 <script setup>
 import { ref, onMounted, provide } from "vue";
+import collect from "collect.js";
+import { fnColumnReverseSort } from "src/utils/common";
 import {
   ajaxGetEquipmentKindModels,
   ajaxGetEquipmentKindModel,
@@ -168,7 +165,7 @@ import {
   confirmNotify,
   destroyActions,
 } from "src/utils/notify";
-import { fnColumnReverseSort } from "src/utils/common";
+import JoinString from "src/components/JoinString.vue";
 import SelEquipmentKindCategory_search from "src/components/SelEquipmentKindCategory_search.vue";
 import SelEquipmentKindType_search from "src/components/SelEquipmentKindType_search.vue";
 import SelEquipmentKindCategory_alertCreate from "src/components/SelEquipmentKindCategory_alertCreate.vue";
@@ -190,10 +187,7 @@ const sortBy = ref("name");
 const alertCreateEquipmentKindModel = ref(false);
 const name_alertCreateEquipmentKindModel = ref("");
 const equipmentKindCategoryUuid_alertCreate = ref("");
-provide(
-  "equipmentKindCategoryUuid_alertCreate",
-  equipmentKindCategoryUuid_alertCreate
-);
+provide("equipmentKindCategoryUuid_alertCreate", equipmentKindCategoryUuid_alertCreat);
 const equipmentKindTypeUuid_alertCreate = ref("");
 provide("equipmentKindTypeUuid_alertCreate", equipmentKindTypeUuid_alertCreate);
 
@@ -229,25 +223,21 @@ const fnSearch = () => {
     equipment_kind_type_uuid: equipmentKindTypeUuid_search.value,
   })
     .then((res) => {
-      if (res.content.equipment_kind_models.length > 0) {
-        rows.value = res.content.equipment_kind_models.map(
-          (equipmentKindModel, index) => {
-            return {
-              index: index + 1,
-              uuid: equipmentKindModel.uuid,
-              uniqueCode: equipmentKindModel.unique_code,
-              name: equipmentKindModel.name,
-              parent: {
-                equipmentKindCategory:
-                  equipmentKindModel.equipment_kind_type
-                    .equipment_kind_category,
-                equipmentKindType: equipmentKindModel.equipment_kind_type,
-              },
-              operation: { uuid: equipmentKindModel.uuid },
-            };
+      rows.value = collect(res.content.equipment_kind_models)
+        .map((equipmentKindModel, idx) => {
+          return {
+            ...equipmentKindModel,
+            index: idx + 1,
+            parent: {
+              equipmentKindCategory:
+                equipmentKindModel.equipment_kind_type
+                  .equipment_kind_category,
+              equipmentKindType: equipmentKindModel.equipment_kind_type,
+            },
+            operation: { uuid: equipmentKindModel.uuid },
           }
-        );
-      }
+        })
+        .all();
     })
     .catch((e) => errorNotify(e.msg));
 };

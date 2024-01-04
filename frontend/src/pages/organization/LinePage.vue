@@ -89,10 +89,12 @@
                   <q-td>{{ props.row.index }}</q-td>
                   <q-td key="uniqueCode" :props="props">{{ props.row.uniqueCode }}</q-td>
                   <q-td key="name" :props="props">{{ props.row.name }}</q-td>
-                  <q-td key="organizationParagraph" :props="props">{{ [
-                    props.row.organizationRailway.short_name,
-                    props.row.organizationParagraph.name
-                  ].join(' - ') }}</q-td>
+                  <q-td key="organizationParagraph" :props="props">
+                    <join-string :values="[
+                      props.row.organizationRailway.short_name,
+                      props.row.organizationParagraph.name
+                    ]" />
+                  </q-td>
                   <q-td key="organizationStations" :props="props">{{
                     collect(props.row.organizationStations).pluck('name').implode(',') }}</q-td>
                   <q-td key="organizationCrossroads" :props="props">{{
@@ -122,7 +124,7 @@
   <!-- 弹窗 -->
   <!-- 新建线别弹窗 -->
   <q-dialog v-model="alertCreateOrganizationLine" no-backdrop-dismiss>
-    <q-card :style="{minWidth: '450px'}">
+    <q-card :style="{ minWidth: '450px' }">
       <q-card-section>
         <div class="text-h6">新建线别</div>
       </q-card-section>
@@ -235,6 +237,7 @@ import {
   confirmNotify,
   destroyActions,
 } from "src/utils/notify";
+import JoinString from "src/components/JoinString.vue";
 import SelOrganizationRailway_search from "src/components/SelOrganizationRailway_search.vue";
 import SelOrganizationParagraph_search from "src/components/SelOrganizationParagraph_search.vue";
 import SelOrganizationWorkshop_search from "src/components/SelOrganizationWorkshop_search.vue";
@@ -298,8 +301,8 @@ provide("organizationWorkshopUuid_alertEdit", organizationWorkshopUuid_alertEdit
 const checkedOrganizationStationUuids_alertEditOrganizationLine = ref([]);
 provide("checkedOrganizationStationUuids_alertEdit", checkedOrganizationStationUuids_alertEditOrganizationLine);
 
-onMounted(() => fnInit()
-);
+onMounted(() => fnInit());
+
 const fnInit = () => fnSearch();
 
 const fnResetSearch = () => {
@@ -313,6 +316,9 @@ const fnResetSearch = () => {
 };
 
 const fnSearch = () => {
+  rows.value = [];
+  selected.value = [];
+
   ajaxGetOrganizationLines({
     "@~[]": [
       "OrganizationParagraph",

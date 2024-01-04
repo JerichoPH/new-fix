@@ -183,6 +183,7 @@ const fnResetSearch = () => {
 
 const fnSearch = () => {
   rows.value = [];
+  selected.value = [];
 
   ajaxGetFactories({
     name: name_search.value,

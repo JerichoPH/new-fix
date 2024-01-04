@@ -261,9 +261,9 @@ func (receiver WarehouseShelfMdl) GetListByQuery(ctx *gin.Context) *gorm.DB {
 	return NewWarehouseShelfMdl().
 		SetWheresEqual().
 		SetWheresFuzzy(map[string]string{
-			"name": "ws.name like ?",
+			"name": "wh.name like ?",
 		}).
-		SetWheresDateBetween("ws.created_at", "ws.updated_at", "ws.deleted_at").
+		SetWheresDateBetween("wsh.created_at", "wsh.updated_at", "wsh.deleted_at").
 		SetWheresExtraHasValue(map[string]func(string, *gorm.DB) *gorm.DB{
 			"organization_railway_uuid": func(value string, db *gorm.DB) *gorm.DB {
 				return db.Where("oa.uuid = ?", value)
@@ -290,8 +290,8 @@ func (receiver WarehouseShelfMdl) GetListByQuery(ctx *gin.Context) *gorm.DB {
 		SetWheresExtraHasValues(map[string]func([]string, *gorm.DB) *gorm.DB{}).
 		SetCtx(ctx).
 		GetDbUseQuery("").
-		Table("warehouse_shelves as ws").
-		Joins("join warehouse_platoons wp on ws.warehouse_platoon_uuid = wp.uuid").
+		Table("warehouse_shelves as wsh").
+		Joins("join warehouse_platoons wp on wsh.warehouse_platoon_uuid = wp.uuid").
 		Joins("join warehouse_areas wa on wp.warehouse_area_uuid = wa.uuid").
 		Joins("join warehouse_storehouses ws on wa.warehouse_storehouse_uuid = ws.uuid").
 		Joins("join organization_workshops ow on ws.organization_workshop_uuid = ow.uuid").
@@ -341,15 +341,15 @@ func (receiver WarehouseTierMdl) GetListByQuery(ctx *gin.Context) *gorm.DB {
 				return db.Where("wp.uuid = ?", value)
 			},
 			"warehouse_shelf_uuid": func(value string, db *gorm.DB) *gorm.DB {
-				return db.Where("ws.uuid = ?", value)
+				return db.Where("wsh.uuid = ?", value)
 			},
 		}).
 		SetWheresExtraHasValues(map[string]func([]string, *gorm.DB) *gorm.DB{}).
 		SetCtx(ctx).
 		GetDbUseQuery("").
 		Table("warehouse_tiers as wt").
-		Joins("join warehouse_shelves ws on wt.warehouse_shelf_uuid = ws.uuid").
-		Joins("join warehouse_platoons wp on ws.warehouse_platoon_uuid = wp.uuid").
+		Joins("join warehouse_shelves wsh on wt.warehouse_shelf_uuid = wsh.uuid").
+		Joins("join warehouse_platoons wp on wsh.warehouse_platoon_uuid = wp.uuid").
 		Joins("join warehouse_areas wa on wp.warehouse_area_uuid = wa.uuid").
 		Joins("join warehouse_storehouses ws on wa.warehouse_storehouse_uuid = ws.uuid").
 		Joins("join organization_workshops ow on ws.organization_workshop_uuid = ow.uuid").
@@ -410,7 +410,7 @@ func (receiver WarehouseCellMdl) GetListByQuery(ctx *gin.Context) *gorm.DB {
 				return db.Where("wp.uuid = ?", value)
 			},
 			"warehouse_shelf_uuid": func(value string, db *gorm.DB) *gorm.DB {
-				return db.Where("ws.uuid = ?", value)
+				return db.Where("wsh.uuid = ?", value)
 			},
 			"warehouse_tier_uuid": func(value string, db *gorm.DB) *gorm.DB {
 				return db.Where("wt.uuid = ?", value)
@@ -421,8 +421,8 @@ func (receiver WarehouseCellMdl) GetListByQuery(ctx *gin.Context) *gorm.DB {
 		GetDbUseQuery("").
 		Table("warehouse_cells as wc").
 		Joins("join warehouse_tiers wt on wc.warehouse_tier_uuid = wt.uuid").
-		Joins("join warehouse_shelves ws on wt.warehouse_shelf_uuid = ws.uuid").
-		Joins("join warehouse_platoons wp on ws.warehouse_platoon_uuid = wp.uuid").
+		Joins("join warehouse_shelves wsh on wt.warehouse_shelf_uuid = wsh.uuid").
+		Joins("join warehouse_platoons wp on wsh.warehouse_platoon_uuid = wp.uuid").
 		Joins("join warehouse_areas wa on wp.warehouse_area_uuid = wa.uuid").
 		Joins("join warehouse_storehouses ws on wa.warehouse_storehouse_uuid = ws.uuid").
 		Joins("join organization_workshops ow on ws.organization_workshop_uuid = ow.uuid").

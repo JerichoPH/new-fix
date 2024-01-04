@@ -192,6 +192,9 @@ const fnResetSearch = () => {
 };
 
 const fnSearch = () => {
+  rows.value = [];
+  selected.value = [];
+  
   ajaxGetSourceProjects({
     "@~[]": ["SourceType", "Equipments"],
     name: name_search.value,

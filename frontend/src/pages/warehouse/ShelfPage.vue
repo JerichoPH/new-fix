@@ -38,7 +38,9 @@
                 <div class="col">
                   <sel-warehouse-area_search label-name="所属库区" />
                 </div>
-                <div class="col"></div>
+                <div class="col">
+                  <sel-warehouse-platoon_search label-name="所属排" />
+                </div>
                 <div class="col"></div>
                 <div class="col"></div>
               </div>
@@ -51,17 +53,17 @@
     <q-card class="q-mt-md">
       <q-card-section>
         <div class="row">
-          <div class="col"><span :style="{ fontSize: '20px' }">仓库-排列表</span></div>
+          <div class="col"><span :style="{ fontSize: '20px' }">仓库-架列表</span></div>
           <div class="col text-right">
             <q-btn-group>
-              <q-btn color="secondary" label="新建仓库-排" icon="add" @click="fnOpenAlertCreateWarehousePlatoon" />
-              <q-btn color="negative" label="删除仓库-排" icon="deleted" @click="fnDestroyWarehousePlatoons" />
+              <q-btn color="secondary" label="新建仓库-架" icon="add" @click="fnOpenAlertCreateWarehouseShelf" />
+              <q-btn color="negative" label="删除仓库-架" icon="deleted" @click="fnDestroyCreateWarehouseShelves" />
             </q-btn-group>
           </div>
         </div>
         <div class="row q-mt-md">
           <div class="col">
-            <q-table flat bordered title="仓库-排列表" :rows="rows" row-key="uuid" :pagination="{ rowsPerPage: 200 }"
+            <q-table flat bordered title="仓库-架列表" :rows="rows" row-key="uuid" :pagination="{ rowsPerPage: 200 }"
               :rows-per-page-options="[50, 100, 200, 0]" rows-per-page-label="分页" :selected-rows-label="() => { }"
               selection="multiple" v-model:selected="selected">
               <template v-slot:header="props">
@@ -71,8 +73,8 @@
                   <q-th align="left" key="name" @click="(event) => fnColumnReverseSort(event, props, sortBy)">
                     名称
                   </q-th>
-                  <q-th align="left" key="warehouseArea" @click="(event) => fnColumnReverseSort(event, props, sortBy)">
-                    所属仓库-库区
+                  <q-th align="left" key="warehousePlatoon" @click="(event) => fnColumnReverseSort(event, props, sortBy)">
+                    所属仓库-排
                   </q-th>
                   <q-th align="right"></q-th>
                 </q-tr>
@@ -82,18 +84,20 @@
                   <q-td><q-checkbox :key="props.row.uuid" :value="props.row.uuid" v-model="props.selected" /></q-td>
                   <q-td>{{ props.row.index }}</q-td>
                   <q-td key="name" :props="props">{{ props.row.name }}</q-td>
-                  <q-td key="warehouseArea" :props="props">
+                  <q-td key="warehousePlatoon" :props="props">
                     <join-string :values="[
                       props.row.warehouseStorehouse.name,
                       props.row.warehouseArea.name,
+                      props.row.warehousePlatoon.name,
                     ]" />
                   </q-td>
                   <q-td key="operation" :props="props">
                     <q-btn-group>
-                      <q-btn @click="fnOpenAlertEditWarehousePlatoon(props.row.operation)" color="warning" icon="edit">
+                      <q-btn @click="fnOpenAlertEditCreateWarehouseShelf(props.row.operation)" color="warning"
+                        icon="edit">
                         编辑
                       </q-btn>
-                      <q-btn @click="fnDestroyWarehousePlatoon(props.row.operation)" color="negative" icon="delete">
+                      <q-btn @click="fnDestroyCreateWarehouseShelf(props.row.operation)" color="negative" icon="delete">
                         删除
                       </q-btn>
                     </q-btn-group>
@@ -108,17 +112,17 @@
   </div>
 
   <!-- 弹窗 -->
-  <!-- 新建仓库-排弹窗 -->
-  <q-dialog v-model="alertCreateWarehousePlatoon" no-backdrop-dismiss>
+  <!-- 新建仓库-架弹窗 -->
+  <q-dialog v-model="alertCreateWarehouseShelf" no-backdrop-dismiss>
     <q-card :style="{ minWidth: '450px' }">
       <q-card-section>
-        <div class="text-h6">新建仓库-排</div>
+        <div class="text-h6">新建仓库-架</div>
       </q-card-section>
-      <q-form class="q-gutter-md" @submit.prevent="fnStoreWarehousePlatoon">
+      <q-form class="q-gutter-md" @submit.prevent="fnStoreWarehouseShelf">
         <q-card-section class="q-pt-none">
           <div class="row">
             <div class="col">
-              <q-input outlined clearable lazy-rules v-model="name_alertCreateWarehousePlatoon" label="名称" :rules="[]" />
+              <q-input outlined clearable lazy-rules v-model="name_alertCreateWarehouseShelf" label="名称" :rules="[]" />
             </div>
           </div>
           <div class="row q-mt-md">
@@ -151,6 +155,11 @@
               <sel-warehouse-area_alert-create label-name="所属库区" />
             </div>
           </div>
+          <div class="row q-mt-md">
+            <div class="col">
+              <sel-warehouse-platoon_alert-create label-name="所属排" />
+            </div>
+          </div>
         </q-card-section>
         <q-card-actions align="right">
           <q-btn type="button" label="关闭" v-close-popup />
@@ -159,17 +168,17 @@
       </q-form>
     </q-card>
   </q-dialog>
-  <!-- 编辑仓库-排弹窗 -->
-  <q-dialog v-model="alertWarehousePlatoon" no-backdrop-dismiss>
+
+  <q-dialog v-model="alertEditWarehouseShelf" no-backdrop-dismiss>
     <q-card :style="{ minWidth: '450px' }">
       <q-card-section>
-        <div class="text-h6">编辑仓库-排弹窗</div>
+        <div class="text-h6">编辑仓库-架</div>
       </q-card-section>
-      <q-form class="q-gutter-md" @submit.prevent="fnUpdateWarehouseArea">
+      <q-form class="q-gutter-md" @submit.prevent="fnUpdateWarehouseShelf">
         <q-card-section class="q-pt-none">
           <div class="row">
             <div class="col">
-              <q-input outlined clearable lazy-rules v-model="name_alertWarehousePlatoon" label="名称" :rules="[]" />
+              <q-input outlined clearable lazy-rules v-model="name_alertEditWarehouseShelf" label="名称" :rules="[]" />
             </div>
           </div>
           <div class="row q-mt-md">
@@ -202,6 +211,11 @@
               <sel-warehouse-area_alert-edit label-name="所属库区" />
             </div>
           </div>
+          <div class="row q-mt-md">
+            <div class="col">
+              <sel-warehouse-platoon_alert-edit label-name="所属排" />
+            </div>
+          </div>
         </q-card-section>
         <q-card-actions align="right">
           <q-btn type="button" label="关闭" v-close-popup />
@@ -216,12 +230,13 @@ import { ref, onMounted, provide } from "vue";
 import collect from "collect.js";
 import { fnColumnReverseSort } from "src/utils/common";
 import {
-  ajaxGetWarehousePlatoons,
-  ajaxGetWarehousePlatoon,
+  ajaxGetWarehouseShelves,
+  ajaxGetWarehouseShelf,
+  ajaxStoreWarehouseShelf,
+  ajaxUpdateWarehouseShelf,
+  ajaxDestroyWarehouseShelf,
+  ajaxDestroyWarehouseShelves,
   ajaxStoreWarehousePlatoon,
-  ajaxUpdateWarehousePlatoon,
-  ajaxDestroyWarehousePlatoon,
-  ajaxDestroyWarehousePlatoons,
 } from "src/apis/warehouse";
 import {
   loadingNotify,
@@ -237,18 +252,21 @@ import SelOrganizationWorkshop_search from "src/components/SelOrganizationWorksh
 import SelOrganizationWorkArea_search from "src/components/SelOrganizationWorkArea_search.vue";
 import SelWarehouseStorehouse_search from "src/components/SelWarehouseStorehouse_search.vue";
 import SelWarehouseArea_search from "src/components/SelWarehouseArea_search.vue";
+import SelWarehousePlatoon_search from "src/components/SelWarehousePlatoon_search.vue";
 import SelOrganizationRailway_alertCreate from "src/components/SelOrganizationRailway_alertCreate.vue";
 import SelOrganizationParagraph_alertCreate from "src/components/SelOrganizationParagraph_alertCreate.vue";
 import SelOrganizationWorkshop_alertCreate from "src/components/SelOrganizationWorkshop_alertCreate.vue";
 import SelOrganizationWorkArea_alertCreate from "src/components/SelOrganizationWorkArea_alertCreate.vue";
 import SelWarehouseStorehouse_alertCreate from "src/components/SelWarehouseStorehouse_alertCreate.vue";
 import SelWarehouseArea_alertCreate from "src/components/SelWarehouseArea_alertCreate.vue";
+import SelWarehousePlatoon_alertCreate from "src/components/SelWarehousePlatoon_alertCreate.vue";
 import SelOrganizationRailway_alertEdit from "src/components/SelOrganizationRailway_alertEdit.vue";
 import SelOrganizationParagraph_alertEdit from "src/components/SelOrganizationParagraph_alertEdit.vue";
 import SelOrganizationWorkshop_alertEdit from "src/components/SelOrganizationWorkshop_alertEdit.vue";
 import SelOrganizationWorkArea_alertEdit from "src/components/SelOrganizationWorkArea_alertEdit.vue";
 import SelWarehouseStorehouse_alertEdit from "src/components/SelWarehouseStorehouse_alertEdit.vue";
 import SelWarehouseArea_alertEdit from "src/components/SelWarehouseArea_alertEdit.vue";
+import SelWarehousePlatoon_alertEdit from "src/components/SelWarehousePlatoon_alertEdit.vue";
 
 // 搜索栏数据
 const name_search = ref("");
@@ -264,45 +282,50 @@ const warehouseStorehouseUuid_search = ref("");
 provide("warehouseStorehouseUuid_search", warehouseStorehouseUuid_search);
 const warehouseAreaUuid_search = ref("");
 provide("warehouseAreaUuid_search", warehouseAreaUuid_search);
+const warehousePlatoonUuid_search = ref("");
+provide("warehousePlatoonUuid_search", warehousePlatoonUuid_search);
 
 // 表格数据
 const rows = ref([]);
 const selected = ref([]);
 const sortBy = ref("");
 
-// 新建仓库-排弹窗数据
-const alertCreateWarehousePlatoon = ref(false);
-const name_alertCreateWarehousePlatoon = ref("");
-const organizationRailwayUuid_alertCreateWarehousePlatoon = ref("");
-provide("organizationRailwayUuid_alertCreate", organizationRailwayUuid_alertCreateWarehousePlatoon);
-const organizationParagraphUuid_alertCreateWarehousePlatoon = ref("");
-provide("organizationParagraphUuid_alertCreate", organizationParagraphUuid_alertCreateWarehousePlatoon);
-const organizationWorkshopUuid_alertCreateWarehousePlatoon = ref("");
-provide("organizationWorkshopUuid_alertCreate", organizationWorkshopUuid_alertCreateWarehousePlatoon);
-const organizationWorkAreaUuid_alertCreateWarehousePlatoon = ref("");
-provide("organizationWorkAreaUuid_alertCreate", organizationWorkAreaUuid_alertCreateWarehousePlatoon);
-const warehouseStorehouseUuid_alertCreateWarehousePlatoon = ref("");
-provide("warehouseStorehouseUuid_alertCreate", warehouseStorehouseUuid_alertCreateWarehousePlatoon);
-const warehouseAreaUuid_alertCreateWarehousePlatoon = ref("");
-provide("warehouseAreaUuid_alertCreate", warehouseAreaUuid_alertCreateWarehousePlatoon);
+// 新建仓库-架弹窗
+const alertCreateWarehouseShelf = ref(false);
+const name_alertCreateWarehouseShelf = ref("");
+const organizationRailwayUuid_alertCreateWarehouseShelf = ref("");
+provide("organizationRailwayUuid_alertCreate", organizationRailwayUuid_alertCreateWarehouseShelf);
+const organizationParagraphUuid_alertCreateWarehouseShelf = ref("");
+provide("organizationParagraphUuid_alertCreate", organizationParagraphUuid_alertCreateWarehouseShelf);
+const organizationWorkshopUuid_alertCreateWarehouseShelf = ref("");
+provide("organizationWorkshopUuid_alertCreate", organizationWorkshopUuid_alertCreateWarehouseShelf);
+const organizationWorkAreaUuid_alertCreateWarehouseShelf = ref("");
+provide("organizationWorkAreaUuid_alertCreate", organizationWorkAreaUuid_alertCreateWarehouseShelf);
+const warehouseStorehouseUuid_alertCreateWarehouseShelf = ref("");
+provide("warehouseStorehouseUuid_alertCreate", warehouseStorehouseUuid_alertCreateWarehouseShelf);
+const warehouseAreaUuid_alertCreateWarehouseShelf = ref("");
+provide("warehouseAreaUuid_alertCreate", warehouseAreaUuid_alertCreateWarehouseShelf);
+const warehousePlatoonUuid_alertCreateWarehouseShelf = ref("");
+provide("warehousePlatoonUuid_alertCreate", warehousePlatoonUuid_alertCreateWarehouseShelf);
 
-// 编辑仓库-排弹窗数据
-const alertWarehousePlatoon = ref(false);
+// 编辑仓库-架弹窗数据
+const alertEditWarehouseShelf = ref(false);
 const currentUuid = ref("");
-const name_alertWarehousePlatoon = ref("");
-const organizationRailwayUuid_alertEditWarehousePlatoon = ref("");
-provide("organizationRailwayUuid_alertEdit", organizationRailwayUuid_alertEditWarehousePlatoon);
-const organizationParagraphUuid_alertEditWarehousePlatoon = ref("");
-provide("organizationParagraphUuid_alertEdit", organizationParagraphUuid_alertEditWarehousePlatoon);
-const organizationWorkshopUuid_alertEditWarehousePlatoon = ref("");
-provide("organizationWorkshopUuid_alertEdit", organizationWorkshopUuid_alertEditWarehousePlatoon);
-const organizationWorkAreaUuid_alertEditWarehousePlatoon = ref("");
-provide("organizationWorkAreaUuid_alertEdit", organizationWorkAreaUuid_alertEditWarehousePlatoon);
-const warehouseStorehouseUuid_alertEditWarehousePlatoon = ref("");
-provide("warehouseStorehouseUuid_alertEdit", warehouseStorehouseUuid_alertEditWarehousePlatoon);
-const warehouseAreaUuid_alertEditWarehousePlatoon = ref("");
-provide("warehouseAreaUuid_alertEdit", warehouseAreaUuid_alertEditWarehousePlatoon);
-
+const name_alertEditWarehouseShelf = ref("");
+const organizationRailwayUuid_alertEditWarehouseShelf = ref("");
+provide("organizationRailwayUuid_alertEdit", organizationRailwayUuid_alertEditWarehouseShelf);
+const organizationParagraphUuid_alertEditWarehouseShelf = ref("");
+provide("organizationParagraphUuid_alertEdit", organizationParagraphUuid_alertEditWarehouseShelf);
+const organizationWorkshopUuid_alertEditWarehouseShelf = ref("");
+provide("organizationWorkshopUuid_alertEdit", organizationWorkshopUuid_alertEditWarehouseShelf);
+const organizationWorkAreaUuid_alertEditWarehouseShelf = ref("");
+provide("organizationWorkAreaUuid_alertEdit", organizationWorkAreaUuid_alertEditWarehouseShelf);
+const warehouseStorehouseUuid_alertEditWarehouseShelf = ref("");
+provide("warehouseStorehouseUuid_alertEdit", warehouseStorehouseUuid_alertEditWarehouseShelf);
+const warehouseAreaUuid_alertEditWarehouseShelf = ref("");
+provide("warehouseAreaUuid_alertEdit", warehouseAreaUuid_alertEditWarehouseShelf);
+const warehousePlatoonUuid_alertEditWarehouseShelf = ref("");
+provide("warehousePlatoonUuid_alertEdit", warehousePlatoonUuid_alertEditWarehouseShelf);
 
 onMounted(() => fnInit());
 
@@ -310,158 +333,133 @@ const fnInit = () => fnSearch();
 
 const fnResetSearch = () => {
   name_search.value = "";
-  organizationRailwayUuid_search.value = "";
-  organizationParagraphUuid_search.value = "";
-  organizationWorkshopUuid_search.value = "";
-  organizationWorkAreaUuid_search.value = "";
-  warehouseStorehouseUuid_search.value = "";
-  warehouseAreaUuid_search.value = "";
 };
 
 const fnSearch = () => {
   rows.value = [];
   selected.value = [];
 
-  ajaxGetWarehousePlatoons({
+  ajaxGetWarehouseShelves({
     "@~[]": [
-      "WarehouseArea",
-      "WarehouseArea.WarehouseStorehouse",
+      "WarehousePlatoon",
+      "WarehousePlatoon.WarehouseArea",
+      "WarehousePlatoon.WarehouseArea.WarehouseStorehouse",
+      "WarehousePlatoon.WarehouseArea.WarehouseStorehouse.OrganizationWorkshop",
+      "WarehousePlatoon.WarehouseArea.WarehouseStorehouse.OrganizationWorkArea",
+      "WarehousePlatoon.WarehouseArea.WarehouseStorehouse.OrganizationWorkshop.OrganizationParagraph",
+      "WarehousePlatoon.WarehouseArea.WarehouseStorehouse.OrganizationWorkshop.OrganizationParagraph.OrganizationRailway",
     ],
     name: name_search.value,
-    organization_railway_uuid: organizationRailwayUuid_search.value,
-    organization_paragraph_uuid: organizationParagraphUuid_search.value,
-    organization_workshop_uuid: organizationWorkshopUuid_search.value,
-    organization_work_area_uuid: organizationWorkAreaUuid_search.value,
-    warehouse_storehouse_uuid: warehouseStorehouseUuid_search.value,
-    warehouse_area_uuid: warehouseAreaUuid_search.value,
+    organizationRailwayUuid: organizationRailwayUuid_search.value,
+    organizationParagraphUuid: organizationParagraphUuid_search.value,
+    organizationWorkshopUuid: organizationWorkshopUuid_search.value,
+    organizationWorkAreaUuid: organizationWorkAreaUuid_search.value,
+    warehouseStorehouseUuid: warehouseStorehouseUuid_search.value,
+    warehouseAreaUuid: warehouseAreaUuid_search.value,
+    warehousePlatoonUuid: warehousePlatoonUuid_search.value,
   })
-    .then(response => {
-      rows.value = collect(response.content.warehouse_platoons)
-        .map((warehousePlatoon, idx) => {
+    .then((res) => {
+      rows.value = collect(res.content.warehouse_shelves)
+        .map((warehouseShelf, idx) => {
           return {
-            ...warehousePlatoon,
+            ...warehouseShelf,
             index: idx + 1,
-            warehouseArea: warehousePlatoon.warehouse_area,
-            warehouseStorehouse: warehousePlatoon.warehouse_area.warehouse_storehouse,
-            operation: { uuid: warehousePlatoon.uuid },
-          };
+            warehouseStorehouse: warehouseShelf.warehouse_platoon.warehouse_area.warehouse_storehouse,
+            warehouseArea: warehouseShelf.warehouse_platoon.warehouse_area,
+            warehousePlatoon: warehouseShelf.warehouse_platoon,
+            operation: { uuid: warehouseShelf.uuid },
+          }
         })
         .all();
     })
-    .catch(e => errorNotify(e.msg));
+    .catch((e) => errorNotify(e.msg));
 };
 
-const fnResetAlertCreateWarehousePlatoon = () => {
-  name_alertCreateWarehousePlatoon.value = "";
-  organizationRailwayUuid_alertCreateWarehousePlatoon.value = "";
-  organizationParagraphUuid_alertCreateWarehousePlatoon.value = "";
-  organizationWorkshopUuid_alertCreateWarehousePlatoon.value = "";
-  organizationWorkAreaUuid_alertCreateWarehousePlatoon.value = "";
-  warehouseStorehouseUuid_alertCreateWarehousePlatoon.value = "";
-  warehouseAreaUuid_alertCreateWarehousePlatoon.value = "";
+const fnResetAlertCreateWarehouseShelf = () => {
+  name_alertCreateWarehouseShelf.value = "";
+  organizationRailwayUuid_alertCreateWarehouseShelf.value = "";
+  organizationParagraphUuid_alertCreateWarehouseShelf.value = "";
+  organizationWorkshopUuid_alertCreateWarehouseShelf.value = "";
+  organizationWorkAreaUuid_alertCreateWarehouseShelf.value = "";
+  warehouseStorehouseUuid_alertCreateWarehouseShelf.value = "";
+  warehouseAreaUuid_alertCreateWarehouseShelf.value = "";
+  warehousePlatoonUuid_alertCreateWarehouseShelf.value = "";
 };
 
-const fnOpenAlertCreateWarehousePlatoon = () => {
-  alertCreateWarehousePlatoon.value = true;
+const fnOpenAlertCreateWarehouseShelf = () => {
+  alertCreateWarehouseShelf.value = true;
 };
 
-const fnStoreWarehousePlatoon = () => {
-  ajaxStoreWarehousePlatoon({
-    name: name_alertCreateWarehousePlatoon.value,
-    organization_railway_uuid: organizationRailwayUuid_alertCreateWarehousePlatoon.value,
-    organization_paragraph_uuid: organizationParagraphUuid_alertCreateWarehousePlatoon.value,
-    organization_workshop_uuid: organizationWorkshopUuid_alertCreateWarehousePlatoon.value,
-    organization_work_area_uuid: organizationWorkAreaUuid_alertCreateWarehousePlatoon.value,
-    warehouse_storehouse_uuid: warehouseStorehouseUuid_alertCreateWarehousePlatoon.value,
-    warehouse_area_uuid: warehouseAreaUuid_alertCreateWarehousePlatoon.value,
+const fnStoreWarehouseShelf = () => {
+  const loading = loadingNotify();
+
+  ajaxStoreWarehouseShelf({
+    name: name_alertCreateWarehouseShelf.value,
+    warehouse_platoon_uuid: warehousePlatoonUuid_alertCreateWarehouseShelf.value,
   })
-    .then(response => {
-      successNotify(response.msg);
-      fnResetAlertCreateWarehousePlatoon();
+    .then((res) => {
+      successNotify(res.msg);
+      fnResetAlertCreateWarehouseShelf();
       fnSearch();
 
-      alertCreateWarehousePlatoon.value = false;
+      alertCreateWarehouseShelf.value = false;
     })
-    .catch(e => errorNotify(e.msg));
+    .catch((e) => errorNotify(e.msg))
+    .finally(loading());
 };
 
-const fnOpenAlertEditWarehousePlatoon = params => {
+const fnOpenAlertEditCreateWarehouseShelf = params => {
   if (!params["uuid"]) return;
   currentUuid.value = params.uuid;
 
-  ajaxGetWarehousePlatoon(params.uuid, {
+  ajaxGetWarehouseShelf(currentUuid.value, {
     "@~[]": [
-      "WarehouseArea",
-      "WarehouseArea.WarehouseStorehouse",
-      "WarehouseArea.WarehouseStorehouse.OrganizationWorkArea",
-      "WarehouseArea.WarehouseStorehouse.OrganizationWorkshop",
-      "WarehouseArea.WarehouseStorehouse.OrganizationWorkshop.OrganizationParagraph",
-      "WarehouseArea.WarehouseStorehouse.OrganizationWorkshop.OrganizationParagraph.OrganizationRailway",
+      "WarehousePlatoon",
+      "WarehousePlatoon.WarehouseArea",
+      "WarehousePlatoon.WarehouseArea.WarehouseStorehouse",
+      "WarehousePlatoon.WarehouseArea.WarehouseStorehouse.OrganizationWorkshop",
+      "WarehousePlatoon.WarehouseArea.WarehouseStorehouse.OrganizationWorkArea",
+      "WarehousePlatoon.WarehouseArea.WarehouseStorehouse.OrganizationWorkshop.OrganizationParagraph",
+      "WarehousePlatoon.WarehouseArea.WarehouseStorehouse.OrganizationWorkshop.OrganizationParagraph.OrganizationRailway",
     ],
   })
-    .then(res => {
-      name_alertWarehousePlatoon.value = res.content.warehouse_platoon.name;
-      organizationRailwayUuid_alertEditWarehousePlatoon.value = res.content.warehouse_platoon.warehouse_area.warehouse_storehouse.organization_workshop.organization_paragraph.organization_railway.uuid;
-      organizationParagraphUuid_alertEditWarehousePlatoon.value = res.content.warehouse_platoon.warehouse_area.warehouse_storehouse.organization_workshop.organization_paragraph.uuid;
-      organizationWorkshopUuid_alertEditWarehousePlatoon.value = res.content.warehouse_platoon.warehouse_area.warehouse_storehouse.organization_workshop.uuid;
-      organizationWorkAreaUuid_alertEditWarehousePlatoon.value = res.content.warehouse_platoon.warehouse_area.warehouse_storehouse.organization_work_area.uuid;
-      warehouseStorehouseUuid_alertEditWarehousePlatoon.value = res.content.warehouse_platoon.warehouse_area.warehouse_storehouse.uuid;
-      warehouseAreaUuid_alertEditWarehousePlatoon.value = res.content.warehouse_platoon.warehouse_area.uuid;
+    .then((res) => {
+      name_alertEditWarehouseShelf.value = res.content.warehouse_shelf.name;
+      organizationRailwayUuid_alertEditWarehouseShelf.value = res.content.warehouse_shelf.warehouse_platoon.warehouse_area.warehouse_storehouse.organization_workshop.organization_paragraph.organization_railway.uuid;
+      organizationParagraphUuid_alertEditWarehouseShelf.value = res.content.warehouse_shelf.warehouse_platoon.warehouse_area.warehouse_storehouse.organization_workshop.organization_paragraph.uuid;
+      organizationWorkshopUuid_alertEditWarehouseShelf.value = res.content.warehouse_shelf.warehouse_platoon.warehouse_area.warehouse_storehouse.organization_workshop.uuid;
+      organizationWorkAreaUuid_alertEditWarehouseShelf.value = res.content.warehouse_shelf.warehouse_platoon.warehouse_area.warehouse_storehouse.organization_work_area.uuid;
+      warehouseStorehouseUuid_alertEditWarehouseShelf.value = res.content.warehouse_shelf.warehouse_platoon.warehouse_area.warehouse_storehouse.uuid;
+      warehouseAreaUuid_alertEditWarehouseShelf.value = res.content.warehouse_shelf.warehouse_platoon.warehouse_area.uuid;
+      warehousePlatoonUuid_alertEditWarehouseShelf.value = res.content.warehouse_shelf.warehouse_platoon.uuid;
 
-      alertWarehousePlatoon.value = true;
+      alertEditWarehouseShelf.value = true;
     })
-    .catch(e => errorNotify(e.msg));
+    .catch((e) => errorNotify(e.msg));
 };
 
-const fnUpdateWarehouseArea = () => {
+const fnUpdateWarehouseShelf = () => {
   if (!currentUuid.value) return;
 
-  ajaxUpdateWarehousePlatoon(currentUuid.value, {
-    name: name_alertWarehousePlatoon.value,
-    organization_railway_uuid: organizationRailwayUuid_alertEditWarehousePlatoon.value,
-    organization_paragraph_uuid: organizationParagraphUuid_alertEditWarehousePlatoon.value,
-    organization_workshop_uuid: organizationWorkshopUuid_alertEditWarehousePlatoon.value,
-    organization_work_area_uuid: organizationWorkAreaUuid_alertEditWarehousePlatoon.value,
-    warehouse_storehouse_uuid: warehouseStorehouseUuid_alertEditWarehousePlatoon.value,
-    warehouse_area_uuid: warehouseAreaUuid_alertEditWarehousePlatoon.value,
+  const loading = loadingNotify();
+  ajaxUpdateWarehouseShelf(currentUuid.value, {
+    name: name_alertEditWarehouseShelf.value,
+    warehouse_platoon_uuid: warehousePlatoonUuid_alertEditWarehouseShelf.value,
   })
-    .then(res => {
+    .then((res) => {
       successNotify(res.msg);
       fnSearch();
+      currentUuid.value = "";
 
-      alertWarehousePlatoon.value = false;
+      alertEditWarehouseShelf.value = false;
     })
-    .catch(e => errorNotify(e.msg));
+    .catch((e) => errorNotify(e.msg))
+    .finally(loading());
 };
 
-const fnDestroyWarehousePlatoon = params => {
-  if (!params["uuid"]) return;
-
-  confirmNotify(destroyActions(() => {
-    const loading = loadingNotify();
-
-    ajaxDestroyWarehousePlatoon(params.uuid)
-      .then(() => {
-        successNotify("删除成功");
-        fnSearch();
-      })
-      .catch(e => errorNotify(e.msg))
-      .finally(loading());
-  }));
+const fnDestroyCreateWarehouseShelf = params => {
+  if(!parmas["uuid"]) return;
 };
 
-const fnDestroyWarehousePlatoons = () => {
-  confirmNotify(destroyActions(() => {
-    const loading = loadingNotify();
-
-    ajaxDestroyWarehousePlatoons(collect(selected.value).pluck("uuid").all())
-      .then(() => {
-        successNotify("删除成功");
-        fnSearch();
-      })
-      .catch(e => errorNotify(e.msg))
-      .finally(loading());
-  }));
-};
-
+const fnDestroyCreateWarehouseShelves = () => { };
 </script>

@@ -77,26 +77,14 @@
                   <q-td><q-checkbox :key="props.row.uuid" :value="props.row.uuid" v-model="props.selected" /></q-td>
                   <q-td>{{ props.row.index }}</q-td>
                   <q-td key="name" :props="props">{{ props.row.name }}</q-td>
-                  <q-td key="uri" :props="props">{{
-                    props.row.uri ?? "-"
-                  }}</q-td>
-                  <q-td key="description" :props="props">
-                    {{ props.row.description ?? "-" }}
-                  </q-td>
+                  <q-td key="uri" :props="props">{{ props.row.uri }}</q-td>
+                  <q-td key="description" :props="props">{{ props.row.description }}</q-td>
                   <q-td key="rbacRoles" :props="props">
-                    <template v-if="props.row.rbacRoles.length > 0">
-                      <q-chip v-for="(rbacRole, idx) in props.row.rbacRoles" :key="idx" color="primary"
-                        text-color="white">
-                        {{ rbacRole.name }}
-                      </q-chip>
-                    </template>
-                    <template v-else><span>-</span></template>
+                    <join-string :values="collect(props.row.rbacRoles).pluck('name').all()" separator=", " />
                   </q-td>
                   <q-td key="operation" :props="props">
                     <q-btn-group>
-                      <q-btn @click="
-                        fnOpenAlertEditRbacPermission(props.row.operation)
-                        " color="warning" icon="edit">
+                      <q-btn @click="fnOpenAlertEditRbacPermission(props.row.operation)" color="warning" icon="edit">
                         编辑
                       </q-btn>
                       <q-btn @click="fnDestroyRbacPermission(props.row.operation)" color="negative" icon="delete">
@@ -189,6 +177,7 @@ import {
   ajaxDestroyRbacPermission,
   ajaxDestroyRbacPermissions,
 } from "src/apis/rbac";
+import JoinString from "src/components/JoinString.vue";
 
 // 表格数据
 const rows = ref([]);
@@ -251,19 +240,17 @@ const fnSearch = () => {
     rbac_role_uuid: rbacRoleUuid_search.value,
   })
     .then((res) => {
-      if (res.content.rbac_permissions.length > 0) {
-        collect(res.content.rbac_permissions).each((rbacPermission, idx) => {
-          rows.value.push({
+      rows.value = collect(res.content.rbac_permissions)
+        .map((rbacPermission, idx) => {
+          return {
+            ...rbacPermission,
             index: idx + 1,
-            uuid: rbacPermission.uuid,
-            name: rbacPermission.name,
-            uri: rbacPermission.uri,
-            description: rbacPermission.description,
-            rbacRoles: rbacPermission.rbac_roles || [],
+            rbacRoles: rbacPermission.rbac_roles,
             operation: { uuid: rbacPermission.uuid },
-          });
-        });
-      }
+          }
+        })
+        .all();
+      console.log('ok', rows.value);
     })
     .catch((e) => errorNotify(e.msg));
 };

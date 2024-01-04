@@ -22,7 +22,7 @@
                   <sel-organization-railway_search label-name="所属路局" />
                 </div>
                 <div class="col">
-                  <sel-oragnization-paragraph_search label-name="所属站段" />
+                  <sel-organization-paragraph_search label-name="所属站段" />
                 </div>
                 <div class="col">
                   <sel-organization-workshop_search label-name="所属车间" />
@@ -76,12 +76,15 @@
                   <q-td><q-checkbox :key="props.row.uuid" :value="props.row.uuid" v-model="props.selected" /></q-td>
                   <q-td>{{ props.row.index }}</q-td>
                   <q-td key="name" :props="props">{{ props.row.name }}</q-td>
-                  <q-td key="organizationWorkshop" :props="props">{{ [
-                    props.row.organizationRailway.short_name,
-                    props.row.organizationParagraph.name,
-                    props.row.organizationWorkshop.name,
-                  ].join(" - ") }}</q-td>
-                  <q-td key="organizationWorkArea" :props="props">{{ props.row.organizationWorkArea ? props.row.organizationWorkArea.name : '' }}</q-td>
+                  <q-td key="organizationWorkshop" :props="props">
+                    <join-string :values="[
+                      props.row.organizationRailway.short_name,
+                      props.row.organizationParagraph.name,
+                      props.row.organizationWorkshop.name,
+                    ]" />
+                  </q-td>
+                  <q-td key="organizationWorkArea" :props="props">{{ props.row.organizationWorkArea ?
+                    props.row.organizationWorkArea.name : '' }}</q-td>
                   <q-td key="operation" :props="props">
                     <q-btn-group>
                       <q-btn @click="fnOpenAlertEditWarehouseStorehouse(props.row.operation)" color="warning" icon="edit">
@@ -146,7 +149,7 @@
   </q-dialog>
   <!-- 编辑仓库-库房弹窗 -->
   <q-dialog v-model="alertEditWarehouseStorehouse" no-backdrop-dismiss>
-    <q-card :style="{minWidth: '450px'}">
+    <q-card :style="{ minWidth: '450px' }">
       <q-card-section>
         <div class="text-h6">编辑仓库-库房</div>
       </q-card-section>
@@ -205,8 +208,9 @@ import {
   confirmNotify,
   destroyActions,
 } from "src/utils/notify";
+import JoinString from "src/components/JoinString.vue";
 import SelOrganizationRailway_search from "src/components/SelOrganizationRailway_search.vue";
-import SelOragnizationParagraph_search from "src/components/SelOrganizationParagraph_search.vue";
+import SelOrganizationParagraph_search from "src/components/SelOrganizationParagraph_search.vue";
 import SelOrganizationWorkshop_search from "src/components/SelOrganizationWorkshop_search.vue";
 import SelOrganizationWorkArea_search from "src/components/SelOrganizationWorkArea_search.vue";
 import SelOrganizationRailway_alertCreate from "src/components/SelOrganizationRailway_alertCreate.vue";
@@ -272,6 +276,9 @@ const fnResetSearch = () => {
 };
 
 const fnSearch = () => {
+  rows.value = [];
+  selected.value = [];
+  
   ajaxGetWarehouseStorehouses({
     "@~[]": [
       "OrganizationWorkshop",

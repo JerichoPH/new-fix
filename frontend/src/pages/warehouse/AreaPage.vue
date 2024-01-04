@@ -22,7 +22,7 @@
                   <sel-organization-railway_search label-name="所属路局" :ajax-params="{}" />
                 </div>
                 <div class="col">
-                  <sel-oragnization-paragraph_search label-name="所属站段" :ajax-params="{}" />
+                  <sel-organization-paragraph_search label-name="所属站段" :ajax-params="{}" />
                 </div>
                 <div class="col">
                   <sel-organization-workshop_search label-name="所属车间" :ajax-params="{}" />
@@ -81,11 +81,13 @@
                   <q-td><q-checkbox :key="props.row.uuid" :value="props.row.uuid" v-model="props.selected" /></q-td>
                   <q-td>{{ props.row.index }}</q-td>
                   <q-td key="name" :props="props">{{ props.row.name }}</q-td>
-                  <q-td key="warehouseStorehouse" :props="props">{{ [
+                  <q-td key="warehouseStorehouse" :props="props">
+                    <join-string :values="[
                     props.row.organizationWorkshop.name,
                     props.row.organizationWorkArea.name,
                     props.row.warehouseStorehouse.name,
-                  ].filter(val => { return val !== '' && val !== null }).join(' - ') }}</q-td>
+                  ]" />
+                  </q-td>
                   <q-td key="operation" :props="props">
                     <q-btn-group>
                       <q-btn @click="fnOpenAlertEditWarehouseArea(props.row.operation)" color="warning" icon="edit">
@@ -218,8 +220,9 @@ import {
   confirmNotify,
   destroyActions,
 } from "src/utils/notify";
+import JoinString from "src/components/JoinString.vue";
 import SelOrganizationRailway_search from "src/components/SelOrganizationRailway_search.vue";
-import SelOragnizationParagraph_search from "src/components/SelOrganizationParagraph_search.vue";
+import SelOrganizationParagraph_search from "src/components/SelOrganizationParagraph_search.vue";
 import SelOrganizationWorkshop_search from "src/components/SelOrganizationWorkshop_search.vue";
 import SelOrganizationWorkArea_search from "src/components/SelOrganizationWorkArea_search.vue";
 import SelWarehouseStorehouse_search from "src/components/SelWarehouseStorehouse_search.vue";
@@ -295,6 +298,9 @@ const fnResetSearch = () => {
 };
 
 const fnSearch = () => {
+  rows.value = [];
+  selected.value = [];
+
   ajaxGetWarehouseAreas({
     "@~[]": [
       "WarehouseStorehouse",

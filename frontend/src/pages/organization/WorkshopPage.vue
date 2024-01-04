@@ -84,10 +84,10 @@
                   <q-td key="name" :props="props">{{ props.row.name }}</q-td>
                   <q-td key="typeText" :props="props">{{ props.row.typeText }}</q-td>
                   <q-td key="organizationParagraph" :props="props">
-                    {{ [
+                    <join-string :values="[
                       props.row.organizationRailway.short_name,
                       props.row.organizationParagraph.name,
-                    ].join(' - ') }}
+                    ]" />
                   </q-td>
                   <q-td key="operation" :props="props">
                     <q-btn-group>
@@ -112,7 +112,7 @@
   <!-- 弹窗 -->
   <!-- 新建车间弹窗 -->
   <q-dialog v-model="alertCreateOrganizationWorkshop" no-backdrop-dismiss>
-    <q-card :style="{minWidth: '450px'}">
+    <q-card :style="{ minWidth: '450px' }">
       <q-card-section>
         <div class="text-h6">新建车间</div>
       </q-card-section>
@@ -155,7 +155,7 @@
   </q-dialog>
   <!-- 编辑车间弹窗 -->
   <q-dialog v-model="alertEditOrganizationWorkshop" no-backdrop-dismiss>
-    <q-card :style="{minWidth: '450px'}">
+    <q-card :style="{ minWidth: '450px' }">
       <q-card-section>
         <div class="text-h6">编辑车间</div>
       </q-card-section>
@@ -201,6 +201,7 @@
 <script setup>
 import { ref, onMounted, provide } from "vue";
 import collect from "collect.js";
+import { fnColumnReverseSort } from "src/utils/common";
 import {
   ajaxGetOrganizationWorkshops,
   ajaxGetOrganizationWorkshop,
@@ -216,7 +217,7 @@ import {
   confirmNotify,
   destroyActions,
 } from "src/utils/notify";
-import { fnColumnReverseSort } from "src/utils/common";
+import JoinString from "src/components/JoinString.vue";
 import SelOrganizationRailway_search from "src/components/SelOrganizationRailway_search.vue";
 import SelOrganizationParagraph_search from "src/components/SelOrganizationParagraph_search.vue";
 import SelOrganizationWorkshopTypeCode_search from "src/components/SelOrganizationWorkshopTypeCode_search.vue";
@@ -278,13 +279,16 @@ const fnResetSearch = () => {
 };
 
 const fnSearch = () => {
+  rows.value = [];
+  selected.value = [];
+  
   ajaxGetOrganizationWorkshops({
     "@~[]": ["OrganizationParagraph", "OrganizationParagraph.OrganizationRailway"],
     unique_code: uniqueCode_search.value,
     name: name_search.value,
     organization_railway_uuid: organizationRailwayUuid_search.value,
     organization_paragraph_uuid: organizationParagraphUuid_search.value,
-    type_code:organizationWorkshopTypeCode_search.value,
+    type_code: organizationWorkshopTypeCode_search.value,
   })
     .then(res => {
       rows.value = collect(res.content.organization_workshops)

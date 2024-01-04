@@ -64,7 +64,6 @@ const fnSearch = () => {
     warehouse_storehouse_uuid: warehouseStorehouseUuid_search.value,
   })
     .then((res) => {
-      console.log('ok',res);
       warehouseAreas.value = collect(res.content.warehouse_areas)
         .map(warehouseArea => {
           return {

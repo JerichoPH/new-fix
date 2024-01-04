@@ -50,16 +50,14 @@
                 <q-tr :props="props">
                   <q-th align="left"><q-checkbox key="allCheck" v-model="props.selected" /></q-th>
                   <q-th align="left">#</q-th>
-                  <q-th align="left" key="uniqueCode" @click="(event) => fnColumnReverseSort(event, props, sortBy)
-                    ">
+                  <q-th align="left" key="uniqueCode" @click="(event) => fnColumnReverseSort(event, props, sortBy)">
                     代码
                   </q-th>
-                  <q-th align="left" key="name" @click="(event) => fnColumnReverseSort(event, props, sortBy)
-                    ">
+                  <q-th align="left" key="name" @click="(event) => fnColumnReverseSort(event, props, sortBy)">
                     名称
                   </q-th>
-                  <q-th align="left" key="equipmentKindCategory" @click="(event) => fnColumnReverseSort(event, props, sortBy)
-                    ">
+                  <q-th align="left" key="equipmentKindCategory"
+                    @click="(event) => fnColumnReverseSort(event, props, sortBy)">
                     所属种类
                   </q-th>
                   <q-th align="right"></q-th>
@@ -69,18 +67,12 @@
                 <q-tr :props="props">
                   <q-td><q-checkbox :key="props.row.uuid" :value="props.row.uuid" v-model="props.selected" /></q-td>
                   <q-td>{{ props.row.index }}</q-td>
-                  <q-td key="uniqueCode" :props="props">{{
-                    props.row.uniqueCode
-                  }}</q-td>
+                  <q-td key="uniqueCode" :props="props">{{ props.row.uniqueCode }}</q-td>
                   <q-td key="name" :props="props">{{ props.row.name }}</q-td>
-                  <q-td key="equipmentKindCategory" :props="props">{{
-                    props.row.equipmentKindCategory.name
-                  }}</q-td>
+                  <q-td key="equipmentKindCategory" :props="props">{{ props.row.equipmentKindCategory.name }}</q-td>
                   <q-td key="operation" :props="props">
                     <q-btn-group>
-                      <q-btn @click="
-                        fnOpenAlertEditEquipmentKindType(props.row.operation)
-                        " color="warning" icon="edit">
+                      <q-btn @click="fnOpenAlertEditEquipmentKindType(props.row.operation)" color="warning" icon="edit">
                         编辑
                       </q-btn>
                       <q-btn @click="fnDestroyEquipmentKindType(props.row.operation)" color="negative" icon="delete">
@@ -100,7 +92,7 @@
   <!-- 弹窗 -->
   <!-- 新建器材类型弹窗 -->
   <q-dialog v-model="alertCreateEquipmentKindType" no-backdrop-dismiss>
-    <q-card :style="{minWidth: '450px'}">
+    <q-card :style="{ minWidth: '450px' }">
       <q-card-section>
         <div class="text-h6">新建器材类型</div>
       </q-card-section>
@@ -127,7 +119,7 @@
   </q-dialog>
   <!-- 编辑器材类型弹窗 -->
   <q-dialog v-model="alertEditEquipmentKindType" no-backdrop-dismiss>
-    <q-card :style="{minWidth: '450px'}">
+    <q-card :style="{ minWidth: '450px' }">
       <q-card-section>
         <div class="text-h6">编辑器材类型</div>
       </q-card-section>
@@ -156,6 +148,7 @@
 
 <script setup>
 import { ref, onMounted, provide } from "vue";
+import collect from "collect.js";
 import { fnColumnReverseSort } from "src/utils/common";
 import {
   ajaxGetEquipmentKindTypes,
@@ -231,18 +224,16 @@ const fnSearch = () => {
     name: name_search.value,
     equipment_kind_category_uuid: equipmentKindCategoryUuid_search.value,
   }).then((res) => {
-    rows.value = res.content.equipment_kind_types.map(
-      (equipmentKindType, idx) => {
+    rows.value = collect(res.content.equipment_kind_types)
+      .map((equipmentKindType, idx) => {
         return {
+          ...equipmentKindType,
           index: idx + 1,
-          uuid: equipmentKindType.uuid,
-          uniqueCode: equipmentKindType.unique_code,
-          name: equipmentKindType.name,
           equipmentKindCategory: equipmentKindType.equipment_kind_category,
           operation: { uuid: equipmentKindType.uuid },
-        };
-      }
-    );
+        }
+      })
+      .all();
   });
 };
 

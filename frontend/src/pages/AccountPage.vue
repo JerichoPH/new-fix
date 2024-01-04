@@ -78,9 +78,7 @@
                     </q-avatar>
                   </q-td>
                   <q-td>
-                    <q-chip v-for="(rbacRole, idx) in props.row.rbac_roles" :key="idx" color="primary" text-color="white">
-                      {{ rbacRole.name }}
-                    </q-chip>
+                    <join-string :values="collect(props.row.rbacRoles).pluck('name').all()" />
                   </q-td>
                   <q-td>
                     <q-btn-group>
@@ -107,7 +105,7 @@
   <!-- 对话框 -->
   <!-- 新建用户对话框 -->
   <q-dialog v-model="alertCreateAccount">
-    <q-card :style="{minWidth: '450px'}">
+    <q-card :style="{ minWidth: '450px' }">
       <q-card-section>
         <div class="text-h6">新建用户</div>
       </q-card-section>
@@ -136,7 +134,7 @@
   </q-dialog>
   <!-- 编辑用户对话框 -->
   <q-dialog v-model="alertEditAccount">
-    <q-card :style="{minWidth: '450px'}">
+    <q-card :style="{ minWidth: '450px' }">
       <q-card-section>
         <div class="text-h6">编辑用户</div>
       </q-card-section>
@@ -192,7 +190,7 @@
   </q-dialog>
   <!-- 编辑密码对话框 -->
   <q-dialog v-model="alertEditPassword">
-    <q-card :style="{minWidth: '450px'}">
+    <q-card :style="{ minWidth: '450px' }">
       <q-card-section>
         <div class="text-h6">编辑密码</div>
       </q-card-section>
@@ -238,6 +236,7 @@ import {
 } from "src/utils/notify";
 import { fnColumnReverseSort } from "src/utils/common";
 import { getBase64 } from "src/utils/file";
+import JoinString from "src/components/JoinString.vue";
 import SelRbacRole_search from "src/components/SelRbacRole_search.vue";
 import ChkRbacRole_alertCreate from "src/components/ChkRbacRole_alertCreate.vue";
 import ChkRbacRole_alertEdit from "src/components/ChkRbacRole_alertEdit.vue";
@@ -329,23 +328,19 @@ const fnSearch = () => {
     rbac_role_uuid_search: rbacRoleUuid_search.value,
   })
     .then((res) => {
-      rows.value = [];
-
-      if (res.content.accounts.length > 0) {
-        collect(res.content.accounts).each((account, idx) => {
-          rows.value.push({
+      rows.value = collect(res.content.accounts)
+        .map((account, idx) => {
+          return {
+            ...account,
             index: idx + 1,
-            uuid: account.uuid,
-            username: account.username,
-            nickname: account.nickname,
             avatar: account.avatar
               ? `${settings.baseUrl}/${account.avatar.url}`
               : "",
-            rbac_roles: account.rbac_roles || [],
+            rbacRoles: account.rbac_roles,
             operation: { uuid: account.uuid },
-          });
-        });
-      }
+          }
+        })
+        .all();
     })
     .catch((e) => errorNotify(e.msg));
 };

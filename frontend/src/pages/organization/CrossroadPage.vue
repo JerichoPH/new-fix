@@ -77,11 +77,13 @@
                   <q-td>{{ props.row.index }}</q-td>
                   <q-td key="uniqueCode" :props="props">{{ props.row.uniqueCode }}</q-td>
                   <q-td key="name" :props="props">{{ props.row.name }}</q-td>
-                  <q-td key="organizationWorkshop" :props="props">{{ [
-                    props.row.organizationRailway.short_name,
-                    props.row.organizationParagraph.name,
-                    props.row.organizationWorkshop.name,
-                  ].join(' - ') }}</q-td>
+                  <q-td key="organizationWorkshop" :props="props">
+                    <join-string :values="[
+                      props.row.organizationRailway.short_name,
+                      props.row.organizationParagraph.name,
+                      props.row.organizationWorkshop.name,
+                    ]" />
+                  </q-td>
                   <q-td key="operation" :props="props">
                     <q-btn-group>
                       <q-btn @click="fnOpenAlertEditCreateOrganizationCrossroad(props.row.operation)" color="warning"
@@ -106,7 +108,7 @@
   <!-- 弹窗 -->
   <!-- 新建道口弹窗 -->
   <q-dialog v-model="alertCreateOrganizationCrossroad" no-backdrop-dismiss>
-    <q-card :style="{minWidth: '450px'}">
+    <q-card :style="{ minWidth: '450px' }">
       <q-card-section>
         <div class="text-h6">新建道口</div>
       </q-card-section>
@@ -149,7 +151,7 @@
   </q-dialog>
   <!-- 编辑道口弹窗 -->
   <q-dialog v-model="alertEditOrganizationCrossroad" no-backdrop-dismiss>
-    <q-card :style="{minWidth: '450px'}">
+    <q-card :style="{ minWidth: '450px' }">
       <q-card-section>
         <div class="text-h6">编辑道口</div>
       </q-card-section>
@@ -211,6 +213,7 @@ import {
   confirmNotify,
   destroyActions,
 } from "src/utils/notify";
+import JoinString from "src/components/JoinString.vue";
 import SelOrganizationRailway_search from "src/components/SelOrganizationRailway_search.vue";
 import SelOrganizationParagraph_search from "src/components/SelOrganizationParagraph_search.vue";
 import SelOrganizationWorkshop_search from "src/components/SelOrganizationWorkshop_search.vue";
@@ -272,6 +275,9 @@ const fnResetSearch = () => {
 };
 
 const fnSearch = () => {
+  rows.value = [];
+  selected.value = [];
+  
   ajaxGetOrganizationCrossroads({
     "@~[]": ["OrganizationWorkshop", "OrganizationWorkshop.OrganizationParagraph", "OrganizationWorkshop.OrganizationParagraph.OrganizationRailway"],
     unique_code: uniqueCode_search.value,

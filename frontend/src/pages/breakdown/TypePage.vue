@@ -195,6 +195,9 @@ const fnResetSearch = () => {
 };
 
 const fnSearch = () => {
+  rows.value = [];
+  selected.value = [];
+
   ajaxGetBreakdownTypes({
     "@~[]": ["EquipmentKindCategory"],
     name: name_search.value,
