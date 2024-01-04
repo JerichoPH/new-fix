@@ -63,7 +63,7 @@
         </div>
         <div class="row q-mt-md">
           <div class="col">
-            <q-table flat bordered title="仓库-架列表" :rows="rows" row-key="uuid" :pagination="{ rowsPerPage: 200 }"
+            <q-table flat bordered title="" :rows="rows" row-key="uuid" :pagination="{ rowsPerPage: 200 }"
               :rows-per-page-options="[50, 100, 200, 0]" rows-per-page-label="分页" :selected-rows-label="() => { }"
               selection="multiple" v-model:selected="selected">
               <template v-slot:header="props">
@@ -230,7 +230,18 @@
   <q-dialog v-model="alertEditWarehouseShelfSubs" no-backdrop-dismiss>
     <q-card :style="{ minWidth: '550px' }">
       <q-card-section>
-        <div class="text-h6">编辑仓库-架正视图</div>
+        <div class="row">
+          <div class="col-4">
+            <div class="text-h6">编辑架结构</div>
+          </div>
+          <div class="col-8">
+              <q-btn-group>
+                <q-btn @click="fnOpenAlertCreateWarehouseTiers" color="secondary" icon="add" label="新建层"></q-btn>
+                <q-btn @click="fnDestoryWarehouseTiers" color="negative" icon="delete" label="删除层"></q-btn>
+                <q-btn @click="fnOpenAlertCreateWarehouseCells" color="secondary" icon="add" label="新建位"></q-btn>
+              </q-btn-group>
+            </div>
+        </div>
       </q-card-section>
       <q-form class="q-gutter-md" @submit.prevent="">
         <q-card-section class="q-pt-none">
@@ -242,26 +253,18 @@
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <q-btn-group>
-                <q-btn @click="fnOpenAlertCreateWarehouseTiers" color="secondary" icon="add" label="新建层"></q-btn>
-                <q-btn @click="fnDestoryWarehouseTiers" color="negative" icon="delete" label="删除层"></q-btn>
-                <q-btn @click="fnOpenAlertCreateWarehouseCells" color="secondary" icon="add" label="新建位"></q-btn>
-              </q-btn-group>
-            </div>
-          </div>
-          <div class="row q-mt-md">
-            <div class="col">
               <template v-if="warehouseShelf_alertEditWarehouseShelfSubs">
-                <q-card flat bordered
-                  v-for="(warehouseTier, idx) in collect(warehouseShelf_alertEditWarehouseShelfSubs.warehouse_tiers || []).reverse().all()"
-                  :key="idx">
-                  <q-card-section>
+                <div class="q-gutter-y-sm column">
+                  <q-toolbar flat round dense class="bg-grey-3"
+                    v-for="(warehouseTier, idx) in collect(warehouseShelf_alertEditWarehouseShelfSubs.warehouse_tiers || []).reverse().all()"
+                    :key="idx">
                     <q-checkbox v-model="warehouseTierUuids_alertEditWarehouseShelfSubs" :label="warehouseTier.name"
                       :val="warehouseTier.uuid" :key="warehouseTier.uuid" />
+                    &emsp;<q-separator vertical />&emsp;
                     <q-btn v-for="(warehouseCell, idx2) in warehouseTier.warehouse_cells" :key="idx2"
                       :label="warehouseCell.name" color="primary" @click="fnDestroyWarehouseCell(warehouseCell.uuid)" />
-                  </q-card-section>
-                </q-card>
+                  </q-toolbar>
+                </div>
               </template>
             </div>
           </div>
