@@ -303,8 +303,10 @@ const fnSearch = () => {
       "WarehouseStorehouse.OrganizationWorkshop.OrganizationParagraph",
       "WarehouseStorehouse.OrganizationWorkshop.OrganizationParagraph.OrganizationRailway",
     ],
+    organization_railway_uuid: organizationRailwayUuid_search.value,
+    organization_paragraph_uuid: organizationParagraphUuid_search.value,
     organization_workshop_uuid: organizationWorkshopUuid_search.value,
-    organizaiton_work_area_uuid: organizationWorkAreaUuid_search.value,
+    organization_work_area_uuid: organizationWorkAreaUuid_search.value,
     warehouse_storehouse_uuid: warehouseStorehouseUuid_search.value,
   })
     .then(res => {

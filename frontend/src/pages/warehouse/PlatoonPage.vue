@@ -322,6 +322,11 @@ const fnSearch = () => {
       "WarehouseArea.WarehouseStorehouse",
     ],
     name: name_search.value,
+    organization_railway_uuid: organizationRailwayUuid_search.value,
+    organization_paragraph_uuid: organizationParagraphUuid_search.value,
+    organization_workshop_uuid: organizationWorkshopUuid_search.value,
+    organization_work_area_uuid: organizationWorkAreaUuid_search.value,
+    warehouse_storehouse_uuid: warehouseStorehouseUuid_search.value,
     warehouse_area_uuid: warehouseAreaUuid_search.value,
   })
     .then(response => {
@@ -388,14 +393,14 @@ const fnOpenAlertEditWarehousePlatoon = params => {
       "WarehouseArea.WarehouseStorehouse.OrganizationWorkshop.OrganizationParagraph.OrganizationRailway",
     ],
   })
-    .then(response => {
-      name_alertWarehousePlatoon.value = response.content.warehouse_platoon.name;
-      organizationRailwayUuid_alertEditWarehousePlatoon.value = response.content.warehouse_platoon.warehouse_area.warehouse_storehouse.organization_workshop.organization_paragraph.organization_railway.uuid;
-      organizationParagraphUuid_alertEditWarehousePlatoon.value = response.content.warehouse_platoon.warehouse_area.warehouse_storehouse.organization_workshop.organization_paragraph.uui;
-      organizationWorkshopUuid_alertEditWarehousePlatoon.value = response.content.warehouse_platoon.warehouse_area.warehouse_storehouse.organization_workshop.uuid;
-      organizationWorkAreaUuid_alertEditWarehousePlatoon.value = response.content.warehouse_platoon.warehouse_area.warehouse_storehouse.organization_work_area.uuid;
-      warehouseStorehouseUuid_alertEditWarehousePlatoon.value = response.content.warehouse_platoon.warehouse_area.warehouse_storehouse.uuid;
-      warehouseAreaUuid_alertEditWarehousePlatoon.value = response.content.warehouse_platoon.warehouse_area.uuid;
+    .then(res => {
+      name_alertWarehousePlatoon.value = res.content.warehouse_platoon.name;
+      organizationRailwayUuid_alertEditWarehousePlatoon.value = res.content.warehouse_platoon.warehouse_area.warehouse_storehouse.organization_workshop.organization_paragraph.organization_railway.uuid;
+      organizationParagraphUuid_alertEditWarehousePlatoon.value = res.content.warehouse_platoon.warehouse_area.warehouse_storehouse.organization_workshop.organization_paragraph.uuid;
+      organizationWorkshopUuid_alertEditWarehousePlatoon.value = res.content.warehouse_platoon.warehouse_area.warehouse_storehouse.organization_workshop.uuid;
+      organizationWorkAreaUuid_alertEditWarehousePlatoon.value = res.content.warehouse_platoon.warehouse_area.warehouse_storehouse.organization_work_area.uuid;
+      warehouseStorehouseUuid_alertEditWarehousePlatoon.value = res.content.warehouse_platoon.warehouse_area.warehouse_storehouse.uuid;
+      warehouseAreaUuid_alertEditWarehousePlatoon.value = res.content.warehouse_platoon.warehouse_area.uuid;
 
       alertWarehousePlatoon.value = true;
     })
@@ -414,8 +419,8 @@ const fnUpdateWarehouseArea = () => {
     warehouse_storehouse_uuid: warehouseStorehouseUuid_alertEditWarehousePlatoon.value,
     warehouse_area_uuid: warehouseAreaUuid_alertEditWarehousePlatoon.value,
   })
-    .then(response => {
-      successNotify(response.msg);
+    .then(res => {
+      successNotify(res.msg);
       fnSearch();
 
       alertWarehousePlatoon.value = false;
@@ -443,7 +448,7 @@ const fnDestroyWarehousePlatoons = () => {
   confirmNotify(destroyActions(() => {
     const loading = loadingNotify();
 
-    ajaxDestroyWarehousePlatoons(selected.value)
+    ajaxDestroyWarehousePlatoons(collect(selected.value).pluck("uuid").all())
       .then(() => {
         successNotify("删除成功");
         fnSearch();

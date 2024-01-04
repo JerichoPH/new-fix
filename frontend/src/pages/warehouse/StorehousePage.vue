@@ -280,6 +280,8 @@ const fnSearch = () => {
       "OrganizationWorkArea",
     ],
     name: name_search.value,
+    organization_railway_uuid: organizationRailwayUuid_search.value,
+    organization_paragraph_uuid: organizationParagraphUuid_search.value,
     organization_workshop_uuid: organizationWorkshopUuid_search.value,
     organization_work_area_uuid: organizationWorkAreaUuid_search.value,
   })

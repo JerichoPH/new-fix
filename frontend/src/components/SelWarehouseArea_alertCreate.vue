@@ -1,11 +1,10 @@
 <template>
   <q-select outlined use-input clearable v-model="warehouseAreaUuid_alertCreate" :options="warehouseAreas_alertCreate"
     :label="labelName" @filter="fnFilter" emit-value map-options
-    :display-value="warehouseAreasMap[warehouseAreaUuid_alertCreate]"
-    :disable="!organizationWorkshopUuid_search && !warehouseStorehouseUuid_alertCreate"/>
+    :display-value="warehouseAreasMap[warehouseAreaUuid_alertCreate]" :disable="!warehouseStorehouseUuid_alertCreate" />
 </template>
 <script setup>
-import { inject, defineProps, onMounted, ref } from "vue";
+import { inject, defineProps, onMounted, ref, watch } from "vue";
 import { ajaxGetWarehouseAreas } from "/src/apis/warehouse";
 import collect from "collect.js";
 import { errorNotify } from "src/utils/notify";
@@ -32,6 +31,8 @@ const warehouseAreas_alertCreate = ref([]);
 const warehouseAreas = ref([]);
 const warehouseAreasMap = ref({});
 
+watch(warehouseStorehouseUuid_alertCreate, () => fnSearch());
+
 const fnFilter = (val, update) => {
   if (val === "") {
     update(() => {
@@ -52,15 +53,14 @@ onMounted(() => fnSearch());
 const fnSearch = () => {
   warehouseAreas_alertCreate.value = [];
 
-  if(!warehouseStorehouseUuid_alertCreate.value){
+  if (!warehouseStorehouseUuid_alertCreate.value) {
     warehouseAreaUuid_alertCreate.value = "";
     return;
   }
 
   ajaxGetWarehouseAreas({
     ...ajaxParams,
-    organization_workshop_uuid: organizationWorkshopUuid_search.value,
-    organization_work_area_uuid: warehouseStorehouseUuid_alertCreate.value,
+    warehouse_storehouse_uuid: warehouseStorehouseUuid_alertCreate.value,
   })
     .then((res) => {
       warehouseAreas.value = collect(res.content.warehouse_areas)
@@ -71,11 +71,9 @@ const fnSearch = () => {
           };
         })
         .all();
-        warehouseAreasMap.value = collect(warehouseAreas.value).pluck("label","value").all();
+      warehouseAreasMap.value = collect(warehouseAreas.value).pluck("label", "value").all();
     })
-    .catch((e) => {
-      errorNotify(e.msg);
-    });
+    .catch((e) => errorNotify(e.msg));
 };
 </script>
 src/utils/notify
