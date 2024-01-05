@@ -255,7 +255,7 @@
             <div class="col">
               <template v-if="warehouseShelf_alertEditWarehouseShelfSubs">
                 <div class="q-gutter-y-sm column">
-                  <q-toolbar flat round dense class="bg-grey-3"
+                  <q-toolbar flat class="bg-grey-3"
                     v-for="(warehouseTier, idx) in collect(warehouseShelf_alertEditWarehouseShelfSubs.warehouse_tiers || []).reverse().all()"
                     :key="idx">
                     <q-checkbox v-model="warehouseTierUuids_alertEditWarehouseShelfSubs" :label="warehouseTier.name"
@@ -271,7 +271,6 @@
         </q-card-section>
         <q-card-actions align="right">
           <q-btn type="button" label="关闭" v-close-popup />
-          <!-- <q-btn type="submit" label="确定" icon="check" color="secondary" /> -->
         </q-card-actions>
       </q-form>
     </q-card>

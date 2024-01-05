@@ -53,30 +53,34 @@ export const ajaxDestroyWarehouseAreas = (uuids) => {
   return api.post(`${urlPrefix}/area/destroyMany`, { uuids });
 };
 
-export const ajaxGetWarehousePlatoons =(params)=>{
+export const ajaxGetWarehousePlatoons = (params) => {
   return api.get(`${urlPrefix}/platoon`, { params });
 };
 
 export const ajaxGetWarehousePlatoon = (uuid, params) => {
   return api.get(`${urlPrefix}/platoon/${uuid}`, { params });
-}
+};
 
 export const ajaxStoreWarehousePlatoon = (params) => {
   return api.post(`${urlPrefix}/platoon`, params);
-}
+};
 
 export const ajaxUpdateWarehousePlatoon = (uuid, params) => {
   return api.put(`${urlPrefix}/platoon/${uuid}`, params);
-}
+};
 
 export const ajaxDestroyWarehousePlatoon = (uuid) => {
   return api.delete(`${urlPrefix}/platoon/${uuid}`);
-}
+};
 
 export const ajaxDestroyWarehousePlatoons = (uuids) => {
   if (collect(uuids).isEmpty()) new Promise.reject("请选择要删除的仓库-排");
   return api.post(`${urlPrefix}/platoon/destroyMany`, { uuids });
-}
+};
+
+export const ajaxGetWarehousePlatoonTypeCodesMap = () => {
+  return api.get(`${urlPrefix}/platoon/typeCodesMap`);
+};
 
 export const ajaxGetWarehouseShelves = (params) => {
   return api.get(`${urlPrefix}/shelf`, { params });
