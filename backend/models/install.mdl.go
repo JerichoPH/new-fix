@@ -202,7 +202,7 @@ func NewInstallIndoorShelfMdl() *MySqlMdl {
 	return NewMySqlMdl().SetModel(InstallIndoorShelfMdl{})
 }
 
-// GetListByQuery 根据Query获取室内上道位置-架列表.
+// GetListByQuery 根据Query获取室内上道位置-架列表
 func (receiver InstallIndoorShelfMdl) GetListByQuery(ctx *gin.Context) *gorm.DB {
 	return NewInstallIndoorShelfMdl().
 		SetWheresEqual().
