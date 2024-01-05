@@ -39,24 +39,35 @@ type EquipmentMdl struct {
 	MadeAt                                  *time.Time                `gorm:"type:date;comment:出厂日期;" json:"made_at"`
 	WorkshopInOrderUuid                     string                    `gorm:"index;type:char(36);not null;default:'';comment:入所单uuid;" json:"workshop_in_order_uuid"`
 	WorkshopOutOrderUuid                    string                    `gorm:"index;type:char(36);not null;default:'';comment:出所单uuid;" json:"workshop_out_order_uuid"`
-	WarehouseInOrderUuid                    string                    `gorm:"index;type:char(36);not null;default:'';comment:入库单uuid;" json:"warehouse_in_order_uuid"`
-	WarehouseOutOrderUuid                   string                    `gorm:"index;type:char(36);not null;default:'';comment:出库单uuid;" json:"warehouse_out_order_uuid"`
-	RepairOrderUuid                         string                    `gorm:"index;type:char(36);not null;default:'';comment:检修单uuid;" json:"repair_order_uuid"`
-	ScrapOrderUuid                          string                    `gorm:"index;type:char(36);not null;default:'';comment:报废单uuid;" json:"scrap_order_uuid"`
-	InstallOrderUuid                        string                    `gorm:"index;type:char(36);not null;default:'';comment:上道单uuid;" json:"install_order_uuid"`
-	UninstallOrderUuid                      string                    `gorm:"index;type:char(36);not null;default:'';comment:下道单uuid;" json:"uninstall_order_uuid"`
-	BeSpareOrderUuid                        string                    `gorm:"index;type:char(36);not null;default:'';comment:成为备品单uuid;" json:"be_spare_order_uuid"`
-	WarehouseCellUuid                       string                    `gorm:"index;type:char(36);not null;default:'';comment:库房格位uuid;" json:"usage_warehouse_cell_uuid"`
-	WarehouseCell                           *WarehouseCellMdl         `gorm:"foreignKey:warehouse_cell_uuid;references:uuid;comment:库房格位;" json:"warehouse_cell"`
-	CanIWorkshopOut                         bool                      `gorm:"-" json:"can_i_workshop_out"`
-	CanIInstall                             bool                      `gorm:"-" json:"can_i_install"`
-	CanIUninstall                           bool                      `gorm:"-" json:"can_i_uninstall"`
-	CanIBeSpare                             bool                      `gorm:"-" json:"can_i_be_spare"`
-	BreakdonwLogs                           []*BreakdownLogMdl        `gorm:"foreignKey:equipment_uuid;references:uuid;comment:故障日志;" json:"breakdown_logs"`
-	SourceTypeUuid                          string                    `gorm:"type:char(36);not null;default:'';comment:所属来源类型uuid;" json:"source_type_uuid"`
-	SourceType                              *SourceTypeMdl            `gorm:"foreignKey:source_type_uuid;references:uuid;comment:所属来源类型;" json:"source_type"`
-	SourceProjectUuid                       string                    `gorm:"type:char(36);not null;default:'';comment:所属来源项目uuid;" json:"source_project_uuid"`
-	SourceProject                           *SourceProjectMdl         `gorm:"foreignKey:source_project_uuid;references:uuid;comment:所属来源项目;" json:"source_project"`
+	WarehouseInScanItemUuid                 string                    `gorm:"index;type:char(36);not null;default:'';comment:入库扫码uuid;" json:"warehouse_in_scan_item_uuid"`
+	WarehouseInScanItem                     *WarehouseScanItemMdl     `gorm:"foreignKey:warehouse_in_scan_item_uuid;references:uuid;comment:入库扫码;" json:"warehouse_in_scan_item"`
+	WarehouseOutScanItemUuid                string                    `gorm:"index;type:char(36);not null;default:'';comment:出库扫码uuid;" json:"warehouse_out_scan_item_uuid"`
+	WarehouseOutScanItem                    *WarehouseScanItemMdl     `gorm:"foreignKey:warehouse_out_scan_item_uuid;references:uuid;comment:出库扫码;" json:"warehouse_out_scan_item"`
+	WarehouseScanItems                      []*WarehouseScanItemMdl   `gorm:"foreignKey:equipment_uuid;references:uuid;comment:相关出入库扫码记录;" json:"warehouse_scan_items"`
+	WarehouseInOrderUuid                    string                    `gorm:"index;type:char(36);not null;default:'';comment:最后入库单uuid;" json:"warehouse_in_order_uuid"`
+	WarehouseInOrder                        *WarehouseOrderMdl        `gorm:"foreignKey:warehouse_in_order_uuid;references:uuid;comment:最后入库单;" json:"warehouse_in_order"`
+	WarehouseOutOrderUuid                   string                    `gorm:"index;type:char(36);not null;default:'';comment:最后出库单uuid;" json:"warehouse_out_order_uuid"`
+	WarehouseOutOrder                       *WarehouseOrderMdl        `gorm:"foreignKey:warehouse_out_order_uuid;references:uuid;comment:最后出库单;" json:"warehouse_out_order"`
+	WarehouseOrders                         *[]WarehouseOrderMdl      `gorm:"foreignKey:equipment_uuid;references:uuid;comment:相关出入库单;" json:"warehouse_orders"`
+	InstallIndoorCellUuid                   string                    `gorm:"index;type:char(36);not null;default:;comment:所属室内上道位置uuid;" json:"install_indoor_cell_uuid"`
+	InstallIndoorCell                       *InstallIndoorCellMdl     `gorm:"foreignKey:install_indoor_cell_uuid;references:uuid;comment:所属室内上道位置;" json:"install_indoor_cell"`
+
+	RepairOrderUuid    string             `gorm:"index;type:char(36);not null;default:'';comment:检修单uuid;" json:"repair_order_uuid"`
+	ScrapOrderUuid     string             `gorm:"index;type:char(36);not null;default:'';comment:报废单uuid;" json:"scrap_order_uuid"`
+	InstallOrderUuid   string             `gorm:"index;type:char(36);not null;default:'';comment:上道单uuid;" json:"install_order_uuid"`
+	UninstallOrderUuid string             `gorm:"index;type:char(36);not null;default:'';comment:下道单uuid;" json:"uninstall_order_uuid"`
+	BeSpareOrderUuid   string             `gorm:"index;type:char(36);not null;default:'';comment:成为备品单uuid;" json:"be_spare_order_uuid"`
+	WarehouseCellUuid  string             `gorm:"index;type:char(36);not null;default:'';comment:库房格位uuid;" json:"usage_warehouse_cell_uuid"`
+	WarehouseCell      *WarehouseCellMdl  `gorm:"foreignKey:warehouse_cell_uuid;references:uuid;comment:库房格位;" json:"warehouse_cell"`
+	CanIWorkshopOut    bool               `gorm:"-" json:"can_i_workshop_out"`
+	CanIInstall        bool               `gorm:"-" json:"can_i_install"`
+	CanIUninstall      bool               `gorm:"-" json:"can_i_uninstall"`
+	CanIBeSpare        bool               `gorm:"-" json:"can_i_be_spare"`
+	BreakdonwLogs      []*BreakdownLogMdl `gorm:"foreignKey:equipment_uuid;references:uuid;comment:故障日志;" json:"breakdown_logs"`
+	SourceTypeUuid     string             `gorm:"type:char(36);not null;default:'';comment:所属来源类型uuid;" json:"source_type_uuid"`
+	SourceType         *SourceTypeMdl     `gorm:"foreignKey:source_type_uuid;references:uuid;comment:所属来源类型;" json:"source_type"`
+	SourceProjectUuid  string             `gorm:"type:char(36);not null;default:'';comment:所属来源项目uuid;" json:"source_project_uuid"`
+	SourceProject      *SourceProjectMdl  `gorm:"foreignKey:source_project_uuid;references:uuid;comment:所属来源项目;" json:"source_project"`
 }
 
 // TableName 器材表名称

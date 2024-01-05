@@ -336,6 +336,7 @@ func (WarehouseStorehouseCtrl) Store(ctx *gin.Context) {
 	ret = models.NewWarehouseStorehouseMdl().
 		GetDb("").
 		Where("name = ?", form.Name).
+		Where("warehouse_storehouse_uuid = ?", form.organizationWorkshop.Uuid).
 		First(&repeat)
 	wrongs.ThrowWhenNotEmpty(ret, "仓库名称")
 
@@ -401,7 +402,9 @@ func (WarehouseStorehouseCtrl) Update(ctx *gin.Context) {
 	// 查重
 	ret = models.NewWarehouseStorehouseMdl().
 		GetDb("").
-		Where("name = ? and uuid <> ?", form.Name, ctx.Param("uuid")).
+		Where("name = ?", form.Name).
+		Where("uuid <> ?", ctx.Param("uuid")).
+		Where("organization_workshop_uuid = ?", form.organizationWorkshop.Uuid).
 		First(&repeat)
 	wrongs.ThrowWhenNotEmpty(ret, "仓库名称")
 
@@ -495,6 +498,7 @@ func (WarehouseAreaCtrl) Store(ctx *gin.Context) {
 	ret = models.NewWarehouseAreaMdl().
 		GetDb("").
 		Where("name = ?", form.Name).
+		Where("warehouse_storehouse_uuid = ?", form.warehouseStorehouse.Uuid).
 		First(&repeat)
 	wrongs.ThrowWhenNotEmpty(ret, "仓库-库区名称")
 
@@ -559,7 +563,9 @@ func (WarehouseAreaCtrl) Update(ctx *gin.Context) {
 	// 查重
 	ret = models.NewWarehouseAreaMdl().
 		GetDb("").
-		Where("name = ? and uuid <> ?", form.Name, ctx.Param("uuid")).
+		Where("name = ?", form.Name).
+		Where("uuid <> ?", ctx.Param("uuid")).
+		Where("warehouse_storehouse_uuid = ?", form.warehouseStorehouse.Uuid).
 		First(&repeat)
 	wrongs.ThrowWhenNotEmpty(ret, "仓库-库区名称")
 
@@ -652,6 +658,7 @@ func (WarehousePlatoonCtrl) Store(ctx *gin.Context) {
 	ret = models.NewWarehousePlatoonMdl().
 		GetDb("").
 		Where("name = ?", form.Name).
+		Where("warehouse_area_uuid = ?", form.warehouseArea.Uuid).
 		First(&repeat)
 	wrongs.ThrowWhenNotEmpty(ret, "仓库-排名称")
 
@@ -717,7 +724,9 @@ func (WarehousePlatoonCtrl) Update(ctx *gin.Context) {
 	// 查重
 	ret = models.NewWarehousePlatoonMdl().
 		GetDb("").
-		Where("name = ? and uuid <> ?", form.Name, ctx.Param("uuid")).
+		Where("name = ?", form.Name).
+		Where("uuid <> ?", ctx.Param("uuid")).
+		Where("warehouse_area_uuid = ?", form.warehouseArea.Uuid).
 		First(&repeat)
 	wrongs.ThrowWhenNotEmpty(ret, "仓库-排名称")
 
@@ -811,6 +820,7 @@ func (WarehouseShelfCtrl) Store(ctx *gin.Context) {
 	ret = models.NewWarehouseShelfMdl().
 		GetDb("").
 		Where("name = ?", form.Name).
+		Where("warehouse_platoon_uuid = ?", form.warehousePlatoon.Uuid).
 		First(&repeat)
 	wrongs.ThrowWhenNotEmpty(ret, "仓库-架名称")
 
@@ -875,7 +885,9 @@ func (WarehouseShelfCtrl) Update(ctx *gin.Context) {
 	// 查重
 	ret = models.NewWarehouseShelfMdl().
 		GetDb("").
-		Where("name = ? and uuid <> ?", form.Name, ctx.Param("uuid")).
+		Where("name = ?", form.Name).
+		Where("uuid <> ?", ctx.Param("uuid")).
+		Where("warehouse_platoon_uuid = ?", form.warehousePlatoon.Uuid).
 		First(&repeat)
 	wrongs.ThrowWhenNotEmpty(ret, "仓库-架名称")
 
@@ -968,6 +980,7 @@ func (WarehouseTierCtrl) Store(ctx *gin.Context) {
 	ret = models.NewWarehouseTierMdl().
 		GetDb("").
 		Where("name = ?", form.Name).
+		Where("warehouse_shelf_uuid = ?", form.warehouseShelf.Uuid).
 		First(&repeat)
 	wrongs.ThrowWhenNotEmpty(ret, "仓库-层名称")
 
@@ -1058,7 +1071,9 @@ func (WarehouseTierCtrl) Update(ctx *gin.Context) {
 	// 查重
 	ret = models.NewWarehouseTierMdl().
 		GetDb("").
-		Where("name = ? and uuid <> ?", form.Name, ctx.Param("uuid")).
+		Where("name = ?", form.Name).
+		Where("uuid <> ?", ctx.Param("uuid")).
+		Where("warehouse_shelf_uuid = ?", form.warehouseShelf.Uuid).
 		First(&repeat)
 	wrongs.ThrowWhenNotEmpty(ret, "仓库-层名称")
 
@@ -1151,6 +1166,7 @@ func (WarehouseCellCtrl) Store(ctx *gin.Context) {
 	ret = models.NewWarehouseCellMdl().
 		GetDb("").
 		Where("name = ?", form.Name).
+		Where("warehouse_tier_uuid = ?", form.warehouseTier.Uuid).
 		First(&repeat)
 	wrongs.ThrowWhenNotEmpty(ret, "仓库-位名称")
 
@@ -1240,7 +1256,9 @@ func (WarehouseCellCtrl) Update(ctx *gin.Context) {
 	// 查重
 	ret = models.NewWarehouseCellMdl().
 		GetDb("").
-		Where("name = ? and uuid <> ?", form.Name, ctx.Param("uuid")).
+		Where("name = ?", form.Name).
+		Where("uuid <> ?", ctx.Param("uuid")).
+		Where("warehouse_tier_uuid = ?", form.warehouseTier.Uuid).
 		First(&repeat)
 	wrongs.ThrowWhenNotEmpty(ret, "仓库-位名称")
 

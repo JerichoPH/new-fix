@@ -67,12 +67,26 @@ type (
 	// WarehouseScanItemMdl 出入库扫码记录模型
 	WarehouseScanItemMdl struct {
 		MySqlMdl
-		EquipmentUuid string        `gorm:"unique;type:char(36);not null;comment:所属器材uuid;" json:"equipment_uuid"`
-		Equipment     *EquipmentMdl `gorm:"foreignKey:equipment_uuid;references:uuid;" json:"equipment"`
-		ProcessorUuid string        `gorm:"type:char(36);not null;comment:经办人uuid;" json:"processor_uuid"`
-		Processor     *AccountMdl   `gorm:"foreignKey:processor_uuid;references:uuid;" json:"processor"`
-		DirectionCode string        `gorm:"enum('IN','OUT');not null;comment:出入库方向;" json:"direction_code"`
-		DirectionText string        `gorm:"-" json:"direction_text"`
+		EquipmentUuid                    string          `gorm:"unique;type:char(36);not null;comment:所属器材uuid;" json:"equipment_uuid"`
+		Equipment                        *EquipmentMdl   `gorm:"foreignKey:equipment_uuid;references:uuid;comment:所属器材;" json:"equipment"`
+		EquipmentsByWarehouseInScanItem  []*EquipmentMdl `gorm:"foreignKey:warehouse_in_scan_item_uuid;references:uuid;comment:相关器材（入库扫码）;" json:"equipments_by_warehouse_in_scan_item"`
+		EquipmentsByWarehouseOutScanItem []*EquipmentMdl `gorm:"foreignKey:warehouse_out_scan_item_uuid;references:uuid;comment:相关器材（出库扫码）;" json:"equipments_by_warehouse_out_scan_item"`
+		ProcessorUuid                    string          `gorm:"type:char(36);not null;comment:经办人uuid;" json:"processor_uuid"`
+		Processor                        *AccountMdl     `gorm:"foreignKey:processor_uuid;references:uuid;" json:"processor"`
+		DirectionCode                    string          `gorm:"enum('IN','OUT');not null;comment:出入库方向;" json:"direction_code"`
+		DirectionText                    string          `gorm:"-" json:"direction_text"`
+	}
+	// WarehouseOrderMdl 仓库-出入库单模型
+	WarehouseOrderMdl struct {
+		MySqlMdl
+		EquipmentUuid                 string          `gorm:"type:char(36);not null;comment:所属器材uuid;" json:"equipment_uuid"`
+		Equipment                     *EquipmentMdl   `gorm:"foreignKey:equipment_uuid;references:uuid;comment:所属器材;" json:"equipment"`
+		EquipmentsByWarehouseInOrder  []*EquipmentMdl `gorm:"foreignKey:warehouse_in_order_uuid;references:uuid;comment:相关器材（最后入库单）;" json:"equipments_by_warehouse_in_order"`
+		EquipmentsByWarehouseOutOrder []*EquipmentMdl `gorm:"foreignKey:warehouse_out_order_uuid;references:uuid;comment:相关器材（最后出库单）;" json:"equipments_by_warehouse_out_order"`
+		ProcessorUuid                 string          `gorm:"type:char(36);not null;comment:经办人uuid;" json:"processor_uuid"`
+		Processor                     *AccountMdl     `gorm:"foreignKey:processor_uuid;references:uuid;" json:"processor"`
+		DirectionCode                 string          `gorm:"enum('IN','OUT');not null;comment:出入库方向;" json:"direction_code"`
+		DirectionText                 string          `gorm:"-" json:"direction_text"`
 	}
 )
 
@@ -455,7 +469,7 @@ func NewWarehouseScanItemMdl() *MySqlMdl {
 // GetListByQuery 根据Query获取出入库扫码记录列表
 func (receiver WarehouseScanItemMdl) GetListByQuery(ctx *gin.Context) *gorm.DB {
 	return NewWarehouseScanItemMdl().
-		SetWheresEqual().
+		SetWheresEqual("direction_code").
 		SetWheresFuzzy(map[string]string{
 			"name": "wsi.name like ?",
 		}).
@@ -490,8 +504,62 @@ func (*WarehouseScanItemMdl) getDirectionText(warehouseScanItem *WarehouseScanIt
 	return
 }
 
-// GetDirectionTexts 获取出入库方向描述
+// AfterFind 查询回调
 func (receiver *WarehouseScanItemMdl) AfterFind(db *gorm.DB) (err error) {
+	receiver.DirectionText = receiver.getDirectionText(receiver)
+	return
+}
+
+// TableName 仓库-出入库单表名称
+func (WarehouseOrderMdl) TableName() string {
+	return "warehouse_orders"
+}
+
+// NewWarehouseOrderMdl 新建仓库-出入库单模型
+func NewWarehouseOrderMdl() *MySqlMdl {
+	return NewMySqlMdl().SetModel(WarehouseOrderMdl{})
+}
+
+// GetListByQuery 根据Query获取仓库-出入库单列表
+func (receiver WarehouseOrderMdl) GetListByQuery(ctx *gin.Context) *gorm.DB {
+	return NewWarehouseOrderMdl().
+		SetWheresEqual("direction_code").
+		SetWheresFuzzy(map[string]string{
+			"name": "wo.name like ?",
+		}).
+		SetWheresDateBetween("wo.created_at", "wo.updated_at", "wo.deleted_at").
+		SetWheresExtraHasValue(map[string]func(string, *gorm.DB) *gorm.DB{}).
+		SetWheresExtraHasValues(map[string]func([]string, *gorm.DB) *gorm.DB{}).
+		SetCtx(ctx).
+		GetDbUseQuery("").
+		Table("warehouse_orders as wo")
+}
+
+// GetDirectionCodes 获取出入库方向代码
+func (WarehouseOrderMdl) GetDirectionCodes() []string {
+	return []string{"IN", "OUT"}
+}
+
+// GetDirectionCodesMap 获取出入库方向代码映射
+func (WarehouseOrderMdl) GetDirectionCodesMap() []map[string]string {
+	return []map[string]string{
+		{"code": "IN", "text": "入库"},
+		{"code": "OUT", "text": "出库"},
+	}
+}
+
+// getDirectionText 获取出入库方向描述
+func (*WarehouseOrderMdl) getDirectionText(warehouseOrder *WarehouseOrderMdl) (typeText string) {
+	for _, item := range warehouseOrder.GetDirectionCodesMap() {
+		if item["code"] == warehouseOrder.DirectionCode {
+			typeText = item["text"]
+		}
+	}
+	return
+}
+
+// AfterFind 查询回调
+func (receiver *WarehouseOrderMdl) AfterFind(db *gorm.DB) (err error) {
 	receiver.DirectionText = receiver.getDirectionText(receiver)
 	return
 }
