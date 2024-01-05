@@ -12,14 +12,16 @@ type (
 	// AccountMdl 用户模型
 	AccountMdl struct {
 		MySqlMdl
-		Username                    string             `gorm:"unique;type:varchar(64);not null;comment:账号;" json:"username"`
-		Password                    string             `gorm:"type:varchar(255);not null;comment:密码;" json:"-"`
-		Nickname                    string             `gorm:"unique;type:varchar(64);not null;comment:昵称;" json:"nickname"`
-		BeAdmin                     bool               `gorm:"type:boolean;not null;default:0;comment:是否是管理员" json:"be_admin"`
-		AvatarUuid                  string             `gorm:"index;type:char(36);not null;default:'';comment:用户头像文件uuid;" json:"avatar_uuid"`
-		Avatar                      *FileMdl           `gorm:"foreignKey:avatar_uuid;references:uuid" json:"avatar"`
-		RbacRoles                   []*RbacRoleMdl     `gorm:"many2many:pivot_rbac_roles__accounts;foreignKey:uuid;joinForeignKey:account_uuid;references:uuid;joinReferences:rbac_role_uuid;" json:"rbac_roles"`
-		BreakdownLogsByReportPerson []*BreakdownLogMdl `gorm:"foreignKey:report_person_uuid;references:uuid;comment:报修人;" json:"breakdown_logs_by_report_person"`
+		Username                      string                  `gorm:"unique;type:varchar(64);not null;comment:账号;" json:"username"`
+		Password                      string                  `gorm:"type:varchar(255);not null;comment:密码;" json:"-"`
+		Nickname                      string                  `gorm:"unique;type:varchar(64);not null;comment:昵称;" json:"nickname"`
+		BeAdmin                       bool                    `gorm:"type:boolean;not null;default:0;comment:是否是管理员" json:"be_admin"`
+		AvatarUuid                    string                  `gorm:"index;type:char(36);not null;default:'';comment:用户头像文件uuid;" json:"avatar_uuid"`
+		Avatar                        *FileMdl                `gorm:"foreignKey:avatar_uuid;references:uuid" json:"avatar"`
+		RbacRoles                     []*RbacRoleMdl          `gorm:"many2many:pivot_rbac_roles__accounts;foreignKey:uuid;joinForeignKey:account_uuid;references:uuid;joinReferences:rbac_role_uuid;" json:"rbac_roles"`
+		BreakdownLogsByReportPerson   []*BreakdownLogMdl      `gorm:"foreignKey:report_person_uuid;references:uuid;comment:报修人;" json:"breakdown_logs_by_report_person"`
+		WarehouseScanItemsByProcessor []*WarehouseScanItemMdl `gorm:"foreignKey:processor_uuid;references:uuid;comment:相关出入库扫码（经办人）;" json:"warehouse_scan_items_by_processor"`
+		WarehouseOrdersByProcessor    []*WarehouseOrderMdl    `gorm:"foreignKey:processor_uuid;references:uuid;comment:相关出入库（经办人）;" json:"warehouse_orders_by_processor"`
 	}
 )
 

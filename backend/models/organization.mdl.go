@@ -52,6 +52,7 @@ type (
 		OrganizationLineUuid     string                   `gorm:"type:char(36);not null;" json:"organization_line_uuid"`
 		OrganizationLine         *OrganizationLineMdl     `gorm:"foreignKey:organization_line_uuid;references:uuid;comment:所属线别;" json:"organization_line"`
 		EquipmentsByUseBelong    []*EquipmentMdl          `gorm:"foreignKey:use_belong_organization_station_uuid;references:uuid;comment:相关器材（使用归属站场）;" json:"equipments_by_use_belong"`
+		InstallIndoorRooms       []*InstallIndoorRoomMdl  `gorm:"foreignKey:organization_station_uuid;references:uuid;comment:相关室内上道位置-机房;" json:"install_indoor_rooms"`
 	}
 	// OrganizationCrossroadMdl 组织结构-道口模型
 	OrganizationCrossroadMdl struct {
@@ -63,6 +64,7 @@ type (
 		OrganizationLineUuid     string                   `gorm:"type:char(36);not null;" json:"organization_line_uuid"`
 		OrganizationLine         *OrganizationLineMdl     `gorm:"foreignKey:organization_line_uuid;references:uuid;comment:所属线别;" json:"organization_line"`
 		EquipmentsByUseBelong    []*EquipmentMdl          `gorm:"foreignKey:use_belong_organization_crossroad_uuid;references:uuid;comment:相关器材（使用归属道口）;" json:"equipments_by_use_belong"`
+		InstallIndoorRooms       []*InstallIndoorRoomMdl  `gorm:"foreignKey:organization_crossroad_uuid;references:uuid;comment:相关室内上道位置-机房;" json:"install_indoor_rooms"`
 	}
 	// OrganizationCenterMdl 组织结构-中心模型
 	OrganizationCenterMdl struct {
@@ -74,6 +76,7 @@ type (
 		OrganizationLineUuid     string                   `gorm:"type:char(36);not null;" json:"organization_line_uuid"`
 		OrganizationLine         *OrganizationLineMdl     `gorm:"foreignKey:organization_line_uuid;references:uuid;comment:所属线别;" json:"organization_line"`
 		EquipmentsByUseBelong    []*EquipmentMdl          `gorm:"foreignKey:use_belong_organization_center_uuid;references:uuid;comment:相关器材（使用归属中心）;" json:"equipments_by_use_belong"`
+		InstallIndoorRooms       []*InstallIndoorRoomMdl  `gorm:"foreignKey:organization_center_uuid;references:uuid;comment:相关室内上道位置-机房;" json:"install_indoor_rooms"`
 	}
 	// OrganizationWorkAreaMdl 组织结构-工区模型
 	OrganizationWorkAreaMdl struct {
