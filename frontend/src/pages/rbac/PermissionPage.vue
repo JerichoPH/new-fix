@@ -252,7 +252,6 @@ const fnSearch = () => {
           }
         })
         .all();
-      console.log('ok', rows.value);
     })
     .catch(e=>errorNotify(e.msg));
 };
@@ -277,7 +276,7 @@ const fnOpenAlertCreateRbacPermission = () => {
  * 新建权限
  */
 const fnStoreRbacPermission = () => {
-  const loading = loadingNotify();
+  const loading = loading();
 
   ajaxStoreRbacPermission({
     name: name_alertCreateRbacPermission.value,
@@ -335,7 +334,7 @@ const fnOpenAlertEditRbacPermission = (params = {}) => {
 const fnUpdateRbacPermission = () => {
   if (!currentUuid.value) return;
 
-  const loading = loadingNotify();
+  const loading = loading();
 
   ajaxUpdateRbacPermission(currentUuid.value, {
     name: name_alertEditRbacPermission.value,
@@ -361,7 +360,7 @@ const fnUpdateRbacPermission = () => {
 const fnDestroyRbacPermission = (params = {}) => {
   if (!params["uuid"]) return;
 
-  const loading = loadingNotify();
+  const loading = loading();
   confirmNotify(
     destroyActions(() => {
       ajaxDestroyRbacPermission(params.uuid)
@@ -381,7 +380,7 @@ const fnDestroyRbacPermission = (params = {}) => {
 const fnDestroyRbacPermissions = () => {
   confirmNotify(
     destroyActions(() => {
-      const loading = loadingNotify();
+      const loading = loading();
 
       ajaxDestroyRbacPermissions(
         collect(selected.value).pluck("uuid").toArray()

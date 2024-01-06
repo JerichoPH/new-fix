@@ -260,7 +260,7 @@ const fnOpenAlertCreateEquipmentKindType = () => {
  * 新建器材类型
  */
 const fnStoreEquipmentKindType = () => {
-  const loading = loadingNotify();
+  const loading = loading();
 
   ajaxStoreEquipmentKindType({
     name: name_alertCreateEquipmentKindType.value,
@@ -284,7 +284,7 @@ const fnStoreEquipmentKindType = () => {
 const fnDestroyEquipmentKindTypes = (params) => {
   confirmNotify(
     destroyActions(() => {
-      const loading = loadingNotify();
+      const loading = loading();
       ajaxDestroyEquipmentKindTypes(selected.value.map((item) => item.uuid))
         .then((res) => {
           successNotify(res.msg);
@@ -324,7 +324,7 @@ const fnOpenAlertEditEquipmentKindType = (params) => {
 const fnUpdateEquipmentKindType = () => {
   if (!currentUuid.value) return;
 
-  const loading = loadingNotify();
+  const loading = loading();
   ajaxUpdateEquipmentKindType(currentUuid.value, {
     name: name_alertEditEquipmentKindType.value,
     equipment_kind_category_uuid:
@@ -349,7 +349,7 @@ const fnDestroyEquipmentKindType = (params) => {
 
   confirmNotify(
     destroyActions(() => {
-      const loading = loadingNotify();
+      const loading = loading();
 
       ajaxDestroyEquipmentKindType(params.uuid)
         .then((res) => {

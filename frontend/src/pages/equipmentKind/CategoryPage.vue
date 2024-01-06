@@ -236,7 +236,7 @@ const fnOpenAlertCreateEquipmentKindCategory = () => {
  * 新建器材种类
  */
 const fnStoreEquipmentKindCategory = () => {
-  const loading = loadingNotify();
+  const loading = loading();
 
   ajaxStoreEquipmentKindCategory({
     name: name_alertCreateEquipmentKindCategory.value,
@@ -267,7 +267,7 @@ const fnOpenAlertEditEquipmentKindCategory = (params) => {
       alertEditEquipmentKindCategory.value = true;
     })
     .catch(e=>errorNotify(e.msg))
-    .finally(loading());
+    .finally(loadingNotify());
 };
 
 /**
@@ -277,7 +277,7 @@ const fnOpenAlertEditEquipmentKindCategory = (params) => {
 const fnUpdateEquipmentKindCategory = (params) => {
   if (!currentUuid.value) return;
 
-  const loading = loadingNotify();
+  const loading = loading();
 
   ajaxUpdateEquipmentKindCategory(currentUuid.value, {
     name: name_alertEditEquipmentKindCategory.value,
@@ -301,7 +301,7 @@ const fnDestroyEquipmentKindCategory = (params) => {
 
   confirmNotify(
     destroyActions(() => {
-      const loading = loadingNotify();
+      const loading = loading();
 
       ajaxDestroyEquipmentKindCategory(params.uuid)
         .then(() => {
@@ -328,7 +328,7 @@ const fnDestroyEquipmentKindCategories = () => {
           fnSearch();
         })
         .catch(e=>errorNotify(e.msg))
-        .finally(loading());
+        .finally(loadingNotify());
     })
   );
 };

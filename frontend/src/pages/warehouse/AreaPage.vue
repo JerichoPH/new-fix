@@ -351,7 +351,7 @@ const fnResetAlertCreateWarehouseArea = () => {
 const fnOpenAlertCreateWarehouseArea = () => { alertCreateWarehouseArea.value = true; };
 
 const fnStoreWarehouseArea = () => {
-  const loading = loadingNotify();
+  const loading = loading();
 
   ajaxStoreWarehouseArea({
     name: name_alertCreateWarehouseArea.value,
@@ -382,7 +382,6 @@ const fnOpenAlertEditWarehouseArea = (params) => {
     ],
   })
     .then(res => {
-      console.log('res', res);
       name_alertEditWarehouseArea.value = res.content.warehouse_area.name;
       organizationRailwayUuid_alertEditWarehouseArea.value = res.content.warehouse_area.warehouse_storehouse.organization_workshop.organization_paragraph.organization_railway.uuid;
       organizationParagraphUuid_alertEditWarehouseArea.value = res.content.warehouse_area.warehouse_storehouse.organization_workshop.organization_paragraph.uuid;
@@ -400,7 +399,7 @@ const fnOpenAlertEditWarehouseArea = (params) => {
 const fnUpdateWarehouseArea = () => {
   if (!currentUuid.value) return;
 
-  const loading = loadingNotify();
+  const loading = loading();
   ajaxUpdateWarehouseArea(currentUuid.value, {
     name: name_alertEditWarehouseArea.value,
     warehouse_storehouse_uuid: warehouseStorehouseUuid_alertEditWarehouseArea.value,
@@ -420,7 +419,7 @@ const fnDestroyWarehouseArea = (params) => {
   if (!params["uuid"]) return;
 
   confirmNotify(destroyActions(() => {
-    const loading = loadingNotify();
+    const loading = loading();
 
     ajaxDestroyWarehouseArea(params.uuid)
       .then(() => {
@@ -434,7 +433,7 @@ const fnDestroyWarehouseArea = (params) => {
 
 const fnDestroyWarehouseAreas = () => {
   confirmNotify(destroyActions(() => {
-    const loading = loadingNotify();
+    const loading = loading();
 
     ajaxDestroyWarehouseAreas(collect(selected.value).pluck("uuid").all())
       .then(() => {

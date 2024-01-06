@@ -376,7 +376,7 @@ const fnOpenAlertCreateAccount = () => {
  * 新建用户
  */
 const fnStoreAccount = async () => {
-  const loading = loadingNotify();
+  const loading = loading();
 
   const avatar = {
     original_filename: avatar_alertCreateAccount.value.name,
@@ -459,7 +459,7 @@ const fnUpdateAccount = async () => {
     avatar.base64 = collect(avatar.base64.split("base64,")).last();
   }
 
-  const loading = loadingNotify();
+  const loading = loading();
 
   ajaxUpdateAccount(currentUuid.value, {
     username: username_alertEditAccount.value,
@@ -487,7 +487,7 @@ const fnDestroyAccount = (params = {}) => {
 
   confirmNotify(
     destroyActions(() => {
-      const loading = loadingNotify();
+      const loading = loading();
 
       ajaxDestroyAccount(params.uuid)
         .then((res) => {
@@ -508,7 +508,7 @@ const fnDestroyAccounts = () => {
 
   confirmNotify(
     destroyActions(() => {
-      const loading = loadingNotify();
+      const loading = loading();
 
       ajaxDestroyAccounts(collect(selected.value).pluck("uuid").all())
         .then((res) => {
@@ -545,7 +545,7 @@ const fnOpenAlertEditPassword = (params = {}) => {
 const fnUpdatePassword = () => {
   if (!currentUuid.value) return;
 
-  const loading = loadingNotify();
+  const loading = loading();
   ajaxUpdateAccountPassword(currentUuid.value, {
     old_password: oldPassword_alertEditPassword.value,
     password: password_alertEditPassword.value,

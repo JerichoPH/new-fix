@@ -284,7 +284,6 @@ const fnSearch = () => {
           };
         })
         .all();
-      console.log('ok', rows.value);
     })
     .catch(e=>errorNotify(e.msg))
     .finally(() => {
@@ -316,7 +315,7 @@ const fnOpenAlertCreateRbacMenu = () => {
  * 新建菜单
  */
 const fnStoreRbacMenu = () => {
-  const loading = loadingNotify();
+  const loading = loading();
 
   ajaxStoreRbacMenu({
     name: name_alertCreateRbacMenu.value,
@@ -385,7 +384,7 @@ const fnOpenAlertEditRbacMenu = (params = {}) => {
  */
 const fnUpdateRbacMenu = () => {
   if (!currentUuid.value) return;
-  const loading = loadingNotify();
+  const loading = loading();
   ajaxUpdateRbacMenu(currentUuid.value, {
     name: name_alertEditRbacMenu.value,
     uri: uri_alertEditRbacMenu.value,
@@ -414,7 +413,7 @@ const fnDeconsteRbacMenu = (params = {}) => {
 
   confirmNotify(
     destroyActions(() => {
-      const loading = loadingNotify();
+      const loading = loading();
       ajaxDestroyRbacMenu(params.uuid)
         .then(() => {
           successNotify("删除成功");
@@ -432,7 +431,7 @@ const fnDeconsteRbacMenu = (params = {}) => {
 const fnDestroyRbacMenus = () => {
   confirmNotify(
     destroyActions(() => {
-      const loading = loadingNotify();
+      const loading = loading();
 
       ajaxDestroyRbacMenus(collect(selected.value).pluck("uuid").toArray())
         .then(() => {

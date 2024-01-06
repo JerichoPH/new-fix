@@ -15,11 +15,11 @@
           <div class="col">
             <q-form>
               <div class="row q-col-gutter-sm">
-                <div class="col">
+                <div class="col-3">
                   <q-input outlined clearable lazy-rules v-model="uniqueCode_search" label="代码" :rules="[]"
                     class="q-mb-md" />
                 </div>
-                <div class="col">
+                <div class="col-3">
                   <q-input outlined clearable lazy-rules v-model="name_search" label="名称" :rules="[]" class="q-mb-md" />
                 </div>
               </div>
@@ -32,11 +32,11 @@
     <q-card class="q-mt-md">
       <q-card-section>
         <div class="row">
-          <div class="col"><span :style="{ fontSize: '20px' }">来源类型列表</span></div>
+          <div class="col"><span :style="{ fontSize: '20px' }">室内上道位置-机房类型列表</span></div>
           <div class="col text-right">
             <q-btn-group>
-              <q-btn color="secondary" label="新建来源类型" icon="add" @click="fnOpenAlertCreateCreateSourceType" />
-              <q-btn color="negative" label="删除来源类型" icon="deleted" @click="fnDestroyCreateSourceTypes" />
+              <q-btn color="secondary" label="新建室内上道位置-机房类型" icon="add" @click="fnOpenAlertCreateInstallIndoorRoomType" />
+              <q-btn color="negative" label="删除室内上道位置-机房类型" icon="deleted" @click="fnDestroyInstallIndoorRoomTypes" />
             </q-btn-group>
           </div>
         </div>
@@ -49,10 +49,10 @@
                 <q-tr :props="props">
                   <q-th align="left"><q-checkbox key="allCheck" v-model="props.selected" /></q-th>
                   <q-th align="left">#</q-th>
-                  <q-th align="left" key="uniqueCode" @click="(event) => fnColumnReverseSort(event, props, sortBy)">
+                  <q-th align="left" key="uniqueCode" @click="event => fnColumnReverseSort(event, props, sortBy)">
                     代码
                   </q-th>
-                  <q-th align="left" key="name" @click="(event) => fnColumnReverseSort(event, props, sortBy)">
+                  <q-th align="left" key="name" @click="event => fnColumnReverseSort(event, props, sortBy)">
                     名称
                   </q-th>
                   <q-th align="right"></q-th>
@@ -66,10 +66,11 @@
                   <q-td key="name" :props="props">{{ props.row.name }}</q-td>
                   <q-td key="operation" :props="props">
                     <q-btn-group>
-                      <q-btn @click="fnOpenAlertEditCreateSourceType(props.row.operation)" color="warning" icon="edit">
+                      <q-btn @click="fnOpenAlertEditInstallIndoorRoomType(props.row.operation)" color="warning"
+                        icon="edit">
                         编辑
                       </q-btn>
-                      <q-btn @click="fnDestroyCreateSourceType(props.row.operation)" color="negative" icon="delete">
+                      <q-btn @click="fnDestroyInstallIndoorRoomType(props.row.operation)" color="negative" icon="delete">
                         删除
                       </q-btn>
                     </q-btn-group>
@@ -84,22 +85,24 @@
   </div>
 
   <!-- 弹窗 -->
-  <!-- 新建来源类型弹窗 -->
-  <q-dialog v-model="alertCreateSourceType" no-backdrop-dismiss>
+  <!-- 新建室内上道位置-机房类型弹窗 -->
+  <q-dialog v-model="alertCreateInstallIndoorRoomType" no-backdrop-dismiss>
     <q-card :style="{ minWidth: '450px' }">
       <q-card-section>
-        <div class="text-h6">新建来源类型</div>
+        <div class="text-h6">新建室内上道位置-机房类型</div>
       </q-card-section>
-      <q-form class="q-gutter-md" @submit.prevent="fnStoreSourceType">
+      <q-form class="q-gutter-md" @submit.prevent="fnStoreInstallIndoorRoomType">
         <q-card-section class="q-pt-none">
           <div class="row">
             <div class="col">
-              <q-input outlined clearable lazy-rules v-model="uniqueCode_alertCreateSourceType" label="代码" :rules="[]" />
+              <q-input outlined clearable lazy-rules v-model="uniqueCode_alertCreateInstallIndoorRoomType" label="代码"
+                :rules="[]" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <q-input outlined clearable lazy-rules v-model="name_alertCreateSourceType" label="名称" :rules="[]" />
+              <q-input outlined clearable lazy-rules v-model="name_alertCreateInstallIndoorRoomType" label="名称"
+                :rules="[]" />
             </div>
           </div>
         </q-card-section>
@@ -112,29 +115,31 @@
       </q-form>
     </q-card>
   </q-dialog>
-  <!-- 编辑来源类型 -->
-  <q-dialog v-model="alertEditSourceType" no-backdrop-dismiss>
+  <!-- 编辑室内上道位置-机房类型弹窗 -->
+  <q-dialog v-model="alertEditInstallIndoorRoomType" no-backdrop-dismiss>
     <q-card :style="{ minWidth: '450px' }">
       <q-card-section>
-        <div class="text-h6">编辑来源类型</div>
+        <div class="text-h6">编辑室内上道位置-机房类型</div>
       </q-card-section>
-      <q-form class="q-gutter-md" @submit.prevent="fnUpdateSourceType">
+      <q-form class="q-gutter-md" @submit.prevent="fnUpdateInstallIndoorRoomType">
         <q-card-section class="q-pt-none">
           <div class="row">
             <div class="col">
-              <q-input outlined clearable lazy-rules v-model="uniqueCode_alertEditSourceType" label="代码" :rules="[]" />
+              <q-input outlined clearable lazy-rules v-model="uniqueCode_alertEditInstallIndoorRoomType" label="名称"
+                :rules="[]" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <q-input outlined clearable lazy-rules v-model="name_alertEditSourceType" label="名称" :rules="[]" />
+              <q-input outlined clearable lazy-rules v-model="name_alertEditInstallIndoorRoomType" label="名称"
+                :rules="[]" />
             </div>
           </div>
         </q-card-section>
         <q-card-actions align="right">
           <q-btn-group>
             <q-btn type="button" label="关闭" v-close-popup />
-            <q-btn type="submit" label="确定" icon="check" color="secondary" />
+            <q-btn type="submit" label="确定" icon="check" color="warning" />
           </q-btn-group>
         </q-card-actions>
       </q-form>
@@ -146,20 +151,14 @@ import { ref, onMounted } from "vue";
 import collect from "collect.js";
 import { fnColumnReverseSort } from "src/utils/common";
 import {
-  ajaxGetSourceTypes,
-  ajaxGetSourceType,
-  ajaxStoreSourceType,
-  ajaxUpdateSoruceType,
-  ajaxDestroySourceType,
-  ajaxDestroySourceTypes,
-} from "src/apis/source";
-import {
-  loadingNotify,
-  successNotify,
-  errorNotify,
-  confirmNotify,
-  destroyActions,
-} from "src/utils/notify";
+  ajaxGetInstallIndoorRoomTypes,
+  ajaxGetInstallIndoorRoomType,
+  ajaxStoreInstallIndoorRoomType,
+  ajaxUpdateInstallIndoorRoomType,
+  ajaxDestroyInstallIndoorRoomType,
+  ajaxDestroyInstallIndoorRoomTypes,
+} from "src/apis/install";
+import { notifies, actions } from "src/utils/notify";
 
 // 搜索栏数据
 const uniqueCode_search = ref("");
@@ -170,16 +169,16 @@ const rows = ref([]);
 const selected = ref([]);
 const sortBy = ref("");
 
-// 新建来源类型弹窗数据
-const alertCreateSourceType = ref(false);
-const uniqueCode_alertCreateSourceType = ref("");
-const name_alertCreateSourceType = ref("");
+// 新建室内上道位置-机房类型数据
+const alertCreateInstallIndoorRoomType = ref(false);
+const uniqueCode_alertCreateInstallIndoorRoomType = ref("");
+const name_alertCreateInstallIndoorRoomType = ref("");
 
-// 编辑来源类型弹窗数据
-const alertEditSourceType = ref(false);
+// 编辑室内上道位置-机房类型数据
+const alertEditInstallIndoorRoomType = ref(false);
 const currentUuid = ref("");
-const uniqueCode_alertEditSourceType = ref("");
-const name_alertEditSourceType = ref("");
+const uniqueCode_alertEditInstallIndoorRoomType = ref("");
+const name_alertEditInstallIndoorRoomType = ref("");
 
 onMounted(() => fnInit());
 
@@ -191,116 +190,110 @@ const fnResetSearch = () => {
 };
 
 const fnSearch = () => {
-  rows.value = [];
-  selected.value = [];
-
-  ajaxGetSourceTypes({
-    "@~[]": ["SourceProjects", "Equipments"],
+  ajaxGetInstallIndoorRoomTypes({
     unique_code: uniqueCode_search.value,
     name: name_search.value,
   })
     .then(res => {
-      rows.value = collect(res.content.source_types).
-        map((sourceType, idx) => {
+      rows.value = collect(res.content.install_indoor_room_types)
+        .map((installIndoorRoomType, idx) => {
           return {
             index: idx + 1,
-            uuid: sourceType.uuid,
-            uniqueCode: sourceType.unique_code,
-            name: sourceType.name,
-            operation: { uuid: sourceType.uuid },
+            uuid: installIndoorRoomType.uuid,
+            uniqueCode: installIndoorRoomType.unique_code,
+            name: installIndoorRoomType.name,
+            operation: { uuid: installIndoorRoomType.uuid },
           };
         })
         .all();
     })
-    .catch(e => errorNotify(e.msg));
+    .catch(e => notifies.error(e.msg));
 };
 
-const fnResetAlertCreateSourceType = () => {
-  uniqueCode_alertCreateSourceType.value = "";
-  name_alertCreateSourceType.value = "";
+const fnResetAlertCreateInstallIndoorRoomType = () => {
+  uniqueCode_alertCreateInstallIndoorRoomType.value = "";
+  name_alertCreateInstallIndoorRoomType.value = "";
 };
 
-const fnOpenAlertCreateCreateSourceType = () => { alertCreateSourceType.value = true; };
+const fnOpenAlertCreateInstallIndoorRoomType = () => { alertCreateInstallIndoorRoomType.value = true; }
 
-const fnStoreSourceType = () => {
-  const loading = loading();
+const fnStoreInstallIndoorRoomType = () => {
+  const loading = notifies.loading();
 
-  ajaxStoreSourceType({
-    unique_code: uniqueCode_alertCreateSourceType.value,
-    name: name_alertCreateSourceType.value,
+  ajaxStoreInstallIndoorRoomType({
+    unique_code: uniqueCode_alertCreateInstallIndoorRoomType.value,
+    name: name_alertCreateInstallIndoorRoomType.value,
   })
     .then(res => {
-      successNotify(res.msg);
+      notifies.success(res.msg);
       fnSearch();
-      fnResetAlertCreateSourceType();
+      fnResetAlertCreateInstallIndoorRoomType();
 
-      alertCreateSourceType.value = false;
+      alertCreateInstallIndoorRoomType.value = false;
     })
-    .catch(e => errorNotify(e.msg))
+    .catch(e => error(e.msg))
     .finally(loading());
 };
 
-const fnOpenAlertEditCreateSourceType = params => {
+const fnOpenAlertEditInstallIndoorRoomType = params => {
   if (!params["uuid"]) return;
   currentUuid.value = params.uuid;
 
-  ajaxGetSourceType(currentUuid.value)
+  ajaxGetInstallIndoorRoomType(currentUuid.value)
     .then(res => {
-      uniqueCode_alertEditSourceType.value = res.content.source_type.unique_code;
-      name_alertEditSourceType.value = res.content.source_type.name;
+      uniqueCode_alertEditInstallIndoorRoomType.value = res.content.install_indoor_room_type.unique_code;
+      name_alertEditInstallIndoorRoomType.value = res.content.install_indoor_room_type.name;
 
-      alertEditSourceType.value = true;
+      alertEditInstallIndoorRoomType.value = true;
     })
-    .catch(e => {
-      errorNotify(e.msg)
-    });
+    .catch(e => notifies.error(e.msg));
 };
 
-const fnUpdateSourceType = () => {
+const fnUpdateInstallIndoorRoomType = () => {
   if (!currentUuid.value) return;
 
-  const loading = loading();
+  const loading = notifies.loading();
 
-  ajaxUpdateSoruceType(currentUuid.value, {
-    unique_code: uniqueCode_alertEditSourceType.value,
-    name: name_alertEditSourceType.value,
+  ajaxUpdateInstallIndoorRoomType(currentUuid.value, {
+    unique_code: uniqueCode_alertEditInstallIndoorRoomType.value,
+    name: name_alertEditInstallIndoorRoomType.value,
   })
     .then(res => {
-      successNotify(res.msg);
+      notifies.success(res.msg);
       fnSearch();
 
-      alertEditSourceType.value = false;
+      alertEditInstallIndoorRoomType.value = false;
     })
-    .catch(e => errorNotify(e.msg))
+    .catch(e => notifies.error(e.msg))
     .finally(loading());
 };
 
-const fnDestroyCreateSourceType = params => {
+const fnDestroyInstallIndoorRoomType = params => {
   if (!params["uuid"]) return;
 
-  confirmNotify(destroyActions(() => {
-    const loading = loading();
+  notifies.confirm(actions.destory(() => {
+    const loading = notifies.loading();
 
-    ajaxDestroySourceType(params.uuids)
+    ajaxDestroyInstallIndoorRoomType(params.uuid)
       .then(() => {
-        successNotify("删除成功");
+        notifies.success("删除成功");
         fnSearch();
       })
-      .catch(e => errorNotify(e.msg))
+      .catch(e => notifies.error(e.msg))
       .finally(loading());
   }));
 };
 
-const fnDestroyCreateSourceTypes = () => {
-  confirmNotify(destroyActions(() => {
-    const loading = loading();
+const fnDestroyInstallIndoorRoomTypes = () => {
+  notifies.confirm(actions.destory(() => {
+    const loading = notifies.loading();
 
-    ajaxDestroySourceTypes(collect(selected.value).pluck("uuid").all())
+    ajaxDestroyInstallIndoorRoomTypes(collect(selected.value).pluck("uuid"))
       .then(() => {
-        successNotify("删除成功");
+        notifies.success("删除成功");
         fnSearch();
       })
-      .catch(e => errorNotify(e.msg))
+      .catch(e => notifies.error(e.msg))
       .finally(loading());
   }));
 };

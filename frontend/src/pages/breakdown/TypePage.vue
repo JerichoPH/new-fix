@@ -233,7 +233,7 @@ const fnOpenAlertCreateBreakdownType = () => {
 };
 
 const fnStoreBreakdownType = () => {
-  const loading = loadingNotify();
+  const loading = loading();
 
   ajaxStoreBreakdownType({
     name: name_alertCreateBreakdownType.value,
@@ -267,7 +267,7 @@ const fnOpenAlertEditBreakdownType = params => {
 };
 
 const fnUpdateBreakdownType = () => {
-  const loading = loadingNotify();
+  const loading = loading();
 
   ajaxUpdateBreakdownType(currentUuid.value, {
     name: name_alertEditBreakdownType.value,
@@ -286,7 +286,7 @@ const fnDestroyBreakdownType = params => {
 
   confirmNotify(
     destroyActions(() => {
-      const loading = loadingNotify();
+      const loading = loading();
 
       ajaxDestroyBreakdownType(params.uuid)
         .then(() => {
@@ -304,7 +304,7 @@ const fnDestroyBreakdownType = params => {
 const fnDestroyBreakdownTypes = () => {
   confirmNotify(
     destroyActions(() => {
-      const loading = loadingNotify();
+      const loading = loading();
 
       ajaxDestroyBreakdownTypes(collect(selected.value).pluck("uuid").toArray())
         .then(() => {

@@ -18,6 +18,7 @@ import organizationRouters from "src/router/organization";
 import breakdownRouters from "src/router/breakdown";
 import sourceRouters from "src/router/source";
 import warehouseRouters from "src/router/warehouse";
+import installRouters from "src/router/install";
 
 const routes = [
   ...homeRouters,
@@ -31,6 +32,7 @@ const routes = [
   ...breakdownRouters,
   ...sourceRouters,
   ...warehouseRouters,
+  ...installRouters,
   // Always leave this as last one,
   // but you can also remove it
   ...errorNotFontRouters,

@@ -252,7 +252,7 @@ const fnOpenAlertCreateOrganizationParagraph = () => {
 };
 
 const fnStoreOrganizationParagraph = () => {
-  const loading = loadingNotify();
+  const loading = loading();
 
   ajaxStoreOrganizationParagraph({
     unique_code: uniqueCode_alertCreateOrganizationParagraph.value,
@@ -289,7 +289,7 @@ const fnOpenAlertEditOrganizationParagraph = params => {
 const fnUpdateOrganizationParagraph = () => {
   if (!currentUuid.value) return;
 
-  const loading = loadingNotify();
+  const loading = loading();
   ajaxUpdateOrganizationPragraph(currentUuid.value, {
     name: name_alertEditOrganizationParagraph.value,
     organization_railway_uuid: organizationRailwayUuid_alertEditOrganizationParagraph.value,

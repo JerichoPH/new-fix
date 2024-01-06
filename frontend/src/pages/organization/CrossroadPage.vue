@@ -322,7 +322,7 @@ const fnOpenAlertCreateCreateStation = () => {
 };
 
 const fnStoreOrganizationCrossroad = () => {
-  const loading = loadingNotify();
+  const loading = loading();
 
   ajaxStoreOrganizationCrossroad({
     unique_code: uniqueCode_alertCreateOrganizationCrossroad.value,
@@ -370,7 +370,7 @@ const fnOpenAlertEditCreateOrganizationCrossroad = params => {
 const fnUpdateOrganizationCrossroad = () => {
   if (!currentUuid.value) return;
 
-  const loading = loadingNotify();
+  const loading = loading();
   ajaxUpdateOrganizationCrossroad(currentUuid.value, {
     unique_code: uniqueCode_alertEditOrganizationCrossroad.value,
     name: name_alertEditOrganizationCrossroad.value,
@@ -391,7 +391,7 @@ const fnDestroyCreateOrganizationCrossroad = params => {
 
   confirmNotify(
     destroyActions(() => {
-      const loading = loadingNotify();
+      const loading = loading();
 
       ajaxDestroyOrganizationCrossroad(params.uuid)
         .then(() => {
@@ -406,7 +406,7 @@ const fnDestroyCreateOrganizationCrossroad = params => {
 const fnDestroyCreateStations = () => {
   confirmNotify(
     destroyActions(() => {
-      const loading = loadingNotify();
+      const loading = loading();
 
       ajaxDestroyOrganizationCrossroads(collect(selected.value).pluck("uuid").all())
         .then(() => {

@@ -362,7 +362,7 @@ const fnOpenAlertEditOrganizationWorkshop = params => {
 const fnUpdateOrganizationWorkshop = () => {
   if (!currentUuid.value) return;
 
-  const loading = loadingNotify();
+  const loading = loading();
   ajaxUpdateOrganizationWorkshop(currentUuid.value, {
     unique_code: uniqueCode_alertEditOrganizationWorkshop.value,
     name: name_alertEditOrganizationWorkshop.value,
@@ -384,7 +384,7 @@ const fnDestroyOrganizationWorkshop = params => {
 
   confirmNotify(
     destroyActions(() => {
-      const loading = loadingNotify();
+      const loading = loading();
 
       ajaxDestroyOrganizationWorkshop(params.uuid)
         .then(() => {
@@ -400,7 +400,7 @@ const fnDestroyOrganizationWorkshop = params => {
 const fnDestroyOrganizationWorkshops = () => {
   confirmNotify(
     destroyActions(() => {
-      const loading = loadingNotify();
+      const loading = loading();
 
       ajaxDestroyOrganizationWorkshops(collect(selected.value).pluck("uuid").all())
         .then(() => {

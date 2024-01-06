@@ -149,4 +149,17 @@ export const confirmNotify = (
   });
 
   return n;
-};actionNotify: confirmNotify
+};
+
+export const notifies = {
+  loading: loadingNotify,
+  info: infoNotify,
+  success: successNotify,
+  error: errorNotify,
+  confirm: confirmNotify,
+};
+
+export const actions = {
+  destory: destroyActions,
+  error: errorActions,
+};

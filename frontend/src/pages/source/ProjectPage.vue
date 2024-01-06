@@ -278,7 +278,7 @@ const fnDestroySourceProject = params => {
   if (!params["uuid"]) return;
 
   confirmNotify(destroyActions(() => {
-    const loading = loadingNotify();
+    const loading = loading();
 
     ajaxDestroySourceProject(params.uuid)
       .then(() => {
@@ -292,7 +292,7 @@ const fnDestroySourceProject = params => {
 
 const fnDestroySourceProjects = () => {
   confirmNotify(destroyActions(() => {
-    const loading = loadingNotify();
+    const loading = loading();
 
     ajaxDestroySourceProjects(collect(selected.value).pluck("uuid").all())
       .then(() => {

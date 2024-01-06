@@ -271,7 +271,7 @@ const fnOpenAlertCreateOrganizationRailway = () => {
  * @param {{*}} params
  */
 const fnStoreOrganizationRailway = (params) => {
-  const loading = loadingNotify();
+  const loading = loading();
 
   ajaxStoreOrganizationRailway({
     unique_code: uniqueCode_alertCreateOrganizationRailway.value,
@@ -316,7 +316,7 @@ const fnOpenAlertEditOrganizationRailway = (params) => {
 const fnUpdateOrganizationRailway = () => {
   if (!currentUuid.value) return;
 
-  const loading = loadingNotify();
+  const loading = loading();
 
   ajaxUpdateOrganizationRailway(currentUuid.value, {
     unique_code: uniqueCode_alertEditOrganizationrailway.value,
@@ -342,7 +342,7 @@ const fnDestroyOrganizationRailway = (params) => {
 
   confirmNotify(
     destroyActions(() => {
-      const loading = loadingNotify();
+      const loading = loading();
 
       ajaxDestroyOrganizationRailway(params.uuid)
         .then(() => {
@@ -362,7 +362,7 @@ const fnDestroyOrganizationRailway = (params) => {
 const fnDestroyOrganizationRailways = (uuids) => {
   confirmNotify(
     destroyActions(() => {
-      const loading = loadingNotify();
+      const loading = loading();
 
       ajaxDestroyOrganizationRailways(selected.value)
         .then(() => {

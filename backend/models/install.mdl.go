@@ -17,7 +17,7 @@ type (
 	// InstallIndoorRoomMdl 室内上道位置-机房模型
 	InstallIndoorRoomMdl struct {
 		MySqlMdl
-		Name                      string                     `gorm:"type:varchar(64);not null;comment:名称;" json:"name" json:"name"`
+		Name                      string                     `gorm:"type:varchar(64);not null;comment:名称;" json:"name"`
 		InstallIndoorRoomTypeUuid string                     `gorm:"index;char(36);not null;default:;comment:所属室内上道位置-机房类型uuid;" json:"install_indoor_room_type_uuid"`
 		InstallIndoorRoomType     *InstallIndoorRoomMdl      `gorm:"foreignKey:install_indoor_room_type_uuid;references:uuid;comment:所属室内上道位置-机房类型;" json:"install_indoor_room_type"`
 		OrganizationStationUuid   string                     `gorm:"index;type:char(36);not null;default:;comment:所属组织结构-站场uuid;" json:"organization_station_uuid"`
@@ -32,7 +32,7 @@ type (
 	// InstallIndoorPlatoonMdl 室内上道位置-排模型
 	InstallIndoorPlatoonMdl struct {
 		MySqlMdl
-		Name                  string                   `gorm:"type:varchar(64);not null;comment:名称;" json:"name" json:"name"`
+		Name                  string                   `gorm:"type:varchar(64);not null;comment:名称;" json:"name"`
 		InstallIndoorRoomUuid string                   `gorm:"index;type:char(36);not null;default:;comment:所属室内上道位置-机房uuid;" json:"install_indoor_room_uuid"`
 		InstallIndoorRoom     *InstallIndoorRoomMdl    `gorm:"foreignKey:install_indoor_room_uuid;references:uuid;comment:所属室内上道位置-机房;" json:"install_indoor_room"`
 		InstallIndoorShelves  []*InstallIndoorShelfMdl `gorm:"foreignKey:install_indoor_platoon_uuid;references:uuid;comment:相关室内上道位置-架;" json:"install_indoor_shelves"`
@@ -41,7 +41,7 @@ type (
 	// InstallIndoorShelfMdl 室内上道位置-架模型
 	InstallIndoorShelfMdl struct {
 		MySqlMdl
-		Name                     string                   `gorm:"type:varchar(64);not null;comment:名称;" json:"name" json:"name"`
+		Name                     string                   `gorm:"type:varchar(64);not null;comment:名称;" json:"name"`
 		InstallIndoorPlatoonUuid string                   `gorm:"index;type:char(36);not null;default:;comment:所属室内上道位置-排uuid;" json:"install_indoor_platoon_uuid"`
 		InstallIndoorPlatoon     *InstallIndoorPlatoonMdl `gorm:"foreignKey:install_indoor_platoon_uuid;references:uuid;comment:所属室内上道位置-排;" json:"install_indoor_platoon"`
 		InstallIndoorTiers       []*InstallIndoorTierMdl  `gorm:"foreignKey:install_indoor_shelf_uuid;references:uuid;comment:相关室内上道位置-层;" json:"install_indoor_tiers"`
@@ -50,7 +50,7 @@ type (
 	// InstallIndoorTierMdl 室内上道位置-层模型
 	InstallIndoorTierMdl struct {
 		MySqlMdl
-		Name                   string                  `gorm:"type:varchar(64);not null;comment:名称;" json:"name" json:"name"`
+		Name                   string                  `gorm:"type:varchar(64);not null;comment:名称;" json:"name"`
 		InstallIndoorShelfUuid string                  `gorm:"index;type:char(36);not null;default:;comment:所属室内上道位置-架uuid;" json:"install_indoor_shelf_uuid"`
 		InstallIndoorShelf     *InstallIndoorShelfMdl  `gorm:"foreignKey:install_indoor_shelf_uuid;references:uuid;comment:所属室内上道位置-架;" json:"install_indoor_shelf"`
 		InstallIndoorCells     []*InstallIndoorCellMdl `gorm:"foreignKey:install_indoor_tier_uuid;references:uuid;comment:相关室内上道位置-位;" json:"install_indoor_cells"`
@@ -59,7 +59,7 @@ type (
 	// InstallIndoorCellMdl 室内上道位置-位模型
 	InstallIndoorCellMdl struct {
 		MySqlMdl
-		Name                  string                `gorm:"type:varchar(64);not null;comment:名称;" json:"name" json:"name"`
+		Name                  string                `gorm:"type:varchar(64);not null;comment:名称;" json:"name"`
 		InstallIndoorTierUuid string                `gorm:"index;type:char(36);not null;default:;comment:所属室内上道位置-层uuid;" json:"install_indoor_tier_uuid"`
 		InstallIndoorTier     *InstallIndoorTierMdl `gorm:"foreignKey:install_indoor_tier_uuid;references:uuid;comment:所属室内上道位置-层;" json:"install_indoor_tier"`
 		Volumn                uint64                `gorm:"type:bigint(20);not null;default:1;comment:容量;" json:"volumn"`

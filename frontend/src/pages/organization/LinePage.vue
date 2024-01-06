@@ -376,7 +376,7 @@ const fnOpenAlertCreateCreateOrganizationLine = () => {
 };
 
 const fnStoreOrganizationLine = () => {
-  const loading = loadingNotify();
+  const loading = loading();
 
   ajaxStoreOrganizationLine({
     unique_code: uniqueCode_alertCreateOrganizationLine.value,
@@ -426,7 +426,7 @@ const fnOpenAlertEditCreateOrganizationLine = params => {
 const fnUpdateOrganizationLine = () => {
   if (!currentUuid.value) return;
 
-  const loading = loadingNotify();
+  const loading = loading();
 
   ajaxUpdateOrganizationLine(currentUuid.value, {
     unique_code: uniqueCode_alertEditOrganizationLine.value,
@@ -447,7 +447,7 @@ const fnUpdateOrganizationLine = () => {
 const fnDestroyCreateOrganizationLines = () => {
   confirmNotify(
     destroyActions(() => {
-      const loading = loadingNotify();
+      const loading = loading();
 
       ajaxDestroyOrganizationLines(collect(selected.value).pluck("uuid").all())
         .then(() => {
@@ -465,7 +465,7 @@ const fnDestroyCreateOrganizationLine = params => {
 
   confirmNotify(
     destroyActions(() => {
-      const loading = loadingNotify();
+      const loading = loading();
 
       ajaxDestroyOrganizationLine(params.uuid)
         .then(() => {

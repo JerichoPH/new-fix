@@ -321,7 +321,7 @@ const fnOpenAlertCreateCreateStation = () => {
 };
 
 const fnStoreOrganizationCenter = () => {
-  const loading = loadingNotify();
+  const loading = loading();
 
   ajaxStoreOrganizationCenter({
     unique_code: uniqueCode_alertCreateOrganizationCenter.value,
@@ -363,7 +363,7 @@ const fnOpenAlertEditCreateOrganizationCenter = params => {
 const fnUpdateOrganizationCenter = () => {
   if (!currentUuid.value) return;
 
-  const loading = loadingNotify();
+  const loading = loading();
   ajaxUpdateOrganizationCenter(currentUuid.value, {
     unique_code: uniqueCode_alertEditOrganizationCenter.value,
     name: name_alertEditOrganizationCenter.value,
@@ -384,7 +384,7 @@ const fnDestroyCreateOrganizationCenter = params => {
 
   confirmNotify(
     destroyActions(() => {
-      const loading = loadingNotify();
+      const loading = loading();
 
       ajaxDestroyOrganizationCenter(params.uuid)
         .then(() => {
@@ -399,7 +399,7 @@ const fnDestroyCreateOrganizationCenter = params => {
 const fnDestroyCreateStations = () => {
   confirmNotify(
     destroyActions(() => {
-      const loading = loadingNotify();
+      const loading = loading();
 
       ajaxDestroyOrganizationCenters(collect(selected.value).pluck("uuid").all())
         .then(() => {

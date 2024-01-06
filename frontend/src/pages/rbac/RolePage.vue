@@ -212,7 +212,7 @@ const fnOpenAlertCreateRbacRole = () => {
  * 新建角色
  */
 const fnStoreRbacRole = () => {
-  const loading = loadingNotify();
+  const loading = loading();
 
   ajaxStoreRbacRole({
     name: name_alertCreateRbacRole.value,
@@ -280,7 +280,7 @@ const fnDestroyRbacRole = (params = {}) => {
 
   confirmNotify(
     destroyActions(() => {
-      const loading = loadingNotify();
+      const loading = loading();
 
       ajaxDestroyRbacRole(params.uuid)
         .then((res) => {
@@ -299,7 +299,7 @@ const fnDestroyRbacRole = (params = {}) => {
 const fnDestroyRbacRoles = () => {
   confirmNotify(
     destroyActions(() => {
-      const loading = loadingNotify();
+      const loading = loading();
 
       ajaxDestroyRbacRoles(collect(selected.value).pluck("uuid").toArray())
         .then((res) => {

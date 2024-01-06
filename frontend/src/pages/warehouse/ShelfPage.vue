@@ -588,7 +588,7 @@ const fnOpenAlertCreateWarehouseShelf = () => {
 };
 
 const fnStoreWarehouseShelf = () => {
-  const loading = loadingNotify();
+  const loading = loading();
 
   ajaxStoreWarehouseShelf({
     name: name_alertCreateWarehouseShelf.value,
@@ -638,7 +638,7 @@ const fnOpenAlertEditWarehouseShelf = params => {
 const fnUpdateWarehouseShelf = () => {
   if (!currentWarehouseShelfUuid.value) return;
 
-  const loading = loadingNotify();
+  const loading = loading();
   ajaxUpdateWarehouseShelf(currentWarehouseShelfUuid.value, {
     name: name_alertEditWarehouseShelf.value,
     warehouse_platoon_uuid: warehousePlatoonUuid_alertEditWarehouseShelf.value,
@@ -658,7 +658,7 @@ const fnDestroyCreateWarehouseShelf = params => {
   if (!parmas["uuid"]) return;
 
   confirmNotify(destroyActions(() => {
-    const loading = loadingNotify();
+    const loading = loading();
 
     ajaxDestroyWarehouseShelf(params.uuid)
       .then(() => {
@@ -672,7 +672,7 @@ const fnDestroyCreateWarehouseShelf = params => {
 
 const fnDestroyCreateWarehouseShelves = () => {
   confirmNotify(destroyActions(() => {
-    const loading = loadingNotify();
+    const loading = loading();
 
     ajaxDestroyWarehouseShelves(collect(selected.value).pluck("uuid").all())
       .then(() => {
@@ -689,7 +689,7 @@ const fnUpdateWarehouseShelfName = (event) => {
   if (!currentWarehouseShelfUuid.value) return;
   if (!event.target.value) return;
 
-  const loading = loadingNotify();
+  const loading = loading();
 
   ajaxUpdateWarehouseShelf(currentWarehouseShelfUuid.value, {
     name: event.target.value,
@@ -735,7 +735,7 @@ const fnOpenAlertCreateWarehouseTiers = () => {
 };
 
 const fnStoreWarehouseTiers = () => {
-  const loading = loadingNotify();
+  const loading = loading();
 
   ajaxStoreWarehouseTiers({
     warehouse_shelf_uuid: currentWarehouseShelfUuid.value,
@@ -754,7 +754,7 @@ const fnStoreWarehouseTiers = () => {
 
 const fnDestoryWarehouseTiers = () => {
   confirmNotify(destroyActions(() => {
-    const loading = loadingNotify();
+    const loading = loading();
 
     ajaxDestroyWarehouseTiers(warehouseTierUuids_alertEditWarehouseShelfSubs.value)
       .then(() => {
@@ -785,7 +785,7 @@ const fnStoreWarehouseCells = () => {
     return;
   }
 
-  const loading = loadingNotify();
+  const loading = loading();
   collect(warehouseTierUuids_alertEditWarehouseShelfSubs.value)
     .each(warehouseTierUuid => {
       ajaxStoreWarehouseCells({
@@ -816,7 +816,7 @@ const fnOpenAlertEditWarehouseTier = (warehouseShelf, warehouseTier) => {
 const fnUpdateWarehouseTier = () => {
   if (!currentUuid_alertEditWarehouseTier.value) return;
 
-  const loading = loadingNotify();
+  const loading = loading();
   ajaxUpdateWarehouseTier(currentUuid_alertEditWarehouseTier.value, {
     name: name_alertEditWarehouseTier.value,
     warehouse_shelf_uuid: warehouseShelfUuid_alertEditWarehouseTier.value,
@@ -842,7 +842,7 @@ const fnOpenAlertEditWarehouseCell = (warehouseTier, warehouseCell) => {
 };
 
 const fnUpdateWarehouseCell = () => {
-  const loading = loadingNotify();
+  const loading = loading();
 
   ajaxUpdateWarehouseCell(currentUuid_alertEditWarehouseCell.value, {
     name: name_alertEditWarehouseCell.value,
@@ -862,7 +862,7 @@ const fnDestroyWarehouseCell = () => {
   if (!currentUuid_alertEditWarehouseCell.value) return;
 
   confirmNotify(destroyActions(() => {
-    const loading = loadingNotify();
+    const loading = loading();
 
     ajaxDestroyWarehouseCell(currentUuid_alertEditWarehouseCell.value)
       .then(() => {

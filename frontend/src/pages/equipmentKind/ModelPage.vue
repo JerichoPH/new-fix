@@ -287,7 +287,7 @@ const fnStoreEquipomentKindModel = () => {
 const fnDestroyEquipmentKindModels = (params) => {
   confirmNotify(
     destroyActions(() => {
-      const loading = loadingNotify();
+      const loading = loading();
 
       ajaxDestroyEquipmentKindModels(selected.value.map((item) => item.uuid))
         .then(() => {
@@ -344,7 +344,7 @@ const fnDestroyEquipmentKindModel = (params) => {
 
   confirmNotify(
     destroyActions(() => {
-      const loading = loadingNotify();
+      const loading = loading();
 
       ajaxDestroyEquipmentKindModel(params.uuid)
         .then(() => {

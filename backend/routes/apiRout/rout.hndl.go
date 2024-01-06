@@ -19,4 +19,5 @@ func (RoutHandle) Register(engine *gin.Engine) {
 	NewFactoryRout().Load(engine)       // 厂家
 	NewSourceRout().Load(engine)        // 来源
 	NewWarehouseRout().Load(engine)     // 仓库
+	NewInstallRout().Load(engine)       // 室内外安装位置
 }

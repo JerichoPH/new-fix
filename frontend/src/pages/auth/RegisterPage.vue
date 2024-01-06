@@ -83,7 +83,7 @@ const accept = ref(true);
  * 注册
  */
 const fnRegister = () => {
-  const loading = loadingNotify("注册中……");
+  const loading = loading("注册中……");
 
   ajaxRegister({
     username: username.value,

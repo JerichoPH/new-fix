@@ -469,7 +469,7 @@ const fnDestroyWarehousePlatoon = params => {
   if (!params["uuid"]) return;
 
   confirmNotify(destroyActions(() => {
-    const loading = loadingNotify();
+    const loading = loading();
 
     ajaxDestroyWarehousePlatoon(params.uuid)
       .then(() => {
@@ -483,7 +483,7 @@ const fnDestroyWarehousePlatoon = params => {
 
 const fnDestroyWarehousePlatoons = () => {
   confirmNotify(destroyActions(() => {
-    const loading = loadingNotify();
+    const loading = loading();
 
     ajaxDestroyWarehousePlatoons(collect(selected.value).pluck("uuid").all())
       .then(() => {
