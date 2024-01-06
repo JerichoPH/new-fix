@@ -84,6 +84,18 @@ func AddPrefix(value, prefix, defaultValue string) string {
 	return Operation{}.Ternary(value != "", fmt.Sprintf("%s%s", prefix, value), defaultValue).(string)
 }
 
+// RemoveEmptyStrings 去掉数组中的空字符串
+func RemoveEmptyStrings(slice []string) []string {
+	j := 0
+	for _, str := range slice {
+		if str != "" {
+			slice[j] = str
+			j++
+		}
+	}
+	return slice[:j]
+}
+
 // InString 判断字符串是否存在数组中
 func InString(target string, strings []string) bool {
 	for _, element := range strings {

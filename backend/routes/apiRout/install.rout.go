@@ -39,5 +39,26 @@ func (InstallRout) Load(engine *gin.Engine) {
 		indoorRoomTypeRout.GET("", controllers.NewInstallIndoorRoomTypeCtrl().List)
 		// jquery-dataTable数据列表
 		indoorRoomTypeRout.GET(".jdt", controllers.NewInstallIndoorRoomTypeCtrl().ListJdt)
+
+		// 室内上道位置-机房
+		indoorRoomRout := installRout.Group(
+			"indoorRoom",
+			middlewares.CheckAuth(),
+			middlewares.CheckPermission(),
+		)
+		// 新建
+		indoorRoomRout.POST("", controllers.NewInstallIndoorRoomCtrl().Store)
+		// 批量删除
+		indoorRoomRout.POST("/destroyMany", controllers.NewInstallIndoorRoomCtrl().DestroyMany)
+		// 删除
+		indoorRoomRout.DELETE("/:uuid", controllers.NewInstallIndoorRoomCtrl().Destroy)
+		// 编辑
+		indoorRoomRout.PUT("/:uuid", controllers.NewInstallIndoorRoomCtrl().Update)
+		// 详情
+		indoorRoomRout.GET("/:uuid", controllers.NewInstallIndoorRoomCtrl().Detail)
+		// 列表
+		indoorRoomRout.GET("", controllers.NewInstallIndoorRoomCtrl().List)
+		// jquery-dataTable数据列表
+		indoorRoomRout.GET(".jdt", controllers.NewInstallIndoorRoomCtrl().ListJdt)
 	}
 }
