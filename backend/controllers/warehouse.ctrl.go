@@ -801,6 +801,11 @@ func (receiver WarehousePlatoonCtrl) ListJdt(ctx *gin.Context) {
 	)
 }
 
+// GetTypeCodesMap 获取类型代码映射
+func (WarehousePlatoonCtrl) GetTypeCodesMap(ctx *gin.Context) {
+	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"type_codes_map": models.WarehousePlatoonMdl{}.GetTypeCodesMap()}).ToGinResponse())
+}
+
 // NewWarehouseShelfCtrl 构造函数
 func NewWarehouseShelfCtrl() *WarehouseShelfCtrl {
 	return &WarehouseShelfCtrl{}

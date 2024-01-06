@@ -104,7 +104,7 @@
 
   <!-- 对话框 -->
   <!-- 新建用户对话框 -->
-  <q-dialog v-model="alertCreateAccount">
+  <q-dialog v-model="alertCreateAccount" no-backdrop-dismiss>
     <q-card :style="{ minWidth: '450px' }">
       <q-card-section>
         <div class="text-h6">新建用户</div>
@@ -128,12 +128,15 @@
         </q-form>
       </q-card-section>
       <q-card-actions align="right">
-        <q-btn type="button" label="确定" icon="check" color="secondary" @click="fnStoreAccount" v-close-popup />
+        <q-btn-group>
+          <q-btn type="button" label="关闭" v-close-popup />
+          <q-btn type="button" label="确定" icon="check" color="secondary" @click="fnStoreAccount" v-close-popup />
+        </q-btn-group>
       </q-card-actions>
     </q-card>
   </q-dialog>
   <!-- 编辑用户对话框 -->
-  <q-dialog v-model="alertEditAccount">
+  <q-dialog v-model="alertEditAccount" no-backdrop-dismiss>
     <q-card :style="{ minWidth: '450px' }">
       <q-card-section>
         <div class="text-h6">编辑用户</div>
@@ -184,12 +187,15 @@
         </q-form>
       </q-card-section>
       <q-card-actions align="right">
-        <q-btn type="button" label="确定" icon="check" color="secondary" @click="fnUpdateAccount" v-close-popup />
+        <q-btn-group>
+          <q-btn type="button" label="关闭" v-close-popup />
+          <q-btn type="button" label="确定" icon="check" color="secondary" @click="fnUpdateAccount" v-close-popup />
+        </q-btn-group>
       </q-card-actions>
     </q-card>
   </q-dialog>
   <!-- 编辑密码对话框 -->
-  <q-dialog v-model="alertEditPassword">
+  <q-dialog v-model="alertEditPassword" no-backdrop-dismiss>
     <q-card :style="{ minWidth: '450px' }">
       <q-card-section>
         <div class="text-h6">编辑密码</div>
@@ -209,7 +215,10 @@
         </q-form>
       </q-card-section>
       <q-card-actions align="right">
-        <q-btn type="button" label="确定" icon="check" color="negative" @click="fnUpdatePassword" v-close-popup />
+        <q-btn-group>
+          <q-btn type="button" label="关闭" v-close-popup />
+          <q-btn type="button" label="确定" icon="check" color="negative" @click="fnUpdatePassword" v-close-popup />
+        </q-btn-group>
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -342,7 +351,7 @@ const fnSearch = () => {
         })
         .all();
     })
-    .catch((e) => errorNotify(e.msg));
+    .catch(e=>errorNotify(e.msg));
 };
 
 /**
@@ -396,7 +405,7 @@ const fnStoreAccount = async () => {
 
       alertCreateAccount.value = false;
     })
-    .catch((e) => errorNotify(e.msg))
+    .catch(e=>errorNotify(e.msg))
     .finally(loading());
 };
 
@@ -429,7 +438,7 @@ const fnOpenAlertEditAccount = (params = {}) => {
         .all();
       alertEditAccount.value = true;
     })
-    .catch((e) => errorNotify(e.msg));
+    .catch(e=>errorNotify(e.msg));
 };
 
 /**
@@ -465,7 +474,7 @@ const fnUpdateAccount = async () => {
 
       alertEditAccount.value = false;
     })
-    .catch((e) => errorNotify(e.msg))
+    .catch(e=>errorNotify(e.msg))
     .finally(loading());
 };
 
@@ -485,7 +494,7 @@ const fnDestroyAccount = (params = {}) => {
           successNotify("删除成功");
           fnSearch();
         })
-        .catch((e) => errorNotify(e.msg))
+        .catch(e=>errorNotify(e.msg))
         .finally(loading());
     })
   );
@@ -506,7 +515,7 @@ const fnDestroyAccounts = () => {
           successNotify("删除成功");
           fnSearch();
         })
-        .catch((e) => errorNotify(e.msg))
+        .catch(e=>errorNotify(e.msg))
         .finally(loading());
     })
   );
@@ -547,7 +556,7 @@ const fnUpdatePassword = () => {
       fnSearch();
       fnResetAlertEditPassword();
     })
-    .catch((e) => errorNotify(e.msg))
+    .catch(e=>errorNotify(e.msg))
     .finally(loading());
 };
 

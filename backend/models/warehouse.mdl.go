@@ -246,17 +246,17 @@ func (WarehousePlatoonMdl) GetTypeCodesMap() []map[string]string {
 }
 
 // getTypeText 获取仓库-排类型描述
-func (*WarehousePlatoonMdl) getTypeText(warehousePlatoon *WarehousePlatoonMdl) (typeText string) {
+func (*WarehousePlatoonMdl) getTypeText(warehousePlatoon *WarehousePlatoonMdl) {
 	for _, item := range warehousePlatoon.GetTypeCodesMap() {
 		if item["code"] == warehousePlatoon.TypeCode {
-			typeText = item["text"]
+			warehousePlatoon.TypeText = item["text"]
+			return
 		}
 	}
-	return
 }
 
 func (receiver *WarehousePlatoonMdl) AfterFind(db *gorm.DB) (err error) {
-	receiver.TypeText = receiver.getTypeText(receiver)
+	receiver.getTypeText(receiver)
 	return
 }
 

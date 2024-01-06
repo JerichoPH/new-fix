@@ -51,7 +51,7 @@ const fnGetRbacRoles = () => {
         rbacRoles.value = collect(res.content.rbac_roles).chunk(4).all();
       }
     })
-    .catch((e) => errorNotify(e.msg));
+    .catch(e=>errorNotify(e.msg));
 };
 </script>
 src/utils/notify

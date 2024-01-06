@@ -73,6 +73,6 @@ const fnSearch = () => {
         );
         equipmentKindTypesMap.value = collect(equipmentKindTypes.value).pluck('value', 'label').all();
     })
-    .catch((e) => errorNotify(e.msg));
+    .catch(e=>errorNotify(e.msg));
 };
 </script>

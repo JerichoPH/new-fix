@@ -60,7 +60,7 @@ onMounted(() => {
         .all();
       sourceTypesMap.value = collect(sourceTypes.value).pluck('label', 'value').all();
     })
-    .catch((e) => errorNotify(e.msg));
+    .catch(e=>errorNotify(e.msg));
 });
 </script>
 src/utils/notify

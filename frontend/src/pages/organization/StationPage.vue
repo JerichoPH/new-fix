@@ -143,8 +143,10 @@
           </div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn type="button" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="secondary" />
+          <q-btn-group>
+            <q-btn type="button" label="关闭" v-close-popup />
+            <q-btn type="submit" label="确定" icon="check" color="secondary" />
+          </q-btn-group>
         </q-card-actions>
       </q-form>
     </q-card>
@@ -185,8 +187,10 @@
           </div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn type="button" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="secondary" />
+          <q-btn-group>
+            <q-btn type="button" label="关闭" v-close-popup />
+            <q-btn type="submit" label="确定" icon="check" color="secondary" />
+          </q-btn-group>
         </q-card-actions>
       </q-form>
     </q-card>
@@ -276,7 +280,7 @@ const fnResetSearch = () => {
 const fnSearch = () => {
   rows.value = [];
   selected.value = [];
-  
+
   ajaxGetOrganizationStations({
     "@~[]": ["OrganizationWorkshop", "OrganizationWorkshop.OrganizationParagraph", "OrganizationWorkshop.OrganizationParagraph.OrganizationRailway"],
     unique_code: uniqueCode_search.value,

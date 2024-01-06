@@ -114,8 +114,10 @@
           </div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn type="button" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="secondary" />
+          <q-btn-group>
+            <q-btn type="button" label="关闭" v-close-popup />
+            <q-btn type="submit" label="确定" icon="check" color="secondary" />
+          </q-btn-group>
         </q-card-actions>
       </q-form>
     </q-card>
@@ -141,8 +143,10 @@
           </div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn type="button" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="warning" />
+          <q-btn-group>
+            <q-btn type="button" label="关闭" v-close-popup />
+            <q-btn type="submit" label="确定" icon="check" color="warning" />
+          </q-btn-group>
         </q-card-actions>
       </q-form>
     </q-card>
@@ -306,7 +310,7 @@ const fnDestroyOrganizationParagraph = params => {
   confirmNotify(
     destroyActions(() => {
       ajaxDestroyOrganizationParagraph(params["uuid"])
-        .then(res => {
+        .then(() => {
           successNotify("删除成功");
           fnSearch();
         })

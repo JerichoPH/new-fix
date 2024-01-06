@@ -94,7 +94,7 @@
   <!-- 弹窗 -->
   <!-- 新建器材种类弹窗 -->
   <q-dialog v-model="alertCreateEquipmentKindCategory" no-backdrop-dismiss>
-    <q-card :style="{minWidth: '450px'}">
+    <q-card :style="{ minWidth: '450px' }">
       <q-card-section>
         <div class="text-h6">新建器材种类</div>
       </q-card-section>
@@ -108,15 +108,17 @@
           </div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn type="button" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="secondary" />
+          <q-btn-group>
+            <q-btn type="button" label="关闭" v-close-popup />
+            <q-btn type="submit" label="确定" icon="check" color="secondary" />
+          </q-btn-group>
         </q-card-actions>
       </q-form>
     </q-card>
   </q-dialog>
   <!-- 编辑器材种类弹窗 -->
   <q-dialog v-model="alertEditEquipmentKindCategory" no-backdrop-dismiss>
-    <q-card :style="{minWidth: '450px'}">
+    <q-card :style="{ minWidth: '450px' }">
       <q-card-section>
         <div class="text-h6">编辑器材种类</div>
       </q-card-section>
@@ -130,8 +132,10 @@
           </div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn type="button" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="warning" />
+          <q-btn-group>
+            <q-btn type="button" label="关闭" v-close-popup />
+            <q-btn type="submit" label="确定" icon="check" color="warning" />
+          </q-btn-group>
         </q-card-actions>
       </q-form>
     </q-card>
@@ -211,9 +215,7 @@ const fnSearch = () => {
         }
       );
     })
-    .catch((err) => {
-      errorNotify(err);
-    });
+    .catch(e => errorNotify(e.msg));
 };
 
 /**
@@ -246,7 +248,7 @@ const fnStoreEquipmentKindCategory = () => {
 
       alertCreateEquipmentKindCategory.value = false;
     })
-    .catch((e) => errorNotify(e.msg))
+    .catch(e=>errorNotify(e.msg))
     .finally(loading());
 };
 
@@ -264,7 +266,7 @@ const fnOpenAlertEditEquipmentKindCategory = (params) => {
         res.content.equipment_kind_category.name;
       alertEditEquipmentKindCategory.value = true;
     })
-    .catch((e) => errorNotify(e.msg))
+    .catch(e=>errorNotify(e.msg))
     .finally(loading());
 };
 
@@ -286,7 +288,7 @@ const fnUpdateEquipmentKindCategory = (params) => {
 
       alertEditEquipmentKindCategory.value = false;
     })
-    .catch((e) => errorNotify(e.msg))
+    .catch(e=>errorNotify(e.msg))
     .finally(loading());
 };
 
@@ -306,7 +308,7 @@ const fnDestroyEquipmentKindCategory = (params) => {
           successNotify("删除成功");
           fnSearch();
         })
-        .catch((e) => errorNotify(e.msg))
+        .catch(e=>errorNotify(e.msg))
         .finally(loading());
     })
   );
@@ -325,7 +327,7 @@ const fnDestroyEquipmentKindCategories = () => {
           successNotify("删除成功");
           fnSearch();
         })
-        .catch((e) => errorNotify(e.msg))
+        .catch(e=>errorNotify(e.msg))
         .finally(loading());
     })
   );

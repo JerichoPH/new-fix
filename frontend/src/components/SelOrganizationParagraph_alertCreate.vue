@@ -75,7 +75,7 @@ const fnSearch = () => {
           .all();
         organizationParagraphsMap.value = collect(organizationParagraphs.value).pluck('label', 'value').all();
       })
-      .catch((e) => errorNotify(e.msg));
+      .catch(e=>errorNotify(e.msg));
   }
 };
 </script>

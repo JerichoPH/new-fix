@@ -117,8 +117,10 @@
           </div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn type="button" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="secondary" />
+          <q-btn-group>
+            <q-btn type="button" label="关闭" v-close-popup />
+            <q-btn type="submit" label="确定" icon="check" color="secondary" />
+          </q-btn-group>
         </q-card-actions>
       </q-form>
     </q-card>
@@ -138,8 +140,10 @@
           </div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn type="button" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="secondary" />
+          <q-btn-group>
+            <q-btn type="button" label="关闭" v-close-popup />
+            <q-btn type="submit" label="确定" icon="check" color="secondary" />
+          </q-btn-group>
         </q-card-actions>
       </q-form>
     </q-card>
@@ -239,7 +243,7 @@ const fnSearch = () => {
         })
         .all();
     })
-    .catch((e) => errorNotify(e.msg));
+    .catch(e=>errorNotify(e.msg));
 };
 
 /**
@@ -273,7 +277,7 @@ const fnStoreEquipomentKindModel = () => {
 
       alertCreateEquipmentKindModel.value = false;
     })
-    .catch((e) => errorNotify(e.msg));
+    .catch(e=>errorNotify(e.msg));
 };
 
 /**
@@ -290,7 +294,7 @@ const fnDestroyEquipmentKindModels = (params) => {
           successNotify("删除成功");
           fnSearch();
         })
-        .catch((e) => errorNotify(e.msg))
+        .catch(e=>errorNotify(e.msg))
         .finally(loading());
     })
   );
@@ -310,7 +314,7 @@ const fnOpenAlertEditEquipmentKindModel = (params) => {
         res.content.equipment_kind_model.name;
       alertEditEquipmentKindModel.value = true;
     })
-    .catch((e) => errorNotify(e.msg));
+    .catch(e=>errorNotify(e.msg));
 };
 
 /**
@@ -329,7 +333,7 @@ const fnUpdateEquipmentKindModel = (params) => {
 
       alertEditEquipmentKindModel.value = false;
     })
-    .catch((e) => errorNotify(e.msg));
+    .catch(e=>errorNotify(e.msg));
 };
 
 /**
@@ -347,7 +351,7 @@ const fnDestroyEquipmentKindModel = (params) => {
           successNotify("删除成功");
           fnSearch();
         })
-        .catch((e) => errorNotify(e.msg))
+        .catch(e=>errorNotify(e.msg))
         .finally(loading());
     })
   );

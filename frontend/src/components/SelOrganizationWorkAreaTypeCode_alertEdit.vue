@@ -63,7 +63,7 @@ const fnSearch = () => {
         .all();
       organizationWorkAreaTypeCodesMap.value = collect(organizationWorkAreaTypeCodes.value).pluck('label', 'value').all();
     })
-    .catch((e) => errorNotify(e.msg));
+    .catch(e=>errorNotify(e.msg));
 };
 </script>
 src/utils/notify

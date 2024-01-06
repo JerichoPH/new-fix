@@ -38,7 +38,9 @@
                 <div class="col">
                   <sel-warehouse-area_search label-name="所属库区" />
                 </div>
-                <div class="col"></div>
+                <div class="col">
+                  <sel-warehouse-platoon-type-code_search label-name="排类型" />
+                </div>
                 <div class="col"></div>
                 <div class="col"></div>
               </div>
@@ -71,6 +73,9 @@
                   <q-th align="left" key="name" @click="(event) => fnColumnReverseSort(event, props, sortBy)">
                     名称
                   </q-th>
+                  <q-th align="left" key="typeText" @click="(event) => fnColumnReverseSort(event, props, sortBy)">
+                    排类型
+                  </q-th>
                   <q-th align="left" key="warehouseArea" @click="(event) => fnColumnReverseSort(event, props, sortBy)">
                     所属仓库-库区
                   </q-th>
@@ -82,6 +87,7 @@
                   <q-td><q-checkbox :key="props.row.uuid" :value="props.row.uuid" v-model="props.selected" /></q-td>
                   <q-td>{{ props.row.index }}</q-td>
                   <q-td key="name" :props="props">{{ props.row.name }}</q-td>
+                  <q-td key="typeText" :props="props">{{ props.row.typeText }}</q-td>
                   <q-td key="warehouseArea" :props="props">
                     <join-string :values="[
                       props.row.warehouseStorehouse.name,
@@ -151,10 +157,17 @@
               <sel-warehouse-area_alert-create label-name="所属库区" />
             </div>
           </div>
+          <div class="row q-mt-md">
+            <div class="col">
+              <sel-warehouse-platoon-type-code_alert-create label-name="排类型" />
+            </div>
+          </div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn type="button" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="secondary" />
+          <q-btn-group>
+            <q-btn type="button" label="关闭" v-close-popup />
+            <q-btn type="submit" label="确定" icon="check" color="secondary" />
+          </q-btn-group>
         </q-card-actions>
       </q-form>
     </q-card>
@@ -202,10 +215,17 @@
               <sel-warehouse-area_alert-edit label-name="所属库区" />
             </div>
           </div>
+          <div class="row q-mt-md">
+            <div class="col">
+              <sel-warehouse-platoon-type-code_alert-edit label-name="排类型" />
+            </div>
+          </div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn type="button" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="warning" />
+          <q-btn-group>
+            <q-btn type="button" label="关闭" v-close-popup />
+            <q-btn type="submit" label="确定" icon="check" color="warning" />
+          </q-btn-group>
         </q-card-actions>
       </q-form>
     </q-card>
@@ -237,18 +257,21 @@ import SelOrganizationWorkshop_search from "src/components/SelOrganizationWorksh
 import SelOrganizationWorkArea_search from "src/components/SelOrganizationWorkArea_search.vue";
 import SelWarehouseStorehouse_search from "src/components/SelWarehouseStorehouse_search.vue";
 import SelWarehouseArea_search from "src/components/SelWarehouseArea_search.vue";
+import SelWarehousePlatoonTypeCode_search from "src/components/SelWarehousePlatoonTypeCode_search.vue";
 import SelOrganizationRailway_alertCreate from "src/components/SelOrganizationRailway_alertCreate.vue";
 import SelOrganizationParagraph_alertCreate from "src/components/SelOrganizationParagraph_alertCreate.vue";
 import SelOrganizationWorkshop_alertCreate from "src/components/SelOrganizationWorkshop_alertCreate.vue";
 import SelOrganizationWorkArea_alertCreate from "src/components/SelOrganizationWorkArea_alertCreate.vue";
 import SelWarehouseStorehouse_alertCreate from "src/components/SelWarehouseStorehouse_alertCreate.vue";
 import SelWarehouseArea_alertCreate from "src/components/SelWarehouseArea_alertCreate.vue";
+import SelWarehousePlatoonTypeCode_alertCreate from "src/components/SelWarehousePlatoonTypeCode_alertCreate.vue";
 import SelOrganizationRailway_alertEdit from "src/components/SelOrganizationRailway_alertEdit.vue";
 import SelOrganizationParagraph_alertEdit from "src/components/SelOrganizationParagraph_alertEdit.vue";
 import SelOrganizationWorkshop_alertEdit from "src/components/SelOrganizationWorkshop_alertEdit.vue";
 import SelOrganizationWorkArea_alertEdit from "src/components/SelOrganizationWorkArea_alertEdit.vue";
 import SelWarehouseStorehouse_alertEdit from "src/components/SelWarehouseStorehouse_alertEdit.vue";
 import SelWarehouseArea_alertEdit from "src/components/SelWarehouseArea_alertEdit.vue";
+import SelWarehousePlatoonTypeCode_alertEdit from "src/components/SelWarehousePlatoonTypeCode_alertEdit.vue";
 
 // 搜索栏数据
 const name_search = ref("");
@@ -264,6 +287,8 @@ const warehouseStorehouseUuid_search = ref("");
 provide("warehouseStorehouseUuid_search", warehouseStorehouseUuid_search);
 const warehouseAreaUuid_search = ref("");
 provide("warehouseAreaUuid_search", warehouseAreaUuid_search);
+const warehousePlatoonTypeCode_search = ref("");
+provide("warehousePlatoonTypeCode_search", warehousePlatoonTypeCode_search);
 
 // 表格数据
 const rows = ref([]);
@@ -285,6 +310,8 @@ const warehouseStorehouseUuid_alertCreateWarehousePlatoon = ref("");
 provide("warehouseStorehouseUuid_alertCreate", warehouseStorehouseUuid_alertCreateWarehousePlatoon);
 const warehouseAreaUuid_alertCreateWarehousePlatoon = ref("");
 provide("warehouseAreaUuid_alertCreate", warehouseAreaUuid_alertCreateWarehousePlatoon);
+const warehousePlatoonTypeCode_alertCreateWarehousePlatoon = ref("");
+provide("warehousePlatoonTypeCode_alertCreate", warehousePlatoonTypeCode_alertCreateWarehousePlatoon);
 
 // 编辑仓库-排弹窗数据
 const alertWarehousePlatoon = ref(false);
@@ -302,6 +329,8 @@ const warehouseStorehouseUuid_alertEditWarehousePlatoon = ref("");
 provide("warehouseStorehouseUuid_alertEdit", warehouseStorehouseUuid_alertEditWarehousePlatoon);
 const warehouseAreaUuid_alertEditWarehousePlatoon = ref("");
 provide("warehouseAreaUuid_alertEdit", warehouseAreaUuid_alertEditWarehousePlatoon);
+const warehousePlatoonTypeCode_alertEditWarehousePlatoon = ref("");
+provide("warehousePlatoonTypeCode_alertEdit", warehousePlatoonTypeCode_alertEditWarehousePlatoon);
 
 
 onMounted(() => fnInit());
@@ -334,13 +363,16 @@ const fnSearch = () => {
     organization_work_area_uuid: organizationWorkAreaUuid_search.value,
     warehouse_storehouse_uuid: warehouseStorehouseUuid_search.value,
     warehouse_area_uuid: warehouseAreaUuid_search.value,
+    type_code: warehousePlatoonTypeCode_search.value,
   })
-    .then(response => {
-      rows.value = collect(response.content.warehouse_platoons)
+    .then(resp => {
+      rows.value = collect(resp.content.warehouse_platoons)
         .map((warehousePlatoon, idx) => {
           return {
-            ...warehousePlatoon,
             index: idx + 1,
+            uuid: warehousePlatoon.uuid,
+            name: warehousePlatoon.name,
+            typeText: warehousePlatoon.type_text,
             warehouseArea: warehousePlatoon.warehouse_area,
             warehouseStorehouse: warehousePlatoon.warehouse_area.warehouse_storehouse,
             operation: { uuid: warehousePlatoon.uuid },
@@ -359,6 +391,7 @@ const fnResetAlertCreateWarehousePlatoon = () => {
   organizationWorkAreaUuid_alertCreateWarehousePlatoon.value = "";
   warehouseStorehouseUuid_alertCreateWarehousePlatoon.value = "";
   warehouseAreaUuid_alertCreateWarehousePlatoon.value = "";
+  warehousePlatoonTypeCode_search.value = "";
 };
 
 const fnOpenAlertCreateWarehousePlatoon = () => {
@@ -374,6 +407,7 @@ const fnStoreWarehousePlatoon = () => {
     organization_work_area_uuid: organizationWorkAreaUuid_alertCreateWarehousePlatoon.value,
     warehouse_storehouse_uuid: warehouseStorehouseUuid_alertCreateWarehousePlatoon.value,
     warehouse_area_uuid: warehouseAreaUuid_alertCreateWarehousePlatoon.value,
+    type_code: warehousePlatoonTypeCode_alertCreateWarehousePlatoon.value,
   })
     .then(response => {
       successNotify(response.msg);
@@ -407,6 +441,7 @@ const fnOpenAlertEditWarehousePlatoon = params => {
       organizationWorkAreaUuid_alertEditWarehousePlatoon.value = res.content.warehouse_platoon.warehouse_area.warehouse_storehouse.organization_work_area.uuid;
       warehouseStorehouseUuid_alertEditWarehousePlatoon.value = res.content.warehouse_platoon.warehouse_area.warehouse_storehouse.uuid;
       warehouseAreaUuid_alertEditWarehousePlatoon.value = res.content.warehouse_platoon.warehouse_area.uuid;
+      warehousePlatoonTypeCode_alertEditWarehousePlatoon.value = res.content.warehouse_platoon.type_code;
 
       alertWarehousePlatoon.value = true;
     })
@@ -418,12 +453,8 @@ const fnUpdateWarehouseArea = () => {
 
   ajaxUpdateWarehousePlatoon(currentUuid.value, {
     name: name_alertWarehousePlatoon.value,
-    organization_railway_uuid: organizationRailwayUuid_alertEditWarehousePlatoon.value,
-    organization_paragraph_uuid: organizationParagraphUuid_alertEditWarehousePlatoon.value,
-    organization_workshop_uuid: organizationWorkshopUuid_alertEditWarehousePlatoon.value,
-    organization_work_area_uuid: organizationWorkAreaUuid_alertEditWarehousePlatoon.value,
-    warehouse_storehouse_uuid: warehouseStorehouseUuid_alertEditWarehousePlatoon.value,
     warehouse_area_uuid: warehouseAreaUuid_alertEditWarehousePlatoon.value,
+    type_code: warehousePlatoonTypeCode_alertEditWarehousePlatoon.value,
   })
     .then(res => {
       successNotify(res.msg);

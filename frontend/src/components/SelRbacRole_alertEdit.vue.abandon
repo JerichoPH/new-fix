@@ -47,7 +47,7 @@ onMounted(() => {
         });
       }
     })
-    .catch((e) => errorNotify(e.msg));
+    .catch(e=>errorNotify(e.msg));
 });
 
 const fnFilter = (val, update) => {

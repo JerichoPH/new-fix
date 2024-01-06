@@ -98,7 +98,7 @@
   <!-- 弹窗 -->
   <!-- 新建路局弹窗 -->
   <q-dialog v-model="alertCreateOrganizationRailway" no-backdrop-dismiss>
-    <q-card :style="{minWidth: '450px'}">
+    <q-card :style="{ minWidth: '450px' }">
       <q-card-section>
         <div class="text-h6">新建路局</div>
       </q-card-section>
@@ -124,15 +124,17 @@
           </div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn type="button" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="secondary" />
+          <q-btn-group>
+            <q-btn type="button" label="关闭" v-close-popup />
+            <q-btn type="submit" label="确定" icon="check" color="secondary" />
+          </q-btn-group>
         </q-card-actions>
       </q-form>
     </q-card>
   </q-dialog>
   <!-- 编辑路局弹窗 -->
   <q-dialog v-model="alertEditOrganizationrailway" no-backdrop-dismiss>
-    <q-card :style="{minWidth: '450px'}">
+    <q-card :style="{ minWidth: '450px' }">
       <q-card-section>
         <div class="text-h6">编辑路局</div>
       </q-card-section>
@@ -158,8 +160,10 @@
           </div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn type="button" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="warning" />
+          <q-btn-group>
+            <q-btn type="button" label="关闭" v-close-popup />
+            <q-btn type="submit" label="确定" icon="check" color="warning" />
+          </q-btn-group>
         </q-card-actions>
       </q-form>
     </q-card>
@@ -281,7 +285,7 @@ const fnStoreOrganizationRailway = (params) => {
 
       alertCreateOrganizationRailway.value = false;
     })
-    .catch((e) => errorNotify(e.msg))
+    .catch(e=>errorNotify(e.msg))
     .finally(loading());
 };
 
@@ -301,7 +305,7 @@ const fnOpenAlertEditOrganizationRailway = (params) => {
       shortName_alertEditOrganizationrailway.value = res.content.organization_railway.short_name;
       alertEditOrganizationrailway.value = true;
     })
-    .catch((e) => errorNotify(e.msg));
+    .catch(e=>errorNotify(e.msg));
 };
 
 /**
@@ -325,7 +329,7 @@ const fnUpdateOrganizationRailway = () => {
 
       alertEditOrganizationrailway.value = false;
     })
-    .catch((e) => errorNotify(e.msg))
+    .catch(e=>errorNotify(e.msg))
     .finally(loading());
 };
 
@@ -345,7 +349,7 @@ const fnDestroyOrganizationRailway = (params) => {
           successNotify("删除成功");
           fnSearch();
         })
-        .catch((e) => errorNotify(e.msg))
+        .catch(e=>errorNotify(e.msg))
         .finally(loading());
     })
   );
@@ -365,7 +369,7 @@ const fnDestroyOrganizationRailways = (uuids) => {
           successNotify("删除成功");
           fnSearch();
         })
-        .catch((e) => errorNotify(e.msg))
+        .catch(e=>errorNotify(e.msg))
         .finally(loading());
     })
   );

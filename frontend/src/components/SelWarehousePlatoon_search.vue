@@ -74,7 +74,7 @@ const fnSearch = () => {
         .all();
       warehousePlatoonsMap.value = collect(warehousePlatoons.value).pluck("label", "value").all();
     })
-    .catch((e) => errorNotify(e.msg));d
+    .catch(e=>errorNotify(e.msg));d
 };
 </script>
 src/utils/notify

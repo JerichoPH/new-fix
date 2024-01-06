@@ -77,7 +77,7 @@ const fnSearch = () => {
         .all();
       warehouseStorehousesMap.value = collect(warehouseStorehouses.value).pluck("label", "value").all();
     })
-    .catch((e) => errorNotify(e.msg));
+    .catch(e=>errorNotify(e.msg));
 };
 </script>
 src/utils/notify

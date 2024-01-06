@@ -63,6 +63,6 @@ const fnSearch = () => {
         });
       factoriesMap.value = collect(factories.value).pluck('label', 'value').all();
     })
-    .catch((e) => errorNotify(e.msg));
+    .catch(e=>errorNotify(e.msg));
 };
 </script>

@@ -80,7 +80,7 @@
 
   <!-- 对话框 -->
   <!-- 新建角色对话框 -->
-  <q-dialog v-model="alertCreateRbacRole">
+  <q-dialog v-model="alertCreateRbacRole" no-backdrop-dismiss>
     <q-card :style="{ minWidth: '450px' }">
       <q-form class="q-gutter-md" @submit.prevent="fnStoreRbacRole">
         <q-card-section>
@@ -94,14 +94,16 @@
           </div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn type="button" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="secondary" />
+          <q-btn-group>
+            <q-btn type="button" label="关闭" v-close-popup />
+            <q-btn type="submit" label="确定" icon="check" color="secondary" />
+          </q-btn-group>
         </q-card-actions>
       </q-form>
     </q-card>
   </q-dialog>
   <!-- 编辑角色对话框 -->
-  <q-dialog v-model="alertEditRbacRole">
+  <q-dialog v-model="alertEditRbacRole" no-backdrop-dismiss>
     <q-card :style="{ minWidth: '450px' }">
       <q-card-section>
         <div class="text-h6">编辑角色</div>
@@ -116,8 +118,10 @@
         </q-form>
       </q-card-section>
       <q-card-actions align="right">
-        <q-btn type="button" label="关闭" v-close-popup />
-        <q-btn type="submit" label="确定" icon="check" color="warning" />
+        <q-btn-group>
+          <q-btn type="button" label="关闭" v-close-popup />
+          <q-btn type="submit" label="确定" icon="check" color="warning" />
+        </q-btn-group>
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -220,7 +224,7 @@ const fnStoreRbacRole = () => {
 
       alertCreateRbacRole.value = false;
     })
-    .catch((e) => errorNotify(e.msg))
+    .catch(e=>errorNotify(e.msg))
     .finally(loading());
 };
 
@@ -246,7 +250,7 @@ const fnOpenAlertEditRbacRole = (params = {}) => {
         alertEditRbacRole.value = true;
       }
     })
-    .catch((e) => errorNotify(e.msg));
+    .catch(e=>errorNotify(e.msg));
 };
 
 /**
@@ -265,7 +269,7 @@ const fnUpdateRbacRole = () => {
 
       alertEditRbacRole.value = false;
     })
-    .catch((e) => errorNotify(e.msg));
+    .catch(e=>errorNotify(e.msg));
 };
 
 /**
@@ -283,7 +287,7 @@ const fnDestroyRbacRole = (params = {}) => {
           successNotify("删除成功");
           fnSearch();
         })
-        .catch((e) => errorNotify(e.msg))
+        .catch(e=>errorNotify(e.msg))
         .finally(loading());
     })
   );
@@ -302,7 +306,7 @@ const fnDestroyRbacRoles = () => {
           successNotify("删除成功");
           fnSearch();
         })
-        .catch((e) => errorNotify(e.msg))
+        .catch(e=>errorNotify(e.msg))
         .finally(loading());
     })
   );

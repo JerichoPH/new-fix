@@ -103,7 +103,7 @@
 
   <!-- 对话框 -->
   <!-- 新建权限对话框 -->
-  <q-dialog v-model="alertCreateRbacPermission">
+  <q-dialog v-model="alertCreateRbacPermission" no-backdrop-dismiss>
     <q-card :style="{ minWidth: '450px' }">
       <q-form class="q-gutter-md" @submit.prevent="fnStoreRbacPermission">
         <q-card-section>
@@ -122,14 +122,16 @@
           </div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn type="button" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="secondary" />
+          <q-btn-group>
+            <q-btn type="button" label="关闭" v-close-popup />
+            <q-btn type="submit" label="确定" icon="check" color="secondary" />
+          </q-btn-group>
         </q-card-actions>
       </q-form>
     </q-card>
   </q-dialog>
   <!-- 编辑权限对话框 -->
-  <q-dialog v-model="alertEditRbacPermission">
+  <q-dialog v-model="alertEditRbacPermission" no-backdrop-dismiss>
     <q-card :style="{ minWidth: '450px' }">
       <q-form class="q-gutter-md" @submit.prevent="fnUpdateRbacPermission">
         <q-card-section>
@@ -252,7 +254,7 @@ const fnSearch = () => {
         .all();
       console.log('ok', rows.value);
     })
-    .catch((e) => errorNotify(e.msg));
+    .catch(e=>errorNotify(e.msg));
 };
 
 /**
@@ -290,7 +292,7 @@ const fnStoreRbacPermission = () => {
 
       alertCreateRbacPermission.value = false;
     })
-    .catch((e) => errorNotify(e.msg))
+    .catch(e=>errorNotify(e.msg))
     .finally(loading());
 };
 
@@ -324,7 +326,7 @@ const fnOpenAlertEditRbacPermission = (params = {}) => {
 
       alertEditRbacPermission.value = true;
     })
-    .catch((e) => errorNotify(e.msg));
+    .catch(e=>errorNotify(e.msg));
 };
 
 /**
@@ -348,7 +350,7 @@ const fnUpdateRbacPermission = () => {
 
       alertEditRbacPermission.value = false;
     })
-    .catch((e) => errorNotify(e.msg))
+    .catch(e=>errorNotify(e.msg))
     .finally(loading());
 };
 
@@ -367,7 +369,7 @@ const fnDestroyRbacPermission = (params = {}) => {
           successNotify("删除成功");
           fnSearch();
         })
-        .catch((e) => errorNotify(e.msg))
+        .catch(e=>errorNotify(e.msg))
         .finally(loading());
     })
   );
@@ -388,7 +390,7 @@ const fnDestroyRbacPermissions = () => {
           successNotify("删除成功");
           fnSearch();
         })
-        .catch((e) => errorNotify(e.msg))
+        .catch(e=>errorNotify(e.msg))
         .finally(loading());
     })
   );

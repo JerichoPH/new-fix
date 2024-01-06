@@ -50,7 +50,6 @@ onMounted(() => fnSearch());
 
 const fnSearch = () => {
   warehousePlatoonTypeCodes.value = [];
-  warehousePlatoonTypeCode_alertEdit.value = "";
 
   ajaxGetWarehousePlatoonTypeCodesMap(ajaxParams)
     .then(res => {
@@ -64,7 +63,7 @@ const fnSearch = () => {
         .all();
       warehousePlatoonTypeCodesMap.value = collect(warehousePlatoonTypeCodes.value).pluck('label', 'value').all();
     })
-    .catch((e) => errorNotify(e.msg));
+    .catch(e=>errorNotify(e.msg));
 };
 </script>
 src/utils/notify

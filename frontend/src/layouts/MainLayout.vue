@@ -120,7 +120,7 @@ const fnInit = () => {
     .then(res => {
       rbacMenus.value = collect(res.content.rbac_menus).all();
     })
-    .catch((e) => errorNotify(e.msg));
+    .catch(e=>errorNotify(e.msg));
 };
 /**
  * 切换左侧边栏

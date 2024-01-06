@@ -83,10 +83,10 @@
                   <q-td key="name" :props="props">{{ props.row.name }}</q-td>
                   <q-td key="warehouseStorehouse" :props="props">
                     <join-string :values="[
-                    props.row.organizationWorkshop.name,
-                    props.row.organizationWorkArea.name,
-                    props.row.warehouseStorehouse.name,
-                  ]" />
+                      props.row.organizationWorkshop.name,
+                      props.row.organizationWorkArea.name,
+                      props.row.warehouseStorehouse.name,
+                    ]" />
                   </q-td>
                   <q-td key="operation" :props="props">
                     <q-btn-group>
@@ -148,58 +148,62 @@
           </div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn type="button" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="secondary" />
+          <q-btn-group>
+            <q-btn type="button" label="关闭" v-close-popup />
+            <q-btn type="submit" label="确定" icon="check" color="secondary" />
+          </q-btn-group>
         </q-card-actions>
       </q-form>
     </q-card>
   </q-dialog>
   <!-- 编辑仓库-库区弹窗-->
   <q-dialog v-model="alertEditWarehouseArea" no-backdrop-dismiss>
-      <q-card :style="{ minWidth: '450px' }">
-        <q-card-section>
-          <div class="text-h6">编辑仓库-库区</div>
+    <q-card :style="{ minWidth: '450px' }">
+      <q-card-section>
+        <div class="text-h6">编辑仓库-库区</div>
+      </q-card-section>
+      <q-form class="q-gutter-md" @submit.prevent="fnUpdateWarehouseArea">
+        <q-card-section class="q-pt-none">
+          <div class="row">
+            <div class="col">
+              <q-input outlined clearable lazy-rules v-model="name_alertEditWarehouseArea" label="名称" :rules="[]" />
+            </div>
+          </div>
+          <div class="row q-mt-md">
+            <div class="col">
+              <sel-organization-railway_alert-edit label-name="所属路局" :ajax-params="{}" />
+            </div>
+          </div>
+          <div class="row q-mt-md">
+            <div class="col">
+              <sel-organization-paragraph_alert-edit label-name="所属站段" :ajax-params="{}" />
+            </div>
+          </div>
+          <div class="row q-mt-dq">
+            <div class="col">
+              <sel-organization-workshop_alert-edit label-name="所属车间" :ajax-params="{}" />
+            </div>
+          </div>
+          <div class="row q-mt-md">
+            <div class="col">
+              <sel-organization-work-area_alert-edit label-name="所属工区" :ajax-params="{}" />
+            </div>
+          </div>
+          <div class="row q-mt-md">
+            <div class="col">
+              <sel-warehouse-storehouse_alert-edit label-name="所属仓库-库房" :ajax-params="{}" />
+            </div>
+          </div>
         </q-card-section>
-        <q-form class="q-gutter-md" @submit.prevent="fnUpdateWarehouseArea">
-          <q-card-section class="q-pt-none">
-            <div class="row">
-              <div class="col">
-                <q-input outlined clearable lazy-rules v-model="name_alertEditWarehouseArea" label="名称" :rules="[]" />
-              </div>
-            </div>
-            <div class="row q-mt-md">
-              <div class="col">
-                <sel-organization-railway_alert-edit label-name="所属路局" :ajax-params="{}" />
-              </div>
-            </div>
-            <div class="row q-mt-md">
-              <div class="col">
-                <sel-organization-paragraph_alert-edit label-name="所属站段" :ajax-params="{}" />
-              </div>
-            </div>
-            <div class="row q-mt-dq">
-              <div class="col">
-                <sel-organization-workshop_alert-edit label-name="所属车间" :ajax-params="{}" />
-              </div>
-            </div>
-            <div class="row q-mt-md">
-              <div class="col">
-                <sel-organization-work-area_alert-edit label-name="所属工区" :ajax-params="{}" />
-              </div>
-            </div>
-            <div class="row q-mt-md">
-              <div class="col">
-                <sel-warehouse-storehouse_alert-edit label-name="所属仓库-库房" :ajax-params="{}" />
-              </div>
-            </div>
-          </q-card-section>
-          <q-card-actions align="right">
+        <q-card-actions align="right">
+          <q-btn-group>
             <q-btn type="button" label="关闭" v-close-popup />
             <q-btn type="submit" label="确定" icon="check" color="warning" />
-          </q-card-actions>
-        </q-form>
-      </q-card>
-    </q-dialog>
+          </q-btn-group>
+        </q-card-actions>
+      </q-form>
+    </q-card>
+  </q-dialog>
 </template>
 <script setup>
 import { ref, onMounted, provide } from "vue";
@@ -378,7 +382,7 @@ const fnOpenAlertEditWarehouseArea = (params) => {
     ],
   })
     .then(res => {
-      console.log('res',res);
+      console.log('res', res);
       name_alertEditWarehouseArea.value = res.content.warehouse_area.name;
       organizationRailwayUuid_alertEditWarehouseArea.value = res.content.warehouse_area.warehouse_storehouse.organization_workshop.organization_paragraph.organization_railway.uuid;
       organizationParagraphUuid_alertEditWarehouseArea.value = res.content.warehouse_area.warehouse_storehouse.organization_workshop.organization_paragraph.uuid;

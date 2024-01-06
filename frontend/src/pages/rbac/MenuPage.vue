@@ -129,8 +129,10 @@
           </div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn type="button" label="关闭" v-close-popup />
-          <q-btn type="button" label="确定" icon="check" color="secondary" />
+          <q-btn-group>
+            <q-btn type="button" label="关闭" v-close-popup />
+            <q-btn type="button" label="确定" icon="check" color="secondary" />
+          </q-btn-group>
         </q-card-actions>
       </q-form>
     </q-card>
@@ -162,8 +164,10 @@
         </q-form>
       </q-card-section>
       <q-card-actions align="right">
-        <q-btn type="button" label="关闭" v-close-popup />
-        <q-btn type="button" label="确定" icon="check" color="warning" />
+        <q-btn-group>
+          <q-btn type="button" label="关闭" v-close-popup />
+          <q-btn type="button" label="确定" icon="check" color="warning" />
+        </q-btn-group>
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -280,9 +284,9 @@ const fnSearch = () => {
           };
         })
         .all();
-        console.log('ok',rows.value);
+      console.log('ok', rows.value);
     })
-    .catch((e) => errorNotify(e.msg))
+    .catch(e=>errorNotify(e.msg))
     .finally(() => {
       selRbacMenu_search_enable.value = false;
       selRbacMenu_search_enable.value = true;
@@ -373,7 +377,7 @@ const fnOpenAlertEditRbacMenu = (params = {}) => {
 
       alertEditRbacMenu.value = true;
     })
-    .catch((e) => errorNotify(e.msg));
+    .catch(e=>errorNotify(e.msg));
 };
 
 /**
@@ -397,7 +401,7 @@ const fnUpdateRbacMenu = () => {
 
       alertEditRbacMenu.value = false;
     })
-    .catch((e) => errorNotify(e.msg))
+    .catch(e=>errorNotify(e.msg))
     .finally(loading());
 };
 
@@ -416,7 +420,7 @@ const fnDeconsteRbacMenu = (params = {}) => {
           successNotify("删除成功");
           fnSearch();
         })
-        .catch((e) => errorNotify(e.msg))
+        .catch(e=>errorNotify(e.msg))
         .finally(loading());
     })
   );
@@ -435,7 +439,7 @@ const fnDestroyRbacMenus = () => {
           successNotify("删除成功");
           fnSearch();
         })
-        .catch((e) => errorNotify(e.msg))
+        .catch(e=>errorNotify(e.msg))
         .finally(loading());
     })
   );

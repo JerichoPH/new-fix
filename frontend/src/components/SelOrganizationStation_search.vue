@@ -74,7 +74,7 @@ const fnSearch = () => {
           .all();
       organizationStationsMap.value = collect(organizationStations.value).pluck('label', 'value').all();
     })
-    .catch((e) => errorNotify(e.msg));
+    .catch(e=>errorNotify(e.msg));
 };
 </script>
 src/utils/notify

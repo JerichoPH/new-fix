@@ -84,7 +84,7 @@ const fnSearch = () => {
         );
       }
     })
-    .catch((e) => errorNotify(e.msg));
+    .catch(e=>errorNotify(e.msg));
 };
 </script>
 src/utils/notify

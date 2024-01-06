@@ -67,7 +67,7 @@ const fnSearch = (sourceTypeUuid) =>{
         .all();
       sourceProjectsMap.value = collect(sourceProjects.value).pluck('label', 'value').all();
     })
-    .catch((e) => errorNotify(e.msg));
+    .catch(e=>errorNotify(e.msg));
 };
 </script>
 src/utils/notify

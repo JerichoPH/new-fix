@@ -85,7 +85,7 @@
   <!-- 弹窗 -->
   <!-- 新建来源项目弹窗 -->
   <q-dialog v-model="alertCreateSourceProject" no-backdrop-dismiss>
-    <q-card :style="{minWidth: '450px'}">
+    <q-card :style="{ minWidth: '450px' }">
       <q-card-section>
         <div class="text-h6">新建来源项目</div>
       </q-card-section>
@@ -103,15 +103,17 @@
           </div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn type="button" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="secondary" />
+          <q-btn-group>
+            <q-btn type="button" label="关闭" v-close-popup />
+            <q-btn type="submit" label="确定" icon="check" color="secondary" />
+          </q-btn-group>
         </q-card-actions>
       </q-form>
     </q-card>
   </q-dialog>
   <!-- 编辑来源项目弹窗 -->
   <q-dialog v-model="alertEditSourceProject" no-backdrop-dismiss>
-    <q-card :style="{minWidth: '450px'}">
+    <q-card :style="{ minWidth: '450px' }">
       <q-card-section>
         <div class="text-h6">编辑来源项目</div>
       </q-card-section>
@@ -129,8 +131,10 @@
           </div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn type="button" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="warning" />
+          <q-btn-group>
+            <q-btn type="button" label="关闭" v-close-popup />
+            <q-btn type="submit" label="确定" icon="check" color="warning" />
+          </q-btn-group>
         </q-card-actions>
       </q-form>
     </q-card>
@@ -194,7 +198,7 @@ const fnResetSearch = () => {
 const fnSearch = () => {
   rows.value = [];
   selected.value = [];
-  
+
   ajaxGetSourceProjects({
     "@~[]": ["SourceType", "Equipments"],
     name: name_search.value,

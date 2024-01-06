@@ -111,8 +111,10 @@
           </div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn type="button" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="secondary" />
+          <q-btn-group>
+            <q-btn type="button" label="关闭" v-close-popup />
+            <q-btn type="submit" label="确定" icon="check" color="secondary" />
+          </q-btn-group>
         </q-card-actions>
       </q-form>
     </q-card>
@@ -138,8 +140,10 @@
           </div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn type="button" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="secondary" />
+          <q-btn-group>
+            <q-btn type="button" label="关闭" v-close-popup />
+            <q-btn type="submit" label="确定" icon="check" color="secondary" />
+          </q-btn-group>
         </q-card-actions>
       </q-form>
     </q-card>
@@ -270,7 +274,7 @@ const fnStoreEquipmentKindType = () => {
 
       alertCreateEquipmentKindType.value = false;
     })
-    .catch((e) => errorNotify(e.msg))
+    .catch(e => errorNotify(e.msg))
     .finally(loading());
 };
 
@@ -286,7 +290,7 @@ const fnDestroyEquipmentKindTypes = (params) => {
           successNotify(res.msg);
           fnSearch();
         })
-        .catch((e) => errorNotify(e.msg))
+        .catch(e => errorNotify(e.msg))
         .finally(loading());
     })
   );
@@ -310,7 +314,7 @@ const fnOpenAlertEditEquipmentKindType = (params) => {
         res.content.equipment_kind_type.equipment_kind_category.uuid;
       alertEditEquipmentKindType.value = true;
     })
-    .catch((e) => errorNotify(e.msg));
+    .catch(e => errorNotify(e.msg));
 };
 
 /**
@@ -333,7 +337,7 @@ const fnUpdateEquipmentKindType = () => {
 
       alertEditEquipmentKindType.value = false;
     })
-    .catch((e) => errorNotify(e.msg))
+    .catch(e => errorNotify(e.msg))
     .finally(loading());
 };
 
@@ -352,7 +356,7 @@ const fnDestroyEquipmentKindType = (params) => {
           successNotify(res.msg);
           fnSearch();
         })
-        .catch((e) => errorNotify(e.msg))
+        .catch(e => errorNotify(e.msg))
         .finally(loading());
     })
   );

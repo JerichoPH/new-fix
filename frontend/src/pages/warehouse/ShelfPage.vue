@@ -41,7 +41,9 @@
                 <div class="col">
                   <sel-warehouse-platoon_search label-name="所属排" />
                 </div>
-                <div class="col"></div>
+                <div class="col">
+                  <sel-warehouse-platoon-type-code_search label-name="所属排类型" />
+                </div>
                 <div class="col"></div>
               </div>
             </q-form>
@@ -297,8 +299,10 @@
           </div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn type="button" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="secondary" />
+          <q-btn-group>
+            <q-btn type="button" label="关闭" v-close-popup />
+            <q-btn type="submit" label="确定" icon="check" color="secondary" />
+          </q-btn-group>
         </q-card-actions>
       </q-form>
     </q-card>
@@ -318,8 +322,10 @@
           </div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn type="button" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="warning" />
+          <q-btn-group>
+            <q-btn type="button" label="关闭" v-close-popup />
+            <q-btn type="submit" label="确定" icon="check" color="warning" />
+          </q-btn-group>
         </q-card-actions>
       </q-form>
     </q-card>
@@ -340,8 +346,10 @@
           </div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn type="button" label="关闭" v-close-popup />
-          <q-btn type="submit" label="确定" icon="check" color="secondary" />
+          <q-btn-group>
+            <q-btn type="button" label="关闭" v-close-popup />
+            <q-btn type="submit" label="确定" icon="check" color="secondary" />
+          </q-btn-group>
         </q-card-actions>
       </q-form>
     </q-card>
@@ -360,9 +368,11 @@
           </div>
         </q-card-section>
         <q-card-actions align="right">
-              <q-btn color="negative" label="删除" icon="delete" @click="fnDestroyWarehouseCell" />
-              <q-btn type="button" label="关闭" v-close-popup />
-              <q-btn type="submit" label="确定" icon="check" color="warning" />
+          <q-btn color="negative" label="删除" icon="delete" @click="fnDestroyWarehouseCell" />
+          <q-btn-group>
+            <q-btn type="button" label="关闭" v-close-popup />
+            <q-btn type="submit" label="确定" icon="check" color="warning" />
+          </q-btn-group>
         </q-card-actions>
       </q-form>
     </q-card>
@@ -401,6 +411,7 @@ import SelOrganizationWorkArea_search from "src/components/SelOrganizationWorkAr
 import SelWarehouseStorehouse_search from "src/components/SelWarehouseStorehouse_search.vue";
 import SelWarehouseArea_search from "src/components/SelWarehouseArea_search.vue";
 import SelWarehousePlatoon_search from "src/components/SelWarehousePlatoon_search.vue";
+import SelWarehousePlatoonTypeCode_search from "src/components/SelWarehousePlatoonTypeCode_search.vue";
 import SelOrganizationRailway_alertCreate from "src/components/SelOrganizationRailway_alertCreate.vue";
 import SelOrganizationParagraph_alertCreate from "src/components/SelOrganizationParagraph_alertCreate.vue";
 import SelOrganizationWorkshop_alertCreate from "src/components/SelOrganizationWorkshop_alertCreate.vue";
@@ -432,6 +443,8 @@ const warehouseAreaUuid_search = ref("");
 provide("warehouseAreaUuid_search", warehouseAreaUuid_search);
 const warehousePlatoonUuid_search = ref("");
 provide("warehousePlatoonUuid_search", warehousePlatoonUuid_search);
+const warehousePlatoonTypeCode_search = ref("");
+provide("warehousePlatoonTypeCode_search", warehousePlatoonTypeCode_search);
 
 // 表格数据
 const rows = ref([]);
@@ -515,6 +528,7 @@ const fnResetSearch = () => {
   warehouseStorehouseUuid_search.value = "";
   warehouseAreaUuid_search.value = "";
   warehousePlatoonUuid_search.value = "";
+  warehousePlatoonTypeCode_search.value = "";
 };
 
 const fnSearch = () => {
@@ -539,6 +553,7 @@ const fnSearch = () => {
     warehouseStorehouseUuid: warehouseStorehouseUuid_search.value,
     warehouseAreaUuid: warehouseAreaUuid_search.value,
     warehousePlatoonUuid: warehousePlatoonUuid_search.value,
+    type_code:warehousePlatoonTypeCode_search.value,
   })
     .then((res) => {
       rows.value = collect(res.content.warehouse_shelves)
@@ -554,7 +569,7 @@ const fnSearch = () => {
         })
         .all();
     })
-    .catch((e) => errorNotify(e.msg));
+    .catch(e=>errorNotify(e.msg));
 };
 
 const fnResetAlertCreateWarehouseShelf = () => {
@@ -586,7 +601,7 @@ const fnStoreWarehouseShelf = () => {
 
       alertCreateWarehouseShelf.value = false;
     })
-    .catch((e) => errorNotify(e.msg))
+    .catch(e=>errorNotify(e.msg))
     .finally(loading());
 };
 
@@ -617,7 +632,7 @@ const fnOpenAlertEditWarehouseShelf = params => {
 
       alertEditWarehouseShelf.value = true;
     })
-    .catch((e) => errorNotify(e.msg));
+    .catch(e=>errorNotify(e.msg));
 };
 
 const fnUpdateWarehouseShelf = () => {
@@ -635,7 +650,7 @@ const fnUpdateWarehouseShelf = () => {
 
       alertEditWarehouseShelf.value = false;
     })
-    .catch((e) => errorNotify(e.msg))
+    .catch(e=>errorNotify(e.msg))
     .finally(loading());
 };
 
@@ -650,7 +665,7 @@ const fnDestroyCreateWarehouseShelf = params => {
         successNotify("删除成功");
         fnSearch();
       })
-      .catch((e) => errorNotify(e.msg))
+      .catch(e=>errorNotify(e.msg))
       .finally(loading());
   }));
 };

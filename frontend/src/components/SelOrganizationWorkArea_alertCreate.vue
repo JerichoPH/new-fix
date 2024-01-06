@@ -75,7 +75,7 @@ const fnSearch = () => {
           .all();
       organizationWorkAreasMap.value = collect(organizationWorkAreas.value).pluck('label', 'value').all();
     })
-    .catch((e) => errorNotify(e.msg));
+    .catch(e=>errorNotify(e.msg));
 };
 </script>
 src/utils/notify

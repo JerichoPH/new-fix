@@ -88,6 +88,8 @@ func (WarehouseRout) Load(engine *gin.Engine) {
 			platoonRout.GET("", controllers.NewWarehousePlatoonCtrl().List)
 			// jquery-dataTable数据列表
 			platoonRout.GET(".jdt", controllers.NewWarehousePlatoonCtrl().ListJdt)
+			// 获取排类型代码映射
+			platoonRout.GET("/typeCodesMap", controllers.NewWarehousePlatoonCtrl().GetTypeCodesMap)
 		}
 
 		// 仓库-架
