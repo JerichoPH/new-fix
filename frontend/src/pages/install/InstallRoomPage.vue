@@ -353,7 +353,7 @@ const fnStoreInstallIndoorRoom = () => {
     organization_crossroad_uuid: organizationCrossroadUuid_alertCreateInstallIndoorRoom.value,
   })
     .then((res) => {
-      notifies.success(res.message);
+      notifies.success(res.msg);
       fnResetAlertCreateInstallIndoorRoom();
       fnSearch();
 

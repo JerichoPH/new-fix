@@ -74,9 +74,8 @@ func (receiver InstallIndoorRoomStoreForm) ShouldBind(ctx *gin.Context) InstallI
 	if receiver.InstallIndoorRoomTypeUuid == "" {
 		wrongs.ThrowValidate("室内上道位置-机房类型必填")
 	} else {
-		if ret := models.NewInstallIndoorRoomMdl().GetDb("").Where("uuid = ?", receiver.InstallIndoorRoomTypeUuid).First(&receiver.installIndoorRoomType); ret.Error != nil {
-			wrongs.ThrowValidate("室内上道位置-机房类型不存在")
-		}
+		ret := models.NewInstallIndoorRoomTypeMdl().GetDb("").Where("uuid = ?", receiver.InstallIndoorRoomTypeUuid).First(&receiver.installIndoorRoomType)
+		wrongs.ThrowWhenEmpty(ret, "室内上道位置-机房类型")
 	}
 
 	parents := tools.RemoveEmptyStrings([]string{
@@ -91,19 +90,19 @@ func (receiver InstallIndoorRoomStoreForm) ShouldBind(ctx *gin.Context) InstallI
 	}
 
 	if receiver.OrganizationStationUuid != "" {
-		if ret := models.NewOrganizationStationMdl().GetDb("").Where("uuid = ?", receiver.OrganizationStationUuid).First(&models.OrganizationStationMdl{}); ret.Error != nil {
-			wrongs.ThrowValidate("室内上道位置-机房所属站场不存在")
-		}
+		ret := models.NewOrganizationStationMdl().GetDb("").Where("uuid = ?", receiver.OrganizationStationUuid).First(&models.OrganizationStationMdl{})
+		wrongs.ThrowWhenEmpty(ret, "室内上道位置-机房所属站场")
+
 	}
 	if receiver.OrganizationCenterUuid != "" {
-		if ret := models.NewOrganizationCenterMdl().GetDb("").Where("uuid = ?", receiver.OrganizationCenterUuid).First(&models.OrganizationCenterMdl{}); ret.Error != nil {
-			wrongs.ThrowValidate("室内上道位置-机房所属中心不存在")
-		}
+		ret := models.NewOrganizationCenterMdl().GetDb("").Where("uuid = ?", receiver.OrganizationCenterUuid).First(&models.OrganizationCenterMdl{})
+		wrongs.ThrowWhenEmpty(ret, "室内上道位置-机房所属中心")
+
 	}
 	if receiver.OrganizationCrossroadUuid != "" {
-		if ret := models.NewOrganizationCrossroadMdl().GetDb("").Where("uuid = ?", receiver.OrganizationCrossroadUuid).First(&models.OrganizationCrossroadMdl{}); ret.Error != nil {
-			wrongs.ThrowValidate("室内上道位置-机房所属路口不存在")
-		}
+		ret := models.NewOrganizationCrossroadMdl().GetDb("").Where("uuid = ?", receiver.OrganizationCrossroadUuid).First(&models.OrganizationCrossroadMdl{})
+		wrongs.ThrowWhenEmpty(ret, "室内上道位置-机房所属路口")
+
 	}
 	return receiver
 }

@@ -18,13 +18,13 @@ type (
 	InstallIndoorRoomMdl struct {
 		MySqlMdl
 		Name                      string                     `gorm:"type:varchar(64);not null;comment:名称;" json:"name"`
-		InstallIndoorRoomTypeUuid string                     `gorm:"index;char(36);not null;default:;comment:所属室内上道位置-机房类型uuid;" json:"install_indoor_room_type_uuid"`
+		InstallIndoorRoomTypeUuid string                     `gorm:"index;char(36);not null;default:'';comment:所属室内上道位置-机房类型uuid;" json:"install_indoor_room_type_uuid"`
 		InstallIndoorRoomType     *InstallIndoorRoomMdl      `gorm:"foreignKey:install_indoor_room_type_uuid;references:uuid;comment:所属室内上道位置-机房类型;" json:"install_indoor_room_type"`
-		OrganizationStationUuid   string                     `gorm:"index;type:char(36);not null;default:;comment:所属组织结构-站场uuid;" json:"organization_station_uuid"`
+		OrganizationStationUuid   string                     `gorm:"index;type:char(36);not null;default:'';comment:所属组织结构-站场uuid;" json:"organization_station_uuid"`
 		OrganizationStation       *OrganizationStationMdl    `gorm:"foreignKey:organization_station_uuid;references:uuid;comment:所属组织结构-站场;" json:"organization_station"`
-		OrganizationCrossroadUuid string                     `gorm:"index;type:char(36);not null;default:;comment:所属组织结构-道口uuid;" json:"organization_crossroad_uuid"`
+		OrganizationCrossroadUuid string                     `gorm:"index;type:char(36);not null;default:'';comment:所属组织结构-道口uuid;" json:"organization_crossroad_uuid"`
 		OrganizationCrossroad     *OrganizationCrossroadMdl  `gorm:"foreignKey:organization_crossroad_uuid;references:uuid;comment:所属组织结构-道口;" json:"organization_crossroad"`
-		OrganizationCenterUuid    string                     `gorm:"index;type:char(36);not null;default:;comment:所属组织结构-中心uuid;" json:"organization_center_uuid"`
+		OrganizationCenterUuid    string                     `gorm:"index;type:char(36);not null;default:'';comment:所属组织结构-中心uuid;" json:"organization_center_uuid"`
 		OrganizationCenter        *OrganizationCenterMdl     `gorm:"foreignKey:organization_center_uuid;references:uuid;comment:所属组织结构-中心;" json:"organization_center"`
 		InstallIndoorPlatoons     []*InstallIndoorPlatoonMdl `gorm:"foreignKey:install_indoor_room_uuid;references:uuid;comment:相关室内上道位置-排;" json:"install_indoor_platoons"`
 	}
@@ -33,7 +33,7 @@ type (
 	InstallIndoorPlatoonMdl struct {
 		MySqlMdl
 		Name                  string                   `gorm:"type:varchar(64);not null;comment:名称;" json:"name"`
-		InstallIndoorRoomUuid string                   `gorm:"index;type:char(36);not null;default:;comment:所属室内上道位置-机房uuid;" json:"install_indoor_room_uuid"`
+		InstallIndoorRoomUuid string                   `gorm:"index;type:char(36);not null;default:'';comment:所属室内上道位置-机房uuid;" json:"install_indoor_room_uuid"`
 		InstallIndoorRoom     *InstallIndoorRoomMdl    `gorm:"foreignKey:install_indoor_room_uuid;references:uuid;comment:所属室内上道位置-机房;" json:"install_indoor_room"`
 		InstallIndoorShelves  []*InstallIndoorShelfMdl `gorm:"foreignKey:install_indoor_platoon_uuid;references:uuid;comment:相关室内上道位置-架;" json:"install_indoor_shelves"`
 	}
@@ -42,7 +42,7 @@ type (
 	InstallIndoorShelfMdl struct {
 		MySqlMdl
 		Name                     string                   `gorm:"type:varchar(64);not null;comment:名称;" json:"name"`
-		InstallIndoorPlatoonUuid string                   `gorm:"index;type:char(36);not null;default:;comment:所属室内上道位置-排uuid;" json:"install_indoor_platoon_uuid"`
+		InstallIndoorPlatoonUuid string                   `gorm:"index;type:char(36);not null;default:'';comment:所属室内上道位置-排uuid;" json:"install_indoor_platoon_uuid"`
 		InstallIndoorPlatoon     *InstallIndoorPlatoonMdl `gorm:"foreignKey:install_indoor_platoon_uuid;references:uuid;comment:所属室内上道位置-排;" json:"install_indoor_platoon"`
 		InstallIndoorTiers       []*InstallIndoorTierMdl  `gorm:"foreignKey:install_indoor_shelf_uuid;references:uuid;comment:相关室内上道位置-层;" json:"install_indoor_tiers"`
 	}
@@ -51,7 +51,7 @@ type (
 	InstallIndoorTierMdl struct {
 		MySqlMdl
 		Name                   string                  `gorm:"type:varchar(64);not null;comment:名称;" json:"name"`
-		InstallIndoorShelfUuid string                  `gorm:"index;type:char(36);not null;default:;comment:所属室内上道位置-架uuid;" json:"install_indoor_shelf_uuid"`
+		InstallIndoorShelfUuid string                  `gorm:"index;type:char(36);not null;default:'';comment:所属室内上道位置-架uuid;" json:"install_indoor_shelf_uuid"`
 		InstallIndoorShelf     *InstallIndoorShelfMdl  `gorm:"foreignKey:install_indoor_shelf_uuid;references:uuid;comment:所属室内上道位置-架;" json:"install_indoor_shelf"`
 		InstallIndoorCells     []*InstallIndoorCellMdl `gorm:"foreignKey:install_indoor_tier_uuid;references:uuid;comment:相关室内上道位置-位;" json:"install_indoor_cells"`
 	}
@@ -60,7 +60,7 @@ type (
 	InstallIndoorCellMdl struct {
 		MySqlMdl
 		Name                  string                `gorm:"type:varchar(64);not null;comment:名称;" json:"name"`
-		InstallIndoorTierUuid string                `gorm:"index;type:char(36);not null;default:;comment:所属室内上道位置-层uuid;" json:"install_indoor_tier_uuid"`
+		InstallIndoorTierUuid string                `gorm:"index;type:char(36);not null;default:'';comment:所属室内上道位置-层uuid;" json:"install_indoor_tier_uuid"`
 		InstallIndoorTier     *InstallIndoorTierMdl `gorm:"foreignKey:install_indoor_tier_uuid;references:uuid;comment:所属室内上道位置-层;" json:"install_indoor_tier"`
 		Volumn                uint64                `gorm:"type:bigint(20);not null;default:1;comment:容量;" json:"volumn"`
 		Equipments            []*EquipmentMdl       `gorm:"foreignKey:install_indoor_cell_uuid;references:uuid;comment:相关器材;" json:"equipments"`

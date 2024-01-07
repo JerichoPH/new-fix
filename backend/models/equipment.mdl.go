@@ -49,7 +49,7 @@ type EquipmentMdl struct {
 	WarehouseOutOrderUuid                   string                    `gorm:"index;type:char(36);not null;default:'';comment:最后出库单uuid;" json:"warehouse_out_order_uuid"`
 	WarehouseOutOrder                       *WarehouseOrderMdl        `gorm:"foreignKey:warehouse_out_order_uuid;references:uuid;comment:最后出库单;" json:"warehouse_out_order"`
 	WarehouseOrders                         *[]WarehouseOrderMdl      `gorm:"foreignKey:equipment_uuid;references:uuid;comment:相关出入库单;" json:"warehouse_orders"`
-	InstallIndoorCellUuid                   string                    `gorm:"index;type:char(36);not null;default:;comment:所属室内上道位置uuid;" json:"install_indoor_cell_uuid"`
+	InstallIndoorCellUuid                   string                    `gorm:"index;type:char(36);not null;default:'';comment:所属室内上道位置uuid;" json:"install_indoor_cell_uuid"`
 	InstallIndoorCell                       *InstallIndoorCellMdl     `gorm:"foreignKey:install_indoor_cell_uuid;references:uuid;comment:所属室内上道位置;" json:"install_indoor_cell"`
 
 	RepairOrderUuid    string             `gorm:"index;type:char(36);not null;default:'';comment:检修单uuid;" json:"repair_order_uuid"`
