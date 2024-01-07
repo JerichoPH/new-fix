@@ -36,6 +36,19 @@ type (
 	InstallIndoorRoomDestroyManyForm struct {
 		Uuids []string `json:"uuids"`
 	}
+
+	// InstallIndoorPlatoonCtrl 室内上道位置-排控制器
+	InstallIndoorPlatoonCtrl struct{}
+	// InstallIndoorPlatoonStoreForm 室内上道位置-排表单
+	InstallIndoorPlatoonStoreForm struct {
+		Name                  string `json:"name"`
+		InstallIndoorRoomUuid string `json:"install_indoor_room_uuid"`
+		installIndoorRoom     *models.InstallIndoorRoomMdl
+	}
+	// InstallIndoorPlatoonDestroyManyForm 批量删除室内上道位置-排表单
+	InstallIndoorPlatoonDestroyManyForm struct {
+		Uuids []string `json:"uuids"`
+	}
 )
 
 // ShouldBind 室内上道位置-机房类型表单验证
@@ -109,6 +122,34 @@ func (receiver InstallIndoorRoomStoreForm) ShouldBind(ctx *gin.Context) InstallI
 
 // ShouldBind 批量删除室内上道位置-机房表单验证
 func (receiver InstallIndoorRoomDestroyManyForm) ShouldBind(ctx *gin.Context) InstallIndoorRoomDestroyManyForm {
+	if err := ctx.ShouldBind(&receiver); err != nil {
+		wrongs.ThrowValidate("表单绑定失败：%s", err.Error())
+	}
+	if len(receiver.Uuids) == 0 {
+		wrongs.ThrowValidate("请选择需要删除的内容")
+	}
+	return receiver
+}
+
+// ShouldBind 室内上道位置-排表单验证
+func (receiver InstallIndoorPlatoonStoreForm) ShouldBind(ctx *gin.Context) InstallIndoorPlatoonStoreForm {
+	if err := ctx.ShouldBind(&receiver); err != nil {
+		wrongs.ThrowValidate("表单绑定失败：%s", err.Error())
+	}
+	if receiver.Name == "" {
+		wrongs.ThrowValidate("室内上道位置-排名称必填")
+	}
+	if receiver.InstallIndoorRoomUuid == "" {
+		wrongs.ThrowValidate("室内上道位置-排所属机房必填")
+	} else {
+		ret := models.NewInstallIndoorRoomMdl().GetDb("").Where("uuid = ?", receiver.InstallIndoorRoomUuid).First(&receiver.installIndoorRoom)
+		wrongs.ThrowWhenEmpty(ret, "室内上道位置-排所属机房")
+	}
+	return receiver
+}
+
+// ShouldBind 批量删除室内上道位置-排表单验证
+func (receiver InstallIndoorPlatoonDestroyManyForm) ShouldBind(ctx *gin.Context) InstallIndoorPlatoonDestroyManyForm {
 	if err := ctx.ShouldBind(&receiver); err != nil {
 		wrongs.ThrowValidate("表单绑定失败：%s", err.Error())
 	}
@@ -442,6 +483,163 @@ func (receiver InstallIndoorRoomCtrl) ListJdt(ctx *gin.Context) {
 				func(db *gorm.DB) map[string]any {
 					db.Find(&installIndoorRooms)
 					return map[string]any{"install_indoor_rooms": installIndoorRooms}
+				},
+			).
+			ToGinResponse(),
+	)
+}
+
+// NewInstallIndoorPlatoonCtrl 构造函数
+func NewInstallIndoorPlatoonCtrl() *InstallIndoorPlatoonCtrl {
+	return &InstallIndoorPlatoonCtrl{}
+}
+
+// Store 新建
+func (InstallIndoorPlatoonCtrl) Store(ctx *gin.Context) {
+	var (
+		ret    *gorm.DB
+		repeat *models.InstallIndoorPlatoonMdl
+	)
+
+	// 表单
+	form := InstallIndoorPlatoonStoreForm{}.ShouldBind(ctx)
+
+	// 查重
+	ret = models.NewInstallIndoorPlatoonMdl().
+		GetDb("").
+		Where("name = ?", form.Name).
+		First(&repeat)
+	wrongs.ThrowWhenNotEmpty(ret, "室内上道位置-排名称")
+
+	// 新建
+	installIndoorPlatoon := &models.InstallIndoorPlatoonMdl{
+		Name:                  form.Name,
+		InstallIndoorRoomUuid: form.installIndoorRoom.Uuid,
+	}
+	if ret = models.NewInstallIndoorPlatoonMdl().
+		GetDb("").
+		Create(&installIndoorPlatoon); ret.Error != nil {
+		wrongs.ThrowForbidden(ret.Error.Error())
+	}
+
+	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Created(map[string]any{"install_indoor_platoon": installIndoorPlatoon}).ToGinResponse())
+}
+
+// Destroy 删除
+func (InstallIndoorPlatoonCtrl) Destroy(ctx *gin.Context) {
+	var (
+		ret                  *gorm.DB
+		installIndoorPlatoon *models.InstallIndoorPlatoonMdl
+	)
+
+	// 查询
+	ret = models.NewInstallIndoorPlatoonMdl().
+		GetDb("").
+		Where("uuid = ?", ctx.Param("uuid")).
+		First(&installIndoorPlatoon)
+	wrongs.ThrowWhenEmpty(ret, "室内上道位置-排")
+
+	// 删除
+	if ret := models.NewInstallIndoorPlatoonMdl().
+		GetDb("").
+		Where("uuid = ?", ctx.Param("uuid")).
+		Delete(&installIndoorPlatoon); ret.Error != nil {
+		wrongs.ThrowForbidden(ret.Error.Error())
+	}
+
+	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+}
+
+// DestroyMany 批量删除
+func (InstallIndoorPlatoonCtrl) DestroyMany(ctx *gin.Context) {
+	form := InstallIndoorPlatoonDestroyManyForm{}.ShouldBind(ctx)
+	if ret := models.NewInstallIndoorPlatoonMdl().GetDb("").Where("uuid in ?", form.Uuids).Delete(nil); ret.Error != nil {
+		wrongs.ThrowForbidden("删除失败：%s", ret.Error.Error())
+	}
+	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+}
+
+// Update 编辑
+func (InstallIndoorPlatoonCtrl) Update(ctx *gin.Context) {
+	var (
+		ret                          *gorm.DB
+		installIndoorPlatoon, repeat *models.InstallIndoorPlatoonMdl
+	)
+
+	// 表单
+	form := InstallIndoorPlatoonStoreForm{}.ShouldBind(ctx)
+
+	// 查重
+	ret = models.NewInstallIndoorPlatoonMdl().
+		GetDb("").
+		Where("name = ? and uuid <> ?", form.Name, ctx.Param("uuid")).
+		First(&repeat)
+	wrongs.ThrowWhenNotEmpty(ret, "室内上道位置-排名称")
+
+	// 查询
+	ret = models.NewInstallIndoorPlatoonMdl().
+		GetDb("").
+		Where("uuid = ?", ctx.Param("uuid")).
+		First(&installIndoorPlatoon)
+	wrongs.ThrowWhenEmpty(ret, "室内上道位置-排")
+
+	// 编辑
+	installIndoorPlatoon.Name = form.Name
+	installIndoorPlatoon.InstallIndoorRoomUuid = form.installIndoorRoom.Uuid
+	if ret = models.NewInstallIndoorPlatoonMdl().
+		GetDb("").
+		Where("uuid = ?", ctx.Param("uuid")).
+		Save(&installIndoorPlatoon); ret.Error != nil {
+		wrongs.ThrowForbidden(ret.Error.Error())
+	}
+
+	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"install_indoor_platoon": installIndoorPlatoon}).ToGinResponse())
+}
+
+// Detail 详情
+func (InstallIndoorPlatoonCtrl) Detail(ctx *gin.Context) {
+	var (
+		ret                  *gorm.DB
+		installIndoorPlatoon *models.InstallIndoorPlatoonMdl
+	)
+	ret = models.NewInstallIndoorPlatoonMdl().
+		SetCtx(ctx).
+		GetDbUseQuery("").
+		Where("uuid = ?", ctx.Param("uuid")).
+		First(&installIndoorPlatoon)
+	wrongs.ThrowWhenEmpty(ret, "室内上道位置-排")
+
+	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"install_indoor_platoon": installIndoorPlatoon}).ToGinResponse())
+}
+
+// List 列表
+func (receiver InstallIndoorPlatoonCtrl) List(ctx *gin.Context) {
+	var installIndoorPlatoons []*models.InstallIndoorPlatoonMdl
+
+	ctx.JSON(
+		tools.NewCorrectWithGinContext("", ctx).
+			DataForPager(
+				models.InstallIndoorPlatoonMdl{}.GetListByQuery(ctx),
+				func(db *gorm.DB) map[string]any {
+					db.Find(&installIndoorPlatoons)
+					return map[string]any{"install_indoor_platoons": installIndoorPlatoons}
+				},
+			).
+			ToGinResponse(),
+	)
+}
+
+// ListJdt jquery-dataTable后端分页数据
+func (receiver InstallIndoorPlatoonCtrl) ListJdt(ctx *gin.Context) {
+	var installIndoorPlatoons []*models.InstallIndoorPlatoonMdl
+
+	ctx.JSON(
+		tools.NewCorrectWithGinContext("", ctx).
+			DataForJqueryDataTable(
+				models.InstallIndoorPlatoonMdl{}.GetListByQuery(ctx),
+				func(db *gorm.DB) map[string]any {
+					db.Find(&installIndoorPlatoons)
+					return map[string]any{"install_indoor_platoons": installIndoorPlatoons}
 				},
 			).
 			ToGinResponse(),

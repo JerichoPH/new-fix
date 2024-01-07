@@ -132,9 +132,9 @@ func (receiver InstallIndoorRoomMdl) GetListByQuery(ctx *gin.Context) *gorm.DB {
 		GetDbUseQuery("").
 		Table("install_indoor_rooms as iir").
 		Joins("join install_indoor_room_types iirt on iirt.uuid = iir.install_indoor_room_type_uuid").
-		Joins("join organization_stations os on os.uuid = iir.organization_station_uuid").
-		Joins("join organization_crossroads ocr on ocr.uuid = iir.organization_crossroad_uuid").
-		Joins("join organization_centers oc on oc.uuid = iir.organization_center_uuid").
+		Joins("left join organization_stations os on os.uuid = iir.organization_station_uuid").
+		Joins("left join organization_crossroads ocr on ocr.uuid = iir.organization_crossroad_uuid").
+		Joins("left join organization_centers oc on oc.uuid = iir.organization_center_uuid").
 		Joins("left join organization_workshops ows on ows.uuid = os.organization_workshop_uuid").
 		Joins("left join organization_workshops owcr on owcr.uuid = ocr.organization_workshop_uuid").
 		Joins("left join organization_workshops owc on owc.uuid = oc.organization_workshop_uuid")
@@ -184,9 +184,9 @@ func (receiver InstallIndoorPlatoonMdl) GetListByQuery(ctx *gin.Context) *gorm.D
 		Table("install_indoor_platoons as iip").
 		Joins("join install_indoor_rooms iir on iir.uuid = iip.install_indoor_room_uuid").
 		Joins("join install_indoor_room_types iirt on iirt.uuid = iir.install_indoor_room_type_uuid").
-		Joins("join organization_stations os on os.uuid = iir.organization_station_uuid").
-		Joins("join organization_crossroads ocr on ocr.uuid = iir.organization_crossroad_uuid").
-		Joins("join organization_centers oc on oc.uuid = iir.organization_center_uuid").
+		Joins("left join organization_stations os on os.uuid = iir.organization_station_uuid").
+		Joins("left join organization_crossroads ocr on ocr.uuid = iir.organization_crossroad_uuid").
+		Joins("left join organization_centers oc on oc.uuid = iir.organization_center_uuid").
 		Joins("left join organization_workshops ows on ows.uuid = os.organization_workshop_uuid").
 		Joins("left join organization_workshops owcr on owcr.uuid = ocr.organization_workshop_uuid").
 		Joins("left join organization_workshops owc on owc.uuid = oc.organization_workshop_uuid")
@@ -240,9 +240,9 @@ func (receiver InstallIndoorShelfMdl) GetListByQuery(ctx *gin.Context) *gorm.DB 
 		Joins("join install_indoor_platoons iip on iip.uuid = iis.install_indoor_platoon_uuid").
 		Joins("join install_indoor_rooms iir on iir.uuid = iip.install_indoor_room_uuid").
 		Joins("join install_indoor_room_types iirt on iirt.uuid = iir.install_indoor_room_type_uuid").
-		Joins("join organization_stations os on os.uuid = iir.organization_station_uuid").
-		Joins("join organization_crossroads ocr on ocr.uuid = iir.organization_crossroad_uuid").
-		Joins("join organization_centers oc on oc.uuid = iir.organization_center_uuid").
+		Joins("left join organization_stations os on os.uuid = iir.organization_station_uuid").
+		Joins("left join organization_crossroads ocr on ocr.uuid = iir.organization_crossroad_uuid").
+		Joins("left join organization_centers oc on oc.uuid = iir.organization_center_uuid").
 		Joins("left join organization_workshops ows on ows.uuid = os.organization_workshop_uuid").
 		Joins("left join organization_workshops owcr on owcr.uuid = ocr.organization_workshop_uuid").
 		Joins("left join organization_workshops owc on owc.uuid = oc.organization_workshop_uuid")
@@ -300,9 +300,9 @@ func (receiver InstallIndoorTierMdl) GetListByQuery(ctx *gin.Context) *gorm.DB {
 		Joins("join install_indoor_platoons iip on iip.uuid = iis.install_indoor_platoon_uuid").
 		Joins("join install_indoor_rooms iir on iir.uuid = iip.install_indoor_room_uuid").
 		Joins("join install_indoor_room_types iirt on iirt.uuid = iir.install_indoor_room_type_uuid").
-		Joins("join organization_stations os on os.uuid = iir.organization_station_uuid").
-		Joins("join organization_crossroads ocr on ocr.uuid = iir.organization_crossroad_uuid").
-		Joins("join organization_centers oc on oc.uuid = iir.organization_center_uuid").
+		Joins("left join organization_stations os on os.uuid = iir.organization_station_uuid").
+		Joins("left join organization_crossroads ocr on ocr.uuid = iir.organization_crossroad_uuid").
+		Joins("left join organization_centers oc on oc.uuid = iir.organization_center_uuid").
 		Joins("left join organization_workshops ows on ows.uuid = os.organization_workshop_uuid").
 		Joins("left join organization_workshops owcr on owcr.uuid = ocr.organization_workshop_uuid").
 		Joins("left join organization_workshops owc on owc.uuid = oc.organization_workshop_uuid")
@@ -364,9 +364,9 @@ func (receiver InstallIndoorCellMdl) GetListByQuery(ctx *gin.Context) *gorm.DB {
 		Joins("join install_indoor_platoons iip on iip.uuid = iis.install_indoor_platoon_uuid").
 		Joins("join install_indoor_rooms iir on iir.uuid = iip.install_indoor_room_uuid").
 		Joins("join install_indoor_room_types iirt on iirt.uuid = iir.install_indoor_room_type_uuid").
-		Joins("join organization_stations os on os.uuid = iir.organization_station_uuid").
-		Joins("join organization_crossroads ocr on ocr.uuid = iir.organization_crossroad_uuid").
-		Joins("join organization_centers oc on oc.uuid = iir.organization_center_uuid").
+		Joins("left join organization_stations os on os.uuid = iir.organization_station_uuid").
+		Joins("left join organization_crossroads ocr on ocr.uuid = iir.organization_crossroad_uuid").
+		Joins("left join organization_centers oc on oc.uuid = iir.organization_center_uuid").
 		Joins("left join organization_workshops ows on ows.uuid = os.organization_workshop_uuid").
 		Joins("left join organization_workshops owcr on owcr.uuid = ocr.organization_workshop_uuid").
 		Joins("left join organization_workshops owc on owc.uuid = oc.organization_workshop_uuid")
