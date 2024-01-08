@@ -81,5 +81,47 @@ func (InstallRout) Load(engine *gin.Engine) {
 		indoorPlatoonRout.GET("", controllers.NewInstallIndoorPlatoonCtrl().List)
 		// jquery-dataTable数据列表
 		indoorPlatoonRout.GET(".jdt", controllers.NewInstallIndoorPlatoonCtrl().ListJdt)
+
+		// 室内上道位置-架
+		indoorShelfRout := installRout.Group(
+			"indoorShelf",
+			middlewares.CheckAuth(),
+			middlewares.CheckPermission(),
+		)
+		// 新建
+		indoorShelfRout.POST("", controllers.NewInstallIndoorShelfCtrl().Store)
+		// 批量删除
+		indoorShelfRout.POST("/destroyMany", controllers.NewInstallIndoorShelfCtrl().DestroyMany)
+		// 删除
+		indoorShelfRout.DELETE("/:uuid", controllers.NewInstallIndoorShelfCtrl().Destroy)
+		// 编辑
+		indoorShelfRout.PUT("/:uuid", controllers.NewInstallIndoorShelfCtrl().Update)
+		// 详情
+		indoorShelfRout.GET("/:uuid", controllers.NewInstallIndoorShelfCtrl().Detail)
+		// 列表
+		indoorShelfRout.GET("", controllers.NewInstallIndoorShelfCtrl().List)
+		// jquery-dataTable数据列表
+		indoorShelfRout.GET(".jdt", controllers.NewInstallIndoorShelfCtrl().ListJdt)
+
+		// 室内上道位置-层
+		indoorTierRout := installRout.Group(
+			"indoorTier",
+			middlewares.CheckAuth(),
+			middlewares.CheckPermission(),
+		)
+		// 新建
+		indoorTierRout.POST("", controllers.NewInstallIndoorTierCtrl().Store)
+		// 批量删除
+		indoorTierRout.POST("/destroyMany", controllers.NewInstallIndoorTierCtrl().DestroyMany)
+		// 删除
+		indoorTierRout.DELETE("/:uuid", controllers.NewInstallIndoorTierCtrl().Destroy)
+		// 编辑
+		indoorTierRout.PUT("/:uuid", controllers.NewInstallIndoorTierCtrl().Update)
+		// 详情
+		indoorTierRout.GET("/:uuid", controllers.NewInstallIndoorTierCtrl().Detail)
+		// 列表
+		indoorTierRout.GET("", controllers.NewInstallIndoorTierCtrl().List)
+		// jquery-dataTable数据列表
+		indoorTierRout.GET(".jdt", controllers.NewInstallIndoorTierCtrl().ListJdt)
 	}
 }
