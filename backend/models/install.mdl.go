@@ -295,6 +295,7 @@ func (receiver InstallIndoorTierMdl) GetListByQuery(ctx *gin.Context) *gorm.DB {
 		SetWheresExtraHasValues(map[string]func([]string, *gorm.DB) *gorm.DB{}).
 		SetCtx(ctx).
 		GetDbUseQuery("").
+		// Preload("InstallIndoorShelf").
 		Table("install_indoor_tiers as iit").
 		Joins("join install_indoor_shelves iis on iis.uuid = iit.install_indoor_shelf_uuid").
 		Joins("join install_indoor_platoons iip on iip.uuid = iis.install_indoor_platoon_uuid").

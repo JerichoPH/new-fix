@@ -1,6 +1,8 @@
 package models
 
 import (
+	"new-fix/tools"
+
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -47,6 +49,7 @@ type (
 		MySqlMdl
 		UniqueCode               string                   `gorm:"index;type:char(6);not null;comment:车站代码;" json:"unique_code"`
 		Name                     string                   `gorm:"index;type:varchar(128);not null;comment:车站名称;" json:"name"`
+		FullName                 string                   `gorm:"-" json:"full_name"`
 		OrganizationWorkshopUuid string                   `gorm:"type:char(36);not null;" json:"organization_workshop_uuid"`
 		OrganizationWorkshop     *OrganizationWorkshopMdl `gorm:"foreignKey:organization_workshop_uuid;references:uuid;comment:所属车间;" json:"organization_workshop"`
 		OrganizationLineUuid     string                   `gorm:"type:char(36);not null;" json:"organization_line_uuid"`
@@ -275,6 +278,32 @@ func (receiver OrganizationStationMdl) GetListByQuery(ctx *gin.Context) *gorm.DB
 		Joins("join organization_workshops ow on os.organization_workshop_uuid = ow.uuid").
 		Joins("join organization_paragraphs op on ow.organization_paragraph_uuid = op.uuid").
 		Joins("join organization_railways ora on op.organization_railway_uuid = ora.uuid")
+}
+
+func (receiver *OrganizationStationMdl) AfterFind(db *gorm.DB) (err error) {
+	if receiver.OrganizationWorkshop == nil {
+		if err = db.Model(receiver).Association(("OrganizationWorkshop")).Find(&receiver.OrganizationWorkshop); err != nil {
+			return
+		}
+	}
+	if receiver.OrganizationWorkshop.OrganizationParagraph == nil {
+		if err = db.Model(receiver.OrganizationWorkshop).Association(("OrganizationParagraph")).Find(&receiver.OrganizationWorkshop.OrganizationParagraph); err != nil {
+			return
+		}
+	}
+	if receiver.OrganizationWorkshop.OrganizationParagraph.OrganizationRailway == nil {
+		if err = db.Model(receiver.OrganizationWorkshop.OrganizationParagraph).Association(("OrganizationRailway")).Find(&receiver.OrganizationWorkshop.OrganizationParagraph.OrganizationRailway); err != nil {
+			return
+		}
+	}
+
+	receiver.FullName = tools.JoinWithoutEmpty([]string{
+		receiver.OrganizationWorkshop.OrganizationParagraph.OrganizationRailway.ShortName,
+		receiver.OrganizationWorkshop.OrganizationParagraph.Name,
+		receiver.OrganizationWorkshop.Name,
+		receiver.Name,
+	}, " - ")
+	return
 }
 
 // TableName 组织结构-道口表名称
