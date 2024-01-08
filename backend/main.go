@@ -82,7 +82,7 @@ var autoMigrateList = []any{
 	models.WarehousePlatoonMdl{},      // 库房-排
 	models.WarehouseShelfMdl{},        // 库房-架
 	models.WarehouseTierMdl{},         // 库房-层
-	models.WarehouseCellMdl{},         // 库房-格
+	models.WarehouseCellMdl{},         // 库房-位
 	models.WarehouseScanItemMdl{},     // 库房-扫描器材项
 	models.WarehouseOrderMdl{},        // 库房-出入库单
 	models.InstallIndoorRoomTypeMdl{}, // 室内上道位置-机房类型
@@ -90,7 +90,7 @@ var autoMigrateList = []any{
 	models.InstallIndoorPlatoonMdl{},  // 室内上道位置-排
 	models.InstallIndoorShelfMdl{},    // 室内上道位置-架
 	models.InstallIndoorTierMdl{},     // 室内上道位置-层
-	models.InstallIndoorCellMdl{},     // 室内上道位置-格
+	models.InstallIndoorCellMdl{},     // 室内上道位置-位
 }
 
 // 启动守护进程
