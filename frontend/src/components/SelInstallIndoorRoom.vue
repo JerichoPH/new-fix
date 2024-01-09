@@ -1,11 +1,11 @@
 <template>
-  <q-select outlined use-input clearable v-model="installIndoorRoomUuid_com" :options="installIndoorRooms_com"
-    :label="labelName" @filter="fnFilter" emit-value map-options
-    :display-value="installIndoorRoomsMap[installIndoorRoomUuid_com]" />
+  <q-select outlined use-input clearable v-model="installIndoorRoomUuid_com"
+    :options="installIndoorRooms_com" :label="labelName" @filter="fnFilter" emit-value map-options
+    :display-value="installIndoorRoomsMap[installIndoorRoomUuid_com]" :disable="!installIndoorRoomTypeUuid_com"/>
 </template>
 <script setup>
 import { inject, defineProps, onMounted, ref, watch } from "vue";
-import { ajaxGetInstallIndoorRoomTypes } from "/src/apis/install";
+import { ajaxGetInstallIndoorRooms } from "/src/apis/install";
 import collect from "collect.js";
 import { errorNotify } from "src/utils/notify";
 
@@ -15,9 +15,9 @@ const props = defineProps({
     default: "",
     required: true,
   },
-  sign: {
+  sechma: {
     type: String,
-    default: "com",
+    default: "",
     required: true,
   },
   ajaxParams: {
@@ -30,11 +30,14 @@ const props = defineProps({
 
 const labelName = props.labelName;
 const ajaxParams = props.ajaxParams;
-
-const installIndoorRoomUuid_com = inject(`installIndoorRoomTypeUuid_${sign}`);
+const sechma = props.sechma;
+const installIndoorRoomTypeUuid_com = inject(`installIndoorRoomTypeUuid_${sechma}`);
+const installIndoorRoomUuid_com = inject(`installIndoorRoomUuid_${sechma}`);
 const installIndoorRooms_com = ref([]);
 const installIndoorRooms = ref([]);
 const installIndoorRoomsMap = ref({});
+
+watch(installIndoorRoomTypeUuid_com,()=>fnSearch());
 
 const fnFilter = (val, update) => {
   if (val === "") {
@@ -56,13 +59,18 @@ onMounted(() => fnSearch());
 const fnSearch = () => {
   installIndoorRooms_com.value = [];
 
-  ajaxGetInstallIndoorRoomTypes(ajaxParams)
+  if(!installIndoorRoomTypeUuid_com.value){
+    installIndoorRoomUuid_com.value = "";
+    return;
+  }
+
+  ajaxGetInstallIndoorRooms(ajaxParams)
     .then((res) => {
-      installIndoorRooms.value = collect(res.content.install_indoor_room_types)
-        .map(installIndoorRoomType => {
+      installIndoorRooms.value = collect(res.content.install_indoor_rooms)
+        .map(installIndoorRoom => {
           return {
-            label: installIndoorRoomType.name,
-            value: installIndoorRoomType.uuid,
+            label: installIndoorRoom.name,
+            value: installIndoorRoom.uuid,
           };
         })
         .all();

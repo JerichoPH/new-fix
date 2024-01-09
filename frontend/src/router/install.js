@@ -2,7 +2,7 @@ import MainLayoutVue from "src/layouts/MainLayout.vue";
 
 import InstallIndoorRoomTypePage from "src/pages/install/IndoorRoomTypePage.vue";
 import InstallIndoorRoomPage from "src/pages/install/InstallRoomPage.vue";
-import InstallIndoorPlatoonPage from "src/pages/install/InstallPlatoonPage.vue";
+import InstallIndoorPlatoonPage from "src/pages/install/IndoorPlatoonPage.vue";
 
 export default [
   {

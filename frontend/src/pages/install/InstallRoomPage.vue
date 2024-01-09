@@ -19,7 +19,7 @@
                   <q-input outlined clearable lazy-rules v-model="name_search" label="名称" :rules="[]" class="q-mb-md" />
                 </div>
                 <div class="col">
-                  <sel-install-indoor-room-type_search label-name="机房类型" />
+                  <sel-install-indoor-room-type label-name="机房类型" sechma="search"/>
                 </div>
                 <div class="col">
                   <sel-organization-railway_search label-name="所属路局" />
@@ -134,7 +134,7 @@
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-install-indoor-room-type_alert-create label-name="所属机房类型" />
+              <sel-install-indoor-room-type label-name="机房类型" sechma="alertCreate"/>
             </div>
           </div>
           <div class="row q-mt-md">
@@ -192,7 +192,7 @@
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-install-indoor-room-type_alert-edit label-name="机房类型" />
+              <sel-install-indoor-room-type label-name="机房类型" sechma="alertEdit" />
             </div>
           </div>
           <div class="row q-mt-md">
@@ -256,15 +256,13 @@ import SelOrganizationWorkshop_search from "src/components/SelOrganizationWorksh
 import SelOrganizationStation_search from "src/components/SelOrganizationStation_search.vue";
 import SelOrganizationCenter_search from "src/components/SelOrganizationCenter_search.vue";
 import SelOrganizationCrossroad_search from "src/components/SelOrganizationCrossroad_search.vue";
-import SelInstallIndoorRoomType_search from "src/components/SelInstallIndoorRoomType_search.vue";
-import SelInstallIndoorRoomType_alertCreate from "src/components/SelInstallIndoorRoomType_alertCreate.vue";
+import SelInstallIndoorRoomType from "src/components/SelInstallIndoorRoomType.vue";
 import SelOrganizationRailway_alertCreate from "src/components/SelOrganizationRailway_alertCreate.vue";
 import SelOrganizationParagraph_alertCreate from "src/components/SelOrganizationParagraph_alertCreate.vue";
 import SelOrganizationWorkshop_alertCreate from "src/components/SelOrganizationWorkshop_alertCreate.vue";
 import SelOrganizationStation_alertCreate from "src/components/SelOrganizationStation_alertCreate.vue";
 import SelOrganizationCenter_alertCreate from "src/components/SelOrganizationCenter_alertCreate.vue";
 import SelOrganizationCrossroad_alertCreate from "src/components/SelOrganizationCrossroad_alertCreate.vue";
-import SelInstallIndoorRoomType_alertEdit from "src/components/SelInstallIndoorRoomType_alertEdit.vue";
 import SelOrganizationRailway_alertEdit from "src/components/SelOrganizationRailway_alertEdit.vue";
 import SelOrganizationParagraph_alertEdit from "src/components/SelOrganizationParagraph_alertEdit.vue";
 import SelOrganizationWorkshop_alertEdit from "src/components/SelOrganizationWorkshop_alertEdit.vue";

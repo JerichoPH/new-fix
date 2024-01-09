@@ -1,7 +1,7 @@
 <template>
-  <q-select outlined use-input clearable v-model="installIndoorRoomTypeUuid_alertEdit"
-    :options="installIndoorRoomTypes_alertEdit" :label="labelName" @filter="fnFilter" emit-value map-options
-    :display-value="installIndoorRoomTypesMap[installIndoorRoomTypeUuid_alertEdit]" />
+  <q-select outlined use-input clearable v-model="installIndoorRoomTypeUuid_com"
+    :options="installIndoorRoomTypes_com" :label="labelName" @filter="fnFilter" emit-value map-options
+    :display-value="installIndoorRoomTypesMap[installIndoorRoomTypeUuid_com]" />
 </template>
 <script setup>
 import { inject, defineProps, onMounted, ref, watch } from "vue";
@@ -11,6 +11,11 @@ import { errorNotify } from "src/utils/notify";
 
 const props = defineProps({
   labelName: {
+    type: String,
+    default: "",
+    required: true,
+  },
+  sechma: {
     type: String,
     default: "",
     required: true,
@@ -25,21 +30,22 @@ const props = defineProps({
 
 const labelName = props.labelName;
 const ajaxParams = props.ajaxParams;
-const installIndoorRoomTypeUuid_alertEdit = inject("installIndoorRoomTypeUuid_alertEdit");
-const installIndoorRoomTypes_alertEdit = ref([]);
+const sechma = props.sechma;
+const installIndoorRoomTypeUuid_com = inject(`installIndoorRoomTypeUuid_${sechma}`);
+const installIndoorRoomTypes_com = ref([]);
 const installIndoorRoomTypes = ref([]);
 const installIndoorRoomTypesMap = ref({});
 
 const fnFilter = (val, update) => {
   if (val === "") {
     update(() => {
-      installIndoorRoomTypes_alertEdit.value = installIndoorRoomTypes.value;
+      installIndoorRoomTypes_com.value = installIndoorRoomTypes.value;
     });
     return;
   }
 
   update(() => {
-    installIndoorRoomTypes_alertEdit.value = installIndoorRoomTypes.value.filter(
+    installIndoorRoomTypes_com.value = installIndoorRoomTypes.value.filter(
       (v) => v.label.toLowerCase().indexOf(val.toLowerCase()) > -1
     );
   });
@@ -48,7 +54,7 @@ const fnFilter = (val, update) => {
 onMounted(() => fnSearch());
 
 const fnSearch = () => {
-  installIndoorRoomTypes_alertEdit.value = [];
+  installIndoorRoomTypes_com.value = [];
 
   ajaxGetInstallIndoorRoomTypes(ajaxParams)
     .then((res) => {
