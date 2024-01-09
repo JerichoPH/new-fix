@@ -19,30 +19,45 @@
                   <q-input outlined clearable lazy-rules v-model="name_search" label="名称" :rules="[]" class="q-mb-md" />
                 </div>
                 <div class="col">
-                  <sel-install-indoor-room-type label-name="机房类型" sechma="search" />
+                  <standard-select label-name="机房类型" sechma="search" :data-source="ajaxGetInstallIndoorRoomTypes"
+                    data-source-field="content.install_indoor_room_types" current-field="installIndoorRoomTypeUuid" />
                 </div>
                 <div class="col">
-                  <sel-install-indoor-room label-name="所属机房" sechma="search" />
+                  <standard-select label-name="所属机房" sechma="search" :data-source="ajaxGetInstallIndoorRooms"
+                    data-source-field="content.install_indoor_rooms" current-field="installIndoorRoomUuid"
+                    parent-field="installIndoorRoomTypeUuid" />
                 </div>
                 <div class="col">
-                  <sel-organization-railway_search label-name="所属路局" />
+                  <standard-select label-name="所属路局" sechma="search" :data-source="ajaxGetOrganizationRailways"
+                    data-source-field="content.organization_railways" current-field="organizationRailwayUuid"
+                    label-field="short_name" />
                 </div>
                 <div class="col">
-                  <sel-organization-paragraph_search label-name="所属站段" />
+                  <standard-select label-name="所属站段" sechma="search" :data-source="ajaxGetOrganizationParagraphs"
+                    data-source-field="content.organization_paragraphs" current-field="organizationParagraphUuid"
+                    parent-field="organizationRailwayUuid" />
                 </div>
               </div>
               <div class="row q-col-gutter-sm">
                 <div class="col">
-                  <sel-organization-workshop_search label-name="所属车间" />
+                  <standard-select label-name="所属车间" sechma="search" :data-source="ajaxGetOrganizationWorkshops"
+                    data-source-field="content.organization_workshops" current-field="organizationWorkshopUuid"
+                    parent-field="organizationParagraphUuid" />
                 </div>
                 <div class="col">
-                  <sel-organization-station_search label-name="所属站场" />
+                  <standard-select label-name="所属站场" sechma="search" :data-source="ajaxGetOrganizationStations"
+                    data-source-field="content.organization_stations" current-field="organizationStationUuid"
+                    parent-field="organizationWorkshopUuid" />
                 </div>
                 <div class="col">
-                  <sel-organization-center_search label-name="所属中心" />
+                  <standard-select label-name="所属中心" sechma="search" :data-source="ajaxGetOrganizationCenters"
+                    data-source-field="content.organization_centers" current-field="organizationCenterUuid"
+                    parent-field="organizationWorkshopUuid" />
                 </div>
                 <div class="col">
-                  <sel-organization-crossroad_search label-name="所属道口" />
+                  <standard-select label-name="所属道口" sechma="search" :data-source="ajaxGetOrganizationCrossroads"
+                    data-source-field="content.organization_crossroads" current-field="organizationCrossroadUuid"
+                    parent-field="organizationWorkshopUuid" />
                 </div>
                 <div class="col"></div>
               </div>
@@ -120,42 +135,57 @@
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-install-indoor-room-type label-name="机房类型" sechma="alertCreate" />
+              <standard-select label-name="机房类型" sechma="alertCreate" :data-source="ajaxGetInstallIndoorRoomTypes"
+                data-source-field="content.install_indoor_room_types" current-field="installIndoorRoomTypeUuid" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-install-indoor-room label-name="所属机房" sechma="alertCreate" />
+              <standard-select label-name="所属机房" sechma="alertCreate" :data-source="ajaxGetInstallIndoorRooms"
+                data-source-field="content.install_indoor_rooms" current-field="installIndoorRoomUuid"
+                parent-field="installIndoorRoomTypeUuid" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-organization-railway_search label-name="所属路局" />
+              <standard-select label-name="所属路局" sechma="alertCreate" :data-source="ajaxGetOrganizationRailways"
+                data-source-field="content.organization_railways" current-field="organizationRailwayUuid"
+                label-field="short_name" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-organization-paragraph_search label-name="所属站段" />
+              <standard-select label-name="所属站段" sechma="alertCreate" :data-source="ajaxGetOrganizationParagraphs"
+                data-source-field="content.organization_paragraphs" current-field="organizationParagraphUuid"
+                parent-field="organizationRailwayUuid" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-organization-workshop_search label-name="所属车间" />
+              <standard-select label-name="所属车间" sechma="alertCreate" :data-source="ajaxGetOrganizationWorkshops"
+                data-source-field="content.organization_workshops" current-field="organizationWorkshopUuid"
+                parent-field="organizationParagraphUuid" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-organization-station_search label-name="所属站场" />
+              <standard-select label-name="所属站场" sechma="alertCreate" :data-source="ajaxGetOrganizationStations"
+                data-source-field="content.organization_stations" current-field="organizationStationUuid"
+                parent-field="organizationWorkshopUuid" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-organization-railway_search label-name="所属中心" />
+              <standard-select label-name="所属中心" sechma="alertCreate" :data-source="ajaxGetOrganizationCenters"
+                data-source-field="content.organization_centers" current-field="organizationCenterUuid"
+                parent-field="organizationWorkshopUuid" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-organization-crossroad_search label-name="所属道口" />
+              <standard-select label-name="所属道口" sechma="alertCreate" :data-source="ajaxGetOrganizationCrossroads"
+                data-source-field="content.organization_crossroads" current-field="organizationCrossroadUuid"
+                parent-field="organizationWorkshopUuid" />
             </div>
           </div>
         </q-card-section>
@@ -180,31 +210,20 @@ import {
   ajaxUpdateInstallIndoorPlatoon,
   ajaxDestroyInstallIndoorPlatoon,
   ajaxDestroyInstallIndoorPlatoons,
+  ajaxGetInstallIndoorRoomTypes,
+  ajaxGetInstallIndoorRooms,
 } from "src/apis/install";
+import {
+  ajaxGetOrganizationRailways,
+  ajaxGetOrganizationParagraphs,
+  ajaxGetOrganizationWorkshops,
+  ajaxGetOrganizationStations,
+  ajaxGetOrganizationCenters,
+  ajaxGetOrganizationCrossroads,
+} from "src/apis/organization";
 import { notifies, actions } from "src/utils/notify";
 import JoinString from "src/components/JoinString.vue";
-import SelOrganizationRailway_search from "src/components/SelOrganizationRailway_search.vue";
-import SelOrganizationParagraph_search from "src/components/SelOrganizationParagraph_search.vue";
-import SelOrganizationWorkshop_search from "src/components/SelOrganizationWorkshop_search.vue";
-import SelOrganizationStation_search from "src/components/SelOrganizationStation_search.vue";
-import SelOrganizationCenter_search from "src/components/SelOrganizationCenter_search.vue";
-import SelOrganizationCrossroad_search from "src/components/SelOrganizationCrossroad_search.vue";
-import SelInstallIndoorRoomType from "src/components/SelInstallIndoorRoomType.vue";
-import SelInstallIndoorRoom from "src/components/SelInstallIndoorRoom.vue";
-
-import SelOrganizationRailway_alertCreate from "src/components/SelOrganizationRailway_alertCreate.vue";
-import SelOrganizationParagraph_alertCreate from "src/components/SelOrganizationParagraph_alertCreate.vue";
-import SelOrganizationWorkshop_alertCreate from "src/components/SelOrganizationWorkshop_alertCreate.vue";
-import SelOrganizationStation_alertCreate from "src/components/SelOrganizationStation_alertCreate.vue";
-import SelOrganizationCenter_alertCreate from "src/components/SelOrganizationCenter_alertCreate.vue";
-import SelOrganizationCrossroad_alertCreate from "src/components/SelOrganizationCrossroad_alertCreate.vue";
-
-import SelOrganizationRailway_alertEdit from "src/components/SelOrganizationRailway_alertEdit.vue";
-import SelOrganizationParagraph_alertEdit from "src/components/SelOrganizationParagraph_alertEdit.vue";
-import SelOrganizationWorkshop_alertEdit from "src/components/SelOrganizationWorkshop_alertEdit.vue";
-import SelOrganizationStation_alertEdit from "src/components/SelOrganizationStation_alertEdit.vue";
-import SelOrganizationCenter_alertEdit from "src/components/SelOrganizationCenter_alertEdit.vue";
-import SelOrganizationCrossroad_alertEdit from "src/components/SelOrganizationCrossroad_alertEdit.vue";
+import StandardSelect from "src/components/StandardSelect.vue";
 import collect from "collect.js";
 
 // 搜索栏数据
@@ -232,7 +251,7 @@ const selected = ref([]);
 const sortBy = ref("");
 
 // 新建室内上道位置-排弹窗数据
-const alertCreateInstallIndoorPlatoon = ref("");
+const alertCreateInstallIndoorPlatoon = ref(false``);
 const name_alertCreateInstallIndoorPlatoon = ref("");
 const installIndoorRoomTypeUuid_alertCreateInstallIndoorPlatoon = ref("");
 provide("installIndoorRoomTypeUuid_alertCreate", installIndoorRoomTypeUuid_alertCreateInstallIndoorPlatoon);
@@ -300,7 +319,7 @@ const fnSearch = () => {
 const fnResetAlertCreateInstallIndoorPlatoon = () => { };
 const fnOpenAlertCreateInstallIndoorPlatoon = () => {
   alertCreateInstallIndoorPlatoon.value = true;
- };
+};
 const fnStoreInstallIndoorPlatoon = params => { };
 const fnOpenAlertEditInstallIndoorPlatoon = params => { };
 const fnUpdateInstallIndoorPlatoon = params => { };
