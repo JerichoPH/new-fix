@@ -1,9 +1,11 @@
 package controllers
 
 import (
+	"fmt"
 	"new-fix/models"
 	"new-fix/utils"
 	"new-fix/wrongs"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -71,6 +73,12 @@ type (
 		InstallIndoorShelfUuid string `json:"install_indoor_shelf_uuid"`
 		installIndoorShelf     *models.InstallIndoorShelfMdl
 	}
+	// InstallIndoorTierStoreManyForm 批量新建室内上道位置-层表单
+	InstallIndoorTierStoreManyForm struct {
+		InstallIndoorShelfUuid string `json:"install_indoor_shelf_uuid"`
+		installIndoorShelf     *models.InstallIndoorShelfMdl
+		Number                 uint `json:"number"`
+	}
 	// InstallIndoorTierDestroyManyForm 批量删除室内上道位置-层表单
 	InstallIndoorTierDestroyManyForm struct {
 		Uuids []string `json:"uuids"`
@@ -83,6 +91,12 @@ type (
 		Name                  string `json:"name"`
 		InstallIndoorTierUuid string `json:"install_indoor_tier_uuid"`
 		installIndoorTier     *models.InstallIndoorTierMdl
+	}
+	// InstallIndoorCellStoreManyForm 批量新建室内上道位置-位表单
+	InstallIndoorCellStoreManyForm struct {
+		InstallIndoorTierUuid string `json:"install_indoor_tier_uuid"`
+		installIndoorTier     *models.InstallIndoorTierMdl
+		Number                uint `json:"number"`
 	}
 	// InstallIndoorCellDestroyManyForm 批量删除室内上道位置-位表单
 	InstallIndoorCellDestroyManyForm struct {
@@ -245,6 +259,24 @@ func (receiver InstallIndoorTierStoreForm) ShouldBind(ctx *gin.Context) InstallI
 	return receiver
 }
 
+// InstallIndoorTierStoreManyForm 批量新建室内上道位置-层表单
+func (receiver InstallIndoorTierStoreManyForm) ShouldBind(ctx *gin.Context) InstallIndoorTierStoreManyForm {
+	if err := ctx.ShouldBind(&receiver); err != nil {
+		wrongs.ThrowValidate("表单绑定失败：%s", err.Error())
+	}
+	if receiver.Number < 1 {
+		wrongs.ThrowValidate("增加的层数不能小于1")
+	}
+	if receiver.InstallIndoorShelfUuid == "" {
+		wrongs.ThrowValidate("室内上道位置-架必选")
+	} else {
+		if ret := models.NewInstallIndoorShelfMdl().GetDb("").Where("uuid = ?", receiver.InstallIndoorShelfUuid).First(&receiver.installIndoorShelf); ret.Error != nil {
+			wrongs.ThrowValidate("仓库-架不存在")
+		}
+	}
+	return receiver
+}
+
 // ShouldBind 批量删除室内上道位置-层表单验证
 func (receiver InstallIndoorTierDestroyManyForm) ShouldBind(ctx *gin.Context) InstallIndoorTierDestroyManyForm {
 	if err := ctx.ShouldBind(&receiver); err != nil {
@@ -269,6 +301,24 @@ func (receiver InstallIndoorCellStoreForm) ShouldBind(ctx *gin.Context) InstallI
 	} else {
 		if ret := models.NewInstallIndoorTierMdl().GetDb("").Where("uuid = ?", receiver.InstallIndoorTierUuid).First(&receiver.installIndoorTier); ret.Error != nil {
 			wrongs.ThrowValidate("室内上道位置-位所属层")
+		}
+	}
+	return receiver
+}
+
+// InstallIndoorCellStoreManyForm 批量新建室内上道位置-位表单
+func (receiver InstallIndoorCellStoreManyForm) ShouldBind(ctx *gin.Context) InstallIndoorCellStoreManyForm {
+	if err := ctx.ShouldBind(&receiver); err != nil {
+		wrongs.ThrowValidate("表单绑定失败：%s", err.Error())
+	}
+	if receiver.Number < 1 {
+		wrongs.ThrowValidate("增加的层数不能小于1")
+	}
+	if receiver.InstallIndoorTierUuid == "" {
+		wrongs.ThrowValidate("室内上道位置-层必选")
+	} else {
+		if ret := models.NewInstallIndoorTierMdl().GetDb("").Where("uuid = ?", receiver.InstallIndoorTierUuid).First(&receiver.installIndoorTier); ret.Error != nil {
+			wrongs.ThrowValidate("仓库-架不存在")
 		}
 	}
 	return receiver
@@ -985,6 +1035,31 @@ func (InstallIndoorTierCtrl) Store(ctx *gin.Context) {
 	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Created(map[string]any{"install_indoor_tier": installIndoorTier}).ToGinResponse())
 }
 
+// StoreMany 批量新建
+func (InstallIndoorTierCtrl) StoreMany(ctx *gin.Context) {
+	var (
+		lastInstallIndoorTierNameInt int
+		err                          error
+		newInstallIndoorTiers        []*models.InstallIndoorTierMdl
+	)
+	form := InstallIndoorTierStoreManyForm{}.ShouldBind(ctx)
+	lastInstallIndoorTier := models.InstallIndoorTierMdl{}.GetLastByInstallIndoorShelf(form.installIndoorShelf)
+	lastInstallIndoorTierNameInt, err = strconv.Atoi(lastInstallIndoorTier.Name)
+	if err != nil {
+		lastInstallIndoorTierNameInt = 0
+	}
+	for i := 0; i < int(form.Number); i++ {
+		newInstallIndoorTiers = append(newInstallIndoorTiers, &models.InstallIndoorTierMdl{
+			Name:                   strconv.Itoa(lastInstallIndoorTierNameInt + i + 1),
+			InstallIndoorShelfUuid: form.installIndoorShelf.Uuid,
+		})
+	}
+
+	models.NewInstallIndoorTierMdl().GetDb("").Create(&newInstallIndoorTiers)
+
+	ctx.JSON(utils.NewCorrectWithGinContext(fmt.Sprintf("成功新建：%d层", len(newInstallIndoorTiers)), ctx).Created(map[string]any{"install_indoor_tiers": newInstallIndoorTiers}).ToGinResponse())
+}
+
 // Destroy 删除
 func (InstallIndoorTierCtrl) Destroy(ctx *gin.Context) {
 	var (
@@ -1102,6 +1177,190 @@ func (receiver InstallIndoorTierCtrl) ListJdt(ctx *gin.Context) {
 				func(db *gorm.DB) map[string]any {
 					db.Find(&installIndoorTiers)
 					return map[string]any{"install_indoor_tiers": installIndoorTiers}
+				},
+			).
+			ToGinResponse(),
+	)
+}
+
+// NewInstallIndoorCellCtrl 构造函数
+func NewInstallIndoorCellCtrl() *InstallIndoorCellCtrl {
+	return &InstallIndoorCellCtrl{}
+}
+
+// Store 新建
+func (InstallIndoorCellCtrl) Store(ctx *gin.Context) {
+	var (
+		ret    *gorm.DB
+		repeat *models.InstallIndoorCellMdl
+	)
+
+	// 表单
+	form := InstallIndoorCellStoreForm{}.ShouldBind(ctx)
+
+	// 查重
+	ret = models.NewInstallIndoorCellMdl().
+		GetDb("").
+		Where("name = ?", form.Name).
+		First(&repeat)
+	wrongs.ThrowWhenNotEmpty(ret, "室内上道位置-位名称")
+
+	// 新建
+	installIndoorCell := &models.InstallIndoorCellMdl{
+		Name:                  form.Name,
+		InstallIndoorTierUuid: form.installIndoorTier.Uuid,
+	}
+	if ret = models.NewInstallIndoorCellMdl().
+		GetDb("").
+		Create(&installIndoorCell); ret.Error != nil {
+		wrongs.ThrowForbidden(ret.Error.Error())
+	}
+
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Created(map[string]any{"install_indoor_cell": installIndoorCell}).ToGinResponse())
+}
+
+// StoreMany 批量新建
+func (InstallIndoorCellCtrl) StoreMany(ctx *gin.Context) {
+	var (
+		lastInstallIndoorCellNameInt int
+		err                          error
+		newInstallIndoorCells        []*models.InstallIndoorCellMdl
+	)
+	form := InstallIndoorCellStoreManyForm{}.ShouldBind(ctx)
+	lastInstallIndoorTier := models.InstallIndoorCellMdl{}.GetLastByInstallIndoorTier(form.installIndoorTier)
+	lastInstallIndoorCellNameInt, err = strconv.Atoi(lastInstallIndoorTier.Name)
+	if err != nil {
+		lastInstallIndoorCellNameInt = 0
+	}
+	for i := 0; i < int(form.Number); i++ {
+		newInstallIndoorCells = append(newInstallIndoorCells, &models.InstallIndoorCellMdl{
+			Name:                  strconv.Itoa(lastInstallIndoorCellNameInt + i + 1),
+			InstallIndoorTierUuid: form.installIndoorTier.Uuid,
+		})
+	}
+
+	models.NewInstallIndoorTierMdl().GetDb("").Create(&newInstallIndoorCells)
+
+	ctx.JSON(utils.NewCorrectWithGinContext(fmt.Sprintf("成功新建：%d位", len(newInstallIndoorCells)), ctx).Created(map[string]any{"install_indoorj_cells": newInstallIndoorCells}).ToGinResponse())
+}
+
+// Destroy 删除
+func (InstallIndoorCellCtrl) Destroy(ctx *gin.Context) {
+	var (
+		ret               *gorm.DB
+		installIndoorCell *models.InstallIndoorCellMdl
+	)
+
+	// 查询
+	ret = models.NewInstallIndoorCellMdl().
+		GetDb("").
+		Where("uuid = ?", ctx.Param("uuid")).
+		First(&installIndoorCell)
+	wrongs.ThrowWhenEmpty(ret, "室内上道位置-位")
+
+	// 删除
+	if ret := models.NewInstallIndoorCellMdl().
+		GetDb("").
+		Where("uuid = ?", ctx.Param("uuid")).
+		Delete(&installIndoorCell); ret.Error != nil {
+		wrongs.ThrowForbidden(ret.Error.Error())
+	}
+
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+}
+
+// DestroyMany 批量删除
+func (InstallIndoorCellCtrl) DestroyMany(ctx *gin.Context) {
+	form := InstallIndoorCellDestroyManyForm{}.ShouldBind(ctx)
+	if ret := models.NewInstallIndoorCellMdl().GetDb("").Where("uuid in ?", form.Uuids).Delete(nil); ret.Error != nil {
+		wrongs.ThrowForbidden("删除失败：%s", ret.Error.Error())
+	}
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+}
+
+// Update 编辑
+func (InstallIndoorCellCtrl) Update(ctx *gin.Context) {
+	var (
+		ret                       *gorm.DB
+		installIndoorCell, repeat *models.InstallIndoorCellMdl
+	)
+
+	// 表单
+	form := InstallIndoorCellStoreForm{}.ShouldBind(ctx)
+
+	// 查重
+	ret = models.NewInstallIndoorCellMdl().
+		GetDb("").
+		Where("name = ? and uuid <> ?", form.Name).
+		Where("uuid <> ?", ctx.Param("uuid")).
+		Where("install_indoor_tier_uuid = ?", form.installIndoorTier.Uuid).
+		First(&repeat)
+	wrongs.ThrowWhenNotEmpty(ret, "室内上道位置-位名称")
+
+	// 查询
+	ret = models.NewInstallIndoorCellMdl().
+		GetDb("").
+		Where("uuid = ?", ctx.Param("uuid")).
+		First(&installIndoorCell)
+	wrongs.ThrowWhenEmpty(ret, "室内上道位置-位")
+
+	// 编辑
+	installIndoorCell.Name = form.Name
+	installIndoorCell.InstallIndoorTierUuid = form.installIndoorTier.Uuid
+	if ret = models.NewInstallIndoorCellMdl().
+		GetDb("").
+		Where("uuid = ?", ctx.Param("uuid")).
+		Save(&installIndoorCell); ret.Error != nil {
+		wrongs.ThrowForbidden(ret.Error.Error())
+	}
+
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"install_indoor_cell": installIndoorCell}).ToGinResponse())
+}
+
+// Detail 详情
+func (InstallIndoorCellCtrl) Detail(ctx *gin.Context) {
+	var (
+		ret               *gorm.DB
+		installIndoorCell *models.InstallIndoorCellMdl
+	)
+	ret = models.NewInstallIndoorCellMdl().
+		SetCtx(ctx).
+		GetDbUseQuery("").
+		Where("uuid = ?", ctx.Param("uuid")).
+		First(&installIndoorCell)
+	wrongs.ThrowWhenEmpty(ret, "室内上道位置-位")
+
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"install_indoor_cell": installIndoorCell}).ToGinResponse())
+}
+
+// List 列表
+func (receiver InstallIndoorCellCtrl) List(ctx *gin.Context) {
+	var installIndoorCells []*models.InstallIndoorCellMdl
+
+	ctx.JSON(
+		utils.NewCorrectWithGinContext("", ctx).
+			DataForPager(
+				models.InstallIndoorCellMdl{}.GetListByQuery(ctx),
+				func(db *gorm.DB) map[string]any {
+					db.Find(&installIndoorCells)
+					return map[string]any{"install_indoor_cells": installIndoorCells}
+				},
+			).
+			ToGinResponse(),
+	)
+}
+
+// ListJdt jquery-dataTable后端分页数据
+func (receiver InstallIndoorCellCtrl) ListJdt(ctx *gin.Context) {
+	var installIndoorCells []*models.InstallIndoorCellMdl
+
+	ctx.JSON(
+		utils.NewCorrectWithGinContext("", ctx).
+			DataForJqueryDataTable(
+				models.InstallIndoorCellMdl{}.GetListByQuery(ctx),
+				func(db *gorm.DB) map[string]any {
+					db.Find(&installIndoorCells)
+					return map[string]any{"install_indoor_cells": installIndoorCells}
 				},
 			).
 			ToGinResponse(),

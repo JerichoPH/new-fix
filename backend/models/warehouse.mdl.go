@@ -372,7 +372,7 @@ func (receiver WarehouseTierMdl) GetListByQuery(ctx *gin.Context) *gorm.DB {
 		Joins("join organization_railways oa on op.organization_railway_uuid = oa.uuid")
 }
 
-// 根据仓库-架获取最后一层
+// GetLastByWarehouseShelf 根据仓库-架获取最后一层
 func (WarehouseTierMdl) GetLastByWarehouseShelf(warehouseShelf *WarehouseShelfMdl) (warehouseTier *WarehouseTierMdl) {
 	NewWarehouseTierMdl().
 		GetDb("").
@@ -445,7 +445,7 @@ func (receiver WarehouseCellMdl) GetListByQuery(ctx *gin.Context) *gorm.DB {
 		Joins("join organization_railways oa on op.organization_railway_uuid = oa.uuid")
 }
 
-// 根据仓库-层获取最后一位
+// GetLastByWarehouseTier 根据仓库-层获取最后一位
 func (WarehouseCellMdl) GetLastByWarehouseTier(warehouseTier *WarehouseTierMdl) (warehouseCell *WarehouseCellMdl) {
 	NewWarehouseCellMdl().
 		GetDb("").

@@ -309,6 +309,17 @@ func (receiver InstallIndoorTierMdl) GetListByQuery(ctx *gin.Context) *gorm.DB {
 		Joins("left join organization_workshops owc on owc.uuid = oc.organization_workshop_uuid")
 }
 
+// GetLastByInstallIndoorShelf 根据室内上道位置-架获取最后一层
+func (InstallIndoorTierMdl) GetLastByInstallIndoorShelf(installIndoorShelf *InstallIndoorShelfMdl) (installIndoorTier *InstallIndoorTierMdl) {
+	NewInstallIndoorTierMdl().
+		GetDb("").
+		Where("install_indoor_shelf_uuid = ?", installIndoorShelf.Uuid).
+		Order("name desc").
+		Order("id desc").
+		First(&installIndoorTier)
+	return
+}
+
 // TableName 室内上道位置-位表名称
 func (InstallIndoorCellMdl) TableName() string {
 	return "install_indoor_cells"
@@ -371,4 +382,15 @@ func (receiver InstallIndoorCellMdl) GetListByQuery(ctx *gin.Context) *gorm.DB {
 		Joins("left join organization_workshops ows on ows.uuid = os.organization_workshop_uuid").
 		Joins("left join organization_workshops owcr on owcr.uuid = ocr.organization_workshop_uuid").
 		Joins("left join organization_workshops owc on owc.uuid = oc.organization_workshop_uuid")
+}
+
+// GetLastByInstallIndoorTier 根据室内上道位置-层获取最后一位
+func (InstallIndoorCellMdl) GetLastByInstallIndoorTier(installIndoorTier *InstallIndoorTierMdl) (installIndoorCell *InstallIndoorCellMdl) {
+	NewInstallIndoorCellMdl().
+		GetDb("").
+		Where("install_indoor_tier_uuid = ?", installIndoorTier.Uuid).
+		Order("name desc").
+		Order("id desc").
+		First(&installIndoorCell)
+	return
 }
