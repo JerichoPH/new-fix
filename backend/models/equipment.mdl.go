@@ -1,7 +1,7 @@
 package models
 
 import (
-	"new-fix/tools"
+	"new-fix/utils"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -166,17 +166,17 @@ func (receiver *EquipmentMdl) getCanIWorkshopOut() {
 
 // getCanIInstall 获取是否可以上道标记
 func (receiver *EquipmentMdl) getCanIInstall() {
-	receiver.CanIInstall = tools.InString(receiver.StatusCode, []string{"TRANSFER_OUT", "UNINSTALLED"})
+	receiver.CanIInstall = utils.InString(receiver.StatusCode, []string{"TRANSFER_OUT", "UNINSTALLED"})
 }
 
 // getCanIUninstall 获取是否可以下道标记
 func (receiver *EquipmentMdl) getCanIUninstall() {
-	receiver.CanIUninstall = tools.InString(receiver.StatusCode, []string{"INSTALLED", "INSTALLING"})
+	receiver.CanIUninstall = utils.InString(receiver.StatusCode, []string{"INSTALLED", "INSTALLING"})
 }
 
 // getCanIBeSpare 获取是否可以成为备品标记
 func (receiver *EquipmentMdl) getCanIBeSpare() {
-	receiver.CanIBeSpare = tools.InString(receiver.StatusCode, []string{"TRANSFER_OUT", "UNINSTALLED"})
+	receiver.CanIBeSpare = utils.InString(receiver.StatusCode, []string{"TRANSFER_OUT", "UNINSTALLED"})
 }
 
 // AfterFind 查询后钩子

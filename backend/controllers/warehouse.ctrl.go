@@ -3,7 +3,7 @@ package controllers
 import (
 	"fmt"
 	"new-fix/models"
-	"new-fix/tools"
+	"new-fix/utils"
 	"new-fix/wrongs"
 	"strconv"
 
@@ -180,7 +180,7 @@ func (receiver WarehousePlatoonStoreForm) ShouldBind(ctx *gin.Context) Warehouse
 		ret := models.NewWarehouseAreaMdl().GetDb("").Where("uuid = ?", receiver.WarehouseAreaUuid).First(&receiver.warehouseArea)
 		wrongs.ThrowWhenEmpty(ret, "仓库-库区")
 	}
-	if !tools.InString(receiver.TypeCode, models.WarehousePlatoonMdl{}.GetTypeCodes()) {
+	if !utils.InString(receiver.TypeCode, models.WarehousePlatoonMdl{}.GetTypeCodes()) {
 		wrongs.ThrowValidate("仓库-排类型错误")
 	}
 	return receiver
@@ -352,7 +352,7 @@ func (WarehouseStorehouseCtrl) Store(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Created(map[string]any{"warehouse_storehouse": warehouseStorehouse}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Created(map[string]any{"warehouse_storehouse": warehouseStorehouse}).ToGinResponse())
 }
 
 // Destroy 删除
@@ -377,7 +377,7 @@ func (WarehouseStorehouseCtrl) Destroy(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // DestroyMany 批量删除
@@ -386,7 +386,7 @@ func (WarehouseStorehouseCtrl) DestroyMany(ctx *gin.Context) {
 	if ret := models.NewWarehouseStorehouseMdl().GetDb("").Where("uuid in ?", form.Uuids).Delete(nil); ret.Error != nil {
 		wrongs.ThrowForbidden("批量删除失败：%s", ret.Error.Error())
 	}
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // Update 编辑
@@ -426,7 +426,7 @@ func (WarehouseStorehouseCtrl) Update(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"warehouse_storehouse": warehouseStorehouse}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"warehouse_storehouse": warehouseStorehouse}).ToGinResponse())
 }
 
 // Detail 详情
@@ -442,7 +442,7 @@ func (WarehouseStorehouseCtrl) Detail(ctx *gin.Context) {
 		First(&warehouseStorehouse)
 	wrongs.ThrowWhenEmpty(ret, "仓库")
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"warehouse_storehouse": warehouseStorehouse}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"warehouse_storehouse": warehouseStorehouse}).ToGinResponse())
 }
 
 // List 列表
@@ -450,7 +450,7 @@ func (receiver WarehouseStorehouseCtrl) List(ctx *gin.Context) {
 	var warehouseStorehouses []*models.WarehouseStorehouseMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForPager(
 				models.WarehouseStorehouseMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -467,7 +467,7 @@ func (receiver WarehouseStorehouseCtrl) ListJdt(ctx *gin.Context) {
 	var warehouseStorehouses []*models.WarehouseStorehouseMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForJqueryDataTable(
 				models.WarehouseStorehouseMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -513,7 +513,7 @@ func (WarehouseAreaCtrl) Store(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Created(map[string]any{"warehouse_area": warehouseArea}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Created(map[string]any{"warehouse_area": warehouseArea}).ToGinResponse())
 }
 
 // Destroy 删除
@@ -538,7 +538,7 @@ func (WarehouseAreaCtrl) Destroy(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // DestroyMany 批量删除
@@ -547,7 +547,7 @@ func (WarehouseAreaCtrl) DestroyMany(ctx *gin.Context) {
 	if ret := models.NewWarehouseAreaMdl().GetDb("").Where("uuid in ?", form.Uuids).Delete(nil); ret.Error != nil {
 		wrongs.ThrowForbidden("批量删除失败：%s", ret.Error.Error())
 	}
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // Update 编辑
@@ -586,7 +586,7 @@ func (WarehouseAreaCtrl) Update(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"warehouse_area": warehouseArea}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"warehouse_area": warehouseArea}).ToGinResponse())
 }
 
 // Detail 详情
@@ -602,7 +602,7 @@ func (WarehouseAreaCtrl) Detail(ctx *gin.Context) {
 		First(&warehouseArea)
 	wrongs.ThrowWhenEmpty(ret, "仓库-库区")
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"warehouse_area": warehouseArea}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"warehouse_area": warehouseArea}).ToGinResponse())
 }
 
 // List 列表
@@ -610,7 +610,7 @@ func (receiver WarehouseAreaCtrl) List(ctx *gin.Context) {
 	var warehouseAreas []*models.WarehouseAreaMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForPager(
 				models.WarehouseAreaMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -627,7 +627,7 @@ func (receiver WarehouseAreaCtrl) ListJdt(ctx *gin.Context) {
 	var warehouseAreas []*models.WarehouseAreaMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForJqueryDataTable(
 				models.WarehouseAreaMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -674,7 +674,7 @@ func (WarehousePlatoonCtrl) Store(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Created(map[string]any{"warehouse_platoon": warehousePlatoon}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Created(map[string]any{"warehouse_platoon": warehousePlatoon}).ToGinResponse())
 }
 
 // Destroy 删除
@@ -699,7 +699,7 @@ func (WarehousePlatoonCtrl) Destroy(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // DestroyMany 批量删除
@@ -708,7 +708,7 @@ func (WarehousePlatoonCtrl) DestroyMany(ctx *gin.Context) {
 	if ret := models.NewWarehousePlatoonMdl().GetDb("").Where("uuid in ?", form.Uuids).Delete(nil); ret.Error != nil {
 		wrongs.ThrowForbidden("批量删除失败：%s", ret.Error.Error())
 	}
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // Update 编辑
@@ -748,7 +748,7 @@ func (WarehousePlatoonCtrl) Update(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"warehouse_platoon": warehousePlatoon}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"warehouse_platoon": warehousePlatoon}).ToGinResponse())
 }
 
 // Detail 详情
@@ -764,7 +764,7 @@ func (WarehousePlatoonCtrl) Detail(ctx *gin.Context) {
 		First(&warehousePlatoon)
 	wrongs.ThrowWhenEmpty(ret, "仓库-排")
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"warehouse_platoon": warehousePlatoon}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"warehouse_platoon": warehousePlatoon}).ToGinResponse())
 }
 
 // List 列表
@@ -772,7 +772,7 @@ func (receiver WarehousePlatoonCtrl) List(ctx *gin.Context) {
 	var warehousePlatoons []*models.WarehousePlatoonMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForPager(
 				models.WarehousePlatoonMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -789,7 +789,7 @@ func (receiver WarehousePlatoonCtrl) ListJdt(ctx *gin.Context) {
 	var warehousePlatoons []*models.WarehousePlatoonMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForJqueryDataTable(
 				models.WarehousePlatoonMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -803,7 +803,7 @@ func (receiver WarehousePlatoonCtrl) ListJdt(ctx *gin.Context) {
 
 // GetTypeCodesMap 获取类型代码映射
 func (WarehousePlatoonCtrl) GetTypeCodesMap(ctx *gin.Context) {
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"type_codes_map": models.WarehousePlatoonMdl{}.GetTypeCodesMap()}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"type_codes_map": models.WarehousePlatoonMdl{}.GetTypeCodesMap()}).ToGinResponse())
 }
 
 // NewWarehouseShelfCtrl 构造函数
@@ -840,7 +840,7 @@ func (WarehouseShelfCtrl) Store(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Created(map[string]any{"warehouse_shelf": warehouseShelf}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Created(map[string]any{"warehouse_shelf": warehouseShelf}).ToGinResponse())
 }
 
 // Destroy 删除
@@ -865,7 +865,7 @@ func (WarehouseShelfCtrl) Destroy(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // DestroyMany 批量删除
@@ -874,7 +874,7 @@ func (WarehouseShelfCtrl) DestroyMany(ctx *gin.Context) {
 	if ret := models.NewWarehouseShelfMdl().GetDb("").Where("uuid in ?", form.Uuids).Delete(nil); ret.Error != nil {
 		wrongs.ThrowForbidden("批量删除失败：%s", ret.Error.Error())
 	}
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // Update 编辑
@@ -913,7 +913,7 @@ func (WarehouseShelfCtrl) Update(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"warehouse_shelf": warehouseShelf}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"warehouse_shelf": warehouseShelf}).ToGinResponse())
 }
 
 // Detail 详情
@@ -929,7 +929,7 @@ func (WarehouseShelfCtrl) Detail(ctx *gin.Context) {
 		First(&warehouseShelf)
 	wrongs.ThrowWhenEmpty(ret, "仓库-架")
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"warehouse_shelf": warehouseShelf}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"warehouse_shelf": warehouseShelf}).ToGinResponse())
 }
 
 // List 列表
@@ -937,7 +937,7 @@ func (receiver WarehouseShelfCtrl) List(ctx *gin.Context) {
 	var warehouseShelves []*models.WarehouseShelfMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForPager(
 				models.WarehouseShelfMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -954,7 +954,7 @@ func (receiver WarehouseShelfCtrl) ListJdt(ctx *gin.Context) {
 	var warehouseShelves []*models.WarehouseShelfMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForJqueryDataTable(
 				models.WarehouseShelfMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -1000,7 +1000,7 @@ func (WarehouseTierCtrl) Store(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Created(map[string]any{"warehouse_tier": warehouseTier}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Created(map[string]any{"warehouse_tier": warehouseTier}).ToGinResponse())
 }
 
 // StoreMany 批量新建
@@ -1026,7 +1026,7 @@ func (WarehouseTierCtrl) StoreMany(ctx *gin.Context) {
 
 	models.NewWarehouseTierMdl().GetDb("").Create(&newWarehouseTiers)
 
-	ctx.JSON(tools.NewCorrectWithGinContext(fmt.Sprintf("成功新建：%d层", len(newWarehouseTiers)), ctx).Created(map[string]any{"warehouse_tiers": newWarehouseTiers}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext(fmt.Sprintf("成功新建：%d层", len(newWarehouseTiers)), ctx).Created(map[string]any{"warehouse_tiers": newWarehouseTiers}).ToGinResponse())
 }
 
 // Destroy 删除
@@ -1051,7 +1051,7 @@ func (WarehouseTierCtrl) Destroy(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // DestroyMany 批量删除
@@ -1060,7 +1060,7 @@ func (WarehouseTierCtrl) DestroyMany(ctx *gin.Context) {
 	if ret := models.NewWarehouseTierMdl().GetDb("").Where("uuid in ?", form.Uuids).Delete(nil); ret.Error != nil {
 		wrongs.ThrowForbidden("批量删除失败：%s", ret.Error.Error())
 	}
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // Update 编辑
@@ -1099,7 +1099,7 @@ func (WarehouseTierCtrl) Update(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"warehouse_tier": warehouseTier}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"warehouse_tier": warehouseTier}).ToGinResponse())
 }
 
 // Detail 详情
@@ -1115,7 +1115,7 @@ func (WarehouseTierCtrl) Detail(ctx *gin.Context) {
 		First(&warehouseTier)
 	wrongs.ThrowWhenEmpty(ret, "仓库-层")
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"warehouse_tier": warehouseTier}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"warehouse_tier": warehouseTier}).ToGinResponse())
 }
 
 // List 列表
@@ -1123,7 +1123,7 @@ func (receiver WarehouseTierCtrl) List(ctx *gin.Context) {
 	var warehouseTiers []*models.WarehouseTierMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForPager(
 				models.WarehouseTierMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -1140,7 +1140,7 @@ func (receiver WarehouseTierCtrl) ListJdt(ctx *gin.Context) {
 	var warehouseTiers []*models.WarehouseTierMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForJqueryDataTable(
 				models.WarehouseTierMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -1186,7 +1186,7 @@ func (WarehouseCellCtrl) Store(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Created(map[string]any{"warehouse_cell": warehouseCell}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Created(map[string]any{"warehouse_cell": warehouseCell}).ToGinResponse())
 }
 
 // StoreMany 批量新建
@@ -1211,7 +1211,7 @@ func (WarehouseCellCtrl) StoreMany(ctx *gin.Context) {
 
 	models.NewWarehouseCellMdl().GetDb("").Create(&newWarehouseCells)
 
-	ctx.JSON(tools.NewCorrectWithGinContext(fmt.Sprintf("成功新建：%d位", len(newWarehouseCells)), ctx).Created(map[string]any{"warehouse_cells": newWarehouseCells}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext(fmt.Sprintf("成功新建：%d位", len(newWarehouseCells)), ctx).Created(map[string]any{"warehouse_cells": newWarehouseCells}).ToGinResponse())
 }
 
 // Destroy 删除
@@ -1236,7 +1236,7 @@ func (WarehouseCellCtrl) Destroy(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // DestroyMany 批量删除
@@ -1245,7 +1245,7 @@ func (WarehouseCellCtrl) DestroyMany(ctx *gin.Context) {
 	if ret := models.NewWarehouseCellMdl().GetDb("").Where("uuid in ?", form.Uuids).Delete(nil); ret.Error != nil {
 		wrongs.ThrowForbidden("批量删除失败：%s", ret.Error.Error())
 	}
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // Update 编辑
@@ -1284,7 +1284,7 @@ func (WarehouseCellCtrl) Update(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"warehouse_cell": warehouseCell}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"warehouse_cell": warehouseCell}).ToGinResponse())
 }
 
 // Detail 详情
@@ -1300,7 +1300,7 @@ func (WarehouseCellCtrl) Detail(ctx *gin.Context) {
 		First(&warehouseCell)
 	wrongs.ThrowWhenEmpty(ret, "仓库-位")
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"warehouse_cell": warehouseCell}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"warehouse_cell": warehouseCell}).ToGinResponse())
 }
 
 // List 列表
@@ -1308,7 +1308,7 @@ func (receiver WarehouseCellCtrl) List(ctx *gin.Context) {
 	var warehouseCells []*models.WarehouseCellMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForPager(
 				models.WarehouseCellMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -1325,7 +1325,7 @@ func (receiver WarehouseCellCtrl) ListJdt(ctx *gin.Context) {
 	var warehouseCells []*models.WarehouseCellMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForJqueryDataTable(
 				models.WarehouseCellMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {

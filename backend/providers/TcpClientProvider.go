@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"log"
 	"net"
-	"new-fix/tools"
 	"new-fix/types"
+	"new-fix/utils"
 	"time"
 )
 
@@ -45,7 +45,7 @@ func TcpClientHandler(tcpClientAddr string) {
 	log.Printf("[tcp-client-debug] [接收消息] %s", message)
 
 	for {
-		TcpClientSendMessage(tools.NewCorrectWithBusiness("ping", "ping", "").Datum(map[string]any{"time": time.Now().Unix()}).ToJsonStr())
+		TcpClientSendMessage(utils.NewCorrectWithBusiness("ping", "ping", "").Datum(map[string]any{"time": time.Now().Unix()}).ToJsonStr())
 		time.Sleep(5 * time.Second)
 	}
 }

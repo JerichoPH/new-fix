@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"new-fix/models"
-	"new-fix/tools"
+	"new-fix/utils"
 	"new-fix/wrongs"
 
 	"github.com/gin-gonic/gin"
@@ -90,7 +90,7 @@ func (FactoryCtrl) Store(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Created(map[string]any{"factory": factory}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Created(map[string]any{"factory": factory}).ToGinResponse())
 }
 
 // Destroy 删除
@@ -115,7 +115,7 @@ func (FactoryCtrl) Destroy(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // DestroyMany 批量删除
@@ -164,7 +164,7 @@ func (FactoryCtrl) Update(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"factory": factory}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"factory": factory}).ToGinResponse())
 }
 
 // Detail 详情
@@ -180,7 +180,7 @@ func (FactoryCtrl) Detail(ctx *gin.Context) {
 		First(&factory)
 	wrongs.ThrowWhenEmpty(ret, "厂家")
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"factory": factory}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"factory": factory}).ToGinResponse())
 }
 
 // List 列表
@@ -188,7 +188,7 @@ func (receiver FactoryCtrl) List(ctx *gin.Context) {
 	var factories []*models.FactoryMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForPager(
 				models.FactoryMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -205,7 +205,7 @@ func (receiver FactoryCtrl) ListJdt(ctx *gin.Context) {
 	var factories []*models.FactoryMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForJqueryDataTable(
 				models.FactoryMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {

@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"new-fix/providers"
-	"new-fix/tools"
+	"new-fix/utils"
 	"new-fix/wrongs"
 
 	"github.com/gin-gonic/gin"
@@ -43,5 +43,5 @@ func (receiver WebsocketCtrl) SendTo(ctx *gin.Context) {
 	form := (&webSocketStoreForm{}).ShouldBind(ctx)
 
 	// 发送到websocket客户端
-	providers.WebsocketSendMessageByUuid(tools.NewCorrectWithBusiness("", "message", "").Datum(form.Message).ToJsonStr(), form.ReceiverUuid)
+	providers.WebsocketSendMessageByUuid(utils.NewCorrectWithBusiness("", "message", "").Datum(form.Message).ToJsonStr(), form.ReceiverUuid)
 }

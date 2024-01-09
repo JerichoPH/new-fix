@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"new-fix/models"
-	"new-fix/tools"
+	"new-fix/utils"
 	"new-fix/wrongs"
 
 	"github.com/gin-gonic/gin"
@@ -130,7 +130,7 @@ func (receiver InstallIndoorRoomStoreForm) ShouldBind(ctx *gin.Context) InstallI
 		wrongs.ThrowWhenEmpty(ret, "室内上道位置-机房类型")
 	}
 
-	parents := tools.RemoveEmptyStrings([]string{
+	parents := utils.RemoveEmptyStrings([]string{
 		receiver.OrganizationStationUuid,
 		receiver.OrganizationCenterUuid,
 		receiver.OrganizationCrossroadUuid,
@@ -323,7 +323,7 @@ func (InstallIndoorRoomTypeCtrl) Store(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Created(map[string]any{"install_indoor_room_type": installIndoorRoomType}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Created(map[string]any{"install_indoor_room_type": installIndoorRoomType}).ToGinResponse())
 }
 
 // Destroy 删除
@@ -348,7 +348,7 @@ func (InstallIndoorRoomTypeCtrl) Destroy(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // DestroyMany 批量删除
@@ -357,7 +357,7 @@ func (InstallIndoorRoomTypeCtrl) DestroyMany(ctx *gin.Context) {
 	if ret := models.NewInstallIndoorRoomTypeMdl().GetDb("").Where("uuid in ?", form.Uuids).Delete(nil); ret.Error != nil {
 		wrongs.ThrowForbidden("删除失败：%s", ret.Error.Error())
 	}
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // Update 编辑
@@ -399,7 +399,7 @@ func (InstallIndoorRoomTypeCtrl) Update(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"install_indoor_room_type": installIndoorRoomType}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"install_indoor_room_type": installIndoorRoomType}).ToGinResponse())
 }
 
 // Detail 详情
@@ -415,7 +415,7 @@ func (InstallIndoorRoomTypeCtrl) Detail(ctx *gin.Context) {
 		First(&installIndoorRoomType)
 	wrongs.ThrowWhenEmpty(ret, "室内上道位置-机房类型")
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"install_indoor_room_type": installIndoorRoomType}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"install_indoor_room_type": installIndoorRoomType}).ToGinResponse())
 }
 
 // List 列表
@@ -423,7 +423,7 @@ func (receiver InstallIndoorRoomTypeCtrl) List(ctx *gin.Context) {
 	var installIndoorRoomTypes []*models.InstallIndoorRoomTypeMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForPager(
 				models.InstallIndoorRoomTypeMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -440,7 +440,7 @@ func (receiver InstallIndoorRoomTypeCtrl) ListJdt(ctx *gin.Context) {
 	var installIndoorRoomTypes []*models.InstallIndoorRoomTypeMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForJqueryDataTable(
 				models.InstallIndoorRoomTypeMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -495,7 +495,7 @@ func (InstallIndoorRoomCtrl) Store(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Created(map[string]any{"install_indoor_room": installIndoorRoom}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Created(map[string]any{"install_indoor_room": installIndoorRoom}).ToGinResponse())
 }
 
 // Destroy 删除
@@ -520,7 +520,7 @@ func (InstallIndoorRoomCtrl) Destroy(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // DestroyMany 批量删除
@@ -529,7 +529,7 @@ func (InstallIndoorRoomCtrl) DestroyMany(ctx *gin.Context) {
 	if ret := models.NewInstallIndoorRoomMdl().GetDb("").Where("uuid in ?", form.Uuids).Delete(nil); ret.Error != nil {
 		wrongs.ThrowForbidden("删除失败：%s", ret.Error.Error())
 	}
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // Update 编辑
@@ -576,7 +576,7 @@ func (InstallIndoorRoomCtrl) Update(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"install_indoor_room": installIndoorRoom}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"install_indoor_room": installIndoorRoom}).ToGinResponse())
 }
 
 // Detail 详情
@@ -592,7 +592,7 @@ func (InstallIndoorRoomCtrl) Detail(ctx *gin.Context) {
 		First(&installIndoorRoom)
 	wrongs.ThrowWhenEmpty(ret, "室内上道位置-机房")
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"install_indoor_room": installIndoorRoom}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"install_indoor_room": installIndoorRoom}).ToGinResponse())
 }
 
 // List 列表
@@ -600,7 +600,7 @@ func (receiver InstallIndoorRoomCtrl) List(ctx *gin.Context) {
 	var installIndoorRooms []*models.InstallIndoorRoomMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForPager(
 				models.InstallIndoorRoomMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -617,7 +617,7 @@ func (receiver InstallIndoorRoomCtrl) ListJdt(ctx *gin.Context) {
 	var installIndoorRooms []*models.InstallIndoorRoomMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForJqueryDataTable(
 				models.InstallIndoorRoomMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -663,7 +663,7 @@ func (InstallIndoorPlatoonCtrl) Store(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Created(map[string]any{"install_indoor_platoon": installIndoorPlatoon}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Created(map[string]any{"install_indoor_platoon": installIndoorPlatoon}).ToGinResponse())
 }
 
 // Destroy 删除
@@ -688,7 +688,7 @@ func (InstallIndoorPlatoonCtrl) Destroy(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // DestroyMany 批量删除
@@ -697,7 +697,7 @@ func (InstallIndoorPlatoonCtrl) DestroyMany(ctx *gin.Context) {
 	if ret := models.NewInstallIndoorPlatoonMdl().GetDb("").Where("uuid in ?", form.Uuids).Delete(nil); ret.Error != nil {
 		wrongs.ThrowForbidden("删除失败：%s", ret.Error.Error())
 	}
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // Update 编辑
@@ -736,7 +736,7 @@ func (InstallIndoorPlatoonCtrl) Update(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"install_indoor_platoon": installIndoorPlatoon}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"install_indoor_platoon": installIndoorPlatoon}).ToGinResponse())
 }
 
 // Detail 详情
@@ -752,7 +752,7 @@ func (InstallIndoorPlatoonCtrl) Detail(ctx *gin.Context) {
 		First(&installIndoorPlatoon)
 	wrongs.ThrowWhenEmpty(ret, "室内上道位置-排")
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"install_indoor_platoon": installIndoorPlatoon}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"install_indoor_platoon": installIndoorPlatoon}).ToGinResponse())
 }
 
 // List 列表
@@ -760,7 +760,7 @@ func (receiver InstallIndoorPlatoonCtrl) List(ctx *gin.Context) {
 	var installIndoorPlatoons []*models.InstallIndoorPlatoonMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForPager(
 				models.InstallIndoorPlatoonMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -777,7 +777,7 @@ func (receiver InstallIndoorPlatoonCtrl) ListJdt(ctx *gin.Context) {
 	var installIndoorPlatoons []*models.InstallIndoorPlatoonMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForJqueryDataTable(
 				models.InstallIndoorPlatoonMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -823,7 +823,7 @@ func (InstallIndoorShelfCtrl) Store(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Created(map[string]any{"install_indoor_shelf": installIndoorShelf}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Created(map[string]any{"install_indoor_shelf": installIndoorShelf}).ToGinResponse())
 }
 
 // Destroy 删除
@@ -848,7 +848,7 @@ func (InstallIndoorShelfCtrl) Destroy(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // DestroyMany 批量删除
@@ -857,7 +857,7 @@ func (InstallIndoorShelfCtrl) DestroyMany(ctx *gin.Context) {
 	if ret := models.NewInstallIndoorShelfMdl().GetDb("").Where("uuid in ?", form.Uuids).Delete(nil); ret.Error != nil {
 		wrongs.ThrowForbidden("删除失败：%s", ret.Error.Error())
 	}
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // Update 编辑
@@ -895,7 +895,7 @@ func (InstallIndoorShelfCtrl) Update(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"install_indoor_shelf": installIndoorShelf}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"install_indoor_shelf": installIndoorShelf}).ToGinResponse())
 }
 
 // Detail 详情
@@ -911,7 +911,7 @@ func (InstallIndoorShelfCtrl) Detail(ctx *gin.Context) {
 		First(&installIndoorShelf)
 	wrongs.ThrowWhenEmpty(ret, "室内上道位置-架")
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"install_indoor_shelf": installIndoorShelf}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"install_indoor_shelf": installIndoorShelf}).ToGinResponse())
 }
 
 // List 列表
@@ -919,7 +919,7 @@ func (receiver InstallIndoorShelfCtrl) List(ctx *gin.Context) {
 	var installIndoorShelves []*models.InstallIndoorShelfMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForPager(
 				models.InstallIndoorShelfMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -936,7 +936,7 @@ func (receiver InstallIndoorShelfCtrl) ListJdt(ctx *gin.Context) {
 	var installIndoorShelves []*models.InstallIndoorShelfMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForJqueryDataTable(
 				models.InstallIndoorShelfMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -982,7 +982,7 @@ func (InstallIndoorTierCtrl) Store(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Created(map[string]any{"install_indoor_tier": installIndoorTier}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Created(map[string]any{"install_indoor_tier": installIndoorTier}).ToGinResponse())
 }
 
 // Destroy 删除
@@ -1007,7 +1007,7 @@ func (InstallIndoorTierCtrl) Destroy(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // DestroyMany 批量删除
@@ -1016,7 +1016,7 @@ func (InstallIndoorTierCtrl) DestroyMany(ctx *gin.Context) {
 	if ret := models.NewInstallIndoorTierMdl().GetDb("").Where("uuid in ?", form.Uuids).Delete(nil); ret.Error != nil {
 		wrongs.ThrowForbidden("删除失败：%s", ret.Error.Error())
 	}
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // Update 编辑
@@ -1055,7 +1055,7 @@ func (InstallIndoorTierCtrl) Update(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"install_indoor_tier": installIndoorTier}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"install_indoor_tier": installIndoorTier}).ToGinResponse())
 }
 
 // Detail 详情
@@ -1071,7 +1071,7 @@ func (InstallIndoorTierCtrl) Detail(ctx *gin.Context) {
 		First(&installIndoorTier)
 	wrongs.ThrowWhenEmpty(ret, "室内上道位置-层")
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"install_indoor_tier": installIndoorTier}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"install_indoor_tier": installIndoorTier}).ToGinResponse())
 }
 
 // List 列表
@@ -1079,7 +1079,7 @@ func (receiver InstallIndoorTierCtrl) List(ctx *gin.Context) {
 	var installIndoorTiers []*models.InstallIndoorTierMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForPager(
 				models.InstallIndoorTierMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -1096,7 +1096,7 @@ func (receiver InstallIndoorTierCtrl) ListJdt(ctx *gin.Context) {
 	var installIndoorTiers []*models.InstallIndoorTierMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForJqueryDataTable(
 				models.InstallIndoorTierMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {

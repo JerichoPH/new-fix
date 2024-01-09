@@ -3,7 +3,7 @@ package controllers
 import (
 	"fmt"
 	"new-fix/models"
-	"new-fix/tools"
+	"new-fix/utils"
 	"new-fix/wrongs"
 	"path"
 	"strings"
@@ -171,7 +171,7 @@ func (AccountCtrl) Store(ctx *gin.Context) {
 		MySqlMdl: models.MySqlMdl{Uuid: uuid.NewV4().String()},
 		Username: form.Username,
 		Nickname: form.Nickname,
-		Password: tools.GeneratePassword(form.Password),
+		Password: utils.GeneratePassword(form.Password),
 		BeAdmin:  false,
 	}
 	if ret = models.
@@ -209,7 +209,7 @@ func (AccountCtrl) Store(ctx *gin.Context) {
 	// 用户绑定角色
 	account.BindRbacRoles(form.rbacRoles)
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Created(map[string]any{"account": account}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Created(map[string]any{"account": account}).ToGinResponse())
 }
 
 // Destroy 删除
@@ -232,7 +232,7 @@ func (AccountCtrl) Destroy(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // DestroyMany 批量删除
@@ -243,7 +243,7 @@ func (AccountCtrl) DestroyMany(ctx *gin.Context) {
 		models.NewAccountMdl().GetDb("").Delete(&form.accounts)
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // Update 编辑
@@ -312,7 +312,7 @@ func (AccountCtrl) Update(ctx *gin.Context) {
 	// 用户绑定角色
 	account.BindRbacRoles(form.rbacRoles)
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"account": account}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"account": account}).ToGinResponse())
 }
 
 // PostUpdateAvatar 更新用户头像
@@ -335,7 +335,7 @@ func (AccountCtrl) PostUpdateAvatar(ctx *gin.Context) {
 
 	// 你可以改变保存的文件名
 	relativePath := path.Join("public", "avatars", account.Uuid)
-	fs := tools.NewFileSystem(tools.GetRootPath()).Join([]string{relativePath})
+	fs := utils.NewFileSystem(utils.GetRootPath()).Join([]string{relativePath})
 	if !fs.IsExist() {
 		fs.CreateDir()
 	}
@@ -376,7 +376,7 @@ func (AccountCtrl) PostUpdateAvatar(ctx *gin.Context) {
 	// 重读新头像文件数据
 	models.NewFileMdl().GetDb("").Where("uuid = ?", newAvatarUuid).First(&newAvatar)
 
-	ctx.JSON(tools.NewCorrectWithGinContext("上传头像成功", ctx).Updated(map[string]any{"avatar": newAvatar}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("上传头像成功", ctx).Updated(map[string]any{"avatar": newAvatar}).ToGinResponse())
 }
 
 // Detail 详情
@@ -388,7 +388,7 @@ func (AccountCtrl) Detail(ctx *gin.Context) {
 	ret = models.NewAccountMdl().SetCtx(ctx).GetDbUseQuery("").Where("uuid", ctx.Param("uuid")).First(&account)
 	wrongs.ThrowWhenEmpty(ret, "用户")
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"account": account}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"account": account}).ToGinResponse())
 }
 
 // List 列表
@@ -396,7 +396,7 @@ func (receiver AccountCtrl) List(ctx *gin.Context) {
 	var accounts []models.AccountMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForPager(
 				models.AccountMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -412,7 +412,7 @@ func (receiver AccountCtrl) ListJdt(ctx *gin.Context) {
 	var accounts []models.AccountMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForJqueryDataTable(
 				models.AccountMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -436,10 +436,10 @@ func (recevier AccountCtrl) PutUpdatePassword(ctx *gin.Context) {
 	wrongs.ThrowWhenEmpty(ret, "用户")
 
 	// 验证密码
-	tools.CheckPassword(form.OldPassword, account.Password)
+	utils.CheckPassword(form.OldPassword, account.Password)
 
-	account.Password = tools.GeneratePassword(form.Password)
+	account.Password = utils.GeneratePassword(form.Password)
 	models.NewAccountMdl().GetDb("").Where("uuid = ?", ctx.Param("uuid")).Save(&account)
 
-	ctx.JSON(tools.NewCorrectWithGinContext("修改成功", ctx).Blank().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("修改成功", ctx).Blank().ToGinResponse())
 }

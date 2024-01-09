@@ -2,7 +2,7 @@ package models
 
 import (
 	"fmt"
-	"new-fix/tools"
+	"new-fix/utils"
 	"new-fix/wrongs"
 
 	"github.com/gin-gonic/gin"
@@ -83,16 +83,16 @@ func (receiver EquipmentKindCategoryMdl) GetNewUniqueCode() string {
 
 	lastUniqueCode = receiver.GetLastUniqueCode()
 	if lastUniqueCode != "" {
-		lastUniqueCodeInt64, err = tools.NewMath().Base36ToDec(lastUniqueCode[len(lastUniqueCode)-2:])
+		lastUniqueCodeInt64, err = utils.NewMath().Base36ToDec(lastUniqueCode[len(lastUniqueCode)-2:])
 		if err != nil {
 			wrongs.ThrowForbidden("器材种类代码36 -> 10失败：%s", err.Error())
 		}
 		newUniqueCodeInt64 = lastUniqueCodeInt64 + 1
-		newUniqueCode, err = tools.NewMath().DecToBase36(newUniqueCodeInt64)
+		newUniqueCode, err = utils.NewMath().DecToBase36(newUniqueCodeInt64)
 		if err != nil {
 			wrongs.ThrowForbidden("器材种类代码10 -> 36失败：%s", err.Error())
 		}
-		return fmt.Sprintf("Q%s", tools.NewMath().PadLeftZeros(newUniqueCode, 2))
+		return fmt.Sprintf("Q%s", utils.NewMath().PadLeftZeros(newUniqueCode, 2))
 	}
 
 	return "Q01"
@@ -149,16 +149,16 @@ func (receiver EquipmentKindTypeMdl) GetNewUniqueCode(equipmentKindCategory *Equ
 
 	lastUniqueCode = receiver.GetLastUniqueCode(equipmentKindCategory)
 	if lastUniqueCode != "" {
-		lastUniqueCodeInt64, err = tools.NewMath().Base36ToDec(lastUniqueCode[len(lastUniqueCode)-4:])
+		lastUniqueCodeInt64, err = utils.NewMath().Base36ToDec(lastUniqueCode[len(lastUniqueCode)-4:])
 		if err != nil {
 			wrongs.ThrowForbidden("器材类型代码36 -> 10失败：%s", err.Error())
 		}
 		newUniqueCodeInt64 = lastUniqueCodeInt64 + 1
-		newUniqueCode, err = tools.NewMath().DecToBase36(newUniqueCodeInt64)
+		newUniqueCode, err = utils.NewMath().DecToBase36(newUniqueCodeInt64)
 		if err != nil {
 			wrongs.ThrowForbidden("器材类型代码10 -> 36失败：%s", err.Error())
 		}
-		return fmt.Sprintf("%s%s", equipmentKindCategory.UniqueCode, tools.NewMath().PadLeftZeros(newUniqueCode, 2))
+		return fmt.Sprintf("%s%s", equipmentKindCategory.UniqueCode, utils.NewMath().PadLeftZeros(newUniqueCode, 2))
 	}
 
 	return fmt.Sprintf("%s01", equipmentKindCategory.UniqueCode)
@@ -219,16 +219,16 @@ func (receiver EquipmentKindModelMdl) GetNewUniqueCode(equipmentKindType *Equipm
 
 	lastUniqueCode = receiver.GetLastUniqueCode(equipmentKindType)
 	if lastUniqueCode != "" {
-		lastUniqueCodeInt64, err = tools.NewMath().Base36ToDec(lastUniqueCode[len(lastUniqueCode)-6:])
+		lastUniqueCodeInt64, err = utils.NewMath().Base36ToDec(lastUniqueCode[len(lastUniqueCode)-6:])
 		if err != nil {
 			wrongs.ThrowForbidden("器材类型代码36 -> 10失败：%s", err.Error())
 		}
 		newUniqueCodeInt64 = lastUniqueCodeInt64 + 1
-		newUniqueCode, err = tools.NewMath().DecToBase36(newUniqueCodeInt64)
+		newUniqueCode, err = utils.NewMath().DecToBase36(newUniqueCodeInt64)
 		if err != nil {
 			wrongs.ThrowForbidden("器材类型代码10 -> 36失败：%s", err.Error())
 		}
-		return fmt.Sprintf("%s%s", equipmentKindType.UniqueCode, tools.NewMath().PadLeftZeros(newUniqueCode, 2))
+		return fmt.Sprintf("%s%s", equipmentKindType.UniqueCode, utils.NewMath().PadLeftZeros(newUniqueCode, 2))
 	}
 
 	return fmt.Sprintf("%s01", equipmentKindType.UniqueCode)

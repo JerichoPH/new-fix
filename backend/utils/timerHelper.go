@@ -1,4 +1,4 @@
-package tools
+package utils
 
 import (
 	"fmt"
@@ -11,7 +11,7 @@ import (
 // 使用方法说明：
 // c := make(chan uint64)
 // go sum(c)
-// go tools.NewTimer(5).Ticker()
+// go utils.NewTimer(5).Ticker()
 // runtime.Gosched()
 // println(<-c)
 type Timer struct {

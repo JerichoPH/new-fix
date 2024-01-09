@@ -3,8 +3,8 @@ package middlewares
 import (
 	"fmt"
 	"new-fix/models"
-	"new-fix/tools"
 	"new-fix/types"
+	"new-fix/utils"
 	"new-fix/wrongs"
 	"reflect"
 	"strings"
@@ -18,7 +18,7 @@ import (
 func CheckAuth() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		// 获取令牌
-		split := strings.Split(tools.GetJwtFromHeader(ctx), " ")
+		split := strings.Split(utils.GetJwtFromHeader(ctx), " ")
 		if len(split) != 2 {
 			wrongs.ThrowUnLogin("令牌格式错误")
 		}
@@ -35,7 +35,7 @@ func CheckAuth() gin.HandlerFunc {
 		} else {
 			switch tokenType {
 			case "JWT":
-				claims, err := tools.ParseJwt(token)
+				claims, err := utils.ParseJwt(token)
 
 				// 判断令牌是否有效
 				if err != nil {
@@ -45,7 +45,7 @@ func CheckAuth() gin.HandlerFunc {
 				}
 
 				// 判断用户是否存在
-				if reflect.DeepEqual(claims, tools.Claims{}) {
+				if reflect.DeepEqual(claims, utils.Claims{}) {
 					wrongs.ThrowUnLogin("令牌解析失败：用户不存在")
 				}
 

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"new-fix/models"
+	"new-fix/utils"
 	"os"
 	"os/exec"
 	"strings"
@@ -18,7 +19,6 @@ import (
 	"new-fix/routes/apiRout"
 	"new-fix/routes/webRout"
 	"new-fix/settings"
-	"new-fix/tools"
 	"new-fix/types"
 	"new-fix/wrongs"
 
@@ -105,7 +105,7 @@ func launchDaemon(title string) {
 
 	currentDir := os.Getenv("PWD")
 	logDir := fmt.Sprintf("%s/logs", currentDir)
-	if !tools.NewFileSystem(logDir).IsExist() {
+	if !utils.NewFileSystem(logDir).IsExist() {
 		err := os.MkdirAll(logDir, os.ModePerm)
 		if err != nil {
 			fmt.Println("创建日志目录错误：" + err.Error())
@@ -173,7 +173,7 @@ func launchCommand(commandName string, commandParams, tmp []string, daemon bool)
 
 	switch commandName {
 	default:
-		// println(tools.StdoutWrong(fmt.Sprintf("『执行失败』%s", strings.Join(tmp, " ")), "").GetContentAndNext("没有找到命令"))
+		// println(utils.StdoutWrong(fmt.Sprintf("『执行失败』%s", strings.Join(tmp, " ")), "").GetContentAndNext("没有找到命令"))
 		// os.Exit(-1)
 		// 启动web-service服务
 
@@ -240,7 +240,7 @@ func launchCommand(commandName string, commandParams, tmp []string, daemon bool)
 		commandResults = commands.NewUpgradeCmd().Do(commandParams)
 	}
 
-	fmt.Println(tools.StdoutDebug(fmt.Sprintf("『执行完成 %s』 「%s」 ", tools.NewTime().SetTimeNowAdd8Hour().ToDateTimeString(), strings.Join(tmp, " ")), "").GetContentAndNext(strings.Join(commandResults, " ")))
+	fmt.Println(utils.StdoutDebug(fmt.Sprintf("『执行完成 %s』 「%s」 ", utils.NewTime().SetTimeNowAdd8Hour().ToDateTimeString(), strings.Join(tmp, " ")), "").GetContentAndNext(strings.Join(commandResults, " ")))
 	os.Exit(0)
 }
 

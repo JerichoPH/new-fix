@@ -3,7 +3,7 @@ package controllers
 import (
 	"new-fix/database"
 	"new-fix/models"
-	"new-fix/tools"
+	"new-fix/utils"
 	"new-fix/wrongs"
 
 	"github.com/gin-gonic/gin"
@@ -89,14 +89,14 @@ func (AuthCtrl) PostRegister(ctx *gin.Context) {
 	account := &models.AccountMdl{
 		MySqlMdl: models.MySqlMdl{Uuid: uuid.NewV4().String()},
 		Username: form.Username,
-		Password: tools.GeneratePassword(form.Password),
+		Password: utils.GeneratePassword(form.Password),
 		Nickname: form.Nickname,
 	}
 	if ret = models.NewAccountMdl().GetDb("").Create(&account); ret.Error != nil {
 		wrongs.ThrowForbidden("创建失败：" + ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("注册成功", ctx).Created(map[string]any{"account": account}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("注册成功", ctx).Created(map[string]any{"account": account}).ToGinResponse())
 }
 
 // PostLogin 登录
@@ -114,12 +114,12 @@ func (AuthCtrl) PostLogin(ctx *gin.Context) {
 	wrongs.ThrowWhenEmpty(ret, "用户")
 
 	// 验证密码
-	if !tools.CheckPassword(form.Password, account.Password) {
+	if !utils.CheckPassword(form.Password, account.Password) {
 		wrongs.ThrowUnAuth("账号或密码错误")
 	}
 
 	// 生成Jwt
-	if token, err := tools.GenerateJwt(
+	if token, err := utils.GenerateJwt(
 		account.Id,
 		account.Username,
 		account.Nickname,
@@ -128,7 +128,7 @@ func (AuthCtrl) PostLogin(ctx *gin.Context) {
 		// 生成jwt错误
 		wrongs.ThrowForbidden(err.Error())
 	} else {
-		ctx.JSON(tools.NewCorrectWithGinContext("登陆成功", ctx).Datum(map[string]any{
+		ctx.JSON(utils.NewCorrectWithGinContext("登陆成功", ctx).Datum(map[string]any{
 			"token": token,
 			"account": map[string]any{
 				"id":       account.Id,
@@ -148,7 +148,7 @@ func (AuthCtrl) GetMenus(ctx *gin.Context) {
 		rbacMenuUuids = make([]string, 0)
 	)
 
-	account = tools.GetAuth(ctx).(models.AccountMdl)
+	account = utils.GetAuth(ctx).(models.AccountMdl)
 
 	if account.BeAdmin {
 		models.NewRbacMenuMdl().SetCtx(ctx).GetDbUseQuery("").Find(&rbacMenus)
@@ -168,7 +168,7 @@ func (AuthCtrl) GetMenus(ctx *gin.Context) {
 		models.NewRbacMenuMdl().SetCtx(ctx).GetDbUseQuery("").Where("uuid in ?", rbacMenuUuids).Find(&rbacMenus)
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"rbac_menus": rbacMenus}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"rbac_menus": rbacMenus}).ToGinResponse())
 }
 
 // PutUpdatePassword 修改密码
@@ -179,7 +179,7 @@ func (AuthCtrl) PutUpdatePassword(ctx *gin.Context) {
 		currentAccount models.AccountMdl
 	)
 
-	currentAccount = tools.GetAuth(ctx).(models.AccountMdl)
+	currentAccount = utils.GetAuth(ctx).(models.AccountMdl)
 
 	form := AccountUpdatePasswordForm{}.ShouldBind(ctx)
 
@@ -187,10 +187,10 @@ func (AuthCtrl) PutUpdatePassword(ctx *gin.Context) {
 	wrongs.ThrowWhenEmpty(ret, "用户")
 
 	// 验证密码
-	tools.CheckPassword(form.OldPassword, account.Password)
+	utils.CheckPassword(form.OldPassword, account.Password)
 
-	account.Password = tools.GeneratePassword(form.Password)
+	account.Password = utils.GeneratePassword(form.Password)
 	models.NewAccountMdl().GetDb("").Where("uuid = ?", ctx.Param("uuid")).Save(&account)
 
-	ctx.JSON(tools.NewCorrectWithGinContext("修改成功", ctx).Blank().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("修改成功", ctx).Blank().ToGinResponse())
 }

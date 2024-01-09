@@ -55,7 +55,7 @@ func KafkaClientHandler(addr, topic string) {
 				switch business.BusinessType {
 				case "ping":
 					log.Printf("[kafka-client] [ping]")
-					// RabbitMqSendMessage(tools.NewCorrectWithBusiness("pong", "pong").Datum(map[string]any{"time": time.Now().Unix()}).ToJsonStr())
+					// RabbitMqSendMessage(utils.NewCorrectWithBusiness("pong", "pong").Datum(map[string]any{"time": time.Now().Unix()}).ToJsonStr())
 				case "message":
 					log.Printf("[kafka-client] [message]")
 				}

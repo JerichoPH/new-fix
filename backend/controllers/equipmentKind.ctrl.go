@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"new-fix/models"
-	"new-fix/tools"
+	"new-fix/utils"
 	"new-fix/wrongs"
 
 	"github.com/gin-gonic/gin"
@@ -208,7 +208,7 @@ func (EquipmentKindCategoryCtrl) Store(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Created(map[string]any{"equipment_kind_category": EquipmentKindCategory}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Created(map[string]any{"equipment_kind_category": EquipmentKindCategory}).ToGinResponse())
 }
 
 // Destroy 删除
@@ -233,7 +233,7 @@ func (EquipmentKindCategoryCtrl) Destroy(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // DestroyMany 批量删除
@@ -251,7 +251,7 @@ func (EquipmentKindCategoryCtrl) DestroyMany(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // Update 编辑
@@ -287,7 +287,7 @@ func (EquipmentKindCategoryCtrl) Update(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"equipment_kind_category": EquipmentKindCategory}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"equipment_kind_category": EquipmentKindCategory}).ToGinResponse())
 }
 
 // Detail 详情
@@ -303,7 +303,7 @@ func (EquipmentKindCategoryCtrl) Detail(ctx *gin.Context) {
 		First(&EquipmentKindCategory)
 	wrongs.ThrowWhenEmpty(ret, "种类")
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"equipment_kind_category": EquipmentKindCategory}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"equipment_kind_category": EquipmentKindCategory}).ToGinResponse())
 }
 
 // List 列表
@@ -311,7 +311,7 @@ func (receiver EquipmentKindCategoryCtrl) List(ctx *gin.Context) {
 	var equipmentKindCategories []*models.EquipmentKindCategoryMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForPager(
 				models.EquipmentKindCategoryMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -328,7 +328,7 @@ func (receiver EquipmentKindCategoryCtrl) ListJdt(ctx *gin.Context) {
 	var equipmentKindCategories []*models.EquipmentKindCategoryMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForJqueryDataTable(
 				models.EquipmentKindCategoryMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -375,7 +375,7 @@ func (EquipmentKindTypeCtrl) Store(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Created(map[string]any{"equipment_kind_type": equipmentKindType}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Created(map[string]any{"equipment_kind_type": equipmentKindType}).ToGinResponse())
 }
 
 // Destroy 删除
@@ -400,7 +400,7 @@ func (EquipmentKindTypeCtrl) Destroy(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // DestroyMany 批量删除
@@ -418,7 +418,7 @@ func (EquipmentKindTypeCtrl) DestroyMany(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // Update 编辑
@@ -456,7 +456,7 @@ func (EquipmentKindTypeCtrl) Update(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"equipment_kind_type": equipmentKindType}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"equipment_kind_type": equipmentKindType}).ToGinResponse())
 }
 
 // Detail 详情
@@ -472,7 +472,7 @@ func (EquipmentKindTypeCtrl) Detail(ctx *gin.Context) {
 		First(&equipmentKindType)
 	wrongs.ThrowWhenEmpty(ret, "器材类型")
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"equipment_kind_type": equipmentKindType}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"equipment_kind_type": equipmentKindType}).ToGinResponse())
 }
 
 // List 列表
@@ -480,7 +480,7 @@ func (receiver EquipmentKindTypeCtrl) List(ctx *gin.Context) {
 	var equipmentKindTypes []*models.EquipmentKindTypeMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForPager(
 				models.EquipmentKindTypeMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -497,7 +497,7 @@ func (receiver EquipmentKindTypeCtrl) ListJdt(ctx *gin.Context) {
 	var equipmentKindTypes []*models.EquipmentKindTypeMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForJqueryDataTable(
 				models.EquipmentKindTypeMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -544,7 +544,7 @@ func (EquipmentKindModelCtrl) Store(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Created(map[string]any{"equipment_kind_model": equipmentKindModel}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Created(map[string]any{"equipment_kind_model": equipmentKindModel}).ToGinResponse())
 }
 
 // Destroy 删除
@@ -569,7 +569,7 @@ func (EquipmentKindModelCtrl) Destroy(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // DestroyMany 批量删除
@@ -587,7 +587,7 @@ func (EquipmentKindModelCtrl) DestroyMany(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // Update 编辑
@@ -625,7 +625,7 @@ func (EquipmentKindModelCtrl) Update(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"equipment_kind_model": equipmentKindModel}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"equipment_kind_model": equipmentKindModel}).ToGinResponse())
 }
 
 // Detail 详情
@@ -641,7 +641,7 @@ func (EquipmentKindModelCtrl) Detail(ctx *gin.Context) {
 		First(&equipmentKindModel)
 	wrongs.ThrowWhenEmpty(ret, "器材型号")
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"equipment_kind_model": equipmentKindModel}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"equipment_kind_model": equipmentKindModel}).ToGinResponse())
 }
 
 // List 列表
@@ -649,7 +649,7 @@ func (receiver EquipmentKindModelCtrl) List(ctx *gin.Context) {
 	var equipmentKindModels []*models.EquipmentKindModelMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForPager(
 				models.EquipmentKindModelMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -666,7 +666,7 @@ func (receiver EquipmentKindModelCtrl) ListJdt(ctx *gin.Context) {
 	var equipmentKindModels []*models.EquipmentKindModelMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForJqueryDataTable(
 				models.EquipmentKindModelMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {

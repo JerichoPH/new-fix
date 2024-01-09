@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"new-fix/providers"
 	"new-fix/settings"
-	"new-fix/tools"
+	"new-fix/utils"
 	"new-fix/wrongs"
 
 	"github.com/gin-gonic/gin"
@@ -43,27 +43,27 @@ func (receiver sendMessageForm) ShouldBind(ctx *gin.Context) sendMessageForm {
 func (receiver TestController) AnySendToWebsocket(ctx *gin.Context) {
 	form := sendMessageForm{}.ShouldBind(ctx)
 
-	providers.WebsocketSendMessageByUuid(tools.NewCorrectWithBusiness(form.MessageTitle, "message", "").Datum(form.MessageContent).ToJsonStr(), form.ReceiverUuid)
+	providers.WebsocketSendMessageByUuid(utils.NewCorrectWithBusiness(form.MessageTitle, "message", "").Datum(form.MessageContent).ToJsonStr(), form.ReceiverUuid)
 
-	ctx.JSON(tools.NewCorrectWithGinContext("OK", ctx).Datum(map[string]any{"content": fmt.Sprintf("%s ==> %s %v", form.ReceiverUuid, form.MessageTitle, form.MessageContent)}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("OK", ctx).Datum(map[string]any{"content": fmt.Sprintf("%s ==> %s %v", form.ReceiverUuid, form.MessageTitle, form.MessageContent)}).ToGinResponse())
 }
 
 // AnySendToTcpServer 接收并转发消息(tcp server)
 func (receiver TestController) AnySendToTcpServer(ctx *gin.Context) {
 	form := sendMessageForm{}.ShouldBind(ctx)
 
-	providers.TcpServerSendMessageByUuid(tools.NewCorrectWithBusiness(form.MessageTitle, "message", "").Datum(form.MessageContent).ToJsonStr(), form.ReceiverUuid)
+	providers.TcpServerSendMessageByUuid(utils.NewCorrectWithBusiness(form.MessageTitle, "message", "").Datum(form.MessageContent).ToJsonStr(), form.ReceiverUuid)
 
-	ctx.JSON(tools.NewCorrectWithGinContext("OK", ctx).Datum(map[string]any{"content": fmt.Sprintf("%s ==> %s %v", form.ReceiverUuid, form.MessageTitle, form.MessageContent)}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("OK", ctx).Datum(map[string]any{"content": fmt.Sprintf("%s ==> %s %v", form.ReceiverUuid, form.MessageTitle, form.MessageContent)}).ToGinResponse())
 }
 
 // AnySendToTcpClient 接收病转发消息(tcp client)
 func (receiver TestController) AnySendToTcpClient(ctx *gin.Context) {
 	form := sendMessageForm{}.ShouldBind(ctx)
 
-	providers.TcpClientSendMessage(tools.NewCorrectWithBusiness(form.MessageTitle, "message", "").Datum(map[string]any{"content": fmt.Sprintf("%s %v", form.MessageTitle, form.MessageContent)}).ToJsonStr())
+	providers.TcpClientSendMessage(utils.NewCorrectWithBusiness(form.MessageTitle, "message", "").Datum(map[string]any{"content": fmt.Sprintf("%s %v", form.MessageTitle, form.MessageContent)}).ToJsonStr())
 
-	ctx.JSON(tools.NewCorrectWithGinContext("OK", ctx).Datum(map[string]any{"content": fmt.Sprintf("%s %v", form.MessageTitle, form.MessageContent)}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("OK", ctx).Datum(map[string]any{"content": fmt.Sprintf("%s %v", form.MessageTitle, form.MessageContent)}).ToGinResponse())
 }
 
 // AnySendToKafkaClient 发送消息到kafka
@@ -79,7 +79,7 @@ func (receiver TestController) AnySendToKafkaClient(ctx *gin.Context) {
 
 	form := sendMessageForm{}.ShouldBind(ctx)
 
-	if err = providers.KafkaSendMessage(topic, "message", tools.NewCorrectWithBusiness(form.MessageTitle, "message", "").Datum(map[string]any{"content": fmt.Sprintf("%s %v", form.MessageTitle, form.MessageContent)}).ToJsonStr()); err != nil {
+	if err = providers.KafkaSendMessage(topic, "message", utils.NewCorrectWithBusiness(form.MessageTitle, "message", "").Datum(map[string]any{"content": fmt.Sprintf("%s %v", form.MessageTitle, form.MessageContent)}).ToJsonStr()); err != nil {
 		wrongs.ThrowForbidden("发送失败：%s", err.Error())
 	}
 }

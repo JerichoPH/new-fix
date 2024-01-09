@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"new-fix/database"
-	"new-fix/tools"
+	"new-fix/utils"
 	"new-fix/wrongs"
 
 	uuid "github.com/satori/go.uuid"
@@ -25,12 +25,12 @@ func (receiver TempCmd) uuid() []string {
 		uuidStr := uuid.NewV4().String()
 		c <- uuidStr
 	}(c)
-	go tools.NewTimer(5).Ticker()
+	go utils.NewTimer(5).Ticker()
 	return []string{<-c}
 }
 
 func (receiver TempCmd) ls() []string {
-	_, res := (&tools.Cmd{}).Process("ls", "-la")
+	_, res := (&utils.Cmd{}).Process("ls", "-la")
 	return []string{res}
 }
 
@@ -51,9 +51,9 @@ func (receiver TempCmd) redis() []string {
 }
 
 func (TempCmd) test() []string {
-	std := tools.NewStdoutHelper("OK")
-	std.EchoLineDebug(tools.GetCurrentPath())
-	std.EchoLineDebug(tools.GetRootPath())
+	std := utils.NewStdoutHelper("OK")
+	std.EchoLineDebug(utils.GetCurrentPath())
+	std.EchoLineDebug(utils.GetRootPath())
 
 	return []string{}
 }

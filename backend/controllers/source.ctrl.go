@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"new-fix/models"
-	"new-fix/tools"
+	"new-fix/utils"
 	"new-fix/wrongs"
 
 	"github.com/gin-gonic/gin"
@@ -131,7 +131,7 @@ func (SourceTypeCtrl) Store(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Created(map[string]any{"source_type": sourceType}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Created(map[string]any{"source_type": sourceType}).ToGinResponse())
 }
 
 // Destroy 删除
@@ -156,7 +156,7 @@ func (SourceTypeCtrl) Destroy(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // DestroyMany 批量删除
@@ -165,7 +165,7 @@ func (SourceTypeCtrl) DestroyMany(ctx *gin.Context) {
 	if ret := models.NewSourceTypeMdl().GetDb("").Where("uuid in ?", form.Uuids).Delete(nil); ret.Error != nil {
 		wrongs.ThrowForbidden("批量删除失败：%s", ret.Error.Error())
 	}
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // Update 编辑
@@ -207,7 +207,7 @@ func (SourceTypeCtrl) Update(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"source_type": sourceType}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"source_type": sourceType}).ToGinResponse())
 }
 
 // Detail 详情
@@ -223,7 +223,7 @@ func (SourceTypeCtrl) Detail(ctx *gin.Context) {
 		First(&sourceType)
 	wrongs.ThrowWhenEmpty(ret, "来源类型")
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"source_type": sourceType}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"source_type": sourceType}).ToGinResponse())
 }
 
 // List 列表
@@ -231,7 +231,7 @@ func (receiver SourceTypeCtrl) List(ctx *gin.Context) {
 	var sourceTypes []*models.SourceTypeMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForPager(
 				models.SourceTypeMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -248,7 +248,7 @@ func (receiver SourceTypeCtrl) ListJdt(ctx *gin.Context) {
 	var sourceTypes []*models.SourceTypeMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForJqueryDataTable(
 				models.SourceTypeMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -293,7 +293,7 @@ func (SourceProjectCtrl) Store(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Created(map[string]any{"source_project": sourceProject}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Created(map[string]any{"source_project": sourceProject}).ToGinResponse())
 }
 
 // Destroy 删除
@@ -318,7 +318,7 @@ func (SourceProjectCtrl) Destroy(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // DestroyMany 批量删除
@@ -327,7 +327,7 @@ func (SourceProjectCtrl) DestroyMany(ctx *gin.Context) {
 	if ret := models.NewSourceProjectMdl().GetDb("").Where("uuid in ?", form.Uuids).Delete(nil); ret.Error != nil {
 		wrongs.ThrowForbidden("批量删除失败：%s", ret.Error.Error())
 	}
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // Update 编辑
@@ -364,7 +364,7 @@ func (SourceProjectCtrl) Update(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"source_project": sourceProject}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"source_project": sourceProject}).ToGinResponse())
 }
 
 // Detail 详情
@@ -380,7 +380,7 @@ func (SourceProjectCtrl) Detail(ctx *gin.Context) {
 		First(&sourceProject)
 	wrongs.ThrowWhenEmpty(ret, "来源项目")
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"source_project": sourceProject}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"source_project": sourceProject}).ToGinResponse())
 }
 
 // List 列表
@@ -388,7 +388,7 @@ func (receiver SourceProjectCtrl) List(ctx *gin.Context) {
 	var sourceProjects []*models.SourceProjectMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForPager(
 				models.SourceProjectMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -405,7 +405,7 @@ func (receiver SourceProjectCtrl) ListJdt(ctx *gin.Context) {
 	var sourceProjects []*models.SourceProjectMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForJqueryDataTable(
 				models.SourceProjectMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {

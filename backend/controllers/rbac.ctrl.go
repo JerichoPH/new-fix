@@ -3,7 +3,7 @@ package controllers
 import (
 	"fmt"
 	"new-fix/models"
-	"new-fix/tools"
+	"new-fix/utils"
 	"new-fix/wrongs"
 
 	"github.com/gin-gonic/gin"
@@ -202,7 +202,7 @@ func (RbacRoleCtrl) Store(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Created(map[string]any{"rbac_role": rbacRole}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Created(map[string]any{"rbac_role": rbacRole}).ToGinResponse())
 }
 
 // Destory 删除
@@ -227,7 +227,7 @@ func (RbacRoleCtrl) Destory(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // DestroyMany 批量删除
@@ -238,7 +238,7 @@ func (receiver RbacRoleCtrl) DestroyMany(ctx *gin.Context) {
 		models.NewRbacRoleMdl().GetDb("").Where("uuid = ?", form.Uuids).Delete(&form.rbacRoles)
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // Update 编辑
@@ -274,7 +274,7 @@ func (RbacRoleCtrl) Update(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"rbac_role": rbacRole}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"rbac_role": rbacRole}).ToGinResponse())
 }
 
 // Detail 详情
@@ -290,7 +290,7 @@ func (RbacRoleCtrl) Detail(ctx *gin.Context) {
 		First(&rbacRole)
 	wrongs.ThrowWhenEmpty(ret, "角色")
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"rbac_role": rbacRole}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"rbac_role": rbacRole}).ToGinResponse())
 }
 
 // List 列表
@@ -298,7 +298,7 @@ func (receiver RbacRoleCtrl) List(ctx *gin.Context) {
 	var rbacRoles []*models.RbacRoleMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForPager(
 				models.RbacRoleMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]interface{} {
@@ -315,7 +315,7 @@ func (receiver RbacRoleCtrl) ListJdt(ctx *gin.Context) {
 	var rbacRoles []*models.RbacRoleMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForJqueryDataTable(
 				models.RbacRoleMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]interface{} {
@@ -365,7 +365,7 @@ func (RbacPermissionCtrl) Store(ctx *gin.Context) {
 	// 绑定角色与权限
 	models.PivotRbacRoleRbacPermissionMdl{}.BindRbacRoles(rbacPermission, form.rbacRoles)
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Created(map[string]any{"rbac_permission": rbacPermission}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Created(map[string]any{"rbac_permission": rbacPermission}).ToGinResponse())
 }
 
 // Destroy 删除
@@ -390,7 +390,7 @@ func (RbacPermissionCtrl) Destroy(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // DestroyMany 批量删除
@@ -401,7 +401,7 @@ func (receiver RbacPermissionCtrl) DestroyMany(ctx *gin.Context) {
 		models.NewRbacPermissionMdl().GetDb("").Where("uuid in ?", form.Uuids).Delete(&form.rbacPermissions)
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // Update 编辑
@@ -442,7 +442,7 @@ func (RbacPermissionCtrl) Update(ctx *gin.Context) {
 	// 绑定角色与权限
 	models.PivotRbacRoleRbacPermissionMdl{}.BindRbacRoles(rbacPermission, form.rbacRoles)
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"rbac_permission": rbacPermission}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"rbac_permission": rbacPermission}).ToGinResponse())
 }
 
 // Detail 详情
@@ -458,7 +458,7 @@ func (RbacPermissionCtrl) Detail(ctx *gin.Context) {
 		First(&rbacPermission)
 	wrongs.ThrowWhenEmpty(ret, "权限")
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"rbac_permission": rbacPermission}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"rbac_permission": rbacPermission}).ToGinResponse())
 }
 
 // List 列表
@@ -466,7 +466,7 @@ func (receiver RbacPermissionCtrl) List(ctx *gin.Context) {
 	var rbacPermissions []*models.RbacPermissionMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForPager(
 				models.RbacPermissionMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]interface{} {
@@ -483,7 +483,7 @@ func (receiver RbacPermissionCtrl) ListJdt(ctx *gin.Context) {
 	var rbacPermissions []*models.RbacPermissionMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForJqueryDataTable(
 				models.RbacPermissionMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]interface{} {
@@ -538,7 +538,7 @@ func (RbacMenuCtrl) Store(ctx *gin.Context) {
 	// 绑定角色与菜单
 	models.PivotRbacRoleRbacMenuMdl{}.BindRbacRoles(rbacMenu, form.rbacRoles)
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Created(map[string]any{"rbac_menu": rbacMenu}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Created(map[string]any{"rbac_menu": rbacMenu}).ToGinResponse())
 }
 
 // Destroy 删除
@@ -569,7 +569,7 @@ func (RbacMenuCtrl) Destroy(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // DestroyMany 批量删除
@@ -580,7 +580,7 @@ func (receiver RbacMenuCtrl) DestroyMany(ctx *gin.Context) {
 		models.NewRbacMenuMdl().GetDb("").Where("uuid in ?", form.Uuids).Delete(&form.rbacMenus)
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // Update 编辑
@@ -640,7 +640,7 @@ func (RbacMenuCtrl) Update(ctx *gin.Context) {
 	// 绑定角色与菜单
 	models.PivotRbacRoleRbacMenuMdl{}.BindRbacRoles(rbacMenu, form.rbacRoles)
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"rbac_menu": rbacMenu}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"rbac_menu": rbacMenu}).ToGinResponse())
 }
 
 // Detail 详情
@@ -656,7 +656,7 @@ func (RbacMenuCtrl) Detail(ctx *gin.Context) {
 		First(&rbacMenu)
 	wrongs.ThrowWhenEmpty(ret, "菜单")
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"rbac_menu": rbacMenu}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"rbac_menu": rbacMenu}).ToGinResponse())
 }
 
 // List 列表
@@ -664,7 +664,7 @@ func (receiver RbacMenuCtrl) List(ctx *gin.Context) {
 	var rbacMenus []*models.RbacMenuMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForPager(
 				models.RbacMenuMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]interface{} {
@@ -681,7 +681,7 @@ func (receiver RbacMenuCtrl) ListJdt(ctx *gin.Context) {
 	var rbacMenus []*models.RbacMenuMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForJqueryDataTable(
 				models.RbacMenuMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]interface{} {

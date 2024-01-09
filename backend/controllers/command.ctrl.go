@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"new-fix/tools"
+	"new-fix/utils"
 	"new-fix/wrongs"
 
 	"github.com/gin-gonic/gin"
@@ -25,7 +25,7 @@ func (receiver CommandCtrl) ExcelHelperDemo(ctx *gin.Context) {
 	excelName := ctx.Query("excel_name")
 
 	if operation == "read" {
-		excelReader := (&tools.ExcelReader{}).
+		excelReader := (&utils.ExcelReader{}).
 			OpenFile(fmt.Sprintf("%s/static/%s.xlsx", dir, excelName)).
 			SetSheetName("Sheet1").
 			ReadTitle().
@@ -36,7 +36,7 @@ func (receiver CommandCtrl) ExcelHelperDemo(ctx *gin.Context) {
 		fmt.Println(excelReader.ToDataFrameDefaultType().Records())
 
 		ctx.JSON(
-			tools.NewCorrectWithGinContext("", ctx).
+			utils.NewCorrectWithGinContext("", ctx).
 				Datum(
 					map[string]any{
 						"title":       excelReader.GetTitle(),
@@ -49,17 +49,17 @@ func (receiver CommandCtrl) ExcelHelperDemo(ctx *gin.Context) {
 	} else if operation == "write" {
 		// 写入Excel
 		// 设置表头
-		titleRow := new(tools.ExcelRow).
+		titleRow := new(utils.ExcelRow).
 			SetRowNumber(1).
-			SetCells([]*tools.ExcelCell{
-				new(tools.ExcelCell).SetContent("姓名").SetFontColor("#FF0000", true),
-				new(tools.ExcelCell).SetContent("年龄"),
-				new(tools.ExcelCell).SetContent("性别"),
+			SetCells([]*utils.ExcelCell{
+				new(utils.ExcelCell).SetContent("姓名").SetFontColor("#FF0000", true),
+				new(utils.ExcelCell).SetContent("年龄"),
+				new(utils.ExcelCell).SetContent("性别"),
 			})
-		err := (&tools.ExcelWriter{}).
+		err := (&utils.ExcelWriter{}).
 			Init(fmt.Sprintf("%s/static/%s.xlsx", dir, excelName)).
 			ActiveSheetByIndex(0).
-			SetRows([]*tools.ExcelRow{titleRow}).
+			SetRows([]*utils.ExcelRow{titleRow}).
 			Save()
 		if err != nil {
 			wrongs.ThrowForbidden(fmt.Sprintf("保存文件失败：%s", err.Error()))

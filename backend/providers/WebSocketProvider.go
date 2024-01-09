@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-	"new-fix/tools"
 	"new-fix/types"
+	"new-fix/utils"
 	"new-fix/wrongs"
 	"sync"
 	"time"
@@ -85,7 +85,7 @@ func WebsocketHandler(ctx *gin.Context) {
 	}()
 
 	// newUuid := uuid.NewV4().String()
-	if err = ws.WriteMessage(1, []byte(tools.NewCorrectWithBusiness("连接成功", "connection-success", "").Datum(nil).ToJsonStr())); err != nil {
+	if err = ws.WriteMessage(1, []byte(utils.NewCorrectWithBusiness("连接成功", "connection-success", "").Datum(nil).ToJsonStr())); err != nil {
 		log.Printf("[websocket-error] [发送消息失败] %v\n", err)
 	}
 	// websocketUuidToAddrDict[newUuid] = ws.RemoteAddr().String()
@@ -110,17 +110,17 @@ func WebsocketHandler(ctx *gin.Context) {
 		switch business.BusinessType {
 		case "echo":
 			log.Printf("[websocket-debug] [%s] %s\n", business.BusinessType, message)
-			WebsocketSendMessageByAddr(tools.NewCorrectWithBusiness("echo", "echo", "").Datum(business.Content).ToJsonStr(), ws.RemoteAddr().String())
+			WebsocketSendMessageByAddr(utils.NewCorrectWithBusiness("echo", "echo", "").Datum(business.Content).ToJsonStr(), ws.RemoteAddr().String())
 		case "ping":
 			// log.Printf("[websocket-debug] [%s] %s\n", business.BusinessType, message)
-			WebsocketSendMessageByAddr(tools.NewCorrectWithBusiness("pong", "pong", "").Datum(map[string]any{"time": time.Now().Unix()}).ToJsonStr(), ws.RemoteAddr().String())
+			WebsocketSendMessageByAddr(utils.NewCorrectWithBusiness("pong", "pong", "").Datum(map[string]any{"time": time.Now().Unix()}).ToJsonStr(), ws.RemoteAddr().String())
 		case "authorization/bindUserUuid":
 			log.Printf("[websocket-debug] [%s] 绑定用户uuid %s %s %v\n", business.BusinessType, business.Content["uuid"], ws.RemoteAddr().String(), websocketClients)
 
 			websocketAddrToUuidDict[ws.RemoteAddr().String()] = business.Content["uuid"].(string)
 			websocketUuidToAddrDict[business.Content["uuid"].(string)] = ws.RemoteAddr().String()
 
-			WebsocketSendMessageByAddr(tools.NewCorrectWithBusiness("绑定成功", business.BusinessType, "").Datum(map[string]any{}).ToJsonStr(), ws.RemoteAddr().String())
+			WebsocketSendMessageByAddr(utils.NewCorrectWithBusiness("绑定成功", business.BusinessType, "").Datum(map[string]any{}).ToJsonStr(), ws.RemoteAddr().String())
 		}
 	}
 }

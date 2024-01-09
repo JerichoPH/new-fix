@@ -1,7 +1,7 @@
 package models
 
 import (
-	"new-fix/tools"
+	"new-fix/utils"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -184,7 +184,7 @@ func (receiver *OrganizationParagraphMdl) AfterFind(db *gorm.DB) (err error) {
 		}
 	}
 
-	receiver.FullName = tools.JoinWithoutEmpty([]string{
+	receiver.FullName = utils.JoinWithoutEmpty([]string{
 		receiver.OrganizationRailway.ShortName,
 		receiver.Name,
 	}, " - ")
@@ -268,7 +268,7 @@ func (receiver *OrganizationWorkshopMdl) AfterFind(db *gorm.DB) (err error) {
 		}
 	}
 
-	receiver.FullName = tools.JoinWithoutEmpty([]string{
+	receiver.FullName = utils.JoinWithoutEmpty([]string{
 		receiver.OrganizationParagraph.OrganizationRailway.ShortName,
 		receiver.OrganizationParagraph.Name,
 		receiver.Name,
@@ -387,7 +387,7 @@ func (receiver *OrganizationCrossroadMdl) AfterFind(db *gorm.DB) (err error) {
 		}
 	}
 
-	receiver.FullName = tools.JoinWithoutEmpty([]string{
+	receiver.FullName = utils.JoinWithoutEmpty([]string{
 		receiver.OrganizationWorkshop.OrganizationParagraph.OrganizationRailway.ShortName,
 		receiver.OrganizationWorkshop.OrganizationParagraph.Name,
 		receiver.OrganizationWorkshop.Name,
@@ -457,7 +457,7 @@ func (receiver *OrganizationCenterMdl) AfterFind(db *gorm.DB) (err error) {
 		}
 	}
 
-	receiver.FullName = tools.JoinWithoutEmpty([]string{
+	receiver.FullName = utils.JoinWithoutEmpty([]string{
 		receiver.OrganizationWorkshop.OrganizationParagraph.OrganizationRailway.ShortName,
 		receiver.OrganizationWorkshop.OrganizationParagraph.Name,
 		receiver.OrganizationWorkshop.Name,
@@ -529,7 +529,7 @@ func (receiver *OrganizationWorkAreaMdl) AfterFind(db *gorm.DB) (err error) {
 		}
 	}
 
-	receiver.FullName = tools.JoinWithoutEmpty([]string{
+	receiver.FullName = utils.JoinWithoutEmpty([]string{
 		receiver.OrganizationWorkshop.OrganizationParagraph.OrganizationRailway.ShortName,
 		receiver.OrganizationWorkshop.OrganizationParagraph.Name,
 		receiver.OrganizationWorkshop.Name,

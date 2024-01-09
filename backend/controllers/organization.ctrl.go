@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"new-fix/models"
-	"new-fix/tools"
+	"new-fix/utils"
 	"new-fix/wrongs"
 
 	"github.com/gin-gonic/gin"
@@ -221,7 +221,7 @@ func (receiver OrganizationWorkshopStoreForm) ShouldBind(ctx *gin.Context) Organ
 		wrongs.ThrowWhenEmpty(ret, "站段")
 	}
 	if receiver.TypeCode != "" {
-		if !tools.InString(receiver.TypeCode, models.OrganizationWorkshopMdl{}.GetTypeCodes()) {
+		if !utils.InString(receiver.TypeCode, models.OrganizationWorkshopMdl{}.GetTypeCodes()) {
 			wrongs.ThrowValidate("车间类型代码错误")
 		}
 	}
@@ -377,7 +377,7 @@ func (receiver OrganizationWorkAreaStoreForm) ShouldBind(ctx *gin.Context) Organ
 		wrongs.ThrowWhenEmpty(ret, "所属车间")
 	}
 	if receiver.TypeCode != "" {
-		if !tools.InString(receiver.TypeCode, models.OrganizationWorkAreaMdl{}.GetTypeCodes()) {
+		if !utils.InString(receiver.TypeCode, models.OrganizationWorkAreaMdl{}.GetTypeCodes()) {
 			wrongs.ThrowValidate("工区类型代码错误")
 		}
 	}
@@ -484,7 +484,7 @@ func (OrganizationRailwayCtrl) Store(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Created(map[string]any{"organization_railway": organizationRailway}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Created(map[string]any{"organization_railway": organizationRailway}).ToGinResponse())
 }
 
 // Destroy 删除
@@ -509,7 +509,7 @@ func (OrganizationRailwayCtrl) Destroy(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // DestroyMany 批量删除
@@ -520,7 +520,7 @@ func (OrganizationRailwayCtrl) DestroyMany(ctx *gin.Context) {
 		wrongs.ThrowForbidden("删除失败：%s", ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // Update 编辑
@@ -568,7 +568,7 @@ func (OrganizationRailwayCtrl) Update(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"organization_railway": organizationRailway}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"organization_railway": organizationRailway}).ToGinResponse())
 }
 
 // Detail 详情
@@ -584,7 +584,7 @@ func (OrganizationRailwayCtrl) Detail(ctx *gin.Context) {
 		First(&organizationRailway)
 	wrongs.ThrowWhenEmpty(ret, "路局")
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"organization_railway": organizationRailway}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"organization_railway": organizationRailway}).ToGinResponse())
 }
 
 // List 列表
@@ -592,7 +592,7 @@ func (receiver OrganizationRailwayCtrl) List(ctx *gin.Context) {
 	var organizationRailways []*models.OrganizationRailwayMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForPager(
 				models.OrganizationRailwayMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -609,7 +609,7 @@ func (receiver OrganizationRailwayCtrl) ListJdt(ctx *gin.Context) {
 	var organizationRailways []*models.OrganizationRailwayMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForJqueryDataTable(
 				models.OrganizationRailwayMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -660,7 +660,7 @@ func (OrganizationParagraphCtrl) Store(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Created(map[string]any{"organization_paragraph": organizationParagraph}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Created(map[string]any{"organization_paragraph": organizationParagraph}).ToGinResponse())
 }
 
 // Destroy 删除
@@ -685,7 +685,7 @@ func (OrganizationParagraphCtrl) Destroy(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // DestroyMany 批量删除
@@ -693,7 +693,7 @@ func (OrganizationParagraphCtrl) DestroyMany(ctx *gin.Context) {
 	form := OrganizaitonParagraphDestroyManyForm{}.ShouldBind(ctx)
 	models.NewOrganizationRailwayMdl().GetDb("").Where("uuid in ?", form.Uuids).Delete(nil)
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // Update 编辑
@@ -736,7 +736,7 @@ func (OrganizationParagraphCtrl) Update(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"organization_paragraph": organizationParagraph}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"organization_paragraph": organizationParagraph}).ToGinResponse())
 }
 
 // Detail 详情
@@ -752,7 +752,7 @@ func (OrganizationParagraphCtrl) Detail(ctx *gin.Context) {
 		First(&organizationParagraph)
 	wrongs.ThrowWhenEmpty(ret, "站段")
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"organization_paragraph": organizationParagraph}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"organization_paragraph": organizationParagraph}).ToGinResponse())
 }
 
 // List 列表
@@ -760,7 +760,7 @@ func (receiver OrganizationParagraphCtrl) List(ctx *gin.Context) {
 	var organizationParagraphs []*models.OrganizationParagraphMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForPager(
 				models.OrganizationParagraphMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -777,7 +777,7 @@ func (receiver OrganizationParagraphCtrl) ListJdt(ctx *gin.Context) {
 	var organizationParagraphs []*models.OrganizationParagraphMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForJqueryDataTable(
 				models.OrganizationParagraphMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -829,7 +829,7 @@ func (OrganizationWorkshopCtrl) Store(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Created(map[string]any{"organization_workshop": organizationWorkshop}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Created(map[string]any{"organization_workshop": organizationWorkshop}).ToGinResponse())
 }
 
 // Destroy 删除
@@ -854,7 +854,7 @@ func (OrganizationWorkshopCtrl) Destroy(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // DestroyMany 批量删除
@@ -863,7 +863,7 @@ func (OrganizationWorkshopCtrl) DestroyMany(ctx *gin.Context) {
 	if ret := models.NewOrganizationWorkshopMdl().GetDb("").Where("uuid in ?", form.Uuids).Delete(nil); ret.Error != nil {
 		wrongs.ThrowForbidden("删除失败：%s", ret.Error.Error())
 	}
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // Update 编辑
@@ -907,7 +907,7 @@ func (OrganizationWorkshopCtrl) Update(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"organization_workshop": organizationWorkshop}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"organization_workshop": organizationWorkshop}).ToGinResponse())
 }
 
 // Detail 详情
@@ -923,7 +923,7 @@ func (OrganizationWorkshopCtrl) Detail(ctx *gin.Context) {
 		First(&organizationWorkshop)
 	wrongs.ThrowWhenEmpty(ret, "车间")
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"organization_workshop": organizationWorkshop}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"organization_workshop": organizationWorkshop}).ToGinResponse())
 }
 
 // List 列表
@@ -931,7 +931,7 @@ func (receiver OrganizationWorkshopCtrl) List(ctx *gin.Context) {
 	var organizationWorkshops []*models.OrganizationWorkshopMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForPager(
 				models.OrganizationWorkshopMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -948,7 +948,7 @@ func (receiver OrganizationWorkshopCtrl) ListJdt(ctx *gin.Context) {
 	var organizationWorkshops []*models.OrganizationWorkshopMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForJqueryDataTable(
 				models.OrganizationWorkshopMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -962,7 +962,7 @@ func (receiver OrganizationWorkshopCtrl) ListJdt(ctx *gin.Context) {
 
 // GetTypeCodes 获取车间类型代码
 func (OrganizationWorkshopCtrl) GetTypeCodesMap(ctx *gin.Context) {
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"type_codes_map": models.OrganizationWorkshopMdl{}.GetTypeCodesMap()}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"type_codes_map": models.OrganizationWorkshopMdl{}.GetTypeCodesMap()}).ToGinResponse())
 }
 
 // NewOrganizationStationCtrl 构造函数
@@ -1005,7 +1005,7 @@ func (OrganizationStationCtrl) Store(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Created(map[string]any{"organization_station": organizationStation}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Created(map[string]any{"organization_station": organizationStation}).ToGinResponse())
 }
 
 // Destroy 删除
@@ -1030,7 +1030,7 @@ func (OrganizationStationCtrl) Destroy(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // DestroyMany 批量删除
@@ -1039,7 +1039,7 @@ func (OrganizationStationCtrl) DestroyMany(ctx *gin.Context) {
 	if ret := models.NewOrganizationStationMdl().GetDb("").Where("uuid in ?", form.Uuids).Delete(nil); ret.Error != nil {
 		wrongs.ThrowForbidden("删除失败：%s", ret.Error.Error())
 	}
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // Update 编辑
@@ -1083,7 +1083,7 @@ func (OrganizationStationCtrl) Update(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"organization_station": organizationStation}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"organization_station": organizationStation}).ToGinResponse())
 }
 
 // Detail 详情
@@ -1099,7 +1099,7 @@ func (OrganizationStationCtrl) Detail(ctx *gin.Context) {
 		First(&organizationStation)
 	wrongs.ThrowWhenEmpty(ret, "站场")
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"organization_station": organizationStation}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"organization_station": organizationStation}).ToGinResponse())
 }
 
 // List 列表
@@ -1107,7 +1107,7 @@ func (receiver OrganizationStationCtrl) List(ctx *gin.Context) {
 	var organizationStations []*models.OrganizationStationMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForPager(
 				models.OrganizationStationMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -1124,7 +1124,7 @@ func (receiver OrganizationStationCtrl) ListJdt(ctx *gin.Context) {
 	var organizationStations []*models.OrganizationStationMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForJqueryDataTable(
 				models.OrganizationStationMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -1176,7 +1176,7 @@ func (OrganizationCrossroadCtrl) Store(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Created(map[string]any{"organization_crossroad": organizationCrossroad}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Created(map[string]any{"organization_crossroad": organizationCrossroad}).ToGinResponse())
 }
 
 // Destroy 删除
@@ -1201,7 +1201,7 @@ func (OrganizationCrossroadCtrl) Destroy(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // 批量删除
@@ -1210,7 +1210,7 @@ func (OrganizationCrossroadCtrl) DestroyMany(ctx *gin.Context) {
 	if ret := models.NewOrganizationCrossroadMdl().GetDb("").Where("uuid in ?", form.Uuids).Delete(nil); ret.Error != nil {
 		wrongs.ThrowForbidden("删除失败：%s", ret.Error.Error())
 	}
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // Update 编辑
@@ -1254,7 +1254,7 @@ func (OrganizationCrossroadCtrl) Update(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"organization_crossroad": organizationCrossroad}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"organization_crossroad": organizationCrossroad}).ToGinResponse())
 }
 
 // Detail 详情
@@ -1270,7 +1270,7 @@ func (OrganizationCrossroadCtrl) Detail(ctx *gin.Context) {
 		First(&organizationCrossroad)
 	wrongs.ThrowWhenEmpty(ret, "道口")
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"organization_crossroad": organizationCrossroad}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"organization_crossroad": organizationCrossroad}).ToGinResponse())
 }
 
 // List 列表
@@ -1278,7 +1278,7 @@ func (receiver OrganizationCrossroadCtrl) List(ctx *gin.Context) {
 	var organizationCrossroads []*models.OrganizationCrossroadMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForPager(
 				models.OrganizationCrossroadMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -1295,7 +1295,7 @@ func (receiver OrganizationCrossroadCtrl) ListJdt(ctx *gin.Context) {
 	var organizationCrossroads []*models.OrganizationCrossroadMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForJqueryDataTable(
 				models.OrganizationCrossroadMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -1347,7 +1347,7 @@ func (OrganizationCenterCtrl) Store(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Created(map[string]any{"organization_center": organizationCenter}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Created(map[string]any{"organization_center": organizationCenter}).ToGinResponse())
 }
 
 // Destroy 删除
@@ -1372,7 +1372,7 @@ func (OrganizationCenterCtrl) Destroy(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // DestroyMany 批量删除
@@ -1381,7 +1381,7 @@ func (OrganizationCenterCtrl) DestroyMany(ctx *gin.Context) {
 	if ret := models.NewOrganizationCenterMdl().GetDb("").Where("uuid in ?", form.Uuids).Delete(nil); ret.Error != nil {
 		wrongs.ThrowForbidden("删除失败：%s", ret.Error.Error())
 	}
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // Update 编辑
@@ -1425,7 +1425,7 @@ func (OrganizationCenterCtrl) Update(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"organization_center": organizationCenter}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"organization_center": organizationCenter}).ToGinResponse())
 }
 
 // Detail 详情
@@ -1441,7 +1441,7 @@ func (OrganizationCenterCtrl) Detail(ctx *gin.Context) {
 		First(&organizationCenter)
 	wrongs.ThrowWhenEmpty(ret, "中心")
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"organization_center": organizationCenter}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"organization_center": organizationCenter}).ToGinResponse())
 }
 
 // List 列表
@@ -1449,7 +1449,7 @@ func (receiver OrganizationCenterCtrl) List(ctx *gin.Context) {
 	var organizationCenters []*models.OrganizationCenterMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForPager(
 				models.OrganizationCenterMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -1466,7 +1466,7 @@ func (receiver OrganizationCenterCtrl) ListJdt(ctx *gin.Context) {
 	var organizationCenters []*models.OrganizationCenterMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForJqueryDataTable(
 				models.OrganizationCenterMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -1518,7 +1518,7 @@ func (OrganizationWorkAreaCtrl) Store(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Created(map[string]any{"organization_work_area": organizationWorkArea}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Created(map[string]any{"organization_work_area": organizationWorkArea}).ToGinResponse())
 }
 
 // Destroy 删除
@@ -1543,7 +1543,7 @@ func (OrganizationWorkAreaCtrl) Destroy(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // DestroyMany 批量删除
@@ -1552,7 +1552,7 @@ func (OrganizationWorkAreaCtrl) DestroyMany(ctx *gin.Context) {
 	if ret := models.NewOrganizationWorkAreaMdl().GetDb("").Where("uuid in ?", form.Uuids).Delete(nil); ret.Error != nil {
 		wrongs.ThrowForbidden("删除失败：%s", ret.Error.Error())
 	}
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // Update 编辑
@@ -1596,7 +1596,7 @@ func (OrganizationWorkAreaCtrl) Update(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"organization_work_area": organizationWorkArea}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"organization_work_area": organizationWorkArea}).ToGinResponse())
 }
 
 // Detail 详情
@@ -1612,7 +1612,7 @@ func (OrganizationWorkAreaCtrl) Detail(ctx *gin.Context) {
 		First(&organizationWorkArea)
 	wrongs.ThrowWhenEmpty(ret, "工区")
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"organization_work_area": organizationWorkArea}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"organization_work_area": organizationWorkArea}).ToGinResponse())
 }
 
 // List 列表
@@ -1620,7 +1620,7 @@ func (receiver OrganizationWorkAreaCtrl) List(ctx *gin.Context) {
 	var organizationWorkAreas []*models.OrganizationWorkAreaMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForPager(
 				models.OrganizationWorkAreaMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -1637,7 +1637,7 @@ func (receiver OrganizationWorkAreaCtrl) ListJdt(ctx *gin.Context) {
 	var organizationWorkAreas []*models.OrganizationWorkAreaMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForJqueryDataTable(
 				models.OrganizationWorkAreaMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -1651,7 +1651,7 @@ func (receiver OrganizationWorkAreaCtrl) ListJdt(ctx *gin.Context) {
 
 // GetTypeCodes 获取工区类型代码
 func (OrganizationWorkAreaCtrl) GetTypeCodesMap(ctx *gin.Context) {
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"type_codes_map": models.OrganizationWorkAreaMdl{}.GetTypeCodesMap()}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"type_codes_map": models.OrganizationWorkAreaMdl{}.GetTypeCodesMap()}).ToGinResponse())
 }
 
 // NewOrganizationLineCtrl 构造函数
@@ -1700,7 +1700,7 @@ func (OrganizationLineCtrl) Store(ctx *gin.Context) {
 	// 线别绑定中心
 	organizationLine.BindOrganizationCenters(form.organizationCenters)
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Created(map[string]any{"organization_line": organizationLine}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Created(map[string]any{"organization_line": organizationLine}).ToGinResponse())
 }
 
 // Destroy 删除
@@ -1725,7 +1725,7 @@ func (OrganizationLineCtrl) Destroy(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // DestroyMany 批量删除
@@ -1734,7 +1734,7 @@ func (OrganizationLineCtrl) DestroyMany(ctx *gin.Context) {
 	if ret := models.NewOrganizationLineMdl().GetDb("").Where("uuid in ?", form.Uuids).Delete(nil); ret.Error != nil {
 		wrongs.ThrowForbidden("删除失败：%s", ret.Error.Error())
 	}
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // Update 编辑
@@ -1784,7 +1784,7 @@ func (OrganizationLineCtrl) Update(ctx *gin.Context) {
 	// 线别绑定中心
 	organizationLine.BindOrganizationCenters(form.organizationCenters)
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"organization_line": organizationLine}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"organization_line": organizationLine}).ToGinResponse())
 }
 
 // Detail 详情
@@ -1800,7 +1800,7 @@ func (OrganizationLineCtrl) Detail(ctx *gin.Context) {
 		First(&organizationLine)
 	wrongs.ThrowWhenEmpty(ret, "线别")
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"organization_line": organizationLine}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"organization_line": organizationLine}).ToGinResponse())
 }
 
 // List 列表
@@ -1808,7 +1808,7 @@ func (receiver OrganizationLineCtrl) List(ctx *gin.Context) {
 	var organizationLines []*models.OrganizationLineMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForPager(
 				models.OrganizationLineMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -1825,7 +1825,7 @@ func (receiver OrganizationLineCtrl) ListJdt(ctx *gin.Context) {
 	var organizationLines []*models.OrganizationLineMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForJqueryDataTable(
 				models.OrganizationLineMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {

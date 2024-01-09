@@ -3,7 +3,7 @@ package models
 import (
 	"encoding/base64"
 	"fmt"
-	"new-fix/tools"
+	"new-fix/utils"
 	"new-fix/wrongs"
 	"os"
 	"path"
@@ -84,10 +84,10 @@ func (receiver *FileMdl) CreateByByte(savePath string, originalFilename, origina
 		return nil, ret.Error
 	}
 	// 创建文件夹
-	if fs := tools.NewFileSystem(tools.GetRootPath()).Join([]string{savePath}); !fs.IsExist() {
+	if fs := utils.NewFileSystem(utils.GetRootPath()).Join([]string{savePath}); !fs.IsExist() {
 		fs.CreateDir()
 	}
-	if err := tools.NewFileSystem(tools.GetRootPath()).
+	if err := utils.NewFileSystem(utils.GetRootPath()).
 		Join([]string{savePath, filename}).
 		WriteByte(values); err != nil {
 		return nil, err
@@ -104,7 +104,7 @@ func (receiver *FileMdl) DeleteFile(uuid string) error {
 		First(&receiver)
 
 	if !wrongs.ThrowWhenEmpty(ret, "") {
-		p := path.Join(tools.GetRootPath(), receiver.SavePath, receiver.Filename)
+		p := path.Join(utils.GetRootPath(), receiver.SavePath, receiver.Filename)
 		os.Remove(p)
 
 		NewFileMdl().

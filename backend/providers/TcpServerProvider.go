@@ -5,8 +5,8 @@ import (
 	"io"
 	"log"
 	"net"
-	"new-fix/tools"
 	"new-fix/types"
+	"new-fix/utils"
 	"new-fix/wrongs"
 	"sync"
 	"time"
@@ -83,7 +83,7 @@ func handleConnection(conn net.Conn) {
 	}()
 
 	newUuid := uuid.NewV4().String()
-	_, err := io.WriteString(conn, tools.NewCorrectWithBusiness("链接成功", "connection-success", "").Datum(map[string]any{"uuid": newUuid}).ToJsonStr())
+	_, err := io.WriteString(conn, utils.NewCorrectWithBusiness("链接成功", "connection-success", "").Datum(map[string]any{"uuid": newUuid}).ToJsonStr())
 	tcpUuidToAddrDict[newUuid] = conn.RemoteAddr().String()
 	tcpAddrToUuidDict[conn.RemoteAddr().String()] = newUuid
 
@@ -112,14 +112,14 @@ func handleConnection(conn net.Conn) {
 		case "ping":
 			log.Printf("[tcp-server-debug] [%s] %s\n", business.BusinessType, message)
 
-			TcpServerSendMessageByAddr(tools.NewCorrectWithBusiness("pong", "pong", "").Datum(map[string]any{"time": time.Now().Unix()}).ToJsonStr(), conn.RemoteAddr().String())
+			TcpServerSendMessageByAddr(utils.NewCorrectWithBusiness("pong", "pong", "").Datum(map[string]any{"time": time.Now().Unix()}).ToJsonStr(), conn.RemoteAddr().String())
 		case "authorization/bindUserUuid":
 			log.Printf("[tcp-server-debug] [%s] 绑定用户uuid\n", business.BusinessType)
 
 			tcpAddrToUuidDict[conn.RemoteAddr().String()] = business.Content["uuid"].(string)
 			tcpUuidToAddrDict[business.Content["uuid"].(string)] = conn.RemoteAddr().String()
 
-			TcpServerSendMessageByAddr(tools.NewCorrectWithBusiness("绑定成功", business.BusinessType, "").Datum(map[string]any{}).ToJsonStr(), conn.RemoteAddr().String())
+			TcpServerSendMessageByAddr(utils.NewCorrectWithBusiness("绑定成功", business.BusinessType, "").Datum(map[string]any{}).ToJsonStr(), conn.RemoteAddr().String())
 		}
 	}
 }

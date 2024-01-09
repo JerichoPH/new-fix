@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"new-fix/database"
 	"new-fix/models"
-	"new-fix/tools"
+	"new-fix/utils"
 
 	"gorm.io/gorm"
 )
@@ -26,7 +26,7 @@ func (UpgradeCmd) init() []string {
 		ret             *gorm.DB
 	)
 
-	std := tools.NewStdoutHelper("初始化项目")
+	std := utils.NewStdoutHelper("初始化项目")
 
 	std.EchoLineDebug("初始化管理员")
 	database.ExecSql("truncate table accounts")
@@ -38,7 +38,7 @@ func (UpgradeCmd) init() []string {
 		Create(&models.AccountMdl{
 			Username: "admin",
 			Nickname: "管理员",
-			Password: tools.GeneratePassword("123123"),
+			Password: utils.GeneratePassword("123123"),
 			BeAdmin:  true,
 		})
 

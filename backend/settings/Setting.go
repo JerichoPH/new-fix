@@ -1,7 +1,7 @@
 package settings
 
 import (
-	"new-fix/tools"
+	"new-fix/utils"
 	"new-fix/wrongs"
 	"path/filepath"
 	"sync"
@@ -27,7 +27,7 @@ func NewSetting() *Setting {
 	if settingIns == nil {
 		once.Do(func() { settingIns = &Setting{} })
 
-		settingIns.RootPath = tools.GetRootPath()
+		settingIns.RootPath = utils.GetRootPath()
 
 		appConfigFile, appConfigErr := ini.Load(filepath.Join(settingIns.RootPath, "/settings/app.ini"))
 		if appConfigErr != nil {

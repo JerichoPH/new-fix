@@ -2,7 +2,7 @@ package middlewares
 
 import (
 	"new-fix/models"
-	"new-fix/tools"
+	"new-fix/utils"
 	"new-fix/wrongs"
 
 	"github.com/gin-gonic/gin"
@@ -20,7 +20,7 @@ func CheckPermission() gin.HandlerFunc {
 			yes                   = false
 		)
 		// 获取当前用户
-		account = tools.GetAuth(ctx).(models.AccountMdl)
+		account = utils.GetAuth(ctx).(models.AccountMdl)
 		if !account.BeAdmin {
 			rbacPermissionUuids = account.GetPermissionUuids()
 

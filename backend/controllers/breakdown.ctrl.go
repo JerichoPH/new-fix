@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"new-fix/models"
-	"new-fix/tools"
+	"new-fix/utils"
 	"new-fix/wrongs"
 
 	"github.com/gin-gonic/gin"
@@ -80,7 +80,7 @@ func (receiver BreakdownLogStoreForm) ShouldBind(ctx *gin.Context) BreakdownLogS
 		ret := models.NewBreakdownTypeMdl().GetDb("").Where("uuid = ?", receiver.BreakdownTypeUuid).First(&receiver.breakdownType)
 		wrongs.ThrowWhenEmpty(ret, "故障类型")
 	}
-	if !tools.InString(receiver.TypeCode, models.BreakdownLogMdl{}.GetTypeCodes()) {
+	if !utils.InString(receiver.TypeCode, models.BreakdownLogMdl{}.GetTypeCodes()) {
 		wrongs.ThrowValidate("故障日志类型错误")
 	}
 	return receiver
@@ -120,7 +120,7 @@ func (BreakdownTypeCtrl) Store(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Created(map[string]any{"breakdown_type": breakdownType}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Created(map[string]any{"breakdown_type": breakdownType}).ToGinResponse())
 }
 
 // Destroy 删除
@@ -145,7 +145,7 @@ func (BreakdownTypeCtrl) Destroy(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // DestroyMany 批量删除
@@ -154,7 +154,7 @@ func (BreakdownTypeCtrl) DestroyMany(ctx *gin.Context) {
 	if ret := models.NewBreakdownTypeMdl().GetDb("").Where("uuid in ?", form.Uuids).Delete(nil); ret.Error != nil {
 		wrongs.ThrowForbidden("批量删除失败：%s", ret.Error.Error())
 	}
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Deleted().ToGinResponse())
 }
 
 // Update 编辑
@@ -193,7 +193,7 @@ func (BreakdownTypeCtrl) Update(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"breakdown_type": breakdownType}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"breakdown_type": breakdownType}).ToGinResponse())
 }
 
 // Detail 详情
@@ -209,7 +209,7 @@ func (BreakdownTypeCtrl) Detail(ctx *gin.Context) {
 		First(&breakdownType)
 	wrongs.ThrowWhenEmpty(ret, "故障类型")
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"breakdown_type": breakdownType}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"breakdown_type": breakdownType}).ToGinResponse())
 }
 
 // List 列表
@@ -217,7 +217,7 @@ func (receiver BreakdownTypeCtrl) List(ctx *gin.Context) {
 	var breakdownTypes []*models.BreakdownTypeMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForPager(
 				models.BreakdownTypeMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -234,7 +234,7 @@ func (receiver BreakdownTypeCtrl) ListJdt(ctx *gin.Context) {
 	var breakdownTypes []*models.BreakdownTypeMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForJqueryDataTable(
 				models.BreakdownTypeMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -270,7 +270,7 @@ func (BreakdownLogCtrl) Store(ctx *gin.Context) {
 		wrongs.ThrowForbidden(ret.Error.Error())
 	}
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Created(map[string]any{"breakdown_log": breakdownLog}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Created(map[string]any{"breakdown_log": breakdownLog}).ToGinResponse())
 }
 
 // Detail 详情
@@ -286,7 +286,7 @@ func (BreakdownLogCtrl) Detail(ctx *gin.Context) {
 		First(&breakdownLog)
 	wrongs.ThrowWhenEmpty(ret, "故障日志")
 
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"breakdown_log": breakdownLog}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"breakdown_log": breakdownLog}).ToGinResponse())
 }
 
 // List 列表
@@ -294,7 +294,7 @@ func (receiver BreakdownLogCtrl) List(ctx *gin.Context) {
 	var breakdownLogs []*models.BreakdownLogMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForPager(
 				models.BreakdownLogMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -311,7 +311,7 @@ func (receiver BreakdownLogCtrl) ListJdt(ctx *gin.Context) {
 	var breakdownLogs []*models.BreakdownLogMdl
 
 	ctx.JSON(
-		tools.NewCorrectWithGinContext("", ctx).
+		utils.NewCorrectWithGinContext("", ctx).
 			DataForJqueryDataTable(
 				models.BreakdownLogMdl{}.GetListByQuery(ctx),
 				func(db *gorm.DB) map[string]any {
@@ -325,5 +325,5 @@ func (receiver BreakdownLogCtrl) ListJdt(ctx *gin.Context) {
 
 // GetTypeCodesMap 获取故障日志类型映射
 func (BreakdownLogCtrl) GetTypeCodesMap(ctx *gin.Context) {
-	ctx.JSON(tools.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"type_codes_map": models.BreakdownLogMdl{}.GetTypeCodesMap()}).ToGinResponse())
+	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Datum(map[string]any{"type_codes_map": models.BreakdownLogMdl{}.GetTypeCodesMap()}).ToGinResponse())
 }
