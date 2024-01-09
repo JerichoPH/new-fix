@@ -149,8 +149,8 @@ func (receiver *Correct) DataForPager(db *gorm.DB, read func(*gorm.DB) map[strin
 		receiver.msg = "OK"
 	}
 
-	pageStr := receiver.context.Query("__page__")
-	limitStr := receiver.context.DefaultQuery("__limit__", "1000")
+	pageStr := receiver.context.Query("@page")
+	limitStr := receiver.context.DefaultQuery("@limit", "1000")
 	limit, _ := strconv.Atoi(limitStr)
 	page, _ := strconv.Atoi(pageStr)
 
@@ -165,12 +165,12 @@ func (receiver *Correct) DataForPager(db *gorm.DB, read func(*gorm.DB) map[strin
 			Status:    200,
 			ErrorCode: 0,
 			Pagination: map[string]any{
-				"page_curr": page,
-				"page_last": math.Ceil(float64(count/int64(limit))) + 1,
-				"page_prev": page - 1,
-				"page_next": page + 1,
-				"page_size": limit,
-				"count":     count,
+				"curr":  page,
+				"last":  math.Ceil(float64(count/int64(limit))) + 1,
+				"prev":  page - 1,
+				"next":  page + 1,
+				"size":  limit,
+				"count": count,
 			},
 			BusinessType: receiver.businessType,
 		}
