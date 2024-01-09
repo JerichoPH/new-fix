@@ -80,7 +80,7 @@
                   <q-td key="uri" :props="props">{{ props.row.uri }}</q-td>
                   <q-td key="description" :props="props">{{ props.row.description }}</q-td>
                   <q-td key="rbacRoles" :props="props">
-                    <join-string :values="collect(props.row.rbacRoles).pluck('name').all()" separator=", " />
+                    <join-string :values="collect(props.row.rbacRoles).pluck('name').all()" sep=", " />
                   </q-td>
                   <q-td key="operation" :props="props">
                     <q-btn-group>

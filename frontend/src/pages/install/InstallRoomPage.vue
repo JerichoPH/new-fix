@@ -91,18 +91,12 @@
                   <q-td key="installIndoorRoomType" :props="props">{{ props.row.installIndoorRoomType.name }}</q-td>
                   <q-td key="parent" :props="props">
                     <join-string :values="[
-                      props.row.organizationRailwayByStation.name,
-                      props.row.organizationRailwayByCenter.name,
-                      props.row.organizationRailwayByCrossroad.name,
-                      props.row.organizationParagraphByStation.name,
-                      props.row.organizationParagraphByCenter.name,
-                      props.row.organizationParagraphByCrossroad.name,
-                      props.row.organizationWorkshopByStation.name,
-                      props.row.organizationWorkshopByCenter.name,
-                      props.row.organizationWorkshopByCrossroad.name,
-                      props.row.organizationStation.name,
-                      props.row.organizationCenter.name,
-                      props.row.organizationCrossroad.name,
+                      getVal(props, 'row.parent.organizationWorkshopByStation.name'),
+                      getVal(props, 'row.parent.organizationWorkshopByCenter.name'),
+                      getVal(props, 'row.parent.organizationWorkshopByCrossroad.name'),
+                      getVal(props, 'row.parent.organizationStation.name'),
+                      getVal(props, 'row.parent.organizationCenter.name'),
+                      getVal(props, 'row.parent.organizationCrossroad.name'),
                     ]" />
                   </q-td>
                   <q-td key="operation" :props="props">
@@ -187,7 +181,7 @@
 <script setup>
 import { ref, onMounted, provide } from "vue";
 import collect from "collect.js";
-import { fnColumnReverseSort } from "src/utils/common";
+import { fnColumnReverseSort, getVal } from "src/utils/common";
 import {
   ajaxGetInstallIndoorRooms,
   ajaxGetInstallIndoorRoom,
@@ -307,18 +301,20 @@ const fnSearch = () => {
           uuid: installIndoorRoom.uuid,
           name: installIndoorRoom.name,
           installIndoorRoomType: installIndoorRoom.install_indoor_room_type,
-          organizationStation: installIndoorRoom.organization_station,
-          organizationCenter: installIndoorRoom.organization_center,
-          organizationCrossroad: installIndoorRoom.organization_crossroad,
-          organizationWorkshopByStation: installIndoorRoom.organization_station.organization_workshop,
-          organizationWorkshopByCenter: installIndoorRoom.organization_center.organization_workshop,
-          organizationWorkshopByCrossroad: installIndoorRoom.organization_crossroad.organization_workshop,
-          organizationParagraphByStation: installIndoorRoom.organization_station.organization_workshop.organization_paragraph,
-          organizationParagraphByCenter: installIndoorRoom.organization_center.organization_workshop.organization_paragraph,
-          organizationParagraphByCrossroad: installIndoorRoom.organization_crossroad.organization_workshop.organization_paragraph,
-          organizationRailwayByStation: installIndoorRoom.organization_station.organization_workshop.organization_paragraph.organization_railway,
-          organizationRailwayByCenter: installIndoorRoom.organization_center.organization_workshop.organization_paragraph.organization_railway,
-          organizationRailwayByCrossroad: installIndoorRoom.organization_crossroad.organization_workshop.organization_paragraph.organization_railway,
+          parent: {
+            organizationStation: installIndoorRoom.organization_station,
+            organizationCenter: installIndoorRoom.organization_center,
+            organizationCrossroad: installIndoorRoom.organization_crossroad,
+            organizationWorkshopByStation: getVal(installIndoorRoom, 'organization_station.organization_workshop'),
+            organizationWorkshopByCenter: getVal(installIndoorRoom, 'organization_center.organization_workshop'),
+            organizationWorkshopByCrossroad: getVal(installIndoorRoom, 'organization_crossroad.organization_workshop'),
+            organizationParagraphByStation: getVal(installIndoorRoom, 'organization_station.organization_workshop.organization_paragraph'),
+            organizationParagraphByCenter: getVal(installIndoorRoom, 'organization_center.organization_workshop.organization_paragraph'),
+            organizationParagraphByCrossroad: getVal(installIndoorRoom, 'organization_crossroad.organization_workshop.organization_paragraph'),
+            organizationRailwayByStation: getVal(installIndoorRoom, 'organization_station.organization_workshop.organization_paragraph.organization_railway'),
+            organizationRailwayByCenter: getVal(installIndoorRoom, 'organization_center.organization_workshop.organization_paragraph.organization_railway'),
+            organizationRailwayByCrossroad: getVal(installIndoorRoom, 'organization_crossroad.organization_workshop.organization_paragraph.organization_railway'),
+          },
           operation: { uuid: installIndoorRoom.uuid },
         }
       })

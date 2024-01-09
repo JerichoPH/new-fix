@@ -1,20 +1,21 @@
 <template>
-  {{ values ? values.filter(val => { return val !== "" || val !== null; }).join(separator) : '' }}
+  {{ values ? values.filter(val => isEmpty(val)).join(sep) : '' }}
 </template>
 <script setup>
 import { defineProps } from "vue";
+import { isEmpty } from "src/utils/common";
 const props = defineProps({
   values: {
     type: Array,
     default: null,
     required: true,
   },
-  separator: {
+  sep: {
     type: String,
     default: " - ",
   },
 });
 
 const values = props.values;
-const separator = props.separator;
+const sep = props.sep;
 </script>

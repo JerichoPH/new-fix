@@ -19,7 +19,7 @@ type (
 		MySqlMdl
 		Name                      string                     `gorm:"type:varchar(64);not null;comment:名称;" json:"name"`
 		InstallIndoorRoomTypeUuid string                     `gorm:"index;char(36);not null;default:'';comment:所属室内上道位置-机房类型uuid;" json:"install_indoor_room_type_uuid"`
-		InstallIndoorRoomType     *InstallIndoorRoomMdl      `gorm:"foreignKey:install_indoor_room_type_uuid;references:uuid;comment:所属室内上道位置-机房类型;" json:"install_indoor_room_type"`
+		InstallIndoorRoomType     *InstallIndoorRoomTypeMdl  `gorm:"foreignKey:install_indoor_room_type_uuid;references:uuid;comment:所属室内上道位置-机房类型;" json:"install_indoor_room_type"`
 		OrganizationStationUuid   string                     `gorm:"index;type:char(36);not null;default:'';comment:所属组织结构-站场uuid;" json:"organization_station_uuid"`
 		OrganizationStation       *OrganizationStationMdl    `gorm:"foreignKey:organization_station_uuid;references:uuid;comment:所属组织结构-站场;" json:"organization_station"`
 		OrganizationCrossroadUuid string                     `gorm:"index;type:char(36);not null;default:'';comment:所属组织结构-道口uuid;" json:"organization_crossroad_uuid"`
