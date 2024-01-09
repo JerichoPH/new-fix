@@ -1,6 +1,8 @@
 package models
 
 import (
+	"new-fix/tools"
+
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -19,6 +21,7 @@ type (
 		MySqlMdl
 		UniqueCode                 string                     `gorm:"index;type:char(4);not null;comment:站段代码;" json:"unique_code"`
 		Name                       string                     `gorm:"index;type:varchar(128);not null;comment:站段名称;" json:"name"`
+		FullName                   string                     `gorm:"-" json:"full_name"`
 		OrganizationRailwayUuid    string                     `gorm:"type:char(36);not null;" json:"organization_railway_uuid"`
 		OrganizationRailway        *OrganizationRailwayMdl    `gorm:"foreignKey:organization_railway_uuid;references:uuid;comment:所属路局;" json:"organization_railway"`
 		OrganizationWorkshops      []*OrganizationWorkshopMdl `gorm:"foreignKey:organization_paragraph_uuid;references:uuid;comment:相关车间;" json:"organization_workshops"`
@@ -30,6 +33,7 @@ type (
 		MySqlMdl
 		UniqueCode                 string                      `gorm:"index;type:char(7);not null;comment:车间代码;" json:"unique_code"`
 		Name                       string                      `gorm:"index;type:varchar(128);not null;comment:车间名称;" json:"name"`
+		FullName                   string                      `gorm:"-" json:"full_name"`
 		TypeCode                   string                      `gorm:"enum('','SCENE','FIX','ELECTRIC','HUMP','ON-BOARD');not null;default:'';comment:车间类型;" json:"type_code"`
 		TypeText                   string                      `gorm:"->;type:varchar(128) as ((case type_code when 'SCENE' then '现场车间' when 'FIX' then '检修车间' when 'ELECTRIC' then '电子车间' when 'HUMP' then '驼峰车间' when 'ON-BOARD' then '车载车间' else '无' end))" json:"type_text"`
 		OrganizationParagraphUuid  string                      `gorm:"type:char(36);not null;" json:"organization_paragraph_uuid"`
@@ -59,6 +63,7 @@ type (
 		MySqlMdl
 		UniqueCode               string                   `gorm:"index;type:char(5);not null;comment:道口代码;" json:"unique_code"` // I1642
 		Name                     string                   `gorm:"index;type:varchar(128);not null;comment:道口名称;" json:"name"`
+		FullName                 string                   `gorm:"-" json:"full_name"`
 		OrganizationWorkshopUuid string                   `gorm:"type:char(36);not null;" json:"organization_workshop_uuid"`
 		OrganizationWorkshop     *OrganizationWorkshopMdl `gorm:"foreignKey:organization_workshop_uuid;references:uuid;comment:所属车间;" json:"organization_workshop"`
 		OrganizationLineUuid     string                   `gorm:"type:char(36);not null;" json:"organization_line_uuid"`
@@ -71,6 +76,7 @@ type (
 		MySqlMdl
 		UniqueCode               string                   `gorm:"index;type:char(6);not null;comment:中心代码;" json:"unique_code"` // A12F34
 		Name                     string                   `gorm:"index;type:varchar(128);not null;comment:中心名称;" json:"name"`
+		FullName                 string                   `gorm:"-" json:"full_name"`
 		OrganizationWorkshopUuid string                   `gorm:"type:char(36);not null;" json:"organization_workshop_uuid"`
 		OrganizationWorkshop     *OrganizationWorkshopMdl `gorm:"foreignKey:organization_workshop_uuid;references:uuid;comment:所属车间;" json:"organization_workshop"`
 		OrganizationLineUuid     string                   `gorm:"type:char(36);not null;" json:"organization_line_uuid"`
@@ -83,6 +89,7 @@ type (
 		MySqlMdl
 		UniqueCode                 string                    `gorm:"index;type:char(8);not null;comment:工区代码;" json:"unique_code"` // B048D001
 		Name                       string                    `gorm:"index;type:varchar(128);not null;comment:工区名称;" json:"name"`
+		FullName                   string                    `gorm:"-" json:"full_name"`
 		TypeCode                   string                    `gorm:"type:enum('','SCENE','POINT-SWITCH','REPLY','SYNTHESIZE', 'POWER-SUPPLY-PANEL');not null;default:'';comment:工区类型;" json:"type_code"`
 		TypeText                   string                    `gorm:"->;type:varchar(128) as ((case type_code when 'SCENE' then '现场工区' when 'POINT-SWITCH' then '转辙机工区' when 'REPLY' then '继电器工区' when 'SYNTHESIZE' then '综合工区' when 'POWER-SUPPLY-PANEL' then '电源屏工区' else '无' end))" json:"type_text"`
 		OrganizationWorkshopUuid   string                    `gorm:"type:char(36);not null;" json:"organization_workshop_uuid"`
@@ -96,6 +103,7 @@ type (
 		MySqlMdl
 		UniqueCode                string                      `gorm:"index;type:char(5);not null;comment:线别代码;" json:"unique_code"` // E0001
 		Name                      string                      `gorm:"index;type:varchar(128);not null;comment:线别名称;" json:"name"`
+		FullName                  string                      `gorm:"-" json:"full_name"`
 		OrganizationParagraphUuid string                      `gorm:"type:char(36);not null;" json:"organization_paragraph_uuid"`
 		OrganizationParagraph     *OrganizationParagraphMdl   `gorm:"foreignKey:organization_paragraph_uuid;references:uuid;comment:所属站段;" json:"organization_paragraph"`
 		OrganizationStations      []*OrganizationStationMdl   `gorm:"foreignKey:organization_line_uuid;references:uuid;comment:相关站场;" json:"organization_stations"`
@@ -168,6 +176,22 @@ func (receiver OrganizationParagraphMdl) GetListByQuery(ctx *gin.Context) *gorm.
 		Joins("join organization_railways ora on op.organization_railway_uuid = ora.uuid")
 }
 
+// AfterFind 查询回调
+func (receiver *OrganizationParagraphMdl) AfterFind(db *gorm.DB) (err error) {
+	if receiver.OrganizationRailway == nil {
+		if err = db.Model(receiver).Association(("OrganizationRailway")).Find(&receiver.OrganizationRailway); err != nil {
+			return
+		}
+	}
+
+	receiver.FullName = tools.JoinWithoutEmpty([]string{
+		receiver.OrganizationRailway.ShortName,
+		receiver.Name,
+	}, " - ")
+
+	return
+}
+
 // TableName 组织结构-车间表名称
 func (OrganizationWorkshopMdl) TableName() string {
 	return "organization_workshops"
@@ -229,6 +253,28 @@ func (OrganizationWorkshopMdl) GetTypeCodesMap() []map[string]string {
 		{"code": "HUMP", "text": "驼峰车间"},
 		{"code": "ON-BOARD", "text": "车载车间"},
 	}
+}
+
+// AfterFind 查询回调
+func (receiver *OrganizationWorkshopMdl) AfterFind(db *gorm.DB) (err error) {
+	if receiver.OrganizationParagraph == nil {
+		if err = db.Model(receiver).Association(("OrganizationParagraph")).Find(&receiver.OrganizationParagraph); err != nil {
+			return err
+		}
+	}
+	if receiver.OrganizationParagraph.OrganizationRailway == nil {
+		if err = db.Model(receiver.OrganizationParagraph).Association(("OrganizationRailway")).Find(&receiver.OrganizationParagraph.OrganizationRailway); err != nil {
+			return err
+		}
+	}
+
+	receiver.FullName = tools.JoinWithoutEmpty([]string{
+		receiver.OrganizationParagraph.OrganizationRailway.ShortName,
+		receiver.OrganizationParagraph.Name,
+		receiver.Name,
+	}, " - ")
+
+	return
 }
 
 // TableName 组织结构-站场表名称
@@ -323,6 +369,33 @@ func (receiver OrganizationCrossroadMdl) GetListByQuery(ctx *gin.Context) *gorm.
 		Joins("join organization_railways ora on op.organization_railway_uuid = ora.uuid")
 }
 
+// AfterFind 查询回调
+func (receiver *OrganizationCrossroadMdl) AfterFind(db *gorm.DB) (err error) {
+	if receiver.OrganizationWorkshop == nil {
+		if err = db.Model(receiver).Association(("OrganizationWorkshop")).Find(&receiver.OrganizationWorkshop); err != nil {
+			return
+		}
+	}
+	if receiver.OrganizationWorkshop.OrganizationParagraph == nil {
+		if err = db.Model(receiver.OrganizationWorkshop).Association(("OrganizationParagraph")).Find(&receiver.OrganizationWorkshop.OrganizationParagraph); err != nil {
+			return
+		}
+	}
+	if receiver.OrganizationWorkshop.OrganizationParagraph.OrganizationRailway == nil {
+		if err = db.Model(receiver.OrganizationWorkshop.OrganizationParagraph).Association(("OrganizationRailway")).Find(&receiver.OrganizationWorkshop.OrganizationParagraph.OrganizationRailway); err != nil {
+			return
+		}
+	}
+
+	receiver.FullName = tools.JoinWithoutEmpty([]string{
+		receiver.OrganizationWorkshop.OrganizationParagraph.OrganizationRailway.ShortName,
+		receiver.OrganizationWorkshop.OrganizationParagraph.Name,
+		receiver.OrganizationWorkshop.Name,
+		receiver.Name,
+	}, " - ")
+	return
+}
+
 // TableName 组织结构-中心表名称
 func (OrganizationCenterMdl) TableName() string {
 	return "organization_centers"
@@ -364,6 +437,33 @@ func (receiver OrganizationCenterMdl) GetListByQuery(ctx *gin.Context) *gorm.DB 
 		Joins("join organization_workshops ow on oct.organization_workshop_uuid = ow.uuid").
 		Joins("join organization_paragraphs op on ow.organization_paragraph_uuid = op.uuid").
 		Joins("join organization_railways ora on op.organization_railway_uuid = ora.uuid")
+}
+
+// AfterFind 查询回调
+func (receiver *OrganizationCenterMdl) AfterFind(db *gorm.DB) (err error) {
+	if receiver.OrganizationWorkshop == nil {
+		if err = db.Model(receiver).Association(("OrganizationWorkshop")).Find(&receiver.OrganizationWorkshop); err != nil {
+			return
+		}
+	}
+	if receiver.OrganizationWorkshop.OrganizationParagraph == nil {
+		if err = db.Model(receiver.OrganizationWorkshop).Association(("OrganizationParagraph")).Find(&receiver.OrganizationWorkshop.OrganizationParagraph); err != nil {
+			return
+		}
+	}
+	if receiver.OrganizationWorkshop.OrganizationParagraph.OrganizationRailway == nil {
+		if err = db.Model(receiver.OrganizationWorkshop.OrganizationParagraph).Association(("OrganizationRailway")).Find(&receiver.OrganizationWorkshop.OrganizationParagraph.OrganizationRailway); err != nil {
+			return
+		}
+	}
+
+	receiver.FullName = tools.JoinWithoutEmpty([]string{
+		receiver.OrganizationWorkshop.OrganizationParagraph.OrganizationRailway.ShortName,
+		receiver.OrganizationWorkshop.OrganizationParagraph.Name,
+		receiver.OrganizationWorkshop.Name,
+		receiver.Name,
+	}, " - ")
+	return
 }
 
 // TableName 组织结构-工区表名称
@@ -409,6 +509,33 @@ func (receiver OrganizationWorkAreaMdl) GetListByQuery(ctx *gin.Context) *gorm.D
 		Joins("join organization_workshops ow on owa.organization_workshop_uuid = ow.uuid").
 		Joins("join organization_paragraphs op on ow.organization_paragraph_uuid = op.uuid").
 		Joins("join organization_railways ora on op.organization_railway_uuid = ora.uuid")
+}
+
+// AfterFind 查询回调
+func (receiver *OrganizationWorkAreaMdl) AfterFind(db *gorm.DB) (err error) {
+	if receiver.OrganizationWorkshop == nil {
+		if err = db.Model(receiver).Association(("OrganizationWorkshop")).Find(&receiver.OrganizationWorkshop); err != nil {
+			return
+		}
+	}
+	if receiver.OrganizationWorkshop.OrganizationParagraph == nil {
+		if err = db.Model(receiver.OrganizationWorkshop).Association(("OrganizationParagraph")).Find(&receiver.OrganizationWorkshop.OrganizationParagraph); err != nil {
+			return
+		}
+	}
+	if receiver.OrganizationWorkshop.OrganizationParagraph.OrganizationRailway == nil {
+		if err = db.Model(receiver.OrganizationWorkshop.OrganizationParagraph).Association(("OrganizationRailway")).Find(&receiver.OrganizationWorkshop.OrganizationParagraph.OrganizationRailway); err != nil {
+			return
+		}
+	}
+
+	receiver.FullName = tools.JoinWithoutEmpty([]string{
+		receiver.OrganizationWorkshop.OrganizationParagraph.OrganizationRailway.ShortName,
+		receiver.OrganizationWorkshop.OrganizationParagraph.Name,
+		receiver.OrganizationWorkshop.Name,
+		receiver.Name,
+	}, " - ")
+	return
 }
 
 // GetTypeCodes 获取工区类型代码列表
