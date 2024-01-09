@@ -573,7 +573,7 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	dbSession = dbSession.Where(wheres).Not(notWheres).Or(orWheres)
 
 	// 拼接自定义条件（like）
-	if m, exist := receiver.ctx.GetQueryMap("@<<>>"); exist {
+	if m, exist := receiver.ctx.GetQueryMap("@like"); exist {
 		for field, value := range m {
 			if _, exist := ignoreFields[field]; !exist {
 				if value != "" {
@@ -584,7 +584,7 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	}
 
 	// 拼接自定义条件（左like）
-	if m, exist := receiver.ctx.GetQueryMap("@<<"); exist {
+	if m, exist := receiver.ctx.GetQueryMap("@%like"); exist {
 		for field, value := range m {
 			if _, exist := ignoreFields[field]; !exist {
 				if value != "" {
@@ -595,7 +595,7 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	}
 
 	// 拼接自定义条件（右like）
-	if m, exist := receiver.ctx.GetQueryMap("@>>"); exist {
+	if m, exist := receiver.ctx.GetQueryMap("@like%"); exist {
 		for field, value := range m {
 			if _, exist := ignoreFields[field]; !exist {
 				if value != "" {
@@ -1100,12 +1100,12 @@ func (receiver *MySqlMdl) GetDbUseQuery(dbConnName string) *gorm.DB {
 	}
 
 	// 排序
-	if order, exist := receiver.ctx.GetQuery("@."); exist {
+	if order, exist := receiver.ctx.GetQuery("@order"); exist {
 		dbSession.Order(order)
 	}
 
 	// 指定排序
-	if orderField, exist := receiver.ctx.GetQueryArray("@..."); exist {
+	if orderField, exist := receiver.ctx.GetQueryArray("@orderField"); exist {
 		if len(orderField) > 2 {
 			dbSession.Order(fmt.Sprintf("field (%s,'%s')", orderField[0], strings.Join(orderField[1:], "','")))
 		}
