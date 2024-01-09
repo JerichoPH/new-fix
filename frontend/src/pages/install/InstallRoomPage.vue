@@ -134,7 +134,7 @@
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-install-indoor-room-type_alertCreate label-name="所属机房类型" />
+              <sel-install-indoor-room-type_alert-create label-name="所属机房类型" />
             </div>
           </div>
           <div class="row q-mt-md">
@@ -177,6 +177,64 @@
       </q-form>
     </q-card>
   </q-dialog>
+  <!-- 编辑室内上道位置-机房弹窗 -->
+  <q-dialog v-model="alertEditInstallIndoorRoom" no-backdrop-dismiss>
+    <q-card :style="{ minWidth: '450px' }">
+      <q-card-section>
+        <div class="text-h6">编辑室内上道位置-机房</div>
+      </q-card-section>
+      <q-form class="q-gutter-md" @submit.prevent="fnUpdateInstallIndoorRoom">
+        <q-card-section class="q-pt-none">
+          <div class="row">
+            <div class="col">
+              <q-input outlined clearable lazy-rules v-model="name_alertEditInstallIndoorRoom" label="名称" :rules="[]" />
+            </div>
+          </div>
+          <div class="row q-mt-md">
+            <div class="col">
+              <sel-install-indoor-room-type_alert-edit label-name="机房类型" />
+            </div>
+          </div>
+          <div class="row q-mt-md">
+            <div class="col">
+              <sel-organization-railway_alert-edit label-name="所属路局" />
+            </div>
+          </div>
+          <div class="row q-mt-md">
+            <div class="col">
+              <sel-organization-paragraph_alert-edit label-name="所属站段" />
+            </div>
+          </div>
+          <div class="row q-mt-md">
+            <div class="col">
+              <sel-organization-workshop_alert-edit label-name="所属车间" />
+            </div>
+          </div>
+          <div class="row q-mt-md">
+            <div class="col">
+              <sel-organization-station_alert-edit label-name="所属站场" />
+            </div>
+          </div>
+          <div class="row q-mt-md">
+            <div class="col">
+              <sel-organization-center_alert-edit label-name="所属中心" />
+            </div>
+          </div>
+          <div class="row q-mt-md">
+            <div class="col">
+              <sel-organization-crossroad_alert-edit label-name="所属道口" />
+            </div>
+          </div>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn-group>
+            <q-btn type="button" label="关闭" v-close-popup />
+            <q-btn type="submit" label="确定" icon="check" color="warning" />
+          </q-btn-group>
+        </q-card-actions>
+      </q-form>
+    </q-card>
+  </q-dialog>
 </template>
 <script setup>
 import { ref, onMounted, provide } from "vue";
@@ -212,6 +270,7 @@ import SelOrganizationParagraph_alertEdit from "src/components/SelOrganizationPa
 import SelOrganizationWorkshop_alertEdit from "src/components/SelOrganizationWorkshop_alertEdit.vue";
 import SelOrganizationStation_alertEdit from "src/components/SelOrganizationStation_alertEdit.vue";
 import SelOrganizationCenter_alertEdit from "src/components/SelOrganizationCenter_alertEdit.vue";
+import SelOrganizationCrossroad_alertEdit from "src/components/SelOrganizationCrossroad_alertEdit.vue";
 
 // 搜索栏数据
 const name_search = ref("");
@@ -253,6 +312,25 @@ provide("organizationCenterUuid_alertCreate", organizationCenterUuid_alertCreate
 const organizationCrossroadUuid_alertCreateInstallIndoorRoom = ref("");
 provide("organizationCrossroadUuid_alertCreate", organizationCrossroadUuid_alertCreateInstallIndoorRoom);
 
+// 编辑室内上道位置-机房弹窗数据
+const alertEditInstallIndoorRoom = ref(false);
+const currentUuid = ref("");
+const name_alertEditInstallIndoorRoom = ref("");
+const installIndoorRoomTypeUuid_alertEditInstallIndoorRoom = ref("");
+provide("installIndoorRoomTypeUuid_alertEdit", installIndoorRoomTypeUuid_alertEditInstallIndoorRoom);
+const organizationRailwayUuid_alertEditInstallIndoorRoom = ref("");
+provide("organizationRailwayUuid_alertEdit", organizationRailwayUuid_alertEditInstallIndoorRoom);
+const organizationParagraphUuid_alertEditInstallIndoorRoom = ref("");
+provide("organizationParagraphUuid_alertEdit", organizationParagraphUuid_alertEditInstallIndoorRoom);
+const organizationWorkshopUuid_alertEditInstallIndoorRoom = ref("");
+provide("organizationWorkshopUuid_alertEdit", organizationWorkshopUuid_alertEditInstallIndoorRoom);
+const organizationStationUuid_alertEditInstallIndoorRoom = ref("");
+provide("organizationStationUuid_alertEdit", organizationStationUuid_alertEditInstallIndoorRoom);
+const organizationCenterUuid_alertEditInstallIndoorRoom = ref("");
+provide("organizationCenterUuid_alertEdit", organizationCenterUuid_alertEditInstallIndoorRoom);
+const organizationCrossroadUuid_alertEditInstallIndoorRoom = ref("");
+provide("organizationCrossroadUuid_alertEdit", organizationCrossroadUuid_alertEditInstallIndoorRoom);
+
 onMounted(() => fnInit());
 
 const fnInit = () => fnSearch();
@@ -269,6 +347,9 @@ const fnResetSearch = () => {
 };
 
 const fnSearch = () => {
+  rows.value = [];
+  selected.value = [];
+
   ajaxGetInstallIndoorRooms({
     "@~[]": [
       "InstallIndoorRoomType",
@@ -360,11 +441,101 @@ const fnStoreInstallIndoorRoom = () => {
 };
 
 const fnOpenAlertEditInstallIndoorRoom = params => {
+  if (!getVal(params, "uuid")) return;
+  currentUuid.value = getVal(params, "uuid");
+
+  ajaxGetInstallIndoorRoom(currentUuid.value, {
+    "@~[]": [
+      "InstallIndoorRoomType",
+      "OrganizationStation",
+      "OrganizationStation.OrganizationWorkshop",
+      "OrganizationStation.OrganizationWorkshop.OrganizationParagraph",
+      "OrganizationStation.OrganizationWorkshop.OrganizationParagraph.OrganizationRailway",
+      "OrganizationCenter",
+      "OrganizationCenter.OrganizationWorkshop",
+      "OrganizationCenter.OrganizationWorkshop.OrganizationParagraph",
+      "OrganizationCenter.OrganizationWorkshop.OrganizationParagraph.OrganizationRailway",
+      "OrganizationCrossroad",
+      "OrganizationCrossroad.OrganizationWorkshop",
+      "OrganizationCrossroad.OrganizationWorkshop.OrganizationParagraph",
+      "OrganizationCrossroad.OrganizationWorkshop.OrganizationParagraph.OrganizationRailway",
+    ],
+  })
+    .then(res => {
+      name_alertEditInstallIndoorRoom.value = getVal(res, "content.install_indoor_room.name");
+      installIndoorRoomTypeUuid_alertEditInstallIndoorRoom.value = getVal(res, "content.install_indoor_room.install_indoor_room_type_uuid");
+      if (getVal(res, "content.install_indoor_room.organization_station")) {
+        organizationRailwayUuid_alertEditInstallIndoorRoom.value = getVal(res, "content.install_indoor_room.organization_station.organization_workshop.organization_paragraph.organization_railway.uuid");
+        organizationParagraphUuid_alertEditInstallIndoorRoom.value = getVal(res, "content.install_indoor_room.organization_station.organization_workshop.organization_paragraph.uuid")
+        organizationWorkshopUuid_alertEditInstallIndoorRoom.value = getVal(res, "content.install_indoor_room.organization_station.organization_workshop.uuid")
+        organizationStationUuid_alertEditInstallIndoorRoom.value = getVal(res, "content.install_indoor_room.organization_station.uuid")
+      } else if (getVal(res, "content.install_indoor_room.organization_crossroad")) {
+        organizationRailwayUuid_alertEditInstallIndoorRoom.value = getVal(res, "content.install_indoor_room.organization_crossroad.organization_workshop.organization_paragraph.organization_railway.uuid");
+        organizationParagraphUuid_alertEditInstallIndoorRoom.value = getVal(res, "content.install_indoor_room.organization_crossroad.organization_workshop.organization_paragraph.uuid")
+        organizationWorkshopUuid_alertEditInstallIndoorRoom.value = getVal(res, "content.install_indoor_room.organization_crossroad.organization_workshop.uuid")
+        organizationCrossroadUuid_alertEditInstallIndoorRoom.value = getVal(res, "content.install_indoor_room.organization_crossroad.uuid")
+      } else if (getVal(res, "content.install_indoor_room.organization_center")) {
+        organizationRailwayUuid_alertEditInstallIndoorRoom.value = getVal(res, "content.install_indoor_room.organization_center.organization_workshop.organization_paragraph.organization_railway.uuid");
+        organizationParagraphUuid_alertEditInstallIndoorRoom.value = getVal(res, "content.install_indoor_room.organization_center.organization_workshop.organization_paragraph.uuid")
+        organizationWorkshopUuid_alertEditInstallIndoorRoom.value = getVal(res, "content.install_indoor_room.organization_center.organization_workshop.uuid")
+        organizationCenterUuid_alertEditInstallIndoorRoom.value = getVal(res, "content.install_indoor_room.organization_center.uuid")
+      }
+
+      alertEditInstallIndoorRoom.value = true;
+    })
+    .catch(e => notifies.error(e.msg));
 };
 
-const fnUpdateInstallIndoorRoom = () => { };
+const fnUpdateInstallIndoorRoom = () => {
+  if (!currentUuid.value) return;
 
-const fnDestroyInstallIndoorRoom = parms => { };
+  const loading = notifies.loading();
 
-const fnDestroyInstallIndoorRooms = () => { };
+  ajaxUpdateInstallIndoorRoom(currentUuid.value, {
+    name: name_alertEditInstallIndoorRoom.value,
+    install_indoor_room_type_uuid: installIndoorRoomTypeUuid_alertEditInstallIndoorRoom.value,
+    organization_station_uuid: organizationStationUuid_alertEditInstallIndoorRoom.value,
+    organization_crossroad_uuid: organizationCrossroadUuid_alertEditInstallIndoorRoom.value,
+    organization_center_uuid: organizationCenterUuid_alertEditInstallIndoorRoom.value,
+  })
+    .then(res => {
+      notifies.success(res.msg);
+      fnSearch();
+
+      alertEditInstallIndoorRoom.value = false;
+    })
+    .catch(e => notifies.error(e.msg))
+    .finally(loading());
+};
+
+const fnDestroyInstallIndoorRoom = parms => {
+  if (!getVal(parms, "uuid")) return;
+
+  notifies.confirm(actions.destory(() => {
+    const loading = notifies.loading();
+
+    ajaxDestroyInstallIndoorRoom(getVal(parms, "uuid"))
+      .then(res => {
+        notifies.success("删除成功");
+        fnSearch();
+      })
+      .catch(e => notifies.error(e.msg))
+      .finally(loading());
+  }));
+};
+
+const fnDestroyInstallIndoorRooms = () => {
+  notifies.confirm(actions.destory(() => {
+    const loading = notifies.loading();
+
+    ajaxDestroyInstallIndoorRooms(collect(selected.value).pluck("uuid"))
+      .then(() => {
+        notifies.success("删除成功");
+        fnSearch();
+      })
+      .catch(e => notifies.error(e.msg))
+      .finally(loading());
+  }));
+
+};
 </script>
