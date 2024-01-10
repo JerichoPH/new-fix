@@ -217,7 +217,7 @@ const fnOpenAlertCreateFactory = () => {
 };
 
 const fnStoreFactory = () => {
-  const loading = loading();
+  const loading = loadingNotify();
   ajaxStoreFactory({
     unique_code: uniqueCode_alertCreateFactory.value,
     name: name_alertCreateFactory.value,
@@ -249,7 +249,7 @@ const fnOpenAlertEditFactory = params => {
 const fnUpdateFactory = () => {
   if (!currentUuid.value) return;
 
-  const loading = loading();
+  const loading = loadingNotify();
 
   ajaxUpdateFactory(currentUuid.value, {
     unique_code: uniqueCode_alertEditFactory.value,
@@ -270,7 +270,7 @@ const fnDestroyFactory = params => {
 
   confirmNotify(
     destroyActions(() => {
-      const loading = loading();
+      const loading = loadingNotify();
 
       ajaxDestroyFactory(params.uuid)
         .then(() => {
@@ -286,7 +286,7 @@ const fnDestroyFactory = params => {
 const fnDestroyFactories = () => {
   confirmNotify(
     destroyActions(() => {
-      const loading = loading();
+      const loading = loadingNotify();
 
       ajaxDestroyFactories(collect(selected.value).pluck("uuid").all())
         .then(() => {

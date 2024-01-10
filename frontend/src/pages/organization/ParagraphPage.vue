@@ -23,7 +23,8 @@
                   <q-input outlined clearable lazy-rules v-model="name_search" label="名称" :rules="[]" class="q-mb-md" />
                 </div>
                 <div class="col-3">
-                  <sel-organization-railway_search label-name="所属路局" :ajax-params="{}" />
+                  <standard-select label-name="所属路局" sechma="search" current-field="organizationRailwayUuid"
+                :data-source="ajaxGetOrganizationRailways" data-source-field="organization_railways" />
                 </div>
               </div>
             </q-form>
@@ -107,9 +108,18 @@
             <div class="col">
               <q-input outlined clearable lazy-rules v-model="uniqueCode_alertCreateOrganizationParagraph" label="代码"
                 :rules="[]" />
+            </div>
+          </div>
+          <div class="row q-mt-md">
+            <div class="col">
               <q-input outlined clearable lazy-rules v-model="name_alertCreateOrganizationParagraph" label="名称"
                 :rules="[]" class="q-mt-md" />
-              <sel-organization-railway_alert-create label-name="所属路局" :ajax-params="{}" class="q-mt-md" />
+            </div>
+          </div>
+          <div class="row q-mt-md">
+            <div class="col">
+              <standard-select label-name="所属路局" sechma="alertCreate" current-field="organizationRailwayUuid"
+                :data-source="ajaxGetOrganizationRailways" data-source-field="organization_railways" />
             </div>
           </div>
         </q-card-section>
@@ -138,7 +148,8 @@
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-organization-railway_alert-edit label-name="所属路局" :ajax-params="{}" />
+              <standard-select label-name="所属路局" sechma="alertEdit" current-field="organizationRailwayUuid"
+                :data-source="ajaxGetOrganizationRailways" data-source-field="organization_railways" />
             </div>
           </div>
         </q-card-section>
@@ -155,6 +166,7 @@
 <script setup>
 import { ref, onMounted, provide } from "vue";
 import collect from "collect.js";
+import { fnColumnReverseSort } from "src/utils/common";
 import {
   ajaxGetOrganizationParagraphs,
   ajaxGetOrganizationParagraph,
@@ -162,6 +174,7 @@ import {
   ajaxUpdateOrganizationParagraph,
   ajaxDestroyOrganizationParagraph,
   ajaxDestroyOrganizationParagraphs,
+  ajaxGetOrganizationRailways,
 } from "src/apis/organization";
 import {
   loadingNotify,
@@ -170,10 +183,7 @@ import {
   confirmNotify,
   destroyActions,
 } from "src/utils/notify";
-import { fnColumnReverseSort } from "src/utils/common";
-import SelOrganizationRailway_search from "src/components/SelOrganizationRailway_search.vue";
-import SelOrganizationRailway_alertCreate from "src/components/SelOrganizationRailway_alertCreate.vue";
-import SelOrganizationRailway_alertEdit from "src/components/SelOrganizationRailway_alertEdit.vue";
+import StandardSelect from "src/components/StandardSelect.vue";
 
 // 搜索栏数据
 const uniqueCode_search = ref("");
@@ -252,7 +262,7 @@ const fnOpenAlertCreateOrganizationParagraph = () => {
 };
 
 const fnStoreOrganizationParagraph = () => {
-  const loading = loading();
+  const loading = loadingNotify();
 
   ajaxStoreOrganizationParagraph({
     unique_code: uniqueCode_alertCreateOrganizationParagraph.value,
@@ -289,7 +299,7 @@ const fnOpenAlertEditOrganizationParagraph = params => {
 const fnUpdateOrganizationParagraph = () => {
   if (!currentUuid.value) return;
 
-  const loading = loading();
+  const loading = loadingNotify();
   ajaxUpdateOrganizationPragraph(currentUuid.value, {
     name: name_alertEditOrganizationParagraph.value,
     organization_railway_uuid: organizationRailwayUuid_alertEditOrganizationParagraph.value,

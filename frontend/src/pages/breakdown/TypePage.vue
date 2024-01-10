@@ -19,7 +19,8 @@
                   <q-input outlined clearable lazy-rules v-model="name_search" label="名称" :rules="[]" class="q-mb-md" />
                 </div>
                 <div class="col-3">
-                  <sel-equipment-kind-category_search label-name="所属器材种类" />
+                  <standard-select label-name="所属器材种类" sechma="search" current-field="equipmentKindCategoryUuid"
+                    :data-source="ajaxGetEquipmentKindCategories" data-source-field="equipment_kind_categories" />
                 </div>
               </div>
             </q-form>
@@ -99,7 +100,8 @@
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-equipment-kind-category_alert-create label-name="所属器材种类" />
+              <standard-select label-name="所属器材种类" sechma="alertCreate" current-field="equipmentKindCategoryUuid"
+                :data-source="ajaxGetEquipmentKindCategories" data-source-field="equipment_kind_categories" />
             </div>
           </div>
         </q-card-section>
@@ -127,7 +129,8 @@
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-equipment-kind-category_alert-edit lable-name="所属器材种类" />
+              <standard-select label-name="所属器材种类" sechma="alertEdit" current-field="equipmentKindCategoryUuid"
+                :data-source="ajaxGetEquipmentKindCategories" data-source-field="equipment_kind_categories" />
             </div>
           </div>
         </q-card-section>
@@ -154,6 +157,7 @@ import {
   ajaxDestroyBreakdownType,
   ajaxDestroyBreakdownTypes,
 } from "src/apis/breakdown";
+import { ajaxGetEquipmentKindCategories } from "src/apis/equipmentKind";
 import {
   loadingNotify,
   successNotify,
@@ -161,9 +165,7 @@ import {
   confirmNotify,
   destroyActions,
 } from "src/utils/notify";
-import SelEquipmentKindCategory_search from "src/components/SelEquipmentKindCategory_search.vue";
-import SelEquipmentKindCategory_alertCreate from "src/components/SelEquipmentKindCategory_alertCreate.vue"
-import SelEquipmentKindCategory_alertEdit from "src/components/SelEquipmentKindCategory_alertEdit.vue"
+import StandardSelect from "src/components/StandardSelect.vue";
 
 // 搜索栏数据
 const name_search = ref("");
@@ -233,7 +235,7 @@ const fnOpenAlertCreateBreakdownType = () => {
 };
 
 const fnStoreBreakdownType = () => {
-  const loading = loading();
+  const loading = loadingNotify();
 
   ajaxStoreBreakdownType({
     name: name_alertCreateBreakdownType.value,
@@ -267,7 +269,7 @@ const fnOpenAlertEditBreakdownType = params => {
 };
 
 const fnUpdateBreakdownType = () => {
-  const loading = loading();
+  const loading = loadingNotify();
 
   ajaxUpdateBreakdownType(currentUuid.value, {
     name: name_alertEditBreakdownType.value,
@@ -286,7 +288,7 @@ const fnDestroyBreakdownType = params => {
 
   confirmNotify(
     destroyActions(() => {
-      const loading = loading();
+      const loading = loadingNotify();
 
       ajaxDestroyBreakdownType(params.uuid)
         .then(() => {
@@ -304,7 +306,7 @@ const fnDestroyBreakdownType = params => {
 const fnDestroyBreakdownTypes = () => {
   confirmNotify(
     destroyActions(() => {
-      const loading = loading();
+      const loading = loadingNotify();
 
       ajaxDestroyBreakdownTypes(collect(selected.value).pluck("uuid").toArray())
         .then(() => {

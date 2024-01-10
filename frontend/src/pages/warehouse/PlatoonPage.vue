@@ -19,27 +19,38 @@
                   <q-input outlined clearable lazy-rules v-model="name_search" label="名称" :rules="[]" class="q-mb-md" />
                 </div>
                 <div class="col">
-                  <sel-organization-railway_search label-name="所属路局" />
+                  <standard-select label-name="所属路局" sechma="search" current-field="organizationRailwayUuid"
+                    :data-source="ajaxGetOrganizationRailways" data-source-field="organization_railways" />
                 </div>
                 <div class="col">
-                  <sel-organization-paragraph_search label-name="所属站段" />
+                  <standard-select label-name="所属站段" sechma="search" current-field="organizationParagraphUuid"
+                    :data-source="ajaxGetOrganizationParagraphs" data-source-field="organization_paragraphs"
+                    parent-field="organizationRailwayhUuid" />
                 </div>
                 <div class="col">
-                  <sel-organization-workshop_search label-name="所属车间" />
+                  <standard-select label-name="所属车间" sechma="search" current-field="organizationWorkshopUuid"
+                    :data-source="ajaxGetOrganizationWorkshops" data-source-field="organization_workshops"
+                    parent-field="organizationParagraphUuid" />
                 </div>
                 <div class="col">
-                  <sel-organization-work-area_search label-name="所属工区" />
+                  <standard-select label-name="所属工区" sechma="search" current-field="organizationWorkAreaUuid"
+                    :data-source="ajaxGetOrganizationWorkAreas" data-source-field="organization_work_areas"
+                    parent-field="organizationWorkshopUuid" />
                 </div>
               </div>
               <div class="row q-col-gutter-sm">
                 <div class="col">
-                  <sel-warehouse-storehouse_search label-name="所属库房" />
+                  <standard-select label-name="所属仓库-库房" sechma="search" current-field="warehouseStorehouseUuid"
+                    :data-source="ajaxGetWarehouseStorehouses" data-source-field="warehouse_storehouses" />
                 </div>
                 <div class="col">
-                  <sel-warehouse-area_search label-name="所属库区" />
+                  <standard-select label-name="所属仓库-库区" sechma="search" current-field="warehouseAreaUuid"
+                    :data-source="ajaxGetWarehouseAreas" data-source-field="warehouse_areas"
+                    parent-field="warehouseStorehouseUuid" />
                 </div>
                 <div class="col">
-                  <sel-warehouse-platoon-type-code_search label-name="排类型" />
+                  <standard-select label-name="排类型" sechma="search" current-field="warehousePlatoonTypeCode"
+                    :data-source="ajaxGetWarehousePlatoonTypeCodesMap" data-source-field="type_codes_map" />
                 </div>
                 <div class="col"></div>
                 <div class="col"></div>
@@ -129,37 +140,48 @@
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-organization-railway_alert-create label-name="所属路局" />
+              <standard-select label-name="所属路局" sechma="alertCreate" current-field="organizationRailwayUuid"
+                :data-source="ajaxGetOrganizationRailways" data-source-field="organization_railways" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-organization-paragraph_alert-create label-name="所属站段" />
+              <standard-select label-name="所属站段" sechma="alertCreate" current-field="organizationParagraphUuid"
+                :data-source="ajaxGetOrganizationParagraphs" data-source-field="organization_paragraphs"
+                parent-field="organizationRailwayhUuid" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-organization-workshop_alert-create label-name="所属车间" />
+              <standard-select label-name="所属车间" sechma="alertCreate" current-field="organizationWorkshopUuid"
+                :data-source="ajaxGetOrganizationWorkshops" data-source-field="organization_workshops"
+                parent-field="organizationParagraphUuid" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-organization-work-area_alert-create label-name="所属工区" />
+              <standard-select label-name="所属工区" sechma="alertCreate" current-field="organizationWorkAreaUuid"
+                :data-source="ajaxGetOrganizationWorkAreas" data-source-field="organization_work_areas"
+                parent-field="organizationWorkshopUuid" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-warehouse-storehouse_alert-create label-name="所属库房" />
+              <standard-select label-name="所属仓库-库房" sechma="alertCreate" current-field="warehouseStorehouseUuid"
+                :data-source="ajaxGetWarehouseStorehouses" data-source-field="warehouse_storehouses" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-warehouse-area_alert-create label-name="所属库区" />
+              <standard-select label-name="所属仓库-库区" sechma="alertCreate" current-field="warehouseAreaUuid"
+                :data-source="ajaxGetWarehouseAreas" data-source-field="warehouse_areas"
+                parent-field="warehouseStorehouseUuid" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-warehouse-platoon-type-code_alert-create label-name="排类型" />
+              <standard-select label-name="排类型" sechma="alertCreate" current-field="warehousePlatoonTypeCode"
+                :data-source="ajaxGetWarehousePlatoonTypeCodesMap" data-source-field="type_codes_map" />
             </div>
           </div>
         </q-card-section>
@@ -187,37 +209,48 @@
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-organization-railway_alert-edit label-name="所属路局" />
+              <standard-select label-name="所属路局" sechma="alertEdit" current-field="organizationRailwayUuid"
+                :data-source="ajaxGetOrganizationRailways" data-source-field="organization_railways" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-organization-paragraph_alert-edit label-name="所属站段" />
+              <standard-select label-name="所属站段" sechma="alertEdit" current-field="organizationParagraphUuid"
+                :data-source="ajaxGetOrganizationParagraphs" data-source-field="organization_paragraphs"
+                parent-field="organizationRailwayhUuid" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-organization-workshop_alert-edit label-name="所属车间" />
+              <standard-select label-name="所属车间" sechma="alertEdit" current-field="organizationWorkshopUuid"
+                :data-source="ajaxGetOrganizationWorkshops" data-source-field="organization_workshops"
+                parent-field="organizationParagraphUuid" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-organization-work-area_alert-edit label-name="所属工区" />
+              <standard-select label-name="所属工区" sechma="alertEdit" current-field="organizationWorkAreaUuid"
+                :data-source="ajaxGetOrganizationWorkAreas" data-source-field="organization_work_areas"
+                parent-field="organizationWorkshopUuid" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-warehouse-storehouse_alert-edit label-name="所属库房" />
+              <standard-select label-name="所属仓库-库房" sechma="alertEdit" current-field="warehouseStorehouseUuid"
+                :data-source="ajaxGetWarehouseStorehouses" data-source-field="warehouse_storehouses" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-warehouse-area_alert-edit label-name="所属库区" />
+              <standard-select label-name="所属仓库-库区" sechma="alertEdit" current-field="warehouseAreaUuid"
+                :data-source="ajaxGetWarehouseAreas" data-source-field="warehouse_areas"
+                parent-field="warehouseStorehouseUuid" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-warehouse-platoon-type-code_alert-edit label-name="排类型" />
+              <standard-select label-name="排类型" sechma="alertEdit" current-field="warehousePlatoonTypeCode"
+                :data-source="ajaxGetWarehousePlatoonTypeCodesMap" data-source-field="type_codes_map" />
             </div>
           </div>
         </q-card-section>
@@ -242,6 +275,13 @@ import {
   ajaxUpdateWarehousePlatoon,
   ajaxDestroyWarehousePlatoon,
   ajaxDestroyWarehousePlatoons,
+  ajaxGetOrganizationRailways,
+  ajaxGetOrganizationParagraphs,
+  ajaxGetOrganizationWorkshops,
+  ajaxGetOrganizationWorkAreas,
+  ajaxGetWarehouseStorehouses,
+  ajaxGetWarehouseAreas,
+  ajaxGetWarehousePlatoonTypeCodesMap,
 } from "src/apis/warehouse";
 import {
   loadingNotify,
@@ -251,27 +291,7 @@ import {
   destroyActions,
 } from "src/utils/notify";
 import JoinString from "src/components/JoinString.vue";
-import SelOrganizationRailway_search from "src/components/SelOrganizationRailway_search.vue";
-import SelOrganizationParagraph_search from "src/components/SelOrganizationParagraph_search.vue";
-import SelOrganizationWorkshop_search from "src/components/SelOrganizationWorkshop_search.vue";
-import SelOrganizationWorkArea_search from "src/components/SelOrganizationWorkArea_search.vue";
-import SelWarehouseStorehouse_search from "src/components/SelWarehouseStorehouse_search.vue";
-import SelWarehouseArea_search from "src/components/SelWarehouseArea_search.vue";
-import SelWarehousePlatoonTypeCode_search from "src/components/SelWarehousePlatoonTypeCode_search.vue";
-import SelOrganizationRailway_alertCreate from "src/components/SelOrganizationRailway_alertCreate.vue";
-import SelOrganizationParagraph_alertCreate from "src/components/SelOrganizationParagraph_alertCreate.vue";
-import SelOrganizationWorkshop_alertCreate from "src/components/SelOrganizationWorkshop_alertCreate.vue";
-import SelOrganizationWorkArea_alertCreate from "src/components/SelOrganizationWorkArea_alertCreate.vue";
-import SelWarehouseStorehouse_alertCreate from "src/components/SelWarehouseStorehouse_alertCreate.vue";
-import SelWarehouseArea_alertCreate from "src/components/SelWarehouseArea_alertCreate.vue";
-import SelWarehousePlatoonTypeCode_alertCreate from "src/components/SelWarehousePlatoonTypeCode_alertCreate.vue";
-import SelOrganizationRailway_alertEdit from "src/components/SelOrganizationRailway_alertEdit.vue";
-import SelOrganizationParagraph_alertEdit from "src/components/SelOrganizationParagraph_alertEdit.vue";
-import SelOrganizationWorkshop_alertEdit from "src/components/SelOrganizationWorkshop_alertEdit.vue";
-import SelOrganizationWorkArea_alertEdit from "src/components/SelOrganizationWorkArea_alertEdit.vue";
-import SelWarehouseStorehouse_alertEdit from "src/components/SelWarehouseStorehouse_alertEdit.vue";
-import SelWarehouseArea_alertEdit from "src/components/SelWarehouseArea_alertEdit.vue";
-import SelWarehousePlatoonTypeCode_alertEdit from "src/components/SelWarehousePlatoonTypeCode_alertEdit.vue";
+import StandardSelect from "src/components/StandardSelect.vue";
 
 // 搜索栏数据
 const name_search = ref("");
@@ -469,7 +489,7 @@ const fnDestroyWarehousePlatoon = params => {
   if (!params["uuid"]) return;
 
   confirmNotify(destroyActions(() => {
-    const loading = loading();
+    const loading = loadingNotify();
 
     ajaxDestroyWarehousePlatoon(params.uuid)
       .then(() => {
@@ -483,7 +503,7 @@ const fnDestroyWarehousePlatoon = params => {
 
 const fnDestroyWarehousePlatoons = () => {
   confirmNotify(destroyActions(() => {
-    const loading = loading();
+    const loading = loadingNotify();
 
     ajaxDestroyWarehousePlatoons(collect(selected.value).pluck("uuid").all())
       .then(() => {

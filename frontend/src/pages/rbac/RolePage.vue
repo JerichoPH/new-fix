@@ -180,7 +180,7 @@ const fnSearch = () => {
 
   ajaxGetRbacRoles({
     name: name_search.value,
-  }).then((res) => {
+  }).then(res => {
     if (res.content.rbac_roles.length > 0) {
       collect(res.content.rbac_roles).each((rbacRole, idx) => {
         rows.value.push({
@@ -212,12 +212,12 @@ const fnOpenAlertCreateRbacRole = () => {
  * 新建角色
  */
 const fnStoreRbacRole = () => {
-  const loading = loading();
+  const loading = loadingNotify();
 
   ajaxStoreRbacRole({
     name: name_alertCreateRbacRole.value,
   })
-    .then((res) => {
+    .then(res => {
       successNotify(res.msg);
       fnSearch();
       fnResetAlertCreateRbacRole();
@@ -244,7 +244,7 @@ const fnOpenAlertEditRbacRole = (params = {}) => {
   currentUuid.value = params.uuid;
 
   ajaxGetRbacRole(currentUuid.value)
-    .then((res) => {
+    .then(res => {
       if (res.content.rbac_role) {
         name_alertEditRbacRole.value = res.content.rbac_role.name;
         alertEditRbacRole.value = true;
@@ -262,7 +262,7 @@ const fnUpdateRbacRole = () => {
   ajaxUpdateRbacRole(currentUuid.value, {
     name: name_alertEditRbacRole.value,
   })
-    .then((res) => {
+    .then(res => {
       successNotify(res.msg);
       fnSearch();
       fnResetAlertEditRbacRole();
@@ -280,10 +280,10 @@ const fnDestroyRbacRole = (params = {}) => {
 
   confirmNotify(
     destroyActions(() => {
-      const loading = loading();
+      const loading = loadingNotify();
 
       ajaxDestroyRbacRole(params.uuid)
-        .then((res) => {
+        .then(res => {
           successNotify("删除成功");
           fnSearch();
         })
@@ -299,10 +299,10 @@ const fnDestroyRbacRole = (params = {}) => {
 const fnDestroyRbacRoles = () => {
   confirmNotify(
     destroyActions(() => {
-      const loading = loading();
+      const loading = loadingNotify();
 
       ajaxDestroyRbacRoles(collect(selected.value).pluck("uuid").toArray())
-        .then((res) => {
+        .then(res => {
           successNotify("删除成功");
           fnSearch();
         })

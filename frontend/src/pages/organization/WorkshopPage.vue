@@ -15,23 +15,26 @@
           <div class="col">
             <q-form>
               <div class="row q-col-gutter-sm">
-                <div class="col-3">
+                <div class="col">
                   <q-input outlined clearable lazy-rules v-model="uniqueCode_search" label="代码" :rules="[]"
                     class="q-mb-md" />
                 </div>
-                <div class="col-3">
+                <div class="col">
                   <q-input outlined clearable lazy-rules v-model="name_search" label="名称" :rules="[]" class="q-mb-md" />
                 </div>
-                <div class="col-3">
-                  <sel-organization-railway_search label-name="所属路局" />
+                <div class="col">
+                  <standard-select label-name="所属路局" sechma="alertEdit" current-field="organizationRailwayUuid"
+                    :data-source="ajaxGetOrganizationRailways" data-source-field="organization_railways" />
                 </div>
-                <div class="col-3">
-                  <sel-organization-paragraph_search label-name="所属站段" />
+                <div class="col">
+                  <standard-select label-name="所属站段" sechma="alertEdit" current-field="organizationParagraphUuid"
+                    :data-source="ajaxGetOrganizationParagraphs" data-source-field="organization_paragraphs"
+                    parent-field="organizationRailwayUuid" />
                 </div>
-              </div>
-              <div class="row q-col-gutter-sm">
-                <div class="col-3">
+                <div class="col">
                   <sel-organization-workshop-type-code_alertCreate label-name="车间类型" />
+                  <standard-select label-name="车间类型" sechma="alertEdit" current-field="organizationRailwayUuid"
+                    :data-source="ajaxGetOrganizationWorkshopTypeCodesMap" data-source-field="type_codes_map" />
                 </div>
               </div>
             </q-form>
@@ -132,17 +135,22 @@
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-organization-railway_alertCreate label-name="所属路局" />
+              <standard-select label-name="所属路局" sechma="alertCreate" current-field="organizationRailwayUuid"
+                :data-source="ajaxGetOrganizationRailways" data-source-field="organization_railways" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-organization-paragraph_alertCreate label-name="所属站段" />
+              <sel-organization-paragraph_alertCreate label-name="" />
+              <standard-select label-name="所属站段" sechma="alertCreate" current-field="organizationParagraphUuid"
+                :data-source="ajaxGetOrganizationParagraphs" data-source-field="organization_paragraphs"
+                parent-field="organizationRailwayUuid" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-organization-workshop-type-code_search label-name="车间类型" />
+              <standard-select label-name="车间类型" sechma="alertCreate" current-field="organizationWorkshopTypeCodeUuid"
+                :data-source="ajaxGetOrganizationWorkshopTypeCodesMap" data-source-field="type_codes_map" />
             </div>
           </div>
         </q-card-section>
@@ -177,17 +185,21 @@
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <SelOrganizationRailway_alertEdit label-name="所属路局" />
+              <standard-select label-name="所属路局" sechma="alertEdit" current-field="organizationRailwayUuid"
+                :data-source="ajaxGetOrganizationRailways" data-source-field="organization_railways" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <SelOrganizationParagraph_alertEdit label-name="所属站段" />
+              <standard-select label-name="所属站段" sechma="alertEdit" current-field="organizationParagraphUuid"
+                :data-source="ajaxGetOrganizationParagraphs" data-source-field="organization_paragraphs"
+                parent-field="organizationRailwayUuid" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <organizationWorkshopTypeCode_alertEdit label-name="车间类型" />
+              <standard-select label-name="车间类型" sechma="alertEdit" current-field="organizationWorkshopTypeCodeUuid"
+                :data-source="ajaxGetOrganizationWorkshopTypeCodesMap" data-source-field="type_codes_map" />
             </div>
           </div>
         </q-card-section>
@@ -213,6 +225,9 @@ import {
   ajaxUpdateOrganizationWorkshop,
   ajaxDestroyOrganizationWorkshop,
   ajaxDestroyOrganizationWorkshops,
+  ajaxGetOrganizationRailways,
+  ajaxGetOrganizationParagraphs,
+  ajaxGetOrganizationWorkshopTypeCodesMap,
 } from "src/apis/organization";
 import {
   loadingNotify,
@@ -222,6 +237,7 @@ import {
   destroyActions,
 } from "src/utils/notify";
 import JoinString from "src/components/JoinString.vue";
+import StandardSelect from "src/components/StandardSelect.vue";
 import SelOrganizationRailway_search from "src/components/SelOrganizationRailway_search.vue";
 import SelOrganizationParagraph_search from "src/components/SelOrganizationParagraph_search.vue";
 import SelOrganizationWorkshopTypeCode_search from "src/components/SelOrganizationWorkshopTypeCode_search.vue";
@@ -362,7 +378,7 @@ const fnOpenAlertEditOrganizationWorkshop = params => {
 const fnUpdateOrganizationWorkshop = () => {
   if (!currentUuid.value) return;
 
-  const loading = loading();
+  const loading = loadingNotify();
   ajaxUpdateOrganizationWorkshop(currentUuid.value, {
     unique_code: uniqueCode_alertEditOrganizationWorkshop.value,
     name: name_alertEditOrganizationWorkshop.value,
@@ -384,7 +400,7 @@ const fnDestroyOrganizationWorkshop = params => {
 
   confirmNotify(
     destroyActions(() => {
-      const loading = loading();
+      const loading = loadingNotify();
 
       ajaxDestroyOrganizationWorkshop(params.uuid)
         .then(() => {
@@ -400,7 +416,7 @@ const fnDestroyOrganizationWorkshop = params => {
 const fnDestroyOrganizationWorkshops = () => {
   confirmNotify(
     destroyActions(() => {
-      const loading = loading();
+      const loading = loadingNotify();
 
       ajaxDestroyOrganizationWorkshops(collect(selected.value).pluck("uuid").all())
         .then(() => {

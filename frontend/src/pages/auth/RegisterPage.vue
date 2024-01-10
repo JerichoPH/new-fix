@@ -91,7 +91,7 @@ const fnRegister = () => {
     password: password.value,
     password_confirmation: passwordConfirmation.value,
   })
-    .then((res) => {
+    .then(res => {
       loading();
       successNotify(
         res.msg,

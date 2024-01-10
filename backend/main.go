@@ -149,7 +149,7 @@ func launchCommand(commandName string, commandParams, tmp []string, daemon bool)
 		WebAddr:           appSetting.Section("web-service").Key("addr").MustString(":8091"),
 		TcpServerEnable:   appSetting.Section("tcp-server-service").Key("enable").MustBool(false),
 		TcpServerAddr:     appSetting.Section("tcp-server-service").Key("addr").MustString("0.0.0.0:8092"),
-		TcpClientEnable:   appSetting.Section("tcp-client-service").Key("enable").MustBool(false),
+		TcpClientEnable:   appSetting.Section("tcp-clientche-service").Key("enable").MustBool(false),
 		TcpClientAddr:     appSetting.Section("tcp-client-service").Key("addr").MustString("127.0.0.1:8080"),
 		RabbitMqEnable:    appSetting.Section("rabbit-mq-service").Key("enable").MustBool(false),
 		RabbitMqAddr:      appSetting.Section("rabbit-mq-service").Key("addr").MustString("127.0.0.1:5672"),

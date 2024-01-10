@@ -75,7 +75,7 @@ export default defineComponent({
         username: this.username,
         password: this.password,
       })
-        .then((res) => {
+        .then(res => {
           if (res.content.token) {
             loading();
             localStorage.setItem("auth.token", res.content.token);

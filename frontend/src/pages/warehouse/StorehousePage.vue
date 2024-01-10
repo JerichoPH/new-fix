@@ -324,7 +324,7 @@ const fnResetAlertCreateWarehouseStorehouse = () => {
 const fnOpenAlertCreateWarehouseStorehouse = () => { alertCreateWarehouseStorehouse.value = true; };
 
 const fnStoreWarehouseStorehouse = () => {
-  const loading = loading();
+  const loading = loadingNotify();
 
   ajaxStoreWarehouseStorehouse({
     name: name_alertCreateWarehouseStorehouse.value,
@@ -369,7 +369,7 @@ const fnOpenAlertEditWarehouseStorehouse = (params) => {
 const fnUpdateWarehouseStorehouse = () => {
   if (!currentUuid.value) return;
 
-  const loading = loading();
+  const loading = loadingNotify();
   ajaxUpdateWarehouseStorehouse(currentUuid.value, {
     name: name_alertEditWarehouseStorehouse.value,
     organization_workshop_uuid: organizationWorkshopUuid_alertEditWarehouseStorehouse.value,
@@ -389,7 +389,7 @@ const fnDestroyWarehouseStorehouse = (params) => {
   if (!params["uuid"]) return;
 
   confirmNotify(destroyActions(() => {
-    const loading = loading();
+    const loading = loadingNotify();
 
     ajaxDestroyWarehouseStorehouse(params["uuid"])
       .then(() => {
@@ -403,7 +403,7 @@ const fnDestroyWarehouseStorehouse = (params) => {
 
 const fnDestroyWarehouseStorehouses = () => {
   confirmNotify(destroyActions(() => {
-    const loading = loading();
+    const loading = loadingNotify();
 
     ajaxDestroyWarehouseStorehouses(collect(selected.value).pluck("uuid").all())
       .then(() => {

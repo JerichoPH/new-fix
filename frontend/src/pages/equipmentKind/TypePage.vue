@@ -19,7 +19,8 @@
                   <q-input outlined clearable lazy-rules v-model="name_search" label="名称" :rules="[]" class="q-mb-md" />
                 </div>
                 <div class="col-3">
-                  <sel-equipment-kind-category_search label-name="所属种类" v-model="equipmentKindCategoryUuid_search" />
+                  <standard-select label-name="所属器材种类" sechma="search" current-field="equipmentKindCategoryUuid"
+                    :data-source="ajaxGetEquipmentKindCategories" data-source-field="equipment_kind_categories" />
                 </div>
               </div>
             </q-form>
@@ -105,8 +106,8 @@
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-equipment-kind-category_alert-create label-name="所属种类"
-                v-model="equipmentKindCategoryUuid_alertCreateEquipmentKindType" />
+              <standard-select label-name="所属器材种类" sechma="alertCreate" current-field="equipmentKindCategoryUuid"
+                :data-source="ajaxGetEquipmentKindCategories" data-source-field="equipment_kind_categories" />
             </div>
           </div>
         </q-card-section>
@@ -134,8 +135,8 @@
           </div>
           <div class="row">
             <div class="col">
-              <sel-equipment-kind-categrory_alert-edit label-name="所属种类"
-                v-model="equipmentKindCategoryUuid_alertEditEquipmentKindType" />
+              <standard-select label-name="所属器材种类" sechma="alertEdit" current-field="equipmentKindCategoryUuid"
+                :data-source="ajaxGetEquipmentKindCategories" data-source-field="equipment_kind_categories" />
             </div>
           </div>
         </q-card-section>
@@ -161,6 +162,7 @@ import {
   ajaxUpdateEquipmentKindType,
   ajaxDestroyEquipmentKindType,
   ajaxDestroyEquipmentKindTypes,
+  ajaxGetEquipmentKindCategories,
 } from "src/apis/equipmentKind";
 import {
   loadingNotify,
@@ -169,6 +171,7 @@ import {
   confirmNotify,
   destroyActions,
 } from "src/utils/notify";
+import StandardSelect from "src/components/StandardSelect.vue";
 import SelEquipmentKindCategory_search from "src/components/SelEquipmentKindCategory_search.vue";
 import SelEquipmentKindCategory_alertCreate from "src/components/SelEquipmentKindCategory_alertCreate.vue";
 import SelEquipmentKindCategrory_alertEdit from "src/components/SelEquipmentKindCategory_alertEdit.vue";
@@ -227,7 +230,7 @@ const fnSearch = () => {
     "@~[]": ["EquipmentKindCategory"],
     name: name_search.value,
     equipment_kind_category_uuid: equipmentKindCategoryUuid_search.value,
-  }).then((res) => {
+  }).then(res => {
     rows.value = collect(res.content.equipment_kind_types)
       .map((equipmentKindType, idx) => {
         return {
@@ -260,14 +263,14 @@ const fnOpenAlertCreateEquipmentKindType = () => {
  * 新建器材类型
  */
 const fnStoreEquipmentKindType = () => {
-  const loading = loading();
+  const loading = loadingNotify();
 
   ajaxStoreEquipmentKindType({
     name: name_alertCreateEquipmentKindType.value,
     equipment_kind_category_uuid:
       equipmentKindCategoryUuid_alertCreateEquipmentKindType.value,
   })
-    .then((res) => {
+    .then(res => {
       successNotify(res.msg);
       fnResetAlertCreateEquipmentKindType();
       fnSearch();
@@ -284,9 +287,9 @@ const fnStoreEquipmentKindType = () => {
 const fnDestroyEquipmentKindTypes = (params) => {
   confirmNotify(
     destroyActions(() => {
-      const loading = loading();
+      const loading = loadingNotify();
       ajaxDestroyEquipmentKindTypes(selected.value.map((item) => item.uuid))
-        .then((res) => {
+        .then(res => {
           successNotify(res.msg);
           fnSearch();
         })
@@ -307,7 +310,7 @@ const fnOpenAlertEditEquipmentKindType = (params) => {
   ajaxGetEquipmentKindType(params.uuid, {
     "@~[]": ["EquipmentKindCategory"],
   })
-    .then((res) => {
+    .then(res => {
       name_alertEditEquipmentKindType.value =
         res.content.equipment_kind_type.name;
       equipmentKindCategoryUuid_alertEditEquipmentKindType.value =
@@ -324,13 +327,13 @@ const fnOpenAlertEditEquipmentKindType = (params) => {
 const fnUpdateEquipmentKindType = () => {
   if (!currentUuid.value) return;
 
-  const loading = loading();
+  const loading = loadingNotify();
   ajaxUpdateEquipmentKindType(currentUuid.value, {
     name: name_alertEditEquipmentKindType.value,
     equipment_kind_category_uuid:
       equipmentKindCategoryUuid_alertEditEquipmentKindType.value,
   })
-    .then((res) => {
+    .then(res => {
       successNotify(res.msg);
       fnSearch();
       currentUuid.value = "";
@@ -349,10 +352,10 @@ const fnDestroyEquipmentKindType = (params) => {
 
   confirmNotify(
     destroyActions(() => {
-      const loading = loading();
+      const loading = loadingNotify();
 
       ajaxDestroyEquipmentKindType(params.uuid)
-        .then((res) => {
+        .then(res => {
           successNotify(res.msg);
           fnSearch();
         })

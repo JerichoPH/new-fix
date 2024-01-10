@@ -272,7 +272,7 @@ const fnSearch = () => {
     parent_uuid: parentUuid_search.value,
     rbac_role_uuid: rbacRoleUuid_search.value,
   })
-    .then((res) => {
+    .then(res => {
       rows.value = collect(res.content.rbac_menus)
         .map((rbacMenu, idx) => {
           return {
@@ -315,7 +315,7 @@ const fnOpenAlertCreateRbacMenu = () => {
  * 新建菜单
  */
 const fnStoreRbacMenu = () => {
-  const loading = loading();
+  const loading = loadingNotify();
 
   ajaxStoreRbacMenu({
     name: name_alertCreateRbacMenu.value,
@@ -325,7 +325,7 @@ const fnStoreRbacMenu = () => {
     parent_uuid: parentUuid_alertCreateRbacMenu.value,
     rbac_role_uuids: rbacRoleUuids_alertCreateRbacMenu.value,
   })
-    .then((res) => {
+    .then(res => {
       successNotify(res.msg);
       fnSearch();
       fnResetAlertCreateRbace();
@@ -362,7 +362,7 @@ const fnOpenAlertEditRbacMenu = (params = {}) => {
   ajaxGetRbacMenu(currentUuid.value, {
     "@~[]": ["Parent", "RbacRoles"],
   })
-    .then((res) => {
+    .then(res => {
       name_alertEditRbacMenu.value = res.content.rbac_menu.name;
       uri_alertEditRbacMenu.value = res.content.rbac_menu.uri;
       description_alertEditRbacMenu.value = res.content.rbac_menu.description;
@@ -384,7 +384,7 @@ const fnOpenAlertEditRbacMenu = (params = {}) => {
  */
 const fnUpdateRbacMenu = () => {
   if (!currentUuid.value) return;
-  const loading = loading();
+  const loading = loadingNotify();
   ajaxUpdateRbacMenu(currentUuid.value, {
     name: name_alertEditRbacMenu.value,
     uri: uri_alertEditRbacMenu.value,
@@ -393,7 +393,7 @@ const fnUpdateRbacMenu = () => {
     parent_uuid: parentUuid_alertEditRbacMenu.value,
     rbac_role_uuids: rbacRoleUuids_alertEditRbacMenu.value,
   })
-    .then((res) => {
+    .then(res => {
       successNotify(res.msg);
       fnSearch();
       fnResetAlertEditRbacMenu();
@@ -413,7 +413,7 @@ const fnDeconsteRbacMenu = (params = {}) => {
 
   confirmNotify(
     destroyActions(() => {
-      const loading = loading();
+      const loading = loadingNotify();
       ajaxDestroyRbacMenu(params.uuid)
         .then(() => {
           successNotify("删除成功");
@@ -431,7 +431,7 @@ const fnDeconsteRbacMenu = (params = {}) => {
 const fnDestroyRbacMenus = () => {
   confirmNotify(
     destroyActions(() => {
-      const loading = loading();
+      const loading = loadingNotify();
 
       ajaxDestroyRbacMenus(collect(selected.value).pluck("uuid").toArray())
         .then(() => {

@@ -46,7 +46,7 @@ onMounted(() => {
 
 const fnGetRbacRoles = () => {
   ajaxGetRbacRoles(ajaxParams)
-    .then((res) => {
+    .then(res => {
       if (res.content.rbac_roles.length > 0) {
         rbacRoles.value = collect(res.content.rbac_roles).chunk(4).all();
       }

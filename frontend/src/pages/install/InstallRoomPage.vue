@@ -372,7 +372,7 @@ const fnSearch = () => {
     organizationStationUuid: organizationStationUuid_search.value,
     organizationCenterUuid: organizationCenterUuid_search.value,
     organizationCrossroadUuid: organizationCrossroadUuid_search.value,
-  }).then((res) => {
+  }).then(res => {
     rows.value = collect(res.content.install_indoor_rooms)
       .map((installIndoorRoom, idx) => {
         return {
@@ -427,7 +427,7 @@ const fnStoreInstallIndoorRoom = () => {
     organization_center_uuid: organizationCenterUuid_alertCreateInstallIndoorRoom.value,
     organization_crossroad_uuid: organizationCrossroadUuid_alertCreateInstallIndoorRoom.value,
   })
-    .then((res) => {
+    .then(res => {
       notifies.success(res.msg);
       fnResetAlertCreateInstallIndoorRoom();
       fnSearch();
@@ -513,7 +513,7 @@ const fnDestroyInstallIndoorRoom = parms => {
     const loading = notifies.loading();
 
     ajaxDestroyInstallIndoorRoom(getVal(parms, "uuid"))
-      .then(res => {
+      .then(() => {
         notifies.success("删除成功");
         fnSearch();
       })

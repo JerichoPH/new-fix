@@ -50,7 +50,7 @@ onMounted(() => {
 });
 
 const fnInit = () => {
-  ajaxGetRbacPermissions().then((res) => {
+  ajaxGetRbacPermissions().then(res => {
     collect(res.content.rbac_permissions).each((rbacPermission, idx) => {
       rows.value.push({
         index: idx + 1,

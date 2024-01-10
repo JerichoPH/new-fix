@@ -23,18 +23,24 @@
                   <q-input outlined clearable lazy-rules v-model="name_search" label="名称" :rules="[]" class="q-mb-md" />
                 </div>
                 <div class="col-3">
-                  <sel-organization-railway_search label-name="所属路局" :ajaxParams="{}" />
+                  <standard-select label-name="所属路局" sechma="search" current-field="organizationRailwayUuid"
+                    :data-source="ajaxGetOrganizationRailways" data-source-field="organization_railways" />
                 </div>
                 <div class="col-3">
-                  <sel-organization-paragraph_search label-name="所属站段" :ajaxParams="{}" />
+                  <standard-select label-name="所属站段" sechma="search" current-field="organizationParagraphUuid"
+                    :data-source="ajaxGetOrganizationParagraphs" data-source-field="organization_paragraphs"
+                    parent-field="organizationRailwayhUuid" />
                 </div>
               </div>
               <div class="row q-col-gutter-sm">
                 <div class="col-3">
-                  <sel-organization-workshop_search label-name="所属车间" :ajaxParams="{}" />
+                  <standard-select label-name="所属车间" sechma="search" current-field="organizationWorkshopUuid"
+                    :data-source="ajaxGetOrganizationWorkshops" data-source-field="organization_workshops"
+                    parent-field="organizationParagraphUuid" />
                 </div>
                 <div class="col-3">
-                  <sel-organization-work-area-type-code_search label-name="工区类型" :ajaxParams="{}" />
+                  <standard-select label-name="工区类型" sechma="search" current-field="organizationWorkAreaTypeCode"
+                    :data-source="ajaxGetOrganizationWorkAreaTypeCodesMap" data-source-field="type_codes_map" />
                 </div>
               </div>
             </q-form>
@@ -136,22 +142,28 @@
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-organization-railway_alert-create label-name="所属路局" :ajaxParams="{}" />
+              <standard-select label-name="所属路局" sechma="alertCreate" current-field="organizationRailwayUuid"
+                :data-source="ajaxGetOrganizationRailways" data-source-field="organization_railways" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-organization-paragraph_alert-create label-name="所属站段" :ajaxParams="{}" />
+              <standard-select label-name="所属站段" sechma="alertCreate" current-field="organizationParagraphUuid"
+                :data-source="ajaxGetOrganizationParagraphs" data-source-field="organization_paragraphs"
+                parent-field="organizationRailwayhUuid" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-organization-workshop_alert-create label-name="所属车间" :ajaxParams="{}" />
+              <standard-select label-name="所属车间" sechma="alertCreate" current-field="organizationWorkshopUuid"
+                :data-source="ajaxGetOrganizationWorkshops" data-source-field="organization_workshops"
+                parent-field="organizationParagraphUuid" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-organization-work-area-type-code_alert-create label-name="工区类型" :ajaxParams="{}" />
+              <standard-select label-name="工区类型" sechma="alertCreate" current-field="organizationWorkAreaTypeCode"
+                :data-source="ajaxGetOrganizationWorkAreaTypeCodesMap" data-source-field="type_codes_map" />
             </div>
           </div>
         </q-card-section>
@@ -186,22 +198,28 @@
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-organization-railway_alert-edit label-name="所属路局" :ajaxParams="{}" />
+              <standard-select label-name="所属路局" sechma="alertEdit" current-field="organizationRailwayUuid"
+                :data-source="ajaxGetOrganizationRailways" data-source-field="organization_railways" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-organization-paragraph_alert-edit label-name="所属站段" :ajaxParams="{}" />
+              <standard-select label-name="所属站段" sechma="alertEdit" current-field="organizationParagraphUuid"
+                :data-source="ajaxGetOrganizationParagraphs" data-source-field="organization_paragraphs"
+                parent-field="organizationRailwayhUuid" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-organization-workshop_alert-edit label-name="所属车间" :ajaxParams="{}" />
+              <standard-select label-name="所属车间" sechma="alertEdit" current-field="organizationWorkshopUuid"
+                :data-source="ajaxGetOrganizationWorkshops" data-source-field="organization_workshops"
+                parent-field="organizationParagraphUuid" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-organization-work-area-type-code_alert-edit label-name="工区类型" :ajaxParams="{}" />
+              <standard-select label-name="工区类型" sechma="alertEdit" current-field="organizationWorkAreaTypeCode"
+                :data-source="ajaxGetOrganizationWorkAreaTypeCodesMap" data-source-field="type_codes_map" />
             </div>
           </div>
         </q-card-section>
@@ -227,6 +245,10 @@ import {
   ajaxUpdateOrganizationWorkArea,
   ajaxDestroyOrganizationWorkArea,
   ajaxDestroyOrganizationWorkAreas,
+  ajaxGetOrganizationWorkAreaTypeCodesMap,
+  ajaxGetOrganizationRailways,
+  ajaxGetOrganizationParagraphs,
+  ajaxGetOrganizationWorkshops,
 } from "src/apis/organization";
 import {
   loadingNotify,
@@ -236,18 +258,7 @@ import {
   destroyActions,
 } from "src/utils/notify";
 import JoinString from "src/components/JoinString.vue";
-import SelOrganizationRailway_search from "src/components/SelOrganizationRailway_search.vue";
-import SelOrganizationParagraph_search from "src/components/SelOrganizationParagraph_search.vue";
-import SelOrganizationWorkshop_search from "src/components/SelOrganizationWorkshop_search.vue";
-import SelOrganizationWorkAreaTypeCode_search from "src/components/SelOrganizationWorkAreaTypeCode_search.vue";
-import SelOrganizationRailway_alertCreate from "src/components/SelOrganizationRailway_alertCreate.vue";
-import SelOrganizationParagraph_alertCreate from "src/components/SelOrganizationParagraph_alertCreate.vue";
-import SelOrganizationWorkshop_alertCreate from "src/components/SelOrganizationWorkshop_alertCreate.vue";
-import SelOrganizationRailway_alertEdit from "src/components/SelOrganizationRailway_alertEdit.vue";
-import SelOrganizationParagraph_alertEdit from "src/components/SelOrganizationParagraph_alertEdit.vue";
-import SelOrganizationWorkshop_alertEdit from "src/components/SelOrganizationWorkshop_alertEdit.vue";
-import SelOrganizationWorkAreaTypeCode_alertCreate from "src/components/SelOrganizationWorkAreaTypeCode_alertCreate.vue";
-import SelOrganizationWorkAreaTypeCode_alertEdit from "src/components/SelOrganizationWorkAreaTypeCode_alertEdit.vue";
+import StandardSelect from "src/components/StandardSelect.vue";
 
 // 搜索栏数据
 const uniqueCode_search = ref("");
@@ -353,7 +364,7 @@ const fnOpenAlertCreateCreateStation = () => {
 };
 
 const fnStoreOrganizationWorkArea = () => {
-  const loading = loading();
+  const loading = loadingNotify();
 
   ajaxStoreOrganizationWorkArea({
     unique_code: uniqueCode_alertCreateOrganizationWorkArea.value,
@@ -397,7 +408,7 @@ const fnOpenAlertEditCreateOrganizationWorkArea = params => {
 const fnUpdateOrganizationWorkArea = () => {
   if (!currentUuid.value) return;
 
-  const loading = loading();
+  const loading = loadingNotify();
   ajaxUpdateOrganizationWorkArea(currentUuid.value, {
     unique_code: uniqueCode_alertEditOrganizationWorkArea.value,
     name: name_alertEditOrganizationWorkArea.value,
@@ -419,7 +430,7 @@ const fnDestroyCreateOrganizationWorkArea = params => {
 
   confirmNotify(
     destroyActions(() => {
-      const loading = loading();
+      const loading = loadingNotify();
 
       ajaxDestroyOrganizationWorkArea(params.uuid)
         .then(() => {
@@ -434,7 +445,7 @@ const fnDestroyCreateOrganizationWorkArea = params => {
 const fnDestroyCreateStations = () => {
   confirmNotify(
     destroyActions(() => {
-      const loading = loading();
+      const loading = loadingNotify();
 
       ajaxDestroyOrganizationWorkAreas(collect(selected.value).pluck("uuid").all())
         .then(() => {

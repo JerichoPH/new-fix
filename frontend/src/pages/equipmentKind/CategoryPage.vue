@@ -202,7 +202,7 @@ const fnSearch = () => {
   ajaxGetEquipmentKindCategories({
     name: name_search.value,
   })
-    .then((res) => {
+    .then(res => {
       rows.value = res.content.equipment_kind_categories.map(
         (equipmentKindCategory, idx) => {
           return {
@@ -236,12 +236,12 @@ const fnOpenAlertCreateEquipmentKindCategory = () => {
  * 新建器材种类
  */
 const fnStoreEquipmentKindCategory = () => {
-  const loading = loading();
+  const loading = loadingNotify();
 
   ajaxStoreEquipmentKindCategory({
     name: name_alertCreateEquipmentKindCategory.value,
   })
-    .then((res) => {
+    .then(res => {
       successNotify(res.msg);
       fnSearch();
       fnRestAlertCreateEquipmentCategory();
@@ -261,7 +261,7 @@ const fnOpenAlertEditEquipmentKindCategory = (params) => {
   currentUuid.value = params["uuid"];
 
   ajaxGetEquipmentKindCategory(params.uuid)
-    .then((res) => {
+    .then(res => {
       name_alertEditEquipmentKindCategory.value =
         res.content.equipment_kind_category.name;
       alertEditEquipmentKindCategory.value = true;
@@ -277,12 +277,12 @@ const fnOpenAlertEditEquipmentKindCategory = (params) => {
 const fnUpdateEquipmentKindCategory = (params) => {
   if (!currentUuid.value) return;
 
-  const loading = loading();
+  const loading = loadingNotify();
 
   ajaxUpdateEquipmentKindCategory(currentUuid.value, {
     name: name_alertEditEquipmentKindCategory.value,
   })
-    .then((res) => {
+    .then(res => {
       successNotify(res.msg);
       fnSearch();
 
@@ -301,7 +301,7 @@ const fnDestroyEquipmentKindCategory = (params) => {
 
   confirmNotify(
     destroyActions(() => {
-      const loading = loading();
+      const loading = loadingNotify();
 
       ajaxDestroyEquipmentKindCategory(params.uuid)
         .then(() => {

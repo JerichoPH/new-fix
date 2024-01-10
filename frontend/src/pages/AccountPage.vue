@@ -336,7 +336,7 @@ const fnSearch = () => {
     nickname: nickname_search.value,
     rbac_role_uuid_search: rbacRoleUuid_search.value,
   })
-    .then((res) => {
+    .then(res => {
       rows.value = collect(res.content.accounts)
         .map((account, idx) => {
           return {
@@ -376,7 +376,7 @@ const fnOpenAlertCreateAccount = () => {
  * 新建用户
  */
 const fnStoreAccount = async () => {
-  const loading = loading();
+  const loading = loadingNotify();
 
   const avatar = {
     original_filename: avatar_alertCreateAccount.value.name,
@@ -398,7 +398,7 @@ const fnStoreAccount = async () => {
     rbac_role_uuids: rbacRoleUuids_alertCreateAccount.value,
     avatar,
   })
-    .then((res) => {
+    .then(res => {
       successNotify(res.msg);
       fnSearch();
       fnResetAlertCreateAccount();
@@ -427,7 +427,7 @@ const fnOpenAlertEditAccount = (params = {}) => {
   currentUuid.value = params.uuid;
 
   ajaxGetAccount(currentUuid.value, { "@~[]": ["Avatar", "RbacRoles"] })
-    .then((res) => {
+    .then(res => {
       username_alertEditAccount.value = res.content.account.username;
       nickname_alertEditAccount.value = res.content.account.nickname;
       showAvatar_alertEditAccount.value = res.content.account.avatar
@@ -459,7 +459,7 @@ const fnUpdateAccount = async () => {
     avatar.base64 = collect(avatar.base64.split("base64,")).last();
   }
 
-  const loading = loading();
+  const loading = loadingNotify();
 
   ajaxUpdateAccount(currentUuid.value, {
     username: username_alertEditAccount.value,
@@ -467,7 +467,7 @@ const fnUpdateAccount = async () => {
     rbac_role_uuids: rbacRoleUuids_alertEditAccount.value,
     avatar,
   })
-    .then((res) => {
+    .then(res => {
       successNotify(res.msg);
       fnSearch();
       fnResetAlertEditAccount();
@@ -487,10 +487,10 @@ const fnDestroyAccount = (params = {}) => {
 
   confirmNotify(
     destroyActions(() => {
-      const loading = loading();
+      const loading = loadingNotify();
 
       ajaxDestroyAccount(params.uuid)
-        .then((res) => {
+        .then(res => {
           successNotify("删除成功");
           fnSearch();
         })
@@ -508,10 +508,10 @@ const fnDestroyAccounts = () => {
 
   confirmNotify(
     destroyActions(() => {
-      const loading = loading();
+      const loading = loadingNotify();
 
       ajaxDestroyAccounts(collect(selected.value).pluck("uuid").all())
-        .then((res) => {
+        .then(res => {
           successNotify("删除成功");
           fnSearch();
         })
@@ -545,13 +545,13 @@ const fnOpenAlertEditPassword = (params = {}) => {
 const fnUpdatePassword = () => {
   if (!currentUuid.value) return;
 
-  const loading = loading();
+  const loading = loadingNotify();
   ajaxUpdateAccountPassword(currentUuid.value, {
     old_password: oldPassword_alertEditPassword.value,
     password: password_alertEditPassword.value,
     password_confirmation: passwordConfirmation_alertEditPassword.value,
   })
-    .then((res) => {
+    .then(res => {
       successNotify(res.msg);
       fnSearch();
       fnResetAlertEditPassword();

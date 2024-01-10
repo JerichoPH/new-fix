@@ -271,14 +271,14 @@ const fnOpenAlertCreateOrganizationRailway = () => {
  * @param {{*}} params
  */
 const fnStoreOrganizationRailway = (params) => {
-  const loading = loading();
+  const loading = loadingNotify();
 
   ajaxStoreOrganizationRailway({
     unique_code: uniqueCode_alertCreateOrganizationRailway.value,
     name: name_alertCreateOrganizationRailway.value,
     short_name: shortName_alertCreateOrganizationRailway.value,
   })
-    .then((res) => {
+    .then(res => {
       successNotify(res.msg);
       fnResetAlertCreateOrganizationRailway();
       fnSearch();
@@ -299,7 +299,7 @@ const fnOpenAlertEditOrganizationRailway = (params) => {
   currentUuid.value = params.uuid;
 
   ajaxGetOrganizationRailway(params.uuid)
-    .then((res) => {
+    .then(res => {
       uniqueCode_alertEditOrganizationrailway.value = res.content.organization_railway.unique_code;
       name_alertEditOrganizationrailway.value = res.content.organization_railway.name;
       shortName_alertEditOrganizationrailway.value = res.content.organization_railway.short_name;
@@ -316,14 +316,14 @@ const fnOpenAlertEditOrganizationRailway = (params) => {
 const fnUpdateOrganizationRailway = () => {
   if (!currentUuid.value) return;
 
-  const loading = loading();
+  const loading = loadingNotify();
 
   ajaxUpdateOrganizationRailway(currentUuid.value, {
     unique_code: uniqueCode_alertEditOrganizationrailway.value,
     name: name_alertEditOrganizationrailway.value,
     short_name: shortName_alertEditOrganizationrailway.value,
   })
-    .then((res) => {
+    .then(res => {
       successNotify(res.msg);
       fnSearch();
 
@@ -342,7 +342,7 @@ const fnDestroyOrganizationRailway = (params) => {
 
   confirmNotify(
     destroyActions(() => {
-      const loading = loading();
+      const loading = loadingNotify();
 
       ajaxDestroyOrganizationRailway(params.uuid)
         .then(() => {
@@ -362,7 +362,7 @@ const fnDestroyOrganizationRailway = (params) => {
 const fnDestroyOrganizationRailways = (uuids) => {
   confirmNotify(
     destroyActions(() => {
-      const loading = loading();
+      const loading = loadingNotify();
 
       ajaxDestroyOrganizationRailways(selected.value)
         .then(() => {

@@ -23,24 +23,29 @@
                   <q-input outlined clearable lazy-rules v-model="name_search" label="名称" :rules="[]" class="q-mb-md" />
                 </div>
                 <div class="col-3">
-                  <sel-organization-railway_search label-name="所属路局" :ajax-params="{}" />
+                  <standard-select label-name="所属路局" sechma="search" current-field="organizationRailwayUuid"
+                    :data-source="ajaxGetOrganizationRailways" data-source-field="organization_railways" />
                 </div>
                 <div class="col-3">
-                  <sel-organization-paragraph_search label-name="所属站段" :ajax-params="{}" />
+                  <standard-select label-name="所属站段" sechma="search" current-field="organizationParagraphUuid"
+                    :data-source="ajaxGetOrganizationParagraphs" data-source-field="organization_paragraphs"
+                    parent-field="organizationRailwayhUuid" />
                 </div>
               </div>
               <div class="row q-col-gutter-sm">
                 <div class="col-3">
-                  <sel-organization-workshop_search label-name="所属车间" :ajax-params="{}" />
+                  <standard-select label-name="所属车间" sechma="search" current-field="organizationWorkshopUuid"
+                    :data-source="ajaxGetOrganizationWorkshops" data-source-field="organization_workshops"
+                    parent-field="organizationParagraphUuid" />
                 </div>
                 <div class="col-3">
-                  <sel-organization-station_search label-name="所属站场" :ajax-params="{}" />
+                  <sel-organization-station_search label-name="相关站场" :ajax-params="{}" />
                 </div>
                 <div class="col-3">
-                  <sel-organization-crossroad_search label-name="所属道口" :ajax-params="{}" />
+                  <sel-organization-crossroad_search label-name="相关道口" :ajax-params="{}" />
                 </div>
                 <div class="col-3">
-                  <sel-organization-center_search label-name="所属中心" :ajax-params="{}" />
+                  <sel-organization-center_search label-name="相关中心" :ajax-params="{}" />
                 </div>
               </div>
             </q-form>
@@ -143,17 +148,22 @@
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-organization-railway_alert-create label-name="所属路局" :ajax-params="{}" />
+              <standard-select label-name="所属路局" sechma="alertCreate" current-field="organizationRailwayUuid"
+                :data-source="ajaxGetOrganizationRailways" data-source-field="organization_railways" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-organization-paragraph_alert-create label-name="所属站段" :ajax-params="{}" />
+              <standard-select label-name="所属站段" sechma="alertCreate" current-field="organizationParagraphUuid"
+                :data-source="ajaxGetOrganizationParagraphs" data-source-field="organization_paragraphs"
+                parent-field="organizationRailwayhUuid" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-organization-workshop_alert-create label-name="所属车间" :ajax-params="{}" />
+              <standard-select label-name="所属车间" sechma="alertCreate" current-field="organizationWorkshopUuid"
+                :data-source="ajaxGetOrganizationWorkshops" data-source-field="organization_workshops"
+                parent-field="organizationParagraphUuid" />
             </div>
           </div>
           <div class="row q-mt-md">
@@ -192,17 +202,22 @@
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-organization-railway_alert-edit label-name="所属路局" :ajax-params="{}" />
+              <standard-select label-name="所属路局" sechma="alertEdit" current-field="organizationRailwayUuid"
+                :data-source="ajaxGetOrganizationRailways" data-source-field="organization_railways" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-organization-paragraph_alert-edit label-name="所属站段" :ajax-params="{}" />
+              <standard-select label-name="所属站段" sechma="alertEdit" current-field="organizationParagraphUuid"
+                :data-source="ajaxGetOrganizationParagraphs" data-source-field="organization_paragraphs"
+                parent-field="organizationRailwayhUuid" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-organization-workshop_alert-edit label-name="所属车间" :ajax-params="{}" />
+              <standard-select label-name="所属车间" sechma="alertEdit" current-field="organizationWorkshopUuid"
+                :data-source="ajaxGetOrganizationWorkshops" data-source-field="organization_workshops"
+                parent-field="organizationParagraphUuid" />
             </div>
           </div>
           <div class="row q-mt-md">
@@ -233,6 +248,9 @@ import {
   ajaxUpdateOrganizationLine,
   ajaxDestroyOrganizationLine,
   ajaxDestroyOrganizationLines,
+  ajaxGetOrganizationRailways,
+  ajaxGetOrganizationParagraphs,
+  ajaxGetOrganizationWorkshops,
 } from "src/apis/organization";
 import {
   loadingNotify,
@@ -242,19 +260,11 @@ import {
   destroyActions,
 } from "src/utils/notify";
 import JoinString from "src/components/JoinString.vue";
-import SelOrganizationRailway_search from "src/components/SelOrganizationRailway_search.vue";
-import SelOrganizationParagraph_search from "src/components/SelOrganizationParagraph_search.vue";
-import SelOrganizationWorkshop_search from "src/components/SelOrganizationWorkshop_search.vue";
+import StandardSelect from "src/components/StandardSelect.vue";
 import SelOrganizationStation_search from "src/components/SelOrganizationStation_search.vue";
 import SelOrganizationCrossroad_search from "src/components/SelOrganizationCrossroad_search.vue";
 import SelOrganizationCenter_search from "src/components/SelOrganizationCenter_search.vue";
-import SelOrganizationRailway_alertCreate from "src/components/SelOrganizationRailway_alertCreate.vue";
-import SelOrganizationParagraph_alertCreate from "src/components/SelOrganizationParagraph_alertCreate.vue";
-import SelOrganizationWorkshop_alertCreate from "src/components/SelOrganizationWorkshop_alertCreate.vue";
 import ChkOrganizationStation_alertCreate from "src/components/ChkOrganizationStation_alertCreate.vue";
-import SelOrganizationRailway_alertEdit from "src/components/SelOrganizationRailway_alertEdit.vue";
-import SelOrganizationParagraph_alertEdit from "src/components/SelOrganizationParagraph_alertEdit.vue";
-import SelOrganizationWorkshop_alertEdit from "src/components/SelOrganizationWorkshop_alertEdit.vue";
 import ChkOrganizationStation_alertEdit from "src/components/ChkOrganizationStation_alertEdit.vue";
 
 // 搜索栏数据
@@ -376,7 +386,7 @@ const fnOpenAlertCreateCreateOrganizationLine = () => {
 };
 
 const fnStoreOrganizationLine = () => {
-  const loading = loading();
+  const loading = loadingNotify();
 
   ajaxStoreOrganizationLine({
     unique_code: uniqueCode_alertCreateOrganizationLine.value,
@@ -426,7 +436,7 @@ const fnOpenAlertEditCreateOrganizationLine = params => {
 const fnUpdateOrganizationLine = () => {
   if (!currentUuid.value) return;
 
-  const loading = loading();
+  const loading = loadingNotify();
 
   ajaxUpdateOrganizationLine(currentUuid.value, {
     unique_code: uniqueCode_alertEditOrganizationLine.value,
@@ -447,7 +457,7 @@ const fnUpdateOrganizationLine = () => {
 const fnDestroyCreateOrganizationLines = () => {
   confirmNotify(
     destroyActions(() => {
-      const loading = loading();
+      const loading = loadingNotify();
 
       ajaxDestroyOrganizationLines(collect(selected.value).pluck("uuid").all())
         .then(() => {
@@ -465,7 +475,7 @@ const fnDestroyCreateOrganizationLine = params => {
 
   confirmNotify(
     destroyActions(() => {
-      const loading = loading();
+      const loading = loadingNotify();
 
       ajaxDestroyOrganizationLine(params.uuid)
         .then(() => {

@@ -241,7 +241,7 @@ const fnSearch = () => {
     description: description_search.value,
     rbac_role_uuid: rbacRoleUuid_search.value,
   })
-    .then((res) => {
+    .then(res => {
       rows.value = collect(res.content.rbac_permissions)
         .map((rbacPermission, idx) => {
           return {
@@ -276,7 +276,7 @@ const fnOpenAlertCreateRbacPermission = () => {
  * 新建权限
  */
 const fnStoreRbacPermission = () => {
-  const loading = loading();
+  const loading = loadingNotify();
 
   ajaxStoreRbacPermission({
     name: name_alertCreateRbacPermission.value,
@@ -284,7 +284,7 @@ const fnStoreRbacPermission = () => {
     description: description_alertCreateRbacPermission.value,
     rbac_role_uuids: rbacRoleUuids_alertCreateRbacPermission.value,
   })
-    .then((res) => {
+    .then(res => {
       successNotify(res.msg);
       fnSearch();
       fnResetAlertCreateRbacPermission();
@@ -315,7 +315,7 @@ const fnOpenAlertEditRbacPermission = (params = {}) => {
   currentUuid.value = params.uuid;
 
   ajaxGetRbacPermission(params.uuid, { "@~[]": ["RbacRoles"] })
-    .then((res) => {
+    .then(res => {
       name_alertEditRbacPermission.value = res.content.rbac_permission.name;
       uri_alertEditRbacPermission.value = res.content.rbac_permission.uri;
       description_alertEditRbacPermission.value = res.content.rbac_permission.description;
@@ -334,7 +334,7 @@ const fnOpenAlertEditRbacPermission = (params = {}) => {
 const fnUpdateRbacPermission = () => {
   if (!currentUuid.value) return;
 
-  const loading = loading();
+  const loading = loadingNotify();
 
   ajaxUpdateRbacPermission(currentUuid.value, {
     name: name_alertEditRbacPermission.value,
@@ -342,7 +342,7 @@ const fnUpdateRbacPermission = () => {
     description: description_alertEditRbacPermission.value,
     rbac_role_uuids: rbacRoleUuids_alertEditRbacPermission.value,
   })
-    .then((res) => {
+    .then(res => {
       successNotify(res.msg);
       fnSearch();
       fnResetAlertEditRbacPermission();
@@ -360,11 +360,11 @@ const fnUpdateRbacPermission = () => {
 const fnDestroyRbacPermission = (params = {}) => {
   if (!params["uuid"]) return;
 
-  const loading = loading();
+  const loading = loadingNotify();
   confirmNotify(
     destroyActions(() => {
       ajaxDestroyRbacPermission(params.uuid)
-        .then((res) => {
+        .then(res => {
           successNotify("删除成功");
           fnSearch();
         })
@@ -380,7 +380,7 @@ const fnDestroyRbacPermission = (params = {}) => {
 const fnDestroyRbacPermissions = () => {
   confirmNotify(
     destroyActions(() => {
-      const loading = loading();
+      const loading = loadingNotify();
 
       ajaxDestroyRbacPermissions(
         collect(selected.value).pluck("uuid").toArray()

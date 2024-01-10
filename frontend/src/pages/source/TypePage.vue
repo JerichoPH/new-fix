@@ -223,7 +223,7 @@ const fnResetAlertCreateSourceType = () => {
 const fnOpenAlertCreateCreateSourceType = () => { alertCreateSourceType.value = true; };
 
 const fnStoreSourceType = () => {
-  const loading = loading();
+  const loading = loadingNotify();
 
   ajaxStoreSourceType({
     unique_code: uniqueCode_alertCreateSourceType.value,
@@ -259,7 +259,7 @@ const fnOpenAlertEditCreateSourceType = params => {
 const fnUpdateSourceType = () => {
   if (!currentUuid.value) return;
 
-  const loading = loading();
+  const loading = loadingNotify();
 
   ajaxUpdateSoruceType(currentUuid.value, {
     unique_code: uniqueCode_alertEditSourceType.value,
@@ -279,7 +279,7 @@ const fnDestroyCreateSourceType = params => {
   if (!params["uuid"]) return;
 
   confirmNotify(destroyActions(() => {
-    const loading = loading();
+    const loading = loadingNotify();
 
     ajaxDestroySourceType(params.uuids)
       .then(() => {
@@ -293,7 +293,7 @@ const fnDestroyCreateSourceType = params => {
 
 const fnDestroyCreateSourceTypes = () => {
   confirmNotify(destroyActions(() => {
-    const loading = loading();
+    const loading = loadingNotify();
 
     ajaxDestroySourceTypes(collect(selected.value).pluck("uuid").all())
       .then(() => {

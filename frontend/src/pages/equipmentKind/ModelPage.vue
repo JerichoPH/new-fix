@@ -19,10 +19,13 @@
                   <q-input outlined clearable lazy-rules v-model="name_search" label="名称" :rules="[]" class="q-mb-md" />
                 </div>
                 <div class="col-3">
-                  <sel-equipment-kind-category_search label-name="器材种类" :ajax-params="{}" />
+                  <standard-select label-name="所属器材种类" sechma="search" current-field="equipmentKindCategoryUuid"
+                    :data-source="ajaxGetEquipmentKindCategories" data-source-field="equipment_kind_categories" />
                 </div>
                 <div class="col-3">
-                  <sel-equipment-kind-type_search label-name="器材类型" :ajax-params="{}" />
+                  <standard-select label-name="所属器材类型" sechma="search" current-field="equipmentKindTypeUuid"
+                    :data-source="ajaxGetEquipmentKindTypes" data-source-field="equipment_kind_types"
+                    parent-field="equipmentKindCategoryUuid"/>
                 </div>
               </div>
             </q-form>
@@ -111,8 +114,19 @@
             <div class="col">
               <q-input outlined clearable lazy-rules v-model="name_alertCreateEquipmentKindModel" label="名称"
                 :rules="[]" />
-              <sel-equipment-kind-category_alert-create label-name="器材种类" :ajax-params="{}" class="q-mt-md" />
-              <sel-equipment-kind-type_alert-create label-name="器材类型" :ajax-params="{}" class="q-mt-md" />
+            </div>
+          </div>
+          <div class="row q-mt-md">
+            <div class="col">
+              <standard-select label-name="所属器材种类" sechma="alertCreate" current-field="equipmentKindCategoryUuid"
+                :data-source="ajaxGetEquipmentKindCategories" data-source-field="equipment_kind_categories" />
+            </div>
+          </div>
+          <div class="row q-mt-md">
+            <div class="col">
+              <standard-select label-name="所属器材类型" sechma="alertCreate" current-field="equipmentKindTypeUuid"
+                :data-source="ajaxGetEquipmentKindTypes" data-source-field="equipment_kind_types"
+                parent-field="equipmentKindCategoryUuid" />
             </div>
           </div>
         </q-card-section>
@@ -138,6 +152,19 @@
               <q-input outlined clearable lazy-rules v-model="name_alertEditEquipmentKindModel" label="名称" :rules="[]" />
             </div>
           </div>
+          <div class="row q-mt-md">
+            <div class="col">
+              <standard-select label-name="所属器材种类" sechma="alertEdit" current-field="equipmentKindCategoryUuid"
+                :data-source="ajaxGetEquipmentKindCategories" data-source-field="equipment_kind_categories" />
+            </div>
+          </div>
+          <div class="row q-mt-md">
+            <div class="col">
+              <standard-select label-name="所属器材类型" sechma="alertEdit" current-field="equipmentKindTypeUuid"
+                :data-source="ajaxGetEquipmentKindTypes" data-source-field="equipment_kind_types"
+                parent-value="equipmentKindCategoryUuid" />
+            </div>
+          </div>
         </q-card-section>
         <q-card-actions align="right">
           <q-btn-group>
@@ -161,6 +188,8 @@ import {
   ajaxUpdateEquipmentKindModel,
   ajaxDestroyEquipmentKindModel,
   ajaxDestroyEquipmentKindModels,
+  ajaxGetEquipmentKindCategories,
+  ajaxGetEquipmentKindTypes,
 } from "/src/apis/equipmentKind";
 import {
   loadingNotify,
@@ -170,10 +199,7 @@ import {
   destroyActions,
 } from "src/utils/notify";
 import JoinString from "src/components/JoinString.vue";
-import SelEquipmentKindCategory_search from "src/components/SelEquipmentKindCategory_search.vue";
-import SelEquipmentKindType_search from "src/components/SelEquipmentKindType_search.vue";
-import SelEquipmentKindCategory_alertCreate from "src/components/SelEquipmentKindCategory_alertCreate.vue";
-import SelEquipmentKindType_alertCreate from "src/components/SelEquipmentKindType_alertCreate.vue";
+import StandardSelect from "src/components/StandardSelect.vue";
 
 // 搜索栏数据
 const name_search = ref("");
@@ -226,7 +252,7 @@ const fnSearch = () => {
     equipment_kind_category_uuid: equipmentKindCategoryUuid_search.value,
     equipment_kind_type_uuid: equipmentKindTypeUuid_search.value,
   })
-    .then((res) => {
+    .then(res => {
       rows.value = collect(res.content.equipment_kind_models)
         .map((equipmentKindModel, idx) => {
           return {
@@ -243,7 +269,7 @@ const fnSearch = () => {
         })
         .all();
     })
-    .catch(e=>errorNotify(e.msg));
+    .catch(e => errorNotify(e.msg));
 };
 
 /**
@@ -270,14 +296,14 @@ const fnStoreEquipomentKindModel = () => {
     name: name_alertCreateEquipmentKindModel.value,
     equipment_kind_type_uuid: equipmentKindTypeUuid_alertCreate.value,
   })
-    .then((res) => {
+    .then(res => {
       successNotify(res.msg);
       fnResetAlertCreateEquipmentKindModel();
       fnSearch();
 
       alertCreateEquipmentKindModel.value = false;
     })
-    .catch(e=>errorNotify(e.msg));
+    .catch(e => errorNotify(e.msg));
 };
 
 /**
@@ -287,14 +313,14 @@ const fnStoreEquipomentKindModel = () => {
 const fnDestroyEquipmentKindModels = (params) => {
   confirmNotify(
     destroyActions(() => {
-      const loading = loading();
+      const loading = loadingNotify();
 
       ajaxDestroyEquipmentKindModels(selected.value.map((item) => item.uuid))
         .then(() => {
           successNotify("删除成功");
           fnSearch();
         })
-        .catch(e=>errorNotify(e.msg))
+        .catch(e => errorNotify(e.msg))
         .finally(loading());
     })
   );
@@ -309,12 +335,12 @@ const fnOpenAlertEditEquipmentKindModel = (params) => {
   currentUuid.value = params.uuid;
 
   ajaxGetEquipmentKindModel(params.uuid)
-    .then((res) => {
+    .then(res => {
       name_alertEditEquipmentKindModel.value =
         res.content.equipment_kind_model.name;
       alertEditEquipmentKindModel.value = true;
     })
-    .catch(e=>errorNotify(e.msg));
+    .catch(e => errorNotify(e.msg));
 };
 
 /**
@@ -327,13 +353,13 @@ const fnUpdateEquipmentKindModel = (params) => {
   ajaxUpdateEquipmentKindModel(currentUuid.value, {
     name: name_alertEditEquipmentKindModel.value,
   })
-    .then((res) => {
+    .then(res => {
       successNotify(res.msg);
       fnSearch();
 
       alertEditEquipmentKindModel.value = false;
     })
-    .catch(e=>errorNotify(e.msg));
+    .catch(e => errorNotify(e.msg));
 };
 
 /**
@@ -344,14 +370,14 @@ const fnDestroyEquipmentKindModel = (params) => {
 
   confirmNotify(
     destroyActions(() => {
-      const loading = loading();
+      const loading = loadingNotify();
 
       ajaxDestroyEquipmentKindModel(params.uuid)
         .then(() => {
           successNotify("删除成功");
           fnSearch();
         })
-        .catch(e=>errorNotify(e.msg))
+        .catch(e => errorNotify(e.msg))
         .finally(loading());
     })
   );

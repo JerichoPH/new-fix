@@ -19,7 +19,8 @@
                   <q-input outlined clearable lazy-rules v-model="name_search" label="名称" :rules="[]" class="q-mb-md" />
                 </div>
                 <div class="col-3">
-                  <sel-source-type_search label-name="所属来源类型" />
+                  <standard-select label-name="所属来源类型" sechma="search" current-field="sourceTypeUuid"
+                :data-source="ajaxGetSourceTypes" data-source-field="source_types" />
                 </div>
               </div>
             </q-form>
@@ -98,7 +99,8 @@
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-source-type_alert-create label-name="所属来源类型" />
+              <standard-select label-name="所属来源类型" sechma="alertCreate" current-field="sourceTypeUuid"
+                :data-source="ajaxGetSourceTypes" data-source-field="source_types" />
             </div>
           </div>
         </q-card-section>
@@ -126,7 +128,8 @@
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-source-type_alert-edit label-name="所属来源类型" />
+              <standard-select label-name="所属来源类型" sechma="alertEdit" current-field="sourceTypeUuid"
+                :data-source="ajaxGetSourceTypes" data-source-field="source_types" />
             </div>
           </div>
         </q-card-section>
@@ -151,6 +154,7 @@ import {
   ajaxUpdateSourceProject,
   ajaxDestroySourceProject,
   ajaxDestroySourceProjects,
+  ajaxGetSourceTypes,
 } from "src/apis/source";
 import {
   loadingNotify,
@@ -159,9 +163,7 @@ import {
   confirmNotify,
   destroyActions,
 } from "src/utils/notify";
-import SelSourceType_search from "src/components/SelSourceType_search.vue";
-import SelSourceType_alertCreate from "src/components/SelSourceType_alertCreate.vue";
-import SelSourceType_alertEdit from "src/components/SelSourceType_alertEdit.vue";
+import StandardSelect from "src/components/StandardSelect.vue";
 
 // 搜索栏数据
 const name_search = ref("");
@@ -278,7 +280,7 @@ const fnDestroySourceProject = params => {
   if (!params["uuid"]) return;
 
   confirmNotify(destroyActions(() => {
-    const loading = loading();
+    const loading = loadingNotify();
 
     ajaxDestroySourceProject(params.uuid)
       .then(() => {
@@ -292,7 +294,7 @@ const fnDestroySourceProject = params => {
 
 const fnDestroySourceProjects = () => {
   confirmNotify(destroyActions(() => {
-    const loading = loading();
+    const loading = loadingNotify();
 
     ajaxDestroySourceProjects(collect(selected.value).pluck("uuid").all())
       .then(() => {

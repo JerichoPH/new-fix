@@ -1,6 +1,6 @@
 <template>
   <q-select outlined use-input clearable v-model="currentValue" :options="l_com" :label="labelName" @filter="fnFilter"
-    emit-value map-options :display-value="m[currentValue]" :disable="parentField ? !parentValue : false" />
+    emit-value map-options :display-value="m[currentValue]" :disable="parentField ? !parentValue : false" :key="`${currentField}_${sechma}`"/>
 </template>
 <script setup>
 import { inject, defineProps, onMounted, ref, watch } from "vue";
@@ -106,8 +106,8 @@ const fnSearch = () => {
   }
 
   dataSource(ajaxParams)
-    .then((res) => {
-      l.value = collect(getVal(res, dataSourceField))
+    .then(res => {
+      l.value = collect(getVal(res, `content.${dataSourceField}`))
         .map(item => {
           return {
             label: getVal(item, labelField),
