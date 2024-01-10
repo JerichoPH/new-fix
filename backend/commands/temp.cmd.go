@@ -35,12 +35,12 @@ func (receiver TempCmd) ls() []string {
 }
 
 func (receiver TempCmd) redis() []string {
-	if _, err := database.NewRedis(0).SetValue("test", "AAA", 15*time.Minute); err != nil {
+	if _, err := database.NewRedis().SetValue("test", "AAA", 15*time.Minute); err != nil {
 		wrongs.ThrowForbidden(err.Error())
 	}
 
-	for i := 0; i < 100000; i++ {
-		if val, err := database.NewRedis(0).GetValue("test"); err != nil {
+	for i := 0; i < 1000; i++ {
+		if val, err := database.NewRedis().GetValue("test"); err != nil {
 			wrongs.ThrowForbidden(err.Error())
 		} else {
 			fmt.Println(i, val)
