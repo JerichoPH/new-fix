@@ -39,13 +39,19 @@
                     parent-field="organizationParagraphUuid" />
                 </div>
                 <div class="col-3">
-                  <sel-organization-station_search label-name="相关站场" :ajax-params="{}" />
+                  <standard-select label-name="相关站场" sechma="search" current-field="organizationStationUuid"
+                    :data-source="ajaxGetOrganizationStations" data-source-field="organization_stations"
+                    parent-field="organizationWorkshopUuid" />
                 </div>
                 <div class="col-3">
-                  <sel-organization-crossroad_search label-name="相关道口" :ajax-params="{}" />
+                  <standard-select label-name="相关道口" sechma="search" current-field="organizationCrossroadUuid"
+                    :data-source="ajaxGetOrganizationCrossroads" data-source-field="organization_crossroads"
+                    parent-field="organizationWorkshopUuid" />
                 </div>
                 <div class="col-3">
-                  <sel-organization-center_search label-name="相关中心" :ajax-params="{}" />
+                  <standard-select label-name="相关中心" sechma="search" current-field="organizationCenterUuid"
+                    :data-source="ajaxGetOrganizationCenters" data-source-field="organization_centers"
+                    parent-field="organizationWorkshopUuid" />
                 </div>
               </div>
             </q-form>
@@ -251,6 +257,9 @@ import {
   ajaxGetOrganizationRailways,
   ajaxGetOrganizationParagraphs,
   ajaxGetOrganizationWorkshops,
+  ajaxGetOrganizationStations,
+  ajaxGetOrganizationCrossroads,
+  ajaxGetOrganizationCenters,
 } from "src/apis/organization";
 import {
   loadingNotify,
@@ -261,9 +270,6 @@ import {
 } from "src/utils/notify";
 import JoinString from "src/components/JoinString.vue";
 import StandardSelect from "src/components/StandardSelect.vue";
-import SelOrganizationStation_search from "src/components/SelOrganizationStation_search.vue";
-import SelOrganizationCrossroad_search from "src/components/SelOrganizationCrossroad_search.vue";
-import SelOrganizationCenter_search from "src/components/SelOrganizationCenter_search.vue";
 import ChkOrganizationStation_alertCreate from "src/components/ChkOrganizationStation_alertCreate.vue";
 import ChkOrganizationStation_alertEdit from "src/components/ChkOrganizationStation_alertEdit.vue";
 
