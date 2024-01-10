@@ -12,7 +12,14 @@ type AccountInfo struct {
 	Nickname   string `json:"nickname"`
 	BeAdmin    bool   `json:"be_admin"`
 	AvatarUuid string `json:"avatar_uuid"`
-	RbacRoles  []struct {
+	Avatar     struct {
+		SavePath          string `json:"save_path"`
+		Filename          string `json:"filename"`
+		OriginalFilename  string `json:"original_filename"`
+		OriginalExtension string `json:"original_extension"`
+		Url               string `json:"url"`
+	}
+	RbacRoles []struct {
 		Uuid            string `json:"uuid"`
 		Name            string `json:"name"`
 		RbacPermissions []struct {

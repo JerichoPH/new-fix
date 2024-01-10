@@ -31,8 +31,7 @@ database = Dwqcgl
 [redis]
 host = 127.0.0.1
 port = 6379
-database = 0
-password = zces@1234
+password = ""
 
 [mongo]
 username = "root"
