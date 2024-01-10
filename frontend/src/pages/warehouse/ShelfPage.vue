@@ -100,7 +100,7 @@
                   <q-td><q-checkbox :key="props.row.uuid" :value="props.row.uuid" v-model="props.selected" /></q-td>
                   <q-td>{{ props.row.index }}</q-td>
                   <q-td key="name" :props="props">
-                    <q-btn color="primary" @click="fnOpenAlertEditWarehouseShelfSubs(props.row.operation)">
+                    <q-btn outline color="primary" @click="fnOpenAlertEditWarehouseShelfSubs(props.row.operation)">
                       {{ props.row.name }}
                     </q-btn>
                   </q-td>
@@ -149,7 +149,8 @@
           <div class="row q-mt-md">
             <div class="col">
               <standard-select label-name="所属路局" sechma="alertCreate" current-field="organizationRailwayUuid"
-                :data-source="ajaxGetOrganizationRailways" data-source-field="organization_railways" />
+                :data-source="ajaxGetOrganizationRailways" data-source-field="organization_railways"
+                label-field="short_name" />
             </div>
           </div>
           <div class="row q-mt-md">
@@ -195,8 +196,10 @@
           </div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn type="button" label="关闭" outline v-close-popup />
-          <q-btn type="submit" label="确定" outline icon="check" color="secondary" />
+          <q-btn-group>
+            <q-btn type="button" label="关闭" outline v-close-popup />
+            <q-btn type="submit" label="确定" outline icon="check" color="secondary" />
+          </q-btn-group>
         </q-card-actions>
       </q-form>
     </q-card>
@@ -217,7 +220,8 @@
           <div class="row q-mt-md">
             <div class="col">
               <standard-select label-name="所属路局" sechma="alertEdit" current-field="organizationRailwayUuid"
-                :data-source="ajaxGetOrganizationRailways" data-source-field="organization_railways" />
+                :data-source="ajaxGetOrganizationRailways" data-source-field="organization_railways"
+                label-field="short_name" />
             </div>
           </div>
           <div class="row q-mt-md">
@@ -263,8 +267,10 @@
           </div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn type="button" label="关闭" outline v-close-popup />
-          <q-btn type="submit" label="确定" outline icon="check" color="warning" />
+          <q-btn-group>
+            <q-btn type="button" label="关闭" outline v-close-popup />
+            <q-btn type="submit" label="确定" outline icon="check" color="warning" />
+          </q-btn-group>
         </q-card-actions>
       </q-form>
     </q-card>
