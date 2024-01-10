@@ -473,7 +473,6 @@ func (recevier AccountCtrl) PutUpdatePassword(ctx *gin.Context) {
 	if err != nil {
 		wrongs.ThrowForbidden("解析用户信息失败：%s", err.Error())
 	}
-	fmt.Printf("OK %v", accountTokens)
 	err = rds.DeleteValues(accountTokens...)
 	if err != nil {
 		wrongs.ThrowForbidden("删除用户信息失败：%s", err.Error())
