@@ -25,7 +25,8 @@
                   <q-input outlined clearable lazy-rules v-model="description_search" label="描述" :rules="[]" />
                 </div>
                 <div class="col-3">
-                  <sel-rbac-role_search label-name="所属角色" />
+                  <standard-select label-name="所属角色" sechma="search" current-field="rbacRoleUuid"
+                    :data-source="ajaxGetRbacRoles" data-source-field="rbac_roles" />
                 </div>
               </div>
             </q-form>
@@ -113,11 +114,23 @@
           <div class="row">
             <div class="col">
               <q-input outlined clearable lazy-rules v-model="name_alertCreateRbacPermission" label="名称" :rules="[]" />
-              <q-input outlined clearable lazy-rules v-model="uri_alertCreateRbacPermission" label="路由" :rules="[]"
-                class="q-mt-md" />
+            </div>
+          </div>
+          <div class="row q-mt-md">
+            <div class="col">
+              <q-input outlined clearable lazy-rules v-model="uri_alertCreateRbacPermission" label="路由" :rules="[]" />
+            </div>
+          </div>
+          <div class="row q-mt-md">
+            <div class="col">
               <q-input outlined clearable lazy-rules v-model="description_alertCreateRbacPermission" label="描述"
-                :rules="[]" class="q-mt-md" />
-              <chk-rbac-role_alert-create label-name="所属角色" class="q-mt-md" />
+                :rules="[]" />
+            </div>
+          </div>
+          <div class="row q-mt-md">
+            <div class="col">
+              <standard-select label-name="所属角色" sechma="alertCreate" current-field="rbacRoleUuid"
+                :data-source="ajaxGetRbacRoles" data-source-field="rbac_roles" />
             </div>
           </div>
         </q-card-section>
@@ -141,11 +154,23 @@
           <div class="row">
             <div class="col">
               <q-input outlined clearable lazy-rules v-model="name_alertEditRbacPermission" label="名称" :rules="[]" />
-              <q-input outlined clearable lazy-rules v-model="uri_alertEditRbacPermission" label="路由" :rules="[]"
-                class="q-mt-md" />
-              <q-input outlined clearable lazy-rules v-model="description_alertEditRbacPermission" label="描述" :rules="[]"
-                class="q-mt-md" />
-              <chk-rbac-role_alert-edit label-name="所属角色" class="q-mt-md" />
+            </div>
+          </div>
+          <div class="row q-mt-md">
+            <div class="col">
+              <q-input outlined clearable lazy-rules v-model="uri_alertEditRbacPermission" label="路由" :rules="[]" />
+            </div>
+          </div>
+          <div class="row q-mt-md">
+            <div class="col">
+              <q-input outlined clearable lazy-rules v-model="description_alertEditRbacPermission" label="描述"
+                :rules="[]" />
+            </div>
+          </div>
+          <div class="row q-mt-dm">
+            <div class="col">
+              <standard-select label-name="所属角色" sechma="alertEdit" current-field="rbacRoleUuid"
+                :data-source="ajaxGetRbacRoles" data-source-field="rbac_roles" />
             </div>
           </div>
         </q-card-section>
@@ -161,16 +186,7 @@
 import { ref, onMounted, provide } from "vue";
 import collect from "collect.js";
 import { fnColumnReverseSort } from "src/utils/common";
-import SelRbacRole_search from "src/components/SelRbacRole_search.vue";
-import ChkRbacRole_alertCreate from "src/components/ChkRbacRole_alertCreate.vue";
-import ChkRbacRole_alertEdit from "src/components/ChkRbacRole_alertEdit.vue";
-import {
-  loadingNotify,
-  successNotify,
-  errorNotify,
-  confirmNotify,
-  destroyActions,
-} from "src/utils/notify";
+import StandardSelect from "src/components/StandardSelect.vue";
 import {
   ajaxGetRbacPermissions,
   ajaxGetRbacPermission,
@@ -178,7 +194,15 @@ import {
   ajaxUpdateRbacPermission,
   ajaxDestroyRbacPermission,
   ajaxDestroyRbacPermissions,
+  ajaxGetRbacRoles,
 } from "src/apis/rbac";
+import {
+  loadingNotify,
+  successNotify,
+  errorNotify,
+  confirmNotify,
+  destroyActions,
+} from "src/utils/notify";
 import JoinString from "src/components/JoinString.vue";
 
 // 表格数据
@@ -253,7 +277,7 @@ const fnSearch = () => {
         })
         .all();
     })
-    .catch(e=>errorNotify(e.msg));
+    .catch(e => errorNotify(e.msg));
 };
 
 /**
@@ -291,7 +315,7 @@ const fnStoreRbacPermission = () => {
 
       alertCreateRbacPermission.value = false;
     })
-    .catch(e=>errorNotify(e.msg))
+    .catch(e => errorNotify(e.msg))
     .finally(loading());
 };
 
@@ -325,7 +349,7 @@ const fnOpenAlertEditRbacPermission = (params = {}) => {
 
       alertEditRbacPermission.value = true;
     })
-    .catch(e=>errorNotify(e.msg));
+    .catch(e => errorNotify(e.msg));
 };
 
 /**
@@ -349,7 +373,7 @@ const fnUpdateRbacPermission = () => {
 
       alertEditRbacPermission.value = false;
     })
-    .catch(e=>errorNotify(e.msg))
+    .catch(e => errorNotify(e.msg))
     .finally(loading());
 };
 
@@ -368,7 +392,7 @@ const fnDestroyRbacPermission = (params = {}) => {
           successNotify("删除成功");
           fnSearch();
         })
-        .catch(e=>errorNotify(e.msg))
+        .catch(e => errorNotify(e.msg))
         .finally(loading());
     })
   );
@@ -389,7 +413,7 @@ const fnDestroyRbacPermissions = () => {
           successNotify("删除成功");
           fnSearch();
         })
-        .catch(e=>errorNotify(e.msg))
+        .catch(e => errorNotify(e.msg))
         .finally(loading());
     })
   );

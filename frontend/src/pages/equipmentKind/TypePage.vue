@@ -172,9 +172,6 @@ import {
   destroyActions,
 } from "src/utils/notify";
 import StandardSelect from "src/components/StandardSelect.vue";
-import SelEquipmentKindCategory_search from "src/components/SelEquipmentKindCategory_search.vue";
-import SelEquipmentKindCategory_alertCreate from "src/components/SelEquipmentKindCategory_alertCreate.vue";
-import SelEquipmentKindCategrory_alertEdit from "src/components/SelEquipmentKindCategory_alertEdit.vue";
 
 // 搜索栏条件
 const name_search = ref("");

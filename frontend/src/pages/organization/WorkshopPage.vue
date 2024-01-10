@@ -32,7 +32,6 @@
                     parent-field="organizationRailwayUuid" />
                 </div>
                 <div class="col">
-                  <sel-organization-workshop-type-code_alertCreate label-name="车间类型" />
                   <standard-select label-name="车间类型" sechma="alertEdit" current-field="organizationRailwayUuid"
                     :data-source="ajaxGetOrganizationWorkshopTypeCodesMap" data-source-field="type_codes_map" />
                 </div>
@@ -141,7 +140,6 @@
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-organization-paragraph_alertCreate label-name="" />
               <standard-select label-name="所属站段" sechma="alertCreate" current-field="organizationParagraphUuid"
                 :data-source="ajaxGetOrganizationParagraphs" data-source-field="organization_paragraphs"
                 parent-field="organizationRailwayUuid" />
@@ -238,15 +236,6 @@ import {
 } from "src/utils/notify";
 import JoinString from "src/components/JoinString.vue";
 import StandardSelect from "src/components/StandardSelect.vue";
-import SelOrganizationRailway_search from "src/components/SelOrganizationRailway_search.vue";
-import SelOrganizationParagraph_search from "src/components/SelOrganizationParagraph_search.vue";
-import SelOrganizationWorkshopTypeCode_search from "src/components/SelOrganizationWorkshopTypeCode_search.vue";
-import SelOrganizationRailway_alertCreate from "src/components/SelOrganizationRailway_alertCreate.vue";
-import SelOrganizationParagraph_alertCreate from "src/components/SelOrganizationParagraph_alertCreate.vue";
-import SelOrganizationWorkshopTypeCode_alertCreate from "src/components/SelOrganizationWorkshopTypeCode_alertCreate.vue";
-import SelOrganizationRailway_alertEdit from "src/components/SelOrganizationRailway_alertEdit.vue";
-import SelOrganizationParagraph_alertEdit from "src/components/SelOrganizationParagraph_alertEdit.vue";
-import organizationWorkshopTypeCode_alertEdit from "src/components/SelOrganizationWorkshopTypeCode_alertEdit.vue";
 
 // 搜索栏数据
 const uniqueCode_search = ref("");
