@@ -682,7 +682,7 @@ const fnUpdateWarehouseShelf = () => {
 };
 
 const fnDestroyCreateWarehouseShelf = params => {
-  if (!parmas["uuid"]) return;
+  if (!params["uuid"]) return;
 
   confirmNotify(destroyActions(() => {
     const loading = loadingNotify();
