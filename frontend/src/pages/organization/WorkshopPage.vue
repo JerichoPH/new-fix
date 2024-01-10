@@ -33,7 +33,7 @@
                 </div>
                 <div class="col">
                   <standard-select label-name="车间类型" sechma="alertEdit" current-field="organizationRailwayUuid"
-                    :data-source="ajaxGetOrganizationWorkshopTypeCodesMap" data-source-field="type_codes_map" />
+                    :data-source="ajaxGetOrganizationWorkshopTypeCodesMap" data-source-field="type_codes_map" label-field="text" value-field="code"/>
                 </div>
               </div>
             </q-form>
@@ -148,7 +148,7 @@
           <div class="row q-mt-md">
             <div class="col">
               <standard-select label-name="车间类型" sechma="alertCreate" current-field="organizationWorkshopTypeCodeUuid"
-                :data-source="ajaxGetOrganizationWorkshopTypeCodesMap" data-source-field="type_codes_map" />
+                :data-source="ajaxGetOrganizationWorkshopTypeCodesMap" data-source-field="type_codes_map" label-field="text" value-field="code" />
             </div>
           </div>
         </q-card-section>
@@ -197,7 +197,7 @@
           <div class="row q-mt-md">
             <div class="col">
               <standard-select label-name="车间类型" sechma="alertEdit" current-field="organizationWorkshopTypeCodeUuid"
-                :data-source="ajaxGetOrganizationWorkshopTypeCodesMap" data-source-field="type_codes_map" />
+                :data-source="ajaxGetOrganizationWorkshopTypeCodesMap" data-source-field="type_codes_map" label-field="text" value-field="code" />
             </div>
           </div>
         </q-card-section>

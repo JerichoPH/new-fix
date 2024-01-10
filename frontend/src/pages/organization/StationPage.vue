@@ -190,7 +190,7 @@
             <div class="col">
               <standard-select label-name="所属站段" sechma="alertEdit" current-field="organizationParagraphUuid"
                 :data-source="ajaxGetOrganizationParagraphs" data-source-field="organization_paragraphs"
-                parent-field="organizationRailwayhUuid" />
+                parent-field="organizationRailwayUuid" />
             </div>
           </div>
           <div class="row q-mt-md">

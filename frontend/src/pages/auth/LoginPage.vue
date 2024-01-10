@@ -69,7 +69,7 @@ export default defineComponent({
      * 登录
      */
     fnLogin() {
-      const loading = loading("登录中……");
+      const loading = loadingNotify("登录中……");
 
       ajaxLogin({
         username: this.username,

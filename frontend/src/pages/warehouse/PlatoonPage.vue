@@ -20,12 +20,13 @@
                 </div>
                 <div class="col">
                   <standard-select label-name="所属路局" sechma="search" current-field="organizationRailwayUuid"
-                    :data-source="ajaxGetOrganizationRailways" data-source-field="organization_railways" />
+                    :data-source="ajaxGetOrganizationRailways" data-source-field="organization_railways"
+                    label-field="short_name" />
                 </div>
                 <div class="col">
                   <standard-select label-name="所属站段" sechma="search" current-field="organizationParagraphUuid"
                     :data-source="ajaxGetOrganizationParagraphs" data-source-field="organization_paragraphs"
-                    parent-field="organizationRailwayhUuid" />
+                    parent-field="organizationRailwayUuid" />
                 </div>
                 <div class="col">
                   <standard-select label-name="所属车间" sechma="search" current-field="organizationWorkshopUuid"
@@ -50,7 +51,8 @@
                 </div>
                 <div class="col">
                   <standard-select label-name="排类型" sechma="search" current-field="warehousePlatoonTypeCode"
-                    :data-source="ajaxGetWarehousePlatoonTypeCodesMap" data-source-field="type_codes_map" />
+                    :data-source="ajaxGetWarehousePlatoonTypeCodesMap" data-source-field="type_codes_map"
+                    label-field="text" value-field="code" />
                 </div>
                 <div class="col"></div>
                 <div class="col"></div>
@@ -148,7 +150,7 @@
             <div class="col">
               <standard-select label-name="所属站段" sechma="alertCreate" current-field="organizationParagraphUuid"
                 :data-source="ajaxGetOrganizationParagraphs" data-source-field="organization_paragraphs"
-                parent-field="organizationRailwayhUuid" />
+                parent-field="organizationRailwayUuid" />
             </div>
           </div>
           <div class="row q-mt-md">
@@ -181,7 +183,8 @@
           <div class="row q-mt-md">
             <div class="col">
               <standard-select label-name="排类型" sechma="alertCreate" current-field="warehousePlatoonTypeCode"
-                :data-source="ajaxGetWarehousePlatoonTypeCodesMap" data-source-field="type_codes_map" />
+                :data-source="ajaxGetWarehousePlatoonTypeCodesMap" data-source-field="type_codes_map" label-field="text"
+                value-field="code" />
             </div>
           </div>
         </q-card-section>
@@ -217,7 +220,7 @@
             <div class="col">
               <standard-select label-name="所属站段" sechma="alertEdit" current-field="organizationParagraphUuid"
                 :data-source="ajaxGetOrganizationParagraphs" data-source-field="organization_paragraphs"
-                parent-field="organizationRailwayhUuid" />
+                parent-field="organizationRailwayUuid" />
             </div>
           </div>
           <div class="row q-mt-md">
@@ -250,7 +253,8 @@
           <div class="row q-mt-md">
             <div class="col">
               <standard-select label-name="排类型" sechma="alertEdit" current-field="warehousePlatoonTypeCode"
-                :data-source="ajaxGetWarehousePlatoonTypeCodesMap" data-source-field="type_codes_map" />
+                :data-source="ajaxGetWarehousePlatoonTypeCodesMap" data-source-field="type_codes_map" label-field="text"
+                value-field="code" />
             </div>
           </div>
         </q-card-section>
@@ -275,14 +279,16 @@ import {
   ajaxUpdateWarehousePlatoon,
   ajaxDestroyWarehousePlatoon,
   ajaxDestroyWarehousePlatoons,
-  ajaxGetOrganizationRailways,
-  ajaxGetOrganizationParagraphs,
-  ajaxGetOrganizationWorkshops,
-  ajaxGetOrganizationWorkAreas,
   ajaxGetWarehouseStorehouses,
   ajaxGetWarehouseAreas,
   ajaxGetWarehousePlatoonTypeCodesMap,
 } from "src/apis/warehouse";
+import {
+  ajaxGetOrganizationRailways,
+  ajaxGetOrganizationParagraphs,
+  ajaxGetOrganizationWorkshops,
+  ajaxGetOrganizationWorkAreas,
+} from "src/apis/organization";
 import {
   loadingNotify,
   successNotify,

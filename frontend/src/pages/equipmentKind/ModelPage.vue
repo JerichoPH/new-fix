@@ -217,7 +217,7 @@ const sortBy = ref("name");
 const alertCreateEquipmentKindModel = ref(false);
 const name_alertCreateEquipmentKindModel = ref("");
 const equipmentKindCategoryUuid_alertCreate = ref("");
-provide("equipmentKindCategoryUuid_alertCreate", equipmentKindCategoryUuid_alertCreat);
+provide("equipmentKindCategoryUuid_alertCreate", equipmentKindCategoryUuid_alertCreate);
 const equipmentKindTypeUuid_alertCreate = ref("");
 provide("equipmentKindTypeUuid_alertCreate", equipmentKindTypeUuid_alertCreate);
 

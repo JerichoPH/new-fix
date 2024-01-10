@@ -1,6 +1,7 @@
 <template>
   <q-select outlined use-input clearable v-model="currentValue" :options="l_com" :label="labelName" @filter="fnFilter"
-    emit-value map-options :display-value="m[currentValue]" :disable="parentField ? !parentValue : false" :key="`${currentField}_${sechma}`"/>
+    emit-value map-options :display-value="m[currentValue]" :disable="parentField ? !parentValue : false"
+    :key="`${currentField}_${sechma}`" />
 </template>
 <script setup>
 import { inject, defineProps, onMounted, ref, watch } from "vue";
@@ -32,12 +33,12 @@ const props = defineProps({
   labelField: {
     type: String,
     default: "name",
-    required: true,
+    required: false,
   },
   valueField: {
     type: String,
     default: "uuid",
-    required: true,
+    required: false,
   },
   sechma: {
     type: String,
@@ -54,6 +55,7 @@ const props = defineProps({
     default: () => {
       return {};
     },
+    required: false,
   },
 });
 
@@ -97,6 +99,8 @@ onMounted(() => fnSearch());
 
 const fnSearch = () => {
   l_com.value = [];
+
+  // console.log(currentField, parentField, parentValue, currentValue);
 
   if (parentField) {
     if (!parentValue.value) {

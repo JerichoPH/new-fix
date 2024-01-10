@@ -24,12 +24,13 @@
                 </div>
                 <div class="col-3">
                   <standard-select label-name="所属路局" sechma="search" current-field="organizationRailwayUuid"
-                    :data-source="ajaxGetOrganizationRailways" data-source-field="organization_railways" />
+                    :data-source="ajaxGetOrganizationRailways" data-source-field="organization_railways"
+                    label-field="short_name" />
                 </div>
                 <div class="col-3">
                   <standard-select label-name="所属站段" sechma="search" current-field="organizationParagraphUuid"
                     :data-source="ajaxGetOrganizationParagraphs" data-source-field="organization_paragraphs"
-                    parent-field="organizationRailwayhUuid" />
+                    parent-field="organizationRailwayUuid" />
                 </div>
               </div>
               <div class="row q-col-gutter-sm">
@@ -40,7 +41,8 @@
                 </div>
                 <div class="col-3">
                   <standard-select label-name="工区类型" sechma="search" current-field="organizationWorkAreaTypeCode"
-                    :data-source="ajaxGetOrganizationWorkAreaTypeCodesMap" data-source-field="type_codes_map" />
+                    :data-source="ajaxGetOrganizationWorkAreaTypeCodesMap" data-source-field="type_codes_map"
+                    label-field="text" value-field="code" />
                 </div>
               </div>
             </q-form>
@@ -150,7 +152,7 @@
             <div class="col">
               <standard-select label-name="所属站段" sechma="alertCreate" current-field="organizationParagraphUuid"
                 :data-source="ajaxGetOrganizationParagraphs" data-source-field="organization_paragraphs"
-                parent-field="organizationRailwayhUuid" />
+                parent-field="organizationRailwayUuid" />
             </div>
           </div>
           <div class="row q-mt-md">
@@ -163,7 +165,8 @@
           <div class="row q-mt-md">
             <div class="col">
               <standard-select label-name="工区类型" sechma="alertCreate" current-field="organizationWorkAreaTypeCode"
-                :data-source="ajaxGetOrganizationWorkAreaTypeCodesMap" data-source-field="type_codes_map" />
+                :data-source="ajaxGetOrganizationWorkAreaTypeCodesMap" data-source-field="type_codes_map"
+                label-field="text" value-field="code" />
             </div>
           </div>
         </q-card-section>
@@ -206,7 +209,7 @@
             <div class="col">
               <standard-select label-name="所属站段" sechma="alertEdit" current-field="organizationParagraphUuid"
                 :data-source="ajaxGetOrganizationParagraphs" data-source-field="organization_paragraphs"
-                parent-field="organizationRailwayhUuid" />
+                parent-field="organizationRailwayUuid" />
             </div>
           </div>
           <div class="row q-mt-md">
@@ -219,7 +222,8 @@
           <div class="row q-mt-md">
             <div class="col">
               <standard-select label-name="工区类型" sechma="alertEdit" current-field="organizationWorkAreaTypeCode"
-                :data-source="ajaxGetOrganizationWorkAreaTypeCodesMap" data-source-field="type_codes_map" />
+                :data-source="ajaxGetOrganizationWorkAreaTypeCodesMap" data-source-field="type_codes_map"
+                label-field="text" value-field="code" />
             </div>
           </div>
         </q-card-section>

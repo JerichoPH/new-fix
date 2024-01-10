@@ -24,12 +24,12 @@
                 </div>
                 <div class="col-3">
                   <standard-select label-name="所属路局" sechma="search" current-field="organizationRailwayUuid"
-                    :data-source="ajaxGetOrganizationRailways" data-source-field="organization_railways" />
+                    :data-source="ajaxGetOrganizationRailways" data-source-field="organization_railways"  label-field="short_name" />
                 </div>
                 <div class="col-3">
                   <standard-select label-name="所属站段" sechma="search" current-field="organizationParagraphUuid"
                     :data-source="ajaxGetOrganizationParagraphs" data-source-field="organization_paragraphs"
-                    parent-field="organizationRailwayhUuid" />
+                    parent-field="organizationRailwayUuid" />
                 </div>
               </div>
               <div class="row q-col-gutter-sm">
@@ -162,7 +162,7 @@
             <div class="col">
               <standard-select label-name="所属站段" sechma="alertCreate" current-field="organizationParagraphUuid"
                 :data-source="ajaxGetOrganizationParagraphs" data-source-field="organization_paragraphs"
-                parent-field="organizationRailwayhUuid" />
+                parent-field="organizationRailwayUuid" />
             </div>
           </div>
           <div class="row q-mt-md">
@@ -216,7 +216,7 @@
             <div class="col">
               <standard-select label-name="所属站段" sechma="alertEdit" current-field="organizationParagraphUuid"
                 :data-source="ajaxGetOrganizationParagraphs" data-source-field="organization_paragraphs"
-                parent-field="organizationRailwayhUuid" />
+                parent-field="organizationRailwayUuid" />
             </div>
           </div>
           <div class="row q-mt-md">

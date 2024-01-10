@@ -19,37 +19,38 @@
                   <q-input outlined clearable lazy-rules v-model="name_search" label="名称" :rules="[]" class="q-mb-md" />
                 </div>
                 <div class="col">
-                  <standard-select label-name="机房类型" sechma="search" current-field="installIndoorRoomTypeUuid"
+                  <StandardSelect label-name="机房类型" sechma="search" current-field="installIndoorRoomTypeUuid"
                     :data-source="ajaxGetInstallIndoorRoomTypes" data-source-field="install_indoor_room_types" />
                 </div>
                 <div class="col">
-                  <standard-select label-name="所属路局" sechma="search" current-field="organizationRailwayUuid"
-                    :data-source="ajaxGetOrganizationRailways" data-source-field="organization_railways" />
+                  <StandardSelect label-name="所属路局" sechma="search" current-field="organizationRailwayUuid"
+                    :data-source="ajaxGetOrganizationRailways" data-source-field="organization_railways"
+                    label-field="short_name" />
                 </div>
                 <div class="col">
-                  <standard-select label-name="所属站段" sechma="search" current-field="organizationParagraphUuid"
+                  <StandardSelect label-name="所属站段" sechma="search" current-field="organizationParagraphUuid"
                     :data-source="ajaxGetOrganizationParagraphs" data-source-field="organization_paragraphs"
-                    parent-field="organizationRailwayhUuid" />
+                    parent-field="organizationRailwayUuid" />
                 </div>
                 <div class="col">
-                  <standard-select label-name="所属车间" sechma="search" current-field="organizationWorkshopUuid"
+                  <StandardSelect label-name="所属车间" sechma="search" current-field="organizationWorkshopUuid"
                     :data-source="ajaxGetOrganizationWorkshops" data-source-field="organization_workshops"
                     parent-field="organizationParagraphUuid" />
                 </div>
               </div>
               <div class="row q-col-gutter-sm">
                 <div class="col">
-                  <standard-select label-name="所属站场" sechma="search" current-field="organizationStationUuid"
+                  <StandardSelect label-name="所属站场" sechma="search" current-field="organizationStationUuid"
                     :data-source="ajaxGetOrganizationStations" data-source-field="organization_stations"
                     parent-field="organizationWorkshopUuid" />
                 </div>
                 <div class="col">
-                  <standard-select label-name="所属中心" sechma="search" current-field="organizationCenterUuid"
+                  <StandardSelect label-name="所属中心" sechma="search" current-field="organizationCenterUuid"
                     :data-source="ajaxGetOrganizationCenters" data-source-field="organization_centers"
                     parent-field="organizationWorkshopUuid" />
                 </div>
                 <div class="col">
-                  <standard-select label-name="所属道口" sechma="search" current-field="organizationCrossroadUuid"
+                  <StandardSelect label-name="所属道口" sechma="search" current-field="organizationCrossroadUuid"
                     :data-source="ajaxGetOrganizationCrossroads" data-source-field="organization_crossroads"
                     parent-field="organizationWorkshopUuid" />
                 </div>
@@ -146,48 +147,47 @@
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-install-indoor-room-type label-name="机房类型" sechma="alertEdit" />
-              <standard-select label-name="机房类型" sechma="alertCreate" current-field="installIndoorRoomTypeUuid"
+              <StandardSelect label-name="机房类型" sechma="alertCreate" current-field="installIndoorRoomTypeUuid"
                 :data-source="ajaxGetInstallIndoorRoomTypes" data-source-field="install_indoor_room_types" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <standard-select label-name="所属路局" sechma="alertCreate" current-field="organizationRailwayUuid"
+              <StandardSelect label-name="所属路局" sechma="alertCreate" current-field="organizationRailwayUuid"
                 :data-source="ajaxGetOrganizationRailways" data-source-field="organization_railways" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <standard-select label-name="所属站段" sechma="alertCreate" current-field="organizationParagraphUuid"
+              <StandardSelect label-name="所属站段" sechma="alertCreate" current-field="organizationParagraphUuid"
                 :data-source="ajaxGetOrganizationParagraphs" data-source-field="organization_paragraphs"
-                parent-field="organizationRailwayhUuid" />
+                parent-field="organizationRailwayUuid" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <standard-select label-name="所属车间" sechma="alertCreate" current-field="organizationWorkshopUuid"
+              <StandardSelect label-name="所属车间" sechma="alertCreate" current-field="organizationWorkshopUuid"
                 :data-source="ajaxGetOrganizationWorkshops" data-source-field="organization_workshops"
                 parent-field="organizationParagraphUuid" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <standard-select label-name="所属站场" sechma="alertCreate" current-field="organizationStationUuid"
+              <StandardSelect label-name="所属站场" sechma="alertCreate" current-field="organizationStationUuid"
                 :data-source="ajaxGetOrganizationStations" data-source-field="organization_stations"
                 parent-field="organizationWorkshopUuid" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <standard-select label-name="所属中心" sechma="alertCreate" current-field="organizationCenterUuid"
+              <StandardSelect label-name="所属中心" sechma="alertCreate" current-field="organizationCenterUuid"
                 :data-source="ajaxGetOrganizationCenters" data-source-field="organization_centers"
                 parent-field="organizationWorkshopUuid" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <standard-select label-name="所属道口" sechma="alertCreate" current-field="organizationCrossroadUuid"
+              <StandardSelect label-name="所属道口" sechma="alertCreate" current-field="organizationCrossroadUuid"
                 :data-source="ajaxGetOrganizationCrossroads" data-source-field="organization_crossroads"
                 parent-field="organizationWorkshopUuid" />
             </div>
@@ -217,48 +217,47 @@
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <sel-install-indoor-room-type label-name="机房类型" sechma="alertEdit" />
-              <standard-select label-name="机房类型" sechma="alertEdit" current-field="installIndoorRoomTypeUuid"
+              <StandardSelect label-name="机房类型" sechma="alertEdit" current-field="installIndoorRoomTypeUuid"
                 :data-source="ajaxGetInstallIndoorRoomTypes" data-source-field="install_indoor_room_types" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <standard-select label-name="所属路局" sechma="alertEdit" current-field="organizationRailwayUuid"
+              <StandardSelect label-name="所属路局" sechma="alertEdit" current-field="organizationRailwayUuid"
                 :data-source="ajaxGetOrganizationRailways" data-source-field="organization_railways" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <standard-select label-name="所属站段" sechma="alertEdit" current-field="organizationParagraphUuid"
+              <StandardSelect label-name="所属站段" sechma="alertEdit" current-field="organizationParagraphUuid"
                 :data-source="ajaxGetOrganizationParagraphs" data-source-field="organization_paragraphs"
-                parent-field="organizationRailwayhUuid" />
+                parent-field="organizationRailwayUuid" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <standard-select label-name="所属车间" sechma="alertEdit" current-field="organizationWorkshopUuid"
+              <StandardSelect label-name="所属车间" sechma="alertEdit" current-field="organizationWorkshopUuid"
                 :data-source="ajaxGetOrganizationWorkshops" data-source-field="organization_workshops"
                 parent-field="organizationParagraphUuid" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <standard-select label-name="所属站场" sechma="alertEdit" current-field="organizationStationUuid"
+              <StandardSelect label-name="所属站场" sechma="alertEdit" current-field="organizationStationUuid"
                 :data-source="ajaxGetOrganizationStations" data-source-field="organization_stations"
                 parent-field="organizationWorkshopUuid" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <standard-select label-name="所属中心" sechma="alertEdit" current-field="organizationCenterUuid"
+              <StandardSelect label-name="所属中心" sechma="alertEdit" current-field="organizationCenterUuid"
                 :data-source="ajaxGetOrganizationCenters" data-source-field="organization_centers"
                 parent-field="organizationWorkshopUuid" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <standard-select label-name="所属道口" sechma="alertEdit" current-field="organizationCrossroadUuid"
+              <StandardSelect label-name="所属道口" sechma="alertEdit" current-field="organizationCrossroadUuid"
                 :data-source="ajaxGetOrganizationCrossroads" data-source-field="organization_crossroads"
                 parent-field="organizationWorkshopUuid" />
             </div>
@@ -285,14 +284,16 @@ import {
   ajaxUpdateInstallIndoorRoom,
   ajaxDestroyInstallIndoorRoom,
   ajaxDestroyInstallIndoorRooms,
+  ajaxGetInstallIndoorRoomTypes,
+} from "src/apis/install";
+import {
   ajaxGetOrganizationRailways,
   ajaxGetOrganizationParagraphs,
   ajaxGetOrganizationWorkshops,
   ajaxGetOrganizationStations,
   ajaxGetOrganizationCenters,
   ajaxGetOrganizationCrossroads,
-  ajaxGetInstallIndoorRoomTypes,
-} from "src/apis/install";
+} from "src/apis/organization";
 import { notifies, actions } from "src/utils/notify";
 import JoinString from "src/components/JoinString.vue";
 import StandardSelect from "src/components/StandardSelect.vue";

@@ -251,7 +251,7 @@ const selected = ref([]);
 const sortBy = ref("");
 
 // 新建室内上道位置-排弹窗数据
-const alertCreateInstallIndoorPlatoon = ref(false``);
+const alertCreateInstallIndoorPlatoon = ref(false);
 const name_alertCreateInstallIndoorPlatoon = ref("");
 const installIndoorRoomTypeUuid_alertCreateInstallIndoorPlatoon = ref("");
 provide("installIndoorRoomTypeUuid_alertCreate", installIndoorRoomTypeUuid_alertCreateInstallIndoorPlatoon);
