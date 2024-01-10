@@ -1,10 +1,13 @@
 package controllers
 
 import (
+	"encoding/json"
 	"new-fix/database"
 	"new-fix/models"
+	"new-fix/types"
 	"new-fix/utils"
 	"new-fix/wrongs"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	uuid "github.com/satori/go.uuid"
@@ -105,12 +108,14 @@ func (AuthCtrl) PostLogin(ctx *gin.Context) {
 	form := AuthLoginForm{}.ShouldBind(ctx)
 
 	var (
-		account models.AccountMdl
-		ret     *gorm.DB
+		account             models.AccountMdl
+		ret                 *gorm.DB
+		accountUuidToToken  any
+		accountUuidToTokens = make([]string, 0)
 	)
 
 	// 获取用户
-	ret = models.NewAccountMdl().GetDb("").Where("username", form.Username).First(&account)
+	ret = models.NewAccountMdl().SetPreloads("RbacRoles", "RbacRoles.RbacPermissions").GetDb("").Where("username", form.Username).First(&account)
 	wrongs.ThrowWhenEmpty(ret, "用户")
 
 	// 验证密码
@@ -128,6 +133,31 @@ func (AuthCtrl) PostLogin(ctx *gin.Context) {
 		// 生成jwt错误
 		wrongs.ThrowForbidden(err.Error())
 	} else {
+		// 保存到redis
+		rds, _, err := database.NewRedis(int(types.REDIS_DATABASE_AUTH)).SetJsonValue(token, account, 24*180*time.Hour)
+		if err != nil {
+			wrongs.ThrowForbidden("保存到redis错误：%s", err.Error())
+		}
+		// 取出已经当前用户已经使用的token
+		_, accountUuidToToken, err = rds.GetValue(account.Uuid)
+		if err != nil {
+			wrongs.ThrowForbidden("取出已经当前用户已经使用的token错误：%s", err.Error())
+		}
+		if accountUuidToToken != nil {
+			err = json.Unmarshal([]byte(string(accountUuidToToken.(string))), &accountUuidToTokens)
+			if err != nil {
+				wrongs.ThrowForbidden("解析已经当前用户已经使用的token错误：%s", err.Error())
+			}
+			if !utils.InString(account.Uuid, accountUuidToTokens) {
+				accountUuidToTokens = append(accountUuidToTokens, token)
+			}
+		} else {
+			accountUuidToTokens = append(accountUuidToTokens, token)
+		}
+		// 保存到redis
+		rds.SetJsonValue(account.Uuid, accountUuidToTokens, 24*180*time.Hour)
+		rds.Disconnect()
+
 		ctx.JSON(utils.NewCorrectWithGinContext("登陆成功", ctx).Datum(map[string]any{
 			"token": token,
 			"account": map[string]any{
@@ -143,12 +173,12 @@ func (AuthCtrl) PostLogin(ctx *gin.Context) {
 // GetMenus 获取当前账号菜单
 func (AuthCtrl) GetMenus(ctx *gin.Context) {
 	var (
-		account       models.AccountMdl
+		account       types.AccountInfo
 		rbacMenus     = make([]*models.RbacMenuMdl, 0)
 		rbacMenuUuids = make([]string, 0)
 	)
 
-	account = utils.GetAuth(ctx).(models.AccountMdl)
+	account = utils.GetAuth(ctx).(types.AccountInfo)
 
 	if account.BeAdmin {
 		models.NewRbacMenuMdl().SetCtx(ctx).GetDbUseQuery("").Find(&rbacMenus)

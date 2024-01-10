@@ -44,3 +44,9 @@ const (
 	RESPONSE_METHOD_UPDATED           ResponseMethod = "UPDATED"
 	RESPONSE_METHOD_DELETED           ResponseMethod = "DELETED"
 )
+
+type RedisDatabase int
+
+const (
+	REDIS_DATABASE_AUTH RedisDatabase = 0
+)

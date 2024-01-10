@@ -7,14 +7,14 @@ type JqueryDataTableResponse struct {
 	Draw            string
 	Start           int
 	Length          int
-	Content         MapStringToAny
+	Content         map[string]any
 	Max             *int64
 	RecordsTotal    *int64
 	RecordsFiltered *int64
 }
 
 // ToMap 转map[string]interface
-func (receiver JqueryDataTableResponse) ToMap() MapStringToAny {
+func (receiver JqueryDataTableResponse) ToMap() map[string]any {
 	return map[string]interface{}{
 		"content":         receiver.Content,
 		"draw":            receiver.Draw,
@@ -42,6 +42,6 @@ func (receiver JqueryDataTableResponse) ToJsonStr() string {
 }
 
 // ToGinResponse 转gin响应格式 int+map[string]interface{}
-func (receiver JqueryDataTableResponse) ToGinResponse() (int, MapStringToAny) {
+func (receiver JqueryDataTableResponse) ToGinResponse() (int, map[string]any) {
 	return 200, receiver.ToMap()
 }

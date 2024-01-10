@@ -15,8 +15,8 @@ type (
 )
 
 // ToMap 转map
-func (receiver StdBusiness) ToMap() MapStringToAny {
-	return MapStringToAny{
+func (receiver StdBusiness) ToMap() map[string]any {
+	return map[string]any{
 		"message_id":    receiver.MessageId,
 		"trace_id":      receiver.TraceId,
 		"content":       receiver.Content,

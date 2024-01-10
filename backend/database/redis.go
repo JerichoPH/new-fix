@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"log"
 	"new-fix/settings"
-	"new-fix/types"
 	"time"
 
 	"github.com/redis/go-redis/v9"
@@ -48,7 +47,7 @@ func (receiver *Redis) Disconnect() {
 }
 
 // SetValue 设置值
-func (receiver *Redis) SetValue(key string, value interface{}, exp time.Duration) (*Redis, any, error) {
+func (receiver *Redis) SetValue(key string, value any, exp time.Duration) (*Redis, any, error) {
 	val, err := receiver.Connect().Set(context.Background(), key, value, exp).Result()
 
 	return receiver, val, err
@@ -96,8 +95,13 @@ func (receiver *Redis) GetZRange(key, min, max string, offset, count int64) (*Re
 	return receiver, values, err
 }
 
+// 设置zset
+func (receiver *Redis) SetZRange(key string, z []redis.Z) (*Redis, any, error) {
+	return receiver.Do("zset", key, z)
+}
+
 // GetZInterStore 获取字典
-func (receiver *Redis) GetZInterStore(keys []string, weights types.ListFloat64) (*Redis, int64, error) {
+func (receiver *Redis) GetZInterStore(keys []string, weights []float64) (*Redis, int64, error) {
 	values, err := receiver.Connect().ZInterStore(context.Background(), "out", &redis.ZStore{
 		Keys:    keys,
 		Weights: weights,

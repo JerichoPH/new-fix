@@ -15,12 +15,12 @@ import (
 
 // GetAuth 获取登陆信息
 func GetAuth(ctx *gin.Context) any {
-	authorization, exist := ctx.Get(string(types.ACCOUNT_AUTH))
+	auth, exist := ctx.Get(string(types.ACCOUNT_AUTH))
 	if !exist {
 		wrongs.ThrowUnLogin("登陆失效")
 	}
 
-	return authorization
+	return auth
 }
 
 // 生成密码
@@ -107,7 +107,7 @@ func InString(target string, strings []string) bool {
 }
 
 // InInt 判断int是否在数组中
-func InInt(target int, values types.ListInt) bool {
+func InInt(target int, values []int) bool {
 	for _, element := range values {
 		if target == element {
 			return true
@@ -117,7 +117,7 @@ func InInt(target int, values types.ListInt) bool {
 }
 
 // InInt8 判断int8是否在数组中
-func InInt8(target int8, values types.ListInt8) bool {
+func InInt8(target int8, values []int8) bool {
 	for _, element := range values {
 		if target == element {
 			return true
@@ -127,7 +127,7 @@ func InInt8(target int8, values types.ListInt8) bool {
 }
 
 // InInt16 判断int16是否在数组中
-func InInt16(target int16, values types.ListInt16) bool {
+func InInt16(target int16, values []int16) bool {
 	for _, element := range values {
 		if target == element {
 			return true
@@ -137,7 +137,7 @@ func InInt16(target int16, values types.ListInt16) bool {
 }
 
 // InInt32 判断int32是否在数组中
-func InInt32(target int32, values types.ListInt32) bool {
+func InInt32(target int32, values []int32) bool {
 	for _, element := range values {
 		if target == element {
 			return true
@@ -147,7 +147,7 @@ func InInt32(target int32, values types.ListInt32) bool {
 }
 
 // InInt64 判断int64是否在数组中
-func InInt64(target int64, values types.ListInt64) bool {
+func InInt64(target int64, values []int64) bool {
 	for _, element := range values {
 		if target == element {
 			return true
@@ -157,7 +157,7 @@ func InInt64(target int64, values types.ListInt64) bool {
 }
 
 // InUint 判断uint是否在数组中
-func InUint(target uint, values types.ListUint) bool {
+func InUint(target uint, values []uint) bool {
 	for _, element := range values {
 		if target == element {
 			return true
@@ -167,7 +167,7 @@ func InUint(target uint, values types.ListUint) bool {
 }
 
 // InUint8 判断uint8是否在数组中
-func InUint8(target uint8, values types.ListUint8) bool {
+func InUint8(target uint8, values []uint8) bool {
 	for _, element := range values {
 		if target == element {
 			return true
@@ -177,7 +177,7 @@ func InUint8(target uint8, values types.ListUint8) bool {
 }
 
 // InUint16 判断uint16是否在数组中
-func InUint16(target uint16, values types.ListUint16) bool {
+func InUint16(target uint16, values []uint16) bool {
 	for _, element := range values {
 		if target == element {
 			return true
@@ -187,7 +187,7 @@ func InUint16(target uint16, values types.ListUint16) bool {
 }
 
 // InUint32 判断uint32是否在数组中
-func InUint32(target uint32, values types.ListUint32) bool {
+func InUint32(target uint32, values []uint32) bool {
 	for _, element := range values {
 		if target == element {
 			return true
@@ -197,7 +197,7 @@ func InUint32(target uint32, values types.ListUint32) bool {
 }
 
 // InUint64 判断uint64是否在数组中
-func InUint64(target uint64, values types.ListUint64) bool {
+func InUint64(target uint64, values []uint64) bool {
 	for _, element := range values {
 		if target == element {
 			return true
@@ -207,7 +207,7 @@ func InUint64(target uint64, values types.ListUint64) bool {
 }
 
 // InFloat32 判断float32是否在数组中
-func InFloat32(target float32, strings types.ListFloat32) bool {
+func InFloat32(target float32, strings []float32) bool {
 	for _, element := range strings {
 		if target == element {
 			return true
@@ -217,7 +217,7 @@ func InFloat32(target float32, strings types.ListFloat32) bool {
 }
 
 // InFloat64 判断float64是否在数组中
-func InFloat64(target float64, strings types.ListFloat64) bool {
+func InFloat64(target float64, strings []float64) bool {
 	for _, element := range strings {
 		if target == element {
 			return true

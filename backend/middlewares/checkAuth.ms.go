@@ -1,7 +1,9 @@
 package middlewares
 
 import (
+	"encoding/json"
 	"fmt"
+	"new-fix/database"
 	"new-fix/models"
 	"new-fix/types"
 	"new-fix/utils"
@@ -26,8 +28,13 @@ func CheckAuth() gin.HandlerFunc {
 		token := split[1]
 
 		var (
-			account models.AccountMdl
-			ret     *gorm.DB
+			account        models.AccountMdl
+			accountInfoStr any
+			accountInfo    types.AccountInfo
+			ret            *gorm.DB
+			claims         *utils.Claims
+			err            error
+			rds            *database.Redis
 		)
 		account = models.AccountMdl{}
 		if token == "" {
@@ -35,7 +42,7 @@ func CheckAuth() gin.HandlerFunc {
 		} else {
 			switch tokenType {
 			case "JWT":
-				claims, err := utils.ParseJwt(token)
+				claims, err = utils.ParseJwt(token)
 
 				// 判断令牌是否有效
 				if err != nil {
@@ -50,23 +57,40 @@ func CheckAuth() gin.HandlerFunc {
 				}
 
 				// 获取用户信息
-				ret = models.NewMySqlMdl().SetModel(models.AccountMdl{}).GetDb("").Where("uuid", claims.Uuid).First(&account)
-				if wrongs.ThrowWhenEmpty(ret, "") {
-					wrongs.ThrowUnLogin(fmt.Sprintf("令牌指向用户(JWT) %s %v ", token, claims))
+				rds, accountInfoStr, err = database.NewRedis(int(types.REDIS_DATABASE_AUTH)).GetValue(token)
+				if err != nil {
+					wrongs.ThrowUnLogin("读取令牌对应用户数据失败：%s", err.Error())
+				} else if accountInfoStr == nil {
+					wrongs.ThrowUnLogin("令牌对应用户数据不存在")
+				} else {
+					err = json.Unmarshal([]byte(string(accountInfoStr.(string))), &accountInfo)
+					if err != nil {
+						wrongs.ThrowForbidden("解析用户数据错误")
+					}
 				}
+				rds.Disconnect()
+
+				ctx.Set(string(types.ACCOUNT_UUID), accountInfo.Uuid)         // 设置用户编号
+				ctx.Set(string(types.ACCOUNT_ACCOUNT), accountInfo.Username)  // 设置用户账号
+				ctx.Set(string(types.ACCOUNT_NICKNAME), accountInfo.Nickname) // 设置用户昵称
+				ctx.Set(string(types.ACCOUNT_AUTH), accountInfo)              // 设置用户信息
+
+				// ret = models.NewMySqlMdl().SetModel(models.AccountMdl{}).GetDb("").Where("uuid", claims.Uuid).First(&account)
+				// if wrongs.ThrowWhenEmpty(ret, "") {
+				// 	wrongs.ThrowUnLogin(fmt.Sprintf("令牌指向用户(JWT) %s %v ", token, claims))
+				// }
 			case "AU":
 				ret = models.NewMySqlMdl().SetModel(models.AccountMdl{}).SetWheres(map[string]any{"uuid": token}).GetDb("").First(&account)
 				if wrongs.ThrowWhenEmpty(ret, "") {
 					wrongs.ThrowUnLogin(fmt.Sprintf("令牌指向用户(AU) %s", token))
 				}
+				ctx.Set(string(types.ACCOUNT_UUID), account.Uuid)         // 设置用户编号
+				ctx.Set(string(types.ACCOUNT_ACCOUNT), account.Username)  // 设置用户账号
+				ctx.Set(string(types.ACCOUNT_NICKNAME), account.Nickname) // 设置用户昵称
+				ctx.Set(string(types.ACCOUNT_AUTH), account)              // 设置用户信息
 			default:
 				wrongs.ThrowForbidden("权鉴认证方式不支持")
 			}
-
-			ctx.Set(string(types.ACCOUNT_ID), account.Id)             // 设置用户编号
-			ctx.Set(string(types.ACCOUNT_ACCOUNT), account.Username)  // 设置用户账号
-			ctx.Set(string(types.ACCOUNT_NICKNAME), account.Nickname) // 设置用户昵称
-			ctx.Set(string(types.ACCOUNT_AUTH), account)              // 设置用户信息
 		}
 
 		ctx.Next()

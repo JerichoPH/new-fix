@@ -5,43 +5,23 @@ import (
 	"strings"
 )
 
-type MapStringToAny = map[string]any
-type MapStringToString = map[string]string
-type MapStringToFloat32 = map[string]float32
-type MapStringToFloat64 = map[string]float64
-type MapStringToUint8 = map[string]uint8
-type MapStringToUint32 = map[string]uint32
-type MapStringToUint64 = map[string]uint64
-type MapStringToUint = map[string]uint
-type MapStringToInt8 = map[string]int8
-type MapStringToInt32 = map[string]int32
-type MapStringToInt64 = map[string]int64
-type MapStringToInt = map[string]int
-type MapStringToBool = map[string]bool
-type MapIntToBool = map[int]bool
-type MapInt8ToBool = map[int8]bool
-type MapInt16ToBool = map[int16]bool
-type MapInt32ToBool = map[int32]bool
-type MapInt64ToBool = map[int64]bool
-type MapUintToBool = map[uint]bool
-type MapUint8ToBool = map[uint8]bool
-type MapUint16ToBool = map[uint16]bool
-type MapUint32ToBool = map[uint32]bool
-type MapUint64ToBool = map[uint64]bool
-type ListString = []string
-type ListInt = []int
-type ListInt8 = []int8
-type ListInt16 = []int16
-type ListInt32 = []int32
-type ListInt64 = []int64
-type ListUint = []uint
-type ListUint8 = []uint8
-type ListUint16 = []uint16
-type ListUint32 = []uint32
-type ListUint64 = []uint64
-type ListFloat32 = []float32
-type ListFloat64 = []float64
-type ListAny = []any
+// 用户信息
+type AccountInfo struct {
+	Uuid       string `json:"uuid"`
+	Username   string `json:"username"`
+	Nickname   string `json:"nickname"`
+	BeAdmin    bool   `json:"be_admin"`
+	AvatarUuid string `json:"avatar_uuid"`
+	RbacRoles  []struct {
+		Uuid            string `json:"uuid"`
+		Name            string `json:"name"`
+		RbacPermissions []struct {
+			Uuid string `json:"uuid"`
+			Name string `json:"name"`
+			Uri  string `json:"uri"`
+		}
+	}
+}
 
 // IsString 判断是否是字符串类型
 func IsString(value any) bool {
@@ -107,14 +87,6 @@ func IsUint64(value any) bool {
 
 // IsFloat 判断是否是浮点类型
 func IsFloat(value any) bool {
-	// if IsFloat32(value) {
-	// 	isFloat = true
-	// }
-	// if IsFloat64(value) {
-	// 	isFloat = true
-	// }
-	// return
-
 	if IsFloat32(value) || IsFloat64(value) {
 		return true
 	}
@@ -140,8 +112,8 @@ func IsEmptyStruct(value, typeMode any) any {
 type MapString struct{}
 
 // GetKeys 获取字符串字典所有key
-func (receiver *MapString) GetKeys(value MapStringToAny) ListString {
-	var keys = make(ListString, 0)
+func (receiver *MapString) GetKeys(value map[string]any) []string {
+	var keys = make([]string, 0)
 
 	for key := range value {
 		keys = append(keys, key)
