@@ -173,14 +173,14 @@ func (AuthCtrl) PostLogin(ctx *gin.Context) {
 // GetMenus 获取当前账号菜单
 func (AuthCtrl) GetMenus(ctx *gin.Context) {
 	var (
-		account       types.AccountInfo
+		accountInfo   types.AccountInfo
 		rbacMenus     = make([]*models.RbacMenuMdl, 0)
 		rbacMenuUuids = make([]string, 0)
 	)
 
-	account = utils.GetAuth(ctx).(types.AccountInfo)
+	accountInfo = utils.GetAuth(ctx).(types.AccountInfo)
 
-	if account.BeAdmin {
+	if accountInfo.BeAdmin {
 		models.NewRbacMenuMdl().SetCtx(ctx).GetDbUseQuery("").Find(&rbacMenus)
 	} else {
 		database.
@@ -192,7 +192,7 @@ func (AuthCtrl) GetMenus(ctx *gin.Context) {
 			Joins("join rbac_roles r on rm.rbac_role_uuid = r.uuid").
 			Joins("join pivot_rbac_roles__accounts ra on r.uuid = ra.rbac_role_uuid").
 			Joins("join accounts a on ra.account_uuid = a.uuid").
-			Where("a.account_uuid =?", account.Uuid).
+			Where("a.account_uuid =?", accountInfo.Uuid).
 			Find(&rbacMenuUuids)
 
 		models.NewRbacMenuMdl().SetCtx(ctx).GetDbUseQuery("").Where("uuid in ?", rbacMenuUuids).Find(&rbacMenus)
@@ -204,16 +204,16 @@ func (AuthCtrl) GetMenus(ctx *gin.Context) {
 // PutUpdatePassword 修改密码
 func (AuthCtrl) PutUpdatePassword(ctx *gin.Context) {
 	var (
-		ret            *gorm.DB
-		account        *models.AccountMdl
-		currentAccount types.AccountInfo
+		ret         *gorm.DB
+		account     *models.AccountMdl
+		accountInfo types.AccountInfo
 	)
 
-	currentAccount = utils.GetAuth(ctx).(types.AccountInfo)
+	accountInfo = utils.GetAuth(ctx).(types.AccountInfo)
 
 	form := AccountUpdatePasswordForm{}.ShouldBind(ctx)
 
-	ret = models.NewAccountMdl().GetDb("").Where("uuid = ?", currentAccount.Uuid).First(&account)
+	ret = models.NewAccountMdl().GetDb("").Where("uuid = ?", accountInfo.Uuid).First(&account)
 	wrongs.ThrowWhenEmpty(ret, "用户")
 
 	// 验证密码

@@ -13,7 +13,7 @@ import (
 func CheckPermission() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var (
-			account               types.AccountInfo
+			currentAccount        types.AccountInfo
 			rbacPermissionUuids   []string
 			currentUri            string
 			currentRbacPermission *models.RbacPermissionMdl
@@ -21,10 +21,10 @@ func CheckPermission() gin.HandlerFunc {
 			yes                   = false
 		)
 		// 获取当前用户
-		account = utils.GetAuth(ctx).(types.AccountInfo)
-		if !account.BeAdmin {
-			if len(account.RbacRoles) > 0 {
-				for _, rbacRole := range account.RbacRoles {
+		currentAccount = utils.GetAuth(ctx).(types.AccountInfo)
+		if !currentAccount.BeAdmin {
+			if len(currentAccount.RbacRoles) > 0 {
+				for _, rbacRole := range currentAccount.RbacRoles {
 					if len(rbacRole.RbacPermissions) > 0 {
 						for _, rbacPermission := range rbacRole.RbacPermissions {
 							rbacPermissionUuids = append(rbacPermissionUuids, rbacPermission.Uuid)
