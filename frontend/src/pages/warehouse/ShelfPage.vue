@@ -20,7 +20,8 @@
                 </div>
                 <div class="col">
                   <standard-select label-name="所属路局" sechma="search" current-field="organizationRailwayUuid"
-                    :data-source="ajaxGetOrganizationRailways" data-source-field="organization_railways"  label-field="short_name" />
+                    :data-source="ajaxGetOrganizationRailways" data-source-field="organization_railways"
+                    label-field="short_name" />
                 </div>
                 <div class="col">
                   <standard-select label-name="所属站段" sechma="search" current-field="organizationParagraphUuid"
@@ -99,8 +100,9 @@
                   <q-td><q-checkbox :key="props.row.uuid" :value="props.row.uuid" v-model="props.selected" /></q-td>
                   <q-td>{{ props.row.index }}</q-td>
                   <q-td key="name" :props="props">
-                    <a href="javascript:" @click="fnOpenAlertEditWarehouseShelfSubs(props.row.operation)">{{
-                      props.row.name }}</a>
+                    <q-btn color="primary" @click="fnOpenAlertEditWarehouseShelfSubs(props.row.operation)">
+                      {{ props.row.name }}
+                    </q-btn>
                   </q-td>
                   <q-td key="warehousePlatoon" :props="props">
                     <join-string :values="[
@@ -111,10 +113,12 @@
                   </q-td>
                   <q-td key="operation" :props="props">
                     <q-btn-group>
-                      <q-btn @click="fnOpenAlertEditWarehouseShelf(props.row.operation)" color="warning" icon="edit" outline>
+                      <q-btn @click="fnOpenAlertEditWarehouseShelf(props.row.operation)" color="warning" icon="edit"
+                        outline>
                         编辑
                       </q-btn>
-                      <q-btn @click="fnDestroyCreateWarehouseShelf(props.row.operation)" color="negative" icon="delete" outline>
+                      <q-btn @click="fnDestroyCreateWarehouseShelf(props.row.operation)" color="negative" icon="delete"
+                        outline>
                         删除
                       </q-btn>
                     </q-btn-group>
@@ -275,9 +279,9 @@
           </div>
           <div class="col-8">
             <q-btn-group>
-              <q-btn @click="fnOpenAlertCreateWarehouseTiers" color="secondary" icon="add" label="新建层"></q-btn>
-              <q-btn @click="fnDestoryWarehouseTiers" color="negative" icon="delete" label="删除层"></q-btn>
-              <q-btn @click="fnOpenAlertCreateWarehouseCells" color="secondary" icon="add" label="新建位"></q-btn>
+              <q-btn outline @click="fnOpenAlertCreateWarehouseTiers" color="secondary" icon="add" label="新建层"></q-btn>
+              <q-btn outline @click="fnDestoryWarehouseTiers" color="negative" icon="delete" label="删除层"></q-btn>
+              <q-btn outline @click="fnOpenAlertCreateWarehouseCells" color="secondary" icon="add" label="新建位"></q-btn>
             </q-btn-group>
           </div>
         </div>
@@ -302,11 +306,11 @@
                     &emsp;
                     <q-btn
                       @click="fnOpenAlertEditWarehouseTier(warehouseShelf_alertEditWarehouseShelfSubs, warehouseTier)"
-                      color="warning" icon="edit" />
+                      color="warning" icon="edit" outline />
                     <q-separator vertical />
                     &emsp;
                     <q-btn v-for="(warehouseCell, idx2) in warehouseTier.warehouse_cells" :key="idx2"
-                      :label="warehouseCell.name" color="primary"
+                      :label="warehouseCell.name" color="primary" outline
                       @click="fnOpenAlertEditWarehouseCell(warehouseTier, warehouseCell)" />
                   </q-toolbar>
                 </div>
