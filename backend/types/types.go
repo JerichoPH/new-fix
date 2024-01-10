@@ -16,9 +16,10 @@ type AccountInfo struct {
 		Uuid            string `json:"uuid"`
 		Name            string `json:"name"`
 		RbacPermissions []struct {
-			Uuid string `json:"uuid"`
-			Name string `json:"name"`
-			Uri  string `json:"uri"`
+			Uuid   string `json:"uuid"`
+			Name   string `json:"name"`
+			Uri    string `json:"uri"`
+			Method string `json:"method"`
 		}
 	}
 }

@@ -23,12 +23,11 @@ type (
 	// RbacPermissionMdl 权限模型
 	RbacPermissionMdl struct {
 		MySqlMdl
-		Name                    string         `gorm:"type:varchar(64);not null;comment:权限名称;" json:"name"`
-		Description             *string        `gorm:"type:text;comment:权限描述;" json:"description"`
-		Uri                     string         `gorm:"type:varchar(255);not null;default:'';comment:权限所属路由;" json:"uri"`
-		Method                  string         `gorm:"type:varchar(32);not null;comment:请求方法;" json:"method"`
-		RbacPermissionGroupUuid string         `gorm:"type:varchar(36);not null;default:'';comment:所属权限组uuid;" json:"rbac_permission_group_uuid"`
-		RbacRoles               []*RbacRoleMdl `gorm:"many2many:pivot_rbac_roles__rbac_permissions;foreignKey:uuid;joinForeignKey:rbac_permission_uuid;references:uuid;joinReferences:rbacRoleUuid;" json:"rbac_roles"`
+		Name        string         `gorm:"type:varchar(64);not null;comment:权限名称;" json:"name"`
+		Description *string        `gorm:"type:text;comment:权限描述;" json:"description"`
+		Uri         string         `gorm:"type:varchar(255);not null;default:'';comment:权限所属路由;" json:"uri"`
+		Method      string         `gorm:"type:varchar(32);not null;comment:请求方法;" json:"method"`
+		RbacRoles   []*RbacRoleMdl `gorm:"many2many:pivot_rbac_roles__rbac_permissions;foreignKey:uuid;joinForeignKey:rbac_permission_uuid;references:uuid;joinReferences:rbacRoleUuid;" json:"rbac_roles"`
 	}
 
 	// RbacMenuMdl 菜单模型
