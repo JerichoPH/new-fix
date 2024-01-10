@@ -6,8 +6,8 @@
           <div class="col"><span :style="{ fontSize: '20px' }">搜索</span></div>
           <div class="col text-right">
             <q-btn-group>
-              <q-btn color="primary" label="搜索" icon="search" @click="fnSearch" />
-              <q-btn color="primary" label="重置" flat @click="fnResetSearch" />
+              <q-btn color="primary" label="搜索" outline icon="search" @click="fnSearch" />
+              <q-btn label="重置" outline flat @click="fnResetSearch" />
             </q-btn-group>
           </div>
         </div>
@@ -69,8 +69,8 @@
           <div class="col"><span :style="{ fontSize: '20px' }">仓库-排列表</span></div>
           <div class="col text-right">
             <q-btn-group>
-              <q-btn color="secondary" label="新建仓库-排" icon="add" @click="fnOpenAlertCreateWarehousePlatoon" />
-              <q-btn color="negative" label="删除仓库-排" icon="deleted" @click="fnDestroyWarehousePlatoons" />
+              <q-btn color="secondary" outline label="新建仓库-排" icon="add" @click="fnOpenAlertCreateWarehousePlatoon" />
+              <q-btn color="negative" outline label="删除仓库-排" icon="deleted" @click="fnDestroyWarehousePlatoons" />
             </q-btn-group>
           </div>
         </div>
@@ -109,10 +109,10 @@
                   </q-td>
                   <q-td key="operation" :props="props">
                     <q-btn-group>
-                      <q-btn @click="fnOpenAlertEditWarehousePlatoon(props.row.operation)" color="warning" icon="edit">
+                      <q-btn @click="fnOpenAlertEditWarehousePlatoon(props.row.operation)" color="warning" icon="edit" outline>
                         编辑
                       </q-btn>
-                      <q-btn @click="fnDestroyWarehousePlatoon(props.row.operation)" color="negative" icon="delete">
+                      <q-btn @click="fnDestroyWarehousePlatoon(props.row.operation)" color="negative" icon="delete" outline>
                         删除
                       </q-btn>
                     </q-btn-group>
@@ -190,8 +190,8 @@
         </q-card-section>
         <q-card-actions align="right">
           <q-btn-group>
-            <q-btn type="button" label="关闭" v-close-popup />
-            <q-btn type="submit" label="确定" icon="check" color="secondary" />
+            <q-btn type="button" label="关闭" outline v-close-popup />
+            <q-btn type="submit" label="确定" outline icon="check" color="secondary" />
           </q-btn-group>
         </q-card-actions>
       </q-form>
@@ -260,8 +260,8 @@
         </q-card-section>
         <q-card-actions align="right">
           <q-btn-group>
-            <q-btn type="button" label="关闭" v-close-popup />
-            <q-btn type="submit" label="确定" icon="check" color="warning" />
+            <q-btn type="button" label="关闭" outline v-close-popup />
+            <q-btn type="submit" label="确定" outline icon="check" color="warning" />
           </q-btn-group>
         </q-card-actions>
       </q-form>

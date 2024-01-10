@@ -6,8 +6,8 @@
           <div class="col"><span :style="{ fontSize: '20px' }">搜索</span></div>
           <div class="col text-right">
             <q-btn-group>
-              <q-btn color="primary" label="搜索" icon="search" @click="fnSearch" />
-              <q-btn color="primary" label="重置" flat @click="fnResetSearch" />
+              <q-btn color="primary" label="搜索" outline icon="search" @click="fnSearch" />
+              <q-btn label="重置" outline flat @click="fnResetSearch" />
             </q-btn-group>
           </div>
         </div>
@@ -57,8 +57,8 @@
           <div class="col"><span :style="{ fontSize: '20px' }">工区列表</span></div>
           <div class="col text-right">
             <q-btn-group>
-              <q-btn color="secondary" label="新建工区" icon="add" @click="fnOpenAlertCreateCreateStation" />
-              <q-btn color="negative" label="删除工区" icon="deleted" @click="fnDestroyCreateStations" />
+              <q-btn color="secondary" outline label="新建工区" icon="add" @click="fnOpenAlertCreateCreateStation" />
+              <q-btn color="negative" outline label="删除工区" icon="deleted" @click="fnDestroyCreateStations" />
             </q-btn-group>
           </div>
         </div>
@@ -172,8 +172,8 @@
         </q-card-section>
         <q-card-actions align="right">
           <q-btn-group>
-            <q-btn type="button" label="关闭" v-close-popup />
-            <q-btn type="submit" label="确定" icon="check" color="secondary" />
+            <q-btn type="button" label="关闭" outline v-close-popup />
+            <q-btn type="submit" label="确定" outline icon="check" color="secondary" />
           </q-btn-group>
         </q-card-actions>
       </q-form>
@@ -229,8 +229,8 @@
         </q-card-section>
         <q-card-actions align="right">
           <q-btn-group>
-            <q-btn type="button" label="关闭" v-close-popup />
-            <q-btn type="submit" label="确定" icon="check" color="secondary" />
+            <q-btn type="button" label="关闭" outline v-close-popup />
+            <q-btn type="submit" label="确定" outline icon="check" color="secondary" />
           </q-btn-group>
         </q-card-actions>
       </q-form>

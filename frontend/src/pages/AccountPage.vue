@@ -6,8 +6,8 @@
           <div class="col"><span style="font-size: 20px">搜索</span></div>
           <div class="col text-right">
             <q-btn-group>
-              <q-btn color="primary" label="搜索" icon="search" @click="fnSearch" />
-              <q-btn color="primary" label="重置" flat @click="fnResetSearch" />
+              <q-btn color="primary" label="搜索" outline icon="search" @click="fnSearch" />
+              <q-btn label="重置" outline flat @click="fnResetSearch" />
             </q-btn-group>
           </div>
         </div>
@@ -39,7 +39,7 @@
           </div>
           <div class="col text-right">
             <q-btn-group>
-              <q-btn color="secondary" label="新建用户" icon="add" @click="fnOpenAlertCreateAccount" />
+              <q-btn color="secondary" outline label="新建用户" icon="add" @click="fnOpenAlertCreateAccount" />
               <q-btn color="negative" label="批量删除用户" icon="delete" @click="fnDestroyAccounts" />
             </q-btn-group>
           </div>
@@ -82,13 +82,13 @@
                   </q-td>
                   <q-td>
                     <q-btn-group>
-                      <q-btn @click="fnOpenAlertEditAccount(props.row.operation)" color="warning" icon="edit">
+                      <q-btn @click="fnOpenAlertEditAccount(props.row.operation)" color="warning" icon="edit" outline>
                         编辑
                       </q-btn>
                       <q-btn @click="fnOpenAlertEditPassword(props.row.operation)" color="warning" icon="lock">
                         重置密码
                       </q-btn>
-                      <q-btn @click="fnDestroyAccount(props.row.operation)" color="negative" icon="delete">
+                      <q-btn @click="fnDestroyAccount(props.row.operation)" color="negative" icon="delete" outline>
                         删除
                       </q-btn>
                     </q-btn-group>
@@ -129,8 +129,8 @@
       </q-card-section>
       <q-card-actions align="right">
         <q-btn-group>
-          <q-btn type="button" label="关闭" v-close-popup />
-          <q-btn type="button" label="确定" icon="check" color="secondary" @click="fnStoreAccount" v-close-popup />
+          <q-btn type="button" label="关闭" outline v-close-popup />
+          <q-btn type="button" label="确定" icon="check" color="secondary" @click="fnStoreAccount" outline v-close-popup />
         </q-btn-group>
       </q-card-actions>
     </q-card>
@@ -188,8 +188,8 @@
       </q-card-section>
       <q-card-actions align="right">
         <q-btn-group>
-          <q-btn type="button" label="关闭" v-close-popup />
-          <q-btn type="button" label="确定" icon="check" color="secondary" @click="fnUpdateAccount" v-close-popup />
+          <q-btn type="button" label="关闭" outline v-close-popup />
+          <q-btn type="button" label="确定" icon="check" color="secondary" @click="fnUpdateAccount" outline v-close-popup />
         </q-btn-group>
       </q-card-actions>
     </q-card>
@@ -216,8 +216,8 @@
       </q-card-section>
       <q-card-actions align="right">
         <q-btn-group>
-          <q-btn type="button" label="关闭" v-close-popup />
-          <q-btn type="button" label="确定" icon="check" color="negative" @click="fnUpdatePassword" v-close-popup />
+          <q-btn type="button" label="关闭" outline v-close-popup />
+          <q-btn type="button" label="确定" icon="check" color="negative" @click="fnUpdatePassword" outline v-close-popup />
         </q-btn-group>
       </q-card-actions>
     </q-card>
