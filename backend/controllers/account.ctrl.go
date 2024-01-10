@@ -1,12 +1,16 @@
 package controllers
 
 import (
+	"encoding/json"
 	"fmt"
+	"new-fix/database"
 	"new-fix/models"
+	"new-fix/types"
 	"new-fix/utils"
 	"new-fix/wrongs"
 	"path"
 	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	uuid "github.com/satori/go.uuid"
@@ -254,7 +258,8 @@ func (AccountCtrl) Update(ctx *gin.Context) {
 		account       *models.AccountMdl
 		avatar        *models.FileMdl
 		oldAvatarUuid string
-		// repeat  *models.AccountModel
+		accountToken  any
+		accountTokens []string
 	)
 
 	// 表单
@@ -311,6 +316,20 @@ func (AccountCtrl) Update(ctx *gin.Context) {
 
 	// 用户绑定角色
 	account.BindRbacRoles(form.rbacRoles)
+
+	// 更新redis
+	models.NewAccountMdl().SetPreloads("RbacRoles,RbacRoles.RbacPermissions").GetDb("").Where("uuid = ?", account.Uuid).First(&account)
+	rds, accountToken, err := database.NewRedis(int(types.REDIS_DATABASE_AUTH)).GetValue(account.Uuid)
+	if err != nil {
+		wrongs.ThrowForbidden("读取用户信息失败：%s", err.Error())
+	}
+	err = json.Unmarshal([]byte(string(accountToken.(string))), &accountTokens)
+	if err != nil {
+		wrongs.ThrowForbidden("解析用户信息失败：%s", err.Error())
+	}
+	for _, token := range accountTokens {
+		rds.SetJsonValue(token, account, 24*180*time.Hour)
+	}
 
 	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"account": account}).ToGinResponse())
 }
@@ -426,8 +445,12 @@ func (receiver AccountCtrl) ListJdt(ctx *gin.Context) {
 // PutUpdatePassword 修改密码
 func (recevier AccountCtrl) PutUpdatePassword(ctx *gin.Context) {
 	var (
-		ret     *gorm.DB
-		account *models.AccountMdl
+		ret           *gorm.DB
+		account       *models.AccountMdl
+		rds           *database.Redis
+		accountToken  any
+		accountTokens []string
+		err           error
 	)
 
 	form := AccountUpdatePasswordForm{}.ShouldBind(ctx)
@@ -440,6 +463,23 @@ func (recevier AccountCtrl) PutUpdatePassword(ctx *gin.Context) {
 
 	account.Password = utils.GeneratePassword(form.Password)
 	models.NewAccountMdl().GetDb("").Where("uuid = ?", ctx.Param("uuid")).Save(&account)
+
+	// 删除当前用户所有token
+	rds, accountToken, err = database.NewRedis(int(types.REDIS_DATABASE_AUTH)).GetValue(account.Uuid)
+	if err != nil {
+		wrongs.ThrowForbidden("读取用户信息失败：%s", err.Error())
+	}
+	err = json.Unmarshal([]byte(string(accountToken.(string))), &accountTokens)
+	if err != nil {
+		wrongs.ThrowForbidden("解析用户信息失败：%s", err.Error())
+	}
+	fmt.Printf("OK %v", accountTokens)
+	err = rds.DeleteValues(accountTokens...)
+	if err != nil {
+		wrongs.ThrowForbidden("删除用户信息失败：%s", err.Error())
+	}
+	rds.DeleteValues(account.Uuid)
+	rds.Disconnect()
 
 	ctx.JSON(utils.NewCorrectWithGinContext("修改成功", ctx).Blank().ToGinResponse())
 }

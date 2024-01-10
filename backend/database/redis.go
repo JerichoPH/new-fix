@@ -110,6 +110,13 @@ func (receiver *Redis) GetZInterStore(keys []string, weights []float64) (*Redis,
 	return receiver, values, err
 }
 
+// DeleteValues 删除
+func (receiver *Redis) DeleteValues(keys ...string) error {
+	ctx := context.Background()
+	_, err := receiver.Client.Del(ctx, keys...).Result()
+	return err
+}
+
 // Do 执行命令
 func (receiver *Redis) Do(command, key string, value any) (*Redis, any, error) {
 	res, err := receiver.Connect().Do(context.Background(), command, key, value).Result()
