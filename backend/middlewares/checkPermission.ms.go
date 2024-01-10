@@ -2,6 +2,7 @@ package middlewares
 
 import (
 	"new-fix/models"
+	"new-fix/types"
 	"new-fix/utils"
 	"new-fix/wrongs"
 
@@ -12,7 +13,7 @@ import (
 func CheckPermission() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var (
-			account               models.AccountMdl
+			account               types.AccountInfo
 			rbacPermissionUuids   []string
 			currentUri            string
 			currentRbacPermission *models.RbacPermissionMdl
@@ -20,9 +21,18 @@ func CheckPermission() gin.HandlerFunc {
 			yes                   = false
 		)
 		// 获取当前用户
-		account = utils.GetAuth(ctx).(models.AccountMdl)
+		account = utils.GetAuth(ctx).(types.AccountInfo)
 		if !account.BeAdmin {
-			rbacPermissionUuids = account.GetPermissionUuids()
+			if len(account.RbacRoles) > 0 {
+				for _, rbacRole := range account.RbacRoles {
+					if len(rbacRole.RbacPermissions) > 0 {
+						for _, rbacPermission := range rbacRole.RbacPermissions {
+							rbacPermissionUuids = append(rbacPermissionUuids, rbacPermission.Uuid)
+						}
+					}
+				}
+			}
+			// rbacPermissionUuids = account.GetPermissionUuids()
 
 			// 获取当前路由
 			currentUri = ctx.Request.URL.Path

@@ -206,10 +206,10 @@ func (AuthCtrl) PutUpdatePassword(ctx *gin.Context) {
 	var (
 		ret            *gorm.DB
 		account        *models.AccountMdl
-		currentAccount models.AccountMdl
+		currentAccount types.AccountInfo
 	)
 
-	currentAccount = utils.GetAuth(ctx).(models.AccountMdl)
+	currentAccount = utils.GetAuth(ctx).(types.AccountInfo)
 
 	form := AccountUpdatePasswordForm{}.ShouldBind(ctx)
 
