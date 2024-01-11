@@ -1,48 +1,19 @@
 <template>
   <q-page class="flex flex-center">
     <!-- <img alt="Quasar logo" src="~assets/quasar-logo-vertical.svg" style="width: 200px; height: 200px" /> -->
-    <q-form
-      @submit="fnLogin"
-      @reset="fnReset"
-      class="q-gutter-md"
-      style="width: 600px"
-    >
-      <q-input
-        filled
-        v-model="username"
-        label="账号 *"
-        hint=""
-        lazy-rules
-        :rules="[(val) => (val && val.length >= 2) || '不能小于2位']"
-      />
+    <q-form @submit="fnLogin" @reset="fnReset" class="q-gutter-md" style="width: 600px">
+      <q-input filled v-model="username" label="账号 *" hint="" lazy-rules
+        :rules="[(val) => (val && val.length >= 2) || '不能小于2位']" />
 
-      <q-input
-        filled
-        type="password"
-        v-model="password"
-        label="密码 *"
-        lazy-rules
-        :rules="[(val) => (val && val.length >= 6) || '不能小于6位']"
-      />
+      <q-input filled type="password" v-model="password" label="密码 *" lazy-rules
+        :rules="[(val) => (val && val.length >= 6) || '不能小于6位']" />
 
       <q-toggle v-model="accept" label="接受条款" />
 
       <div>
-        <q-btn label="登录" type="submit" color="primary" />
-        <q-btn
-          label="重置表单"
-          type="reset"
-          color="primary"
-          flat
-          class="q-ml-sm"
-        />
-        <q-btn
-          label="注册"
-          color="primary"
-          flat
-          class="q-ml-sm"
-          @click="fnHrefTo('/auth/register')"
-        />
+        <q-btn outline label="登录" type="submit" color="primary" />
+        <q-btn outline label="重置表单" type="reset" color="primary" flat class="q-ml-sm" />
+        <q-btn outline label="注册" color="primary" flat class="q-ml-sm" @click="fnHrefTo('/auth/register')" />
       </div>
     </q-form>
   </q-page>

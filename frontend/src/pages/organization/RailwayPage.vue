@@ -7,7 +7,7 @@
           <div class="col text-right">
             <q-btn-group>
               <q-btn color="primary" label="搜索" outline icon="search" @click="fnSearch" />
-              <q-btn label="重置" outline flat @click="fnResetSearch" />
+              <q-btn label="重置" outline @click="fnResetSearch" />
             </q-btn-group>
           </div>
         </div>
@@ -51,13 +51,14 @@
                 <q-tr :props="props">
                   <q-th align="left"><q-checkbox key="allCheck" v-model="props.selected" /></q-th>
                   <q-th align="left">#</q-th>
-                  <q-th align="left" key="uniqueCode" @click="(event) => fnColumnReverseSort(event, props, sortBy)
-                    ">
+                  <q-th align="left" key="uniqueCode" @click="(event) => fnColumnReverseSort(event, props, sortBy)">
                     代码
                   </q-th>
-                  <q-th align="left" key="name" @click="(event) => fnColumnReverseSort(event, props, sortBy)
-                    ">
+                  <q-th align="left" key="name" @click="(event) => fnColumnReverseSort(event, props, sortBy)">
                     名称
+                  </q-th>
+                  <q-th align="left" key="shortName" @click="(event) => fnColumnReverseSort(event, props, sortBy)">
+                    简称
                   </q-th>
                   <q-th align="right"></q-th>
                 </q-tr>
@@ -70,20 +71,17 @@
                     props.row.uniqueCode
                   }}</q-td>
                   <q-td key="name" :props="props">{{ props.row.name }}</q-td>
+                  <q-td key="shortName" :props="props">{{ props.row.shortName }}</q-td>
                   <q-td key="operation" :props="props">
                     <q-btn-group>
                       <q-btn @click="
                         fnOpenAlertEditOrganizationRailway(
                           props.row.operation
                         )
-                        " color="warning" icon="edit" outline>
-                        编辑
-                      </q-btn>
+                        " color="warning" icon="edit" outline label="编辑" />
                       <q-btn @click="
                         fnDestroyOrganizationRailway(props.row.operation)
-                        " color="negative" icon="delete" outline>
-                        删除
-                      </q-btn>
+                        " color="negative" icon="delete" outline label="删除" />
                     </q-btn-group>
                   </q-td>
                 </q-tr>
@@ -244,6 +242,7 @@ const fnSearch = () => {
             index: idx + 1,
             uniqueCode: organizationRailway.unique_code,
             name: organizationRailway.name,
+            shortName: organizationRailway.short_name,
             uuid: organizationRailway.uuid,
             operation: { uuid: organizationRailway.uuid },
           };
@@ -285,7 +284,7 @@ const fnStoreOrganizationRailway = (params) => {
 
       alertCreateOrganizationRailway.value = false;
     })
-    .catch(e=>errorNotify(e.msg))
+    .catch(e => errorNotify(e.msg))
     .finally(loading());
 };
 
@@ -305,7 +304,7 @@ const fnOpenAlertEditOrganizationRailway = (params) => {
       shortName_alertEditOrganizationrailway.value = res.content.organization_railway.short_name;
       alertEditOrganizationrailway.value = true;
     })
-    .catch(e=>errorNotify(e.msg));
+    .catch(e => errorNotify(e.msg));
 };
 
 /**
@@ -329,7 +328,7 @@ const fnUpdateOrganizationRailway = () => {
 
       alertEditOrganizationrailway.value = false;
     })
-    .catch(e=>errorNotify(e.msg))
+    .catch(e => errorNotify(e.msg))
     .finally(loading());
 };
 
@@ -349,7 +348,7 @@ const fnDestroyOrganizationRailway = (params) => {
           successNotify("删除成功");
           fnSearch();
         })
-        .catch(e=>errorNotify(e.msg))
+        .catch(e => errorNotify(e.msg))
         .finally(loading());
     })
   );
@@ -369,7 +368,7 @@ const fnDestroyOrganizationRailways = (uuids) => {
           successNotify("删除成功");
           fnSearch();
         })
-        .catch(e=>errorNotify(e.msg))
+        .catch(e => errorNotify(e.msg))
         .finally(loading());
     })
   );

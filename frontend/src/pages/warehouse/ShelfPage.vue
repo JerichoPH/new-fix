@@ -100,7 +100,7 @@
                   <q-td><q-checkbox :key="props.row.uuid" :value="props.row.uuid" v-model="props.selected" /></q-td>
                   <q-td>{{ props.row.index }}</q-td>
                   <q-td key="name" :props="props">
-                    <q-btn outline color="primary" @click="fnOpenAlertEditWarehouseShelfSubs(props.row.operation)">
+                    <q-btn outline no-shadowcolor="primary" @click="fnOpenAlertEditWarehouseShelfSubs(props.row.operation)">
                       {{ props.row.name }}
                     </q-btn>
                   </q-td>
@@ -114,13 +114,9 @@
                   <q-td key="operation" :props="props">
                     <q-btn-group>
                       <q-btn @click="fnOpenAlertEditWarehouseShelf(props.row.operation)" color="warning" icon="edit"
-                        outline>
-                        编辑
-                      </q-btn>
+                        outline label="编辑" />
                       <q-btn @click="fnDestroyCreateWarehouseShelf(props.row.operation)" color="negative" icon="delete"
-                        outline>
-                        删除
-                      </q-btn>
+                        outline label="删除" />
                     </q-btn-group>
                   </q-td>
                 </q-tr>
@@ -312,7 +308,7 @@
                     &emsp;
                     <q-btn
                       @click="fnOpenAlertEditWarehouseTier(warehouseShelf_alertEditWarehouseShelfSubs, warehouseTier)"
-                      color="warning" icon="edit" outline />
+                      color="warning" icon="edit" outline no-shadow/>
                     <q-separator vertical />
                     &emsp;
                     <q-btn v-for="(warehouseCell, idx2) in warehouseTier.warehouse_cells" :key="idx2"

@@ -7,7 +7,7 @@
           <div class="col text-right">
             <q-btn-group>
               <q-btn color="primary" label="搜索" outline icon="search" @click="fnSearch" />
-              <q-btn label="重置" outline flat @click="fnResetSearch" />
+              <q-btn label="重置" outline @click="fnResetSearch" />
             </q-btn-group>
           </div>
         </div>
@@ -82,15 +82,9 @@
                   </q-td>
                   <q-td>
                     <q-btn-group>
-                      <q-btn @click="fnOpenAlertEditAccount(props.row.operation)" color="warning" icon="edit" outline>
-                        编辑
-                      </q-btn>
-                      <q-btn @click="fnOpenAlertEditPassword(props.row.operation)" color="warning" icon="lock">
-                        重置密码
-                      </q-btn>
-                      <q-btn @click="fnDestroyAccount(props.row.operation)" color="negative" icon="delete" outline>
-                        删除
-                      </q-btn>
+                      <q-btn @click="fnOpenAlertEditAccount(props.row.operation)" color="warning" icon="edit" outline label="编辑" />
+                      <q-btn @click="fnOpenAlertEditPassword(props.row.operation)" color="warning" icon="lock" outline label="重置密码" />
+                      <q-btn @click="fnDestroyAccount(props.row.operation)" color="negative" icon="delete" outline label="删除" />
                     </q-btn-group>
                   </q-td>
                 </q-tr>

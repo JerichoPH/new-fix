@@ -7,7 +7,7 @@
           <div class="col text-right">
             <q-btn-group>
               <q-btn color="primary" label="搜索" outline icon="search" @click="fnSearch" />
-              <q-btn label="重置" outline flat @click="fnResetSearch" />
+              <q-btn label="重置" outline @click="fnResetSearch" />
             </q-btn-group>
           </div>
         </div>
@@ -66,12 +66,8 @@
                   <q-td key="sourceType" :props="props">{{ props.row.sourceType.name }}</q-td>
                   <q-td key="operation" :props="props">
                     <q-btn-group>
-                      <q-btn @click="fnOpenAlertEditSourceProject(props.row.operation)" color="warning" icon="edit" outline>
-                        编辑
-                      </q-btn>
-                      <q-btn @click="fnDestroySourceProject(props.row.operation)" color="negative" icon="delete" outline>
-                        删除
-                      </q-btn>
+                      <q-btn @click="fnOpenAlertEditSourceProject(props.row.operation)" color="warning" icon="edit" outline label="编辑" />
+                      <q-btn @click="fnDestroySourceProject(props.row.operation)" color="negative" icon="delete" outline label="删除" />
                     </q-btn-group>
                   </q-td>
                 </q-tr>

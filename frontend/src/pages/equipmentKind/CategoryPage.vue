@@ -7,7 +7,7 @@
           <div class="col text-right">
             <q-btn-group>
               <q-btn color="primary" label="搜索" outline icon="search" @click="fnSearch" />
-              <q-btn label="重置" outline flat @click="fnResetSearch" />
+              <q-btn label="重置" outline @click="fnResetSearch" />
             </q-btn-group>
           </div>
         </div>
@@ -33,7 +33,8 @@
           </div>
           <div class="col text-right">
             <q-btn-group>
-              <q-btn color="secondary" outline label="新建器材种类" icon="add" @click="fnOpenAlertCreateEquipmentKindCategory" />
+              <q-btn color="secondary" outline label="新建器材种类" icon="add"
+                @click="fnOpenAlertCreateEquipmentKindCategory" />
               <q-btn color="negative" outline label="删除器材种类" icon="deleted" @click="fnDestroyEquipmentKindCategories" />
             </q-btn-group>
           </div>
@@ -47,12 +48,10 @@
                 <q-tr :props="props">
                   <q-th align="left"><q-checkbox key="allCheck" v-model="props.selected" /></q-th>
                   <q-th align="left">#</q-th>
-                  <q-th align="left" key="uniqueCode" @click="(event) => fnColumnReverseSort(event, props, sortBy)
-                    ">
+                  <q-th align="left" key="uniqueCode" @click="(event) => fnColumnReverseSort(event, props, sortBy)">
                     代码
                   </q-th>
-                  <q-th align="left" key="name" @click="(event) => fnColumnReverseSort(event, props, sortBy)
-                    ">
+                  <q-th align="left" key="name" @click="(event) => fnColumnReverseSort(event, props, sortBy)">
                     名称
                   </q-th>
                   <q-th align="right"></q-th>
@@ -68,18 +67,10 @@
                   <q-td key="name" :props="props">{{ props.row.name }}</q-td>
                   <q-td key="operation" :props="props">
                     <q-btn-group>
-                      <q-btn @click="
-                        fnOpenAlertEditEquipmentKindCategory(
-                          props.row.operation
-                        )
-                        " color="warning" icon="edit" outline>
-                        编辑
-                      </q-btn>
-                      <q-btn @click="
-                        fnDestroyEquipmentKindCategory(props.row.operation)
-                        " color="negative" icon="delete" outline>
-                        删除
-                      </q-btn>
+                      <q-btn @click="fnOpenAlertEditEquipmentKindCategory(props.row.operation)" color="warning"
+                        icon="edit" outline label="编辑" />
+                      <q-btn @click="fnDestroyEquipmentKindCategory(props.row.operation)" color="negative" icon="delete"
+                        outline label="删除" />
                     </q-btn-group>
                   </q-td>
                 </q-tr>
@@ -248,7 +239,7 @@ const fnStoreEquipmentKindCategory = () => {
 
       alertCreateEquipmentKindCategory.value = false;
     })
-    .catch(e=>errorNotify(e.msg))
+    .catch(e => errorNotify(e.msg))
     .finally(loading());
 };
 
@@ -266,7 +257,7 @@ const fnOpenAlertEditEquipmentKindCategory = (params) => {
         res.content.equipment_kind_category.name;
       alertEditEquipmentKindCategory.value = true;
     })
-    .catch(e=>errorNotify(e.msg))
+    .catch(e => errorNotify(e.msg))
     .finally(loadingNotify());
 };
 
@@ -288,7 +279,7 @@ const fnUpdateEquipmentKindCategory = (params) => {
 
       alertEditEquipmentKindCategory.value = false;
     })
-    .catch(e=>errorNotify(e.msg))
+    .catch(e => errorNotify(e.msg))
     .finally(loading());
 };
 
@@ -308,7 +299,7 @@ const fnDestroyEquipmentKindCategory = (params) => {
           successNotify("删除成功");
           fnSearch();
         })
-        .catch(e=>errorNotify(e.msg))
+        .catch(e => errorNotify(e.msg))
         .finally(loading());
     })
   );
@@ -327,7 +318,7 @@ const fnDestroyEquipmentKindCategories = () => {
           successNotify("删除成功");
           fnSearch();
         })
-        .catch(e=>errorNotify(e.msg))
+        .catch(e => errorNotify(e.msg))
         .finally(loadingNotify());
     })
   );

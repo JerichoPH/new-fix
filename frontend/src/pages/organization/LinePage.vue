@@ -7,7 +7,7 @@
           <div class="col text-right">
             <q-btn-group>
               <q-btn color="primary" label="搜索" outline icon="search" @click="fnSearch" />
-              <q-btn label="重置" outline flat @click="fnResetSearch" />
+              <q-btn label="重置" outline @click="fnResetSearch" />
             </q-btn-group>
           </div>
         </div>
@@ -116,13 +116,9 @@
                   <q-td key="operation" :props="props">
                     <q-btn-group>
                       <q-btn @click="fnOpenAlertEditCreateOrganizationLine(props.row.operation)" color="warning"
-                        icon="edit" outline>
-                        编辑
-                      </q-btn>
+                        icon="edit" outline label="编辑" />
                       <q-btn @click="fnDestroyCreateOrganizationLine(props.row.operation)" color="negative" icon="delete"
-                        outline>
-                        删除
-                      </q-btn>
+                        outline label="删除" />
                     </q-btn-group>
                   </q-td>
                 </q-tr>
