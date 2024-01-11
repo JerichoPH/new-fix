@@ -12,7 +12,7 @@ export const fnColumnReverseSort = (event, props, sortBy) => {
 };
 
 export const isEmpty = (val) => {
-  if (val) return true;
+  if (!val) return true;
   return false;
 };
 

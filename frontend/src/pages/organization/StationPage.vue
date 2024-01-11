@@ -24,18 +24,18 @@
                 </div>
                 <div class="col">
                   <standard-select label-name="所属路局" sechma="alertEdit" current-field="organizationRailwayUuid"
-                :data-source="ajaxGetOrganizationRailways" data-source-field="organization_railways"
-label-field="short_name" />
+                    :data-source="ajaxGetOrganizationRailways" data-source-field="organization_railways"
+                    label-field="short_name" />
                 </div>
                 <div class="col">
                   <standard-select label-name="所属站段" sechma="alertEdit" current-field="organizationParagraphUuid"
-                :data-source="ajaxGetOrganizationParagraphs" data-source-field="organization_paragraphs"
-                parent-field="organizationRailwayUuid" />
+                    :data-source="ajaxGetOrganizationParagraphs" data-source-field="organization_paragraphs"
+                    parent-field="organizationRailwayUuid" />
                 </div>
                 <div class="col">
                   <standard-select label-name="所属车间" sechma="search" current-field="organizationWorkshopUuid"
-                :data-source="ajaxGetOrganizationWorkshops" data-source-field="organization_workshops"
-                parent-field="organizationParagraphUuid" />
+                    :data-source="ajaxGetOrganizationWorkshops" data-source-field="organization_workshops"
+                    parent-field="organizationParagraphUuid" />
                 </div>
               </div>
             </q-form>
@@ -136,14 +136,14 @@ label-field="short_name" />
             <div class="col">
               <standard-select label-name="所属路局" sechma="alertCreate" current-field="organizationRailwayUuid"
                 :data-source="ajaxGetOrganizationRailways" data-source-field="organization_railways"
-label-field="short_name" />
+                label-field="short_name" />
             </div>
           </div>
           <div class="row q-mt-md">
             <div class="col">
               <standard-select label-name="所属站段" sechma="alertCreate" current-field="organizationParagraphUuid"
                 :data-source="ajaxGetOrganizationParagraphs" data-source-field="organization_paragraphs"
-                parent-field="organizationWorkshopUuid" />
+                parent-field="organizationRailwayUuid" />
             </div>
           </div>
           <div class="row q-mt-md">
@@ -186,7 +186,7 @@ label-field="short_name" />
             <div class="col">
               <standard-select label-name="所属路局" sechma="alertEdit" current-field="organizationRailwayUuid"
                 :data-source="ajaxGetOrganizationRailways" data-source-field="organization_railways"
-label-field="short_name" />
+                label-field="short_name" />
             </div>
           </div>
           <div class="row q-mt-md">

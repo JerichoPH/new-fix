@@ -167,7 +167,7 @@
                 :rules="[]" />
             </div>
           </div>
-          <div class="row q-mt-dm">
+          <div class="row q-mt-md">
             <div class="col">
               <standard-select label-name="所属角色" sechma="alertEdit" current-field="rbacRoleUuid"
                 :data-source="ajaxGetRbacRoles" data-source-field="rbac_roles" />

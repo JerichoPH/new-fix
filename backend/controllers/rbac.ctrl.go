@@ -610,7 +610,7 @@ func (RbacMenuCtrl) Update(ctx *gin.Context) {
 		First(&rbacMenu)
 	wrongs.ThrowWhenEmpty(ret, "菜单")
 	if form.ParentUuid != "" {
-		if rbacMenu.ParentUuid == form.ParentUuid {
+		if rbacMenu.Uuid == form.ParentUuid {
 			wrongs.ThrowValidate("父级菜单不能是自己")
 		}
 	}

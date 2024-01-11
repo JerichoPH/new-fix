@@ -24,7 +24,8 @@
                 </div>
                 <div class="col-3">
                   <standard-select label-name="所属路局" sechma="search" current-field="organizationRailwayUuid"
-                    :data-source="ajaxGetOrganizationRailways" data-source-field="organization_railways"  label-field="short_name" />
+                    :data-source="ajaxGetOrganizationRailways" data-source-field="organization_railways"
+                    label-field="short_name" />
                 </div>
                 <div class="col-3">
                   <standard-select label-name="所属站段" sechma="search" current-field="organizationParagraphUuid"
@@ -107,18 +108,19 @@
                     ]" />
                   </q-td>
                   <q-td key="organizationStations" :props="props">{{
-                    collect(props.row.organizationStations).pluck('name').implode(',') }}</q-td>
+                    collect(props.row.organizationStations).pluck('name').implode(', ') }}</q-td>
                   <q-td key="organizationCrossroads" :props="props">{{
-                    collect(props.row.organizationCrossroads).pluck('name').implode(',') }}</q-td>
+                    collect(props.row.organizationCrossroads).pluck('name').implode(', ') }}</q-td>
                   <q-td key="organizationCenters" :props="props">{{
-                    collect(props.row.organizationCenters).pluck('name').implode(',') }}</q-td>
+                    collect(props.row.organizationCenters).pluck('name').implode(', ') }}</q-td>
                   <q-td key="operation" :props="props">
                     <q-btn-group>
                       <q-btn @click="fnOpenAlertEditCreateOrganizationLine(props.row.operation)" color="warning"
-                        icon="edit">
+                        icon="edit" outline>
                         编辑
                       </q-btn>
-                      <q-btn @click="fnDestroyCreateOrganizationLine(props.row.operation)" color="negative" icon="delete" outline>
+                      <q-btn @click="fnDestroyCreateOrganizationLine(props.row.operation)" color="negative" icon="delete"
+                        outline>
                         删除
                       </q-btn>
                     </q-btn-group>
@@ -135,7 +137,7 @@
   <!-- 弹窗 -->
   <!-- 新建线别弹窗 -->
   <q-dialog v-model="alertCreateOrganizationLine" no-backdrop-dismiss>
-    <q-card :style="{ minWidth: '450px' }">
+    <q-card :style="{minWidth: '85vw'}">
       <q-card-section>
         <div class="text-h6">新建线别</div>
       </q-card-section>
@@ -156,7 +158,7 @@
             <div class="col">
               <standard-select label-name="所属路局" sechma="alertCreate" current-field="organizationRailwayUuid"
                 :data-source="ajaxGetOrganizationRailways" data-source-field="organization_railways"
-label-field="short_name" />
+                label-field="short_name" />
             </div>
           </div>
           <div class="row q-mt-md">
@@ -175,7 +177,10 @@ label-field="short_name" />
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <chk-organization-station_alert-create label-name="相关站场" :ajax-params="{}" />
+              <standard-check label-name="相关站场" current-field="checkedOrganizationStationUuids" sechma="alertCreate"
+                :ajax-params="{ '@~[]': ['OrganizationWorkshop'] }" :data-source="ajaxGetOrganizationStations"
+                data-source-field="organization_stations" group-by-item="organization_workshop" group-by-key="uuid"
+                group-by-name="name" parent-field="organizationWorkshopUuid" />
             </div>
           </div>
         </q-card-section>
@@ -190,7 +195,7 @@ label-field="short_name" />
   </q-dialog>
   <!-- 编辑线别弹窗 -->
   <q-dialog v-model="alertEditOrganizationLine" no-backdrop-dismiss>
-    <q-card style="width: 1800px">
+    <q-card :style="{minWidth: '85vw'}">
       <q-card-section>
         <div class="text-h6">编辑线别</div>
       </q-card-section>
@@ -211,7 +216,7 @@ label-field="short_name" />
             <div class="col">
               <standard-select label-name="所属路局" sechma="alertEdit" current-field="organizationRailwayUuid"
                 :data-source="ajaxGetOrganizationRailways" data-source-field="organization_railways"
-label-field="short_name" />
+                label-field="short_name" />
             </div>
           </div>
           <div class="row q-mt-md">
@@ -230,7 +235,10 @@ label-field="short_name" />
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <chk-organization-station_alert-edit label-name="相关站场" :ajax-params="{}" />
+              <standard-check label-name="相关站场" current-field="checkedOrganizationStationUuids" sechma="alertEdit"
+                :ajax-params="{ '@~[]': ['OrganizationWorkshop'] }" :data-source="ajaxGetOrganizationStations"
+                data-source-field="organization_stations" group-by-item="organization_workshop" group-by-key="uuid"
+                group-by-name="name" parent-field="organizationWorkshopUuid" />
             </div>
           </div>
         </q-card-section>
@@ -272,8 +280,7 @@ import {
 } from "src/utils/notify";
 import JoinString from "src/components/JoinString.vue";
 import StandardSelect from "src/components/StandardSelect.vue";
-import ChkOrganizationStation_alertCreate from "src/components/ChkOrganizationStation_alertCreate.vue";
-import ChkOrganizationStation_alertEdit from "src/components/ChkOrganizationStation_alertEdit.vue";
+import StandardCheck from "src/components/StandardCheck.vue";
 
 // 搜索栏数据
 const uniqueCode_search = ref("");

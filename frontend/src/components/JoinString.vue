@@ -1,5 +1,5 @@
 <template>
-  {{ values ? values.filter(val => isEmpty(val)).join(sep) : '' }}
+  {{ values ? values.filter(val => !isEmpty(val)).join(sep) : 'nono' }}
 </template>
 <script setup>
 import { defineProps } from "vue";

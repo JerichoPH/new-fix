@@ -86,7 +86,7 @@
                     {{ props.row.parent ? props.row.parent.name : "" }}
                   </q-td>
                   <q-td key="rbacRoles" :props="props">
-                    <join-string :values="collect(props.row.rbacRoles).pluck('name').all()" sseparator=", " />
+                    <join-string :values="collect(props.row.rbacRoles).pluck('name').all()" sep=", " />
                   </q-td>
                   <q-td key="operation" :props="props">
                     <q-btn-group>
@@ -144,14 +144,15 @@
           </div>
           <div class="row q-mt-md">
             <div class="col">
-              <chk-rbac-role_alert-create label-name="所属角色" />
+              <standard-check label-name="所属角色" current-field="checkedRbacRoleUuids" sechma="alertCreate"
+                :ajax-params="{}" :data-source="ajaxGetRbacRoles" data-source-field="rbac_roles" />
             </div>
           </div>
         </q-card-section>
         <q-card-actions align="right">
           <q-btn-group>
             <q-btn type="button" label="关闭" outline v-close-popup />
-            <q-btn type="button" label="确定" icon="check" color="secondary" />
+            <q-btn type="submit" label="确定" outline icon="check" color="secondary" />
           </q-btn-group>
         </q-card-actions>
       </q-form>
@@ -160,51 +161,52 @@
   <!-- 编辑菜单对话框 -->
   <q-dialog v-model="alertEditRbacMenu" no-backdrop-dismiss>
     <q-card :style="{ minWidth: '450px' }">
-      <q-card-section>
-        <div class="text-h6">编辑菜单</div>
-      </q-card-section>
-      <q-card-section class="q-pt-none">
-        <q-form class="q-gutter-md" @submit.prevent="fnUpdateRbacMenu">
+      <q-form class="q-gutter-md" @submit.prevent="fnUpdateRbacMenu">
+        <q-card-section>
+          <div class="text-h6">编辑菜单</div>
+        </q-card-section>
+        <q-card-section class="q-pt-none">
           <div class="row">
             <div class="col">
               <q-input outlined clearable lazy-rules v-model="name_alertEditRbacMenu" label="名称" :rules="[]" />
             </div>
           </div>
-          <div class="row q-mt-m">
+          <div class="row q-mt-md">
             <div class="col">
               <q-input outlined clearable lazy-rules v-model="uri_alertEditRbacMenu" label="路由" :rules="[]" />
             </div>
           </div>
-          <div class="row q-mt-m">
+          <div class="row q-mt-md">
             <div class="col">
               <q-input outlined clearable lazy-rules v-model="description_alertEditRbacMenu" label="描述" :rules="[]" />
             </div>
           </div>
-          <div class="row q-mt-m">
+          <div class="row q-mt-md">
             <div class="col">
               <q-input outlined clearable lazy-rules v-model="icon_alertEditRbacMenu" label="图标" :rules="[]" />
             </div>
           </div>
-          <div class="row q-mt-m">
+          <div class="row q-mt-md">
             <div class="col">
-              <standard-select label-name="所属父级" sechma="alertCreate" current-field="parentUuid"
+              <standard-select label-name="所属父级" sechma="alertEdit" current-field="parentUuid"
                 :data-source="ajaxGetRbacMenus" data-source-field="rbac_menus"
                 :ajax-params="{ '@<>': { uuid: currentUuid }, not_has_subs: currentUuid, }" />
             </div>
           </div>
-          <div class="row q-mt-m">
+          <div class="row q-mt-md">
             <div class="col">
-              <chk-rbac-role_alert-edit label-name="所属角色" />
+              <standard-check label-name="所属角色" current-field="checkedRbacRoleUuids" sechma="alertEdit" :ajax-params="{}"
+                :data-source="ajaxGetRbacRoles" data-source-field="rbac_roles" />
             </div>
           </div>
-        </q-form>
-      </q-card-section>
-      <q-card-actions align="right">
-        <q-btn-group>
-          <q-btn type="button" label="关闭" outline v-close-popup />
-          <q-btn type="button" label="确定" icon="check" color="warning" />
-        </q-btn-group>
-      </q-card-actions>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn-group>
+            <q-btn type="button" label="关闭" outline v-close-popup />
+            <q-btn type="submit" label="确定" outline icon="check" color="warning" />
+          </q-btn-group>
+        </q-card-actions>
+      </q-form>
     </q-card>
   </q-dialog>
 </template>
@@ -226,24 +228,26 @@ import {
   ajaxStoreRbacMenu,
   ajaxUpdateRbacMenu,
   ajaxDestroyRbacMenus,
+  ajaxGetRbacRoles,
 } from "src/apis/rbac";
 import JoinString from "src/components/JoinString.vue";
 import StandardSelect from "src/components/StandardSelect.vue";
-import ChkRbacRole_alertCreate from "src/components/ChkRbacRole_alertCreate.vue";
-import ChkRbacRole_alertEdit from "src/components/ChkRbacRole_alertEdit.vue";
+import StandardCheck from "src/components/StandardCheck.vue";
+
+// 搜索栏数据
+const name_search = ref("");
+const uri_search = ref("");
+const description_search = ref("");
+const parentUuid_search = ref("");
+provide("parentUuid_search", parentUuid_search);
+const selRbacMenuShow_search = ref(true);
+const rbacRoleUuid_search = ref("");
+provide("rbacRoleUuid_search", parentUuid_search);
 
 // 表格数据
 const rows = ref([]);
 const selected = ref([]);
 const sortBy = ref("");
-
-// 表格数据
-const name_search = ref("");
-const uri_search = ref("");
-const description_search = ref("");
-const parentUuid_search = ref("");
-const selRbacMenu_search_enable = ref(true);
-const rbacRoleUuid_search = ref("");
 
 // 新建菜单对话框
 const alertCreateRbacMenu = ref(false);
@@ -252,7 +256,9 @@ const uri_alertCreateRbacMenu = ref("");
 const description_alertCreateRbacMenu = ref("");
 const icon_alertCreateRbacMenu = ref("");
 const parentUuid_alertCreateRbacMenu = ref("");
+provide("parentUuid_alertCreate", parentUuid_alertCreateRbacMenu);
 const rbacRoleUuids_alertCreateRbacMenu = ref([]);
+provide("checkedRbacRoleUuids_alertCreate", rbacRoleUuids_alertCreateRbacMenu);
 
 // 编辑菜单对话框
 const alertEditRbacMenu = ref(false);
@@ -263,12 +269,8 @@ const uri_alertEditRbacMenu = ref("");
 const description_alertEditRbacMenu = ref("");
 const icon_alertEditRbacMenu = ref("");
 const parentUuid_alertEditRbacMenu = ref("");
-const rbacRoleUuids_alertEditRbacMenu = ref([]);
-
-provide("parentUuid_search", parentUuid_search);
-provide("parentUuid_alertCreate", parentUuid_alertCreateRbacMenu);
 provide("parentUuid_alertEdit", parentUuid_alertEditRbacMenu);
-provide("checkedRbacRoleUuids_alertCreate", rbacRoleUuids_alertCreateRbacMenu);
+const rbacRoleUuids_alertEditRbacMenu = ref([]);
 provide("checkedRbacRoleUuids_alertEdit", rbacRoleUuids_alertEditRbacMenu);
 
 onMounted(() => fnInit());
@@ -319,8 +321,8 @@ const fnSearch = () => {
     })
     .catch(e => errorNotify(e.msg))
     .finally(() => {
-      selRbacMenu_search_enable.value = false;
-      selRbacMenu_search_enable.value = true;
+      selRbacMenuShow_search.value = false;
+      selRbacMenuShow_search.value = true;
     });
 };
 

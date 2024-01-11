@@ -122,7 +122,9 @@
                 label="确认密码" :rules="[]" class="q-mt-md" />
               <q-file outlined v-model="avatar_alertCreateAccount" label="用户头像" accept="image/*" max-file-size="1048576"
                 counter class="q-mt-md" />
-              <chk-rbac-role_alert-create label-name="所属角色" class="q-mt-md" />
+              <!-- <chk-rbac-role_alert-create label-name="所属角色" class="q-mt-md" /> -->
+              <standard-check label-name="所属角色" current-field="checkedRbacRoleUuids" sechma="alertCreate"
+                :ajax-params="{}" :data-source="ajaxGetRbacRoles" data-source-field="rbac_roles" />
             </div>
           </div>
         </q-form>
@@ -181,7 +183,9 @@
                   </q-list>
                 </template>
               </q-uploader>
-              <chk-rbac-role_alert-edit label-name="所属角色" class="q-mt-md" />
+              <!-- <chk-rbac-role_alert-edit label-name="所属角色" class="q-mt-md" /> -->
+              <standard-check label-name="所属角色" current-field="checkedRbacRoleUuids" sechma="alertEdit" :ajax-params="{}"
+                :data-source="ajaxGetRbacRoles" data-source-field="rbac_roles" />
             </div>
           </div>
         </q-form>
@@ -236,6 +240,7 @@ import {
   ajaxDestroyAccounts,
   ajaxUpdateAccountPassword,
 } from "src/apis/account";
+import { ajaxGetRbacRoles } from "src/apis/rbac";
 import {
   loadingNotify,
   successNotify,
@@ -246,8 +251,7 @@ import {
 import { fnColumnReverseSort } from "src/utils/common";
 import { getBase64 } from "src/utils/file";
 import JoinString from "src/components/JoinString.vue";
-import ChkRbacRole_alertCreate from "src/components/ChkRbacRole_alertCreate.vue";
-import ChkRbacRole_alertEdit from "src/components/ChkRbacRole_alertEdit.vue";
+import StandardCheck from "src/components/StandardCheck.vue";
 
 // 用户令牌
 let authToken = ref(localStorage.getItem("auth.token"));
@@ -350,7 +354,7 @@ const fnSearch = () => {
         })
         .all();
     })
-    .catch(e=>errorNotify(e.msg));
+    .catch(e => errorNotify(e.msg));
 };
 
 /**
@@ -404,7 +408,7 @@ const fnStoreAccount = async () => {
 
       alertCreateAccount.value = false;
     })
-    .catch(e=>errorNotify(e.msg))
+    .catch(e => errorNotify(e.msg))
     .finally(loading());
 };
 
@@ -437,7 +441,7 @@ const fnOpenAlertEditAccount = (params = {}) => {
         .all();
       alertEditAccount.value = true;
     })
-    .catch(e=>errorNotify(e.msg));
+    .catch(e => errorNotify(e.msg));
 };
 
 /**
@@ -473,7 +477,7 @@ const fnUpdateAccount = async () => {
 
       alertEditAccount.value = false;
     })
-    .catch(e=>errorNotify(e.msg))
+    .catch(e => errorNotify(e.msg))
     .finally(loading());
 };
 
@@ -493,7 +497,7 @@ const fnDestroyAccount = (params = {}) => {
           successNotify("删除成功");
           fnSearch();
         })
-        .catch(e=>errorNotify(e.msg))
+        .catch(e => errorNotify(e.msg))
         .finally(loading());
     })
   );
@@ -514,7 +518,7 @@ const fnDestroyAccounts = () => {
           successNotify("删除成功");
           fnSearch();
         })
-        .catch(e=>errorNotify(e.msg))
+        .catch(e => errorNotify(e.msg))
         .finally(loading());
     })
   );
@@ -555,7 +559,7 @@ const fnUpdatePassword = () => {
       fnSearch();
       fnResetAlertEditPassword();
     })
-    .catch(e=>errorNotify(e.msg))
+    .catch(e => errorNotify(e.msg))
     .finally(loading());
 };
 
