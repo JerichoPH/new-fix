@@ -40,7 +40,7 @@
           <div class="col text-right">
             <q-btn-group>
               <q-btn color="secondary" outline label="新建用户" icon="add" @click="fnOpenAlertCreateAccount" />
-              <q-btn color="negative" label="批量删除用户" icon="delete" @click="fnDestroyAccounts" />
+              <q-btn color="negative" outline label="删除用户" icon="delete" @click="fnDestroyAccounts" />
             </q-btn-group>
           </div>
         </div>
@@ -53,12 +53,10 @@
                 <q-tr :props="props">
                   <q-th align="left"><q-checkbox key="allCheck" v-model="props.selected" /></q-th>
                   <q-th align="left">#</q-th>
-                  <q-th align="left" name="username" key="username" @click="(event) => fnColumnReverseSort(event, props, sortBy)
-                    ">
+                  <q-th align="left" name="username" key="username" @click="(event) => fnColumnReverseSort(event, props, sortBy)">
                     用户名
                   </q-th>
-                  <q-th align="left" name="nickname" key="nickname" @click="(event) => fnColumnReverseSort(event, props, sortBy)
-                    ">
+                  <q-th align="left" name="nickname" key="nickname" @click="(event) => fnColumnReverseSort(event, props, sortBy)">
                     昵称
                   </q-th>
                   <q-th align="left">头像</q-th>
@@ -82,9 +80,12 @@
                   </q-td>
                   <q-td>
                     <q-btn-group>
-                      <q-btn @click="fnOpenAlertEditAccount(props.row.operation)" color="warning" icon="edit" outline label="编辑" />
-                      <q-btn @click="fnOpenAlertEditPassword(props.row.operation)" color="warning" icon="lock" outline label="重置密码" />
-                      <q-btn @click="fnDestroyAccount(props.row.operation)" color="negative" icon="delete" outline label="删除" />
+                      <q-btn @click="fnOpenAlertEditAccount(props.row.operation)" color="warning" icon="edit" outline
+                        label="编辑" />
+                      <q-btn @click="fnOpenAlertEditPassword(props.row.operation)" color="warning" icon="lock" outline
+                        label="重置密码" />
+                      <q-btn @click="fnDestroyAccount(props.row.operation)" color="negative" icon="delete" outline
+                        label="删除" />
                     </q-btn-group>
                   </q-td>
                 </q-tr>
