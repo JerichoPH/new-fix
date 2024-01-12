@@ -1,13 +1,14 @@
 package controllers
 
 import (
-	"encoding/json"
+	"fmt"
 	"new-fix/database"
 	"new-fix/models"
+	"new-fix/settings"
 	"new-fix/types"
 	"new-fix/utils"
 	"new-fix/wrongs"
-	"time"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	uuid "github.com/satori/go.uuid"
@@ -108,10 +109,9 @@ func (AuthCtrl) PostLogin(ctx *gin.Context) {
 	form := AuthLoginForm{}.ShouldBind(ctx)
 
 	var (
-		account             models.AccountMdl
-		ret                 *gorm.DB
-		accountUuidToToken  any
-		accountUuidToTokens = make([]string, 0)
+		account                                                  models.AccountMdl
+		ret                                                      *gorm.DB
+		dataConversionLayerRootUrl, dataconversionLayerApiPrefix string
 	)
 
 	// 获取用户
@@ -122,6 +122,10 @@ func (AuthCtrl) PostLogin(ctx *gin.Context) {
 	if !utils.CheckPassword(form.Password, account.Password) {
 		wrongs.ThrowUnAuth("账号或密码错误")
 	}
+
+	setting := settings.NewSetting()
+	dataConversionLayerRootUrl = setting.Url.Section("data-conversion-layer").Key("root-url").MustString("")
+	dataconversionLayerApiPrefix = setting.Url.Section("data-conversion-layer").Key("api-prefix").MustString("")
 
 	// 生成Jwt
 	if token, err := utils.GenerateJwt(
@@ -134,29 +138,12 @@ func (AuthCtrl) PostLogin(ctx *gin.Context) {
 		wrongs.ThrowForbidden(err.Error())
 	} else {
 		// 将用户数据保存到redis
-		rds, _, err := database.NewRedis(int(types.REDIS_DATABASE_AUTH)).SetJsonValue(token, account, 24*180*time.Hour)
-		if err != nil {
-			wrongs.ThrowForbidden("保存到redis错误：%s", err.Error())
-		}
-		// 取出已经当前用户已经使用的token
-		_, accountUuidToToken, err = rds.GetValue(account.Uuid)
-		if err != nil {
-			wrongs.ThrowForbidden("取出已经当前用户已经使用的token错误：%s", err.Error())
-		}
-		if accountUuidToToken != nil {
-			err = json.Unmarshal([]byte(string(accountUuidToToken.(string))), &accountUuidToTokens)
-			if err != nil {
-				wrongs.ThrowForbidden("解析已经当前用户已经使用的token错误：%s", err.Error())
-			}
-			if !utils.InString(account.Uuid, accountUuidToTokens) {
-				accountUuidToTokens = append(accountUuidToTokens, token)
-			}
-		} else {
-			accountUuidToTokens = append(accountUuidToTokens, token)
-		}
-		// 保存到redis
-		rds.SetJsonValue(account.Uuid, accountUuidToTokens, 24*180*time.Hour)
-		rds.Disconnect()
+		utils.HttpRequest{
+			Method:   "POST",
+			Url:      fmt.Sprintf("%s/%s/auth", dataConversionLayerRootUrl, dataconversionLayerApiPrefix),
+			DataType: utils.HTTP_REQUEST_DATA_TYPE_JSON,
+			Body:     strings.NewReader(utils.ToJson(map[string]any{"token": token, "account": account})),
+		}.Send()
 
 		ctx.JSON(utils.NewCorrectWithGinContext("登陆成功", ctx).Datum(map[string]any{
 			"token": token,

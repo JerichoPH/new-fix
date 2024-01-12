@@ -8,7 +8,7 @@ class AccountMdl(BaseMdl):
     username: str
     nickname: str
     be_admin: bool
-    avatar_uuid: Union[str, None] = None
+    avatar_uuid: str | None = None
     avatar: None
     rbac_roles: List[RbacRoleMdl] = []
     breakdown_logs_by_report_person: None

@@ -14,6 +14,7 @@ import (
 type Setting struct {
 	App      *ini.File
 	DB       *ini.File
+	Url      *ini.File
 	Time     time.Time
 	Timezone *time.Location
 	RootPath string
@@ -39,10 +40,17 @@ func NewSetting() *Setting {
 			wrongs.ThrowForbidden("启动错误：加载数据库配置文件失败")
 		}
 
+		urlConfigFile, urlConfigErr := ini.Load(filepath.Join(settingIns.RootPath, "/settings/url.ini"))
+		if urlConfigErr != nil {
+			wrongs.ThrowForbidden("启动错误：加载url配置文件失败")
+		}
+
 		settingIns.App = appConfigFile
 		settingIns.DB = dbConfigFile
+		settingIns.Url = urlConfigFile
 		settingIns.Timezone, _ = time.LoadLocation(settingIns.App.Section("app").Key("timezone").MustString("Asia/Shanghai"))
 		settingIns.Time = (&time.Time{}).In(settingIns.Timezone)
+
 	}
 
 	return settingIns

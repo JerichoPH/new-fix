@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"new-fix/database"
 	"new-fix/models"
+	"new-fix/settings"
 	"new-fix/types"
 	"new-fix/utils"
 	"new-fix/wrongs"
 	"path"
 	"strings"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	uuid "github.com/satori/go.uuid"
@@ -19,7 +19,10 @@ import (
 
 type (
 	// AccountCtrl 用户控制器
-	AccountCtrl struct{}
+	AccountCtrl struct {
+		setting                                                  *settings.Setting
+		dataConversionLayerRootUrl, dataconversionLayerApiPrefix string
+	}
 	// AccountStoreForm 新建用户表单
 	AccountStoreForm struct {
 		Username             string   `json:"username"`
@@ -61,7 +64,13 @@ type (
 
 // NewAccountCtrl 构造函数
 func NewAccountCtrl() *AccountCtrl {
-	return &AccountCtrl{}
+	ins := &AccountCtrl{}
+
+	ins.setting = settings.NewSetting()
+	ins.dataConversionLayerRootUrl = ins.setting.Url.Section("data-conversion-layer").Key("root-url").MustString("")
+	ins.dataconversionLayerApiPrefix = ins.setting.Url.Section("data-conversion-layer").Key("api-prefix").MustString("")
+
+	return ins
 }
 
 // ShouldBind 新建用户表单绑定
@@ -251,15 +260,13 @@ func (AccountCtrl) DestroyMany(ctx *gin.Context) {
 }
 
 // Update 编辑
-func (AccountCtrl) Update(ctx *gin.Context) {
+func (receiver *AccountCtrl) Update(ctx *gin.Context) {
 	var (
 		ret           *gorm.DB
 		err           error
 		account       *models.AccountMdl
 		avatar        *models.FileMdl
 		oldAvatarUuid string
-		accountToken  any
-		accountTokens []string
 	)
 
 	// 表单
@@ -318,18 +325,12 @@ func (AccountCtrl) Update(ctx *gin.Context) {
 	account.BindRbacRoles(form.rbacRoles)
 
 	// 更新redis
-	models.NewAccountMdl().SetPreloads("RbacRoles,RbacRoles.RbacPermissions").GetDb("").Where("uuid = ?", account.Uuid).First(&account)
-	rds, accountToken, err := database.NewRedis(int(types.REDIS_DATABASE_AUTH)).GetValue(account.Uuid)
-	if err != nil {
-		wrongs.ThrowForbidden("读取用户信息失败：%s", err.Error())
-	}
-	err = json.Unmarshal([]byte(string(accountToken.(string))), &accountTokens)
-	if err != nil {
-		wrongs.ThrowForbidden("解析用户信息失败：%s", err.Error())
-	}
-	for _, token := range accountTokens {
-		rds.SetJsonValue(token, account, 24*180*time.Hour)
-	}
+	models.NewAccountMdl().SetPreloads("RbacRoles", "RbacRoles.RbacPermissions").GetDb("").Where("uuid = ?", account.Uuid).First(&account)
+	utils.HttpRequest{
+		Method: "PUT",
+		Url:    fmt.Sprintf("%s/%s/auth/%s", receiver.dataConversionLayerRootUrl, receiver.dataconversionLayerApiPrefix, account.Uuid),
+		Body:   strings.NewReader(utils.ToJson(map[string]any{"account": account})),
+	}.Send()
 
 	ctx.JSON(utils.NewCorrectWithGinContext("", ctx).Updated(map[string]any{"account": account}).ToGinResponse())
 }
@@ -443,7 +444,7 @@ func (receiver AccountCtrl) ListJdt(ctx *gin.Context) {
 }
 
 // PutUpdatePassword 修改密码
-func (recevier AccountCtrl) PutUpdatePassword(ctx *gin.Context) {
+func (recevier *AccountCtrl) PutUpdatePassword(ctx *gin.Context) {
 	var (
 		ret           *gorm.DB
 		account       *models.AccountMdl
@@ -465,6 +466,11 @@ func (recevier AccountCtrl) PutUpdatePassword(ctx *gin.Context) {
 	models.NewAccountMdl().GetDb("").Where("uuid = ?", ctx.Param("uuid")).Save(&account)
 
 	// 删除当前用户所有token
+	utils.HttpRequest{
+		Method: "DELETE",
+		Url:    fmt.Sprintf("%s/%s/auth/%s", recevier.dataConversionLayerRootUrl, recevier.dataconversionLayerApiPrefix, account.Uuid),
+	}.Send()
+
 	rds, accountToken, err = database.NewRedis(int(types.REDIS_DATABASE_AUTH)).GetValue(account.Uuid)
 	if err != nil {
 		wrongs.ThrowForbidden("读取用户信息失败：%s", err.Error())

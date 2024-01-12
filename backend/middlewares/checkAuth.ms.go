@@ -3,8 +3,8 @@ package middlewares
 import (
 	"encoding/json"
 	"fmt"
-	"new-fix/database"
 	"new-fix/models"
+	"new-fix/settings"
 	"new-fix/types"
 	"new-fix/utils"
 	"new-fix/wrongs"
@@ -28,18 +28,23 @@ func CheckAuth() gin.HandlerFunc {
 		token := split[1]
 
 		var (
-			account        models.AccountMdl
-			accountInfoStr any
-			accountInfo    types.AccountInfo
-			ret            *gorm.DB
-			claims         *utils.Claims
-			err            error
-			rds            *database.Redis
+			account                                                  models.AccountMdl
+			accountInfo                                              types.AccountInfo
+			ret                                                      *gorm.DB
+			claims                                                   *utils.Claims
+			err                                                      error
+			responseBody                                             string
+			dataConversionLayerRootUrl, dataconversionLayerApiPrefix string
+			stdResponse                                              types.StdResponse
 		)
 		account = models.AccountMdl{}
 		if token == "" {
 			wrongs.ThrowUnLogin("令牌不存在")
 		} else {
+			setting := settings.NewSetting()
+			dataConversionLayerRootUrl = setting.Url.Section("data-conversion-layer").Key("root-url").MustString("")
+			dataconversionLayerApiPrefix = setting.Url.Section("data-conversion-layer").Key("api-prefix").MustString("")
+
 			switch tokenType {
 			case "JWT":
 				claims, err = utils.ParseJwt(token)
@@ -57,18 +62,14 @@ func CheckAuth() gin.HandlerFunc {
 				}
 
 				// 获取用户信息
-				rds, accountInfoStr, err = database.NewRedis(int(types.REDIS_DATABASE_AUTH)).GetValue(token)
-				if err != nil {
-					wrongs.ThrowUnLogin("读取令牌对应用户数据失败：%s", err.Error())
-				} else if accountInfoStr == nil {
-					wrongs.ThrowUnLogin("令牌对应用户数据不存在")
-				} else {
-					err = json.Unmarshal([]byte(string(accountInfoStr.(string))), &accountInfo)
-					if err != nil {
-						wrongs.ThrowForbidden("解析用户数据错误")
-					}
+				_, responseBody = utils.HttpRequest{
+					Url:    fmt.Sprintf("%s/%s/auth/%s", dataConversionLayerRootUrl, dataconversionLayerApiPrefix, token),
+					Method: "GET",
+				}.Send()
+				if err = json.Unmarshal([]byte(responseBody), &stdResponse); err != nil {
+					wrongs.ThrowUnLogin("解析用户数据失败：%s", err.Error())
 				}
-				rds.Disconnect()
+				utils.AnyToSturct(stdResponse.Content.(map[string]any)["account"], &accountInfo)
 
 				ctx.Set(string(types.ACCOUNT_UUID), accountInfo.Uuid)         // 设置用户编号
 				ctx.Set(string(types.ACCOUNT_ACCOUNT), accountInfo.Username)  // 设置用户账号

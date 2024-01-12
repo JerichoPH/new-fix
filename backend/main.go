@@ -177,7 +177,7 @@ func launchCommand(commandName string, commandParams, tmp []string, daemon bool)
 		// os.Exit(-1)
 		// 启动web-service服务
 
-		// 模型
+		// 模型迁移
 		database.NewGormLauncher().BootAutoMigrate(autoMigrateList)
 
 		// 创建TCP服务端
@@ -216,6 +216,7 @@ func launchCommand(commandName string, commandParams, tmp []string, daemon bool)
 			go providers.RocketMqHandler(commandSetting.RocketMqAddr)
 		}
 
+		gin.SetMode(gin.ReleaseMode)                                // 非错误控制台不输出
 		engine := gin.Default()                                     // 启动服务引擎
 		engine.Use(middlewares.Cors())                              // 允许跨域
 		engine.Use(middlewares.TimeoutMiddleware(time.Second * 60)) // 超时处理

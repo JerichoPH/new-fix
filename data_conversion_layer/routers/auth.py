@@ -17,18 +17,27 @@ class SaveAuthForm(BaseModel):
     account: AccountMdl
 
 
+class UpdateAuthForm(BaseModel):
+    account: AccountMdl
+
+
 router = APIRouter()
 
 
-@router.post("/auth/login")
-async def login(login_form: LoginForm):
+@router.get("/auth/{token}")  # 获取权鉴信息
+async def index(token: str):
+    # 读取redis中的权鉴信息
     rds = Redis(constants["redis_database_auth"])
-    rds.set_value(key=login_form.username, value=login_form.password, ex=60)
-    return {"message": rds.get_value(key=login_form.username)}
+    account = rds.get_value(token)
+    if not account:
+        return Response().empty("token不存在")
+    else:
+        account = json.loads(account.decode())
+        return Response().success({"account": account})
 
 
-@router.post("/auth/saveAuth")  # 保存权鉴信息
-async def save_auth(save_auth_form: SaveAuthForm):
+@router.post("/auth")  # 保存权鉴信息
+async def store(save_auth_form: SaveAuthForm):
     # 保存权鉴信息到redis
     rds = Redis(constants["redis_database_auth"])
     rds.set_value(
@@ -51,3 +60,36 @@ async def save_auth(save_auth_form: SaveAuthForm):
         constants["ex"],
     )
     return Response().success(tokens)
+
+
+@router.put("/auth/{account_uuid}")  # 更新权鉴数据
+async def update(account_uuid: str, update_auth_form: UpdateAuthForm):
+    # 读取用户对应token列表
+    rds = Redis(constants["redis_database_auth"])
+    tokens = rds.get_value(account_uuid)
+    if not tokens:
+        return Response().empty("用户数据不存在")
+    tokens = json.loads(tokens.decode())
+
+    # 修改所有对应token的用户信息
+    for token in tokens:
+        rds.set_value(token, update_auth_form.account.json(), constants["ex"])
+
+    return Response().success()
+
+@router.delete("/auth/{account_uuid}") # 删除权鉴数据
+async def destroy(account_uuid: str):
+    # 读取用户对应token列表
+    rds = Redis(constants["redis_database_auth"])
+    tokens = rds.get_value(account_uuid)
+    if not tokens:
+        return Response().empty("用户数据不存在")
+    tokens = json.loads(tokens.decode())
+    
+    # 删除所有对应token的用户信息
+    for token in tokens:
+        rds.delete(token)
+        
+    # 删除用户权鉴数据
+    rds.delete(account_uuid)
+    

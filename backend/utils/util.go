@@ -50,10 +50,13 @@ func ToJsonFormat(v any) string {
 }
 
 // FromJson json反序列化
-func FromJson(s string) any {
-	var v any
+func FromJson(s string, v any) {
 	json.Unmarshal([]byte(s), &v)
-	return v
+}
+
+// AnyToSturct 任意类型转结构体
+func AnyToSturct(v any, r any) {
+	FromJson(ToJson(v), &r)
 }
 
 // DeepCopyByGob 深拷贝

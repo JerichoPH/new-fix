@@ -37,22 +37,23 @@ func (receiver HttpRequest) Send() (int, string) {
 		resp *http.Response
 	)
 
-	switch receiver.Method {
-	case http.MethodGet:
-		if req, err = http.NewRequest(receiver.Method, receiver.Url, receiver.Body); err != nil {
-			wrongs.ThrowForbidden("初始化请求错误：%s", err.Error())
-		}
-		if receiver.DataType == HTTP_REQUEST_DATA_TYPE_JSON {
-			req.Header.Add("Accept", "application/json")
-		}
-	case http.MethodPost:
-	case http.MethodPut:
-	case http.MethodDelete:
-		switch receiver.DataType {
-		case HTTP_REQUEST_DATA_TYPE_URL_ENCODE:
-			req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
-		case HTTP_REQUEST_DATA_TYPE_JSON:
-			req.Header.Add("Content-Type", "application/json")
+	if req, err = http.NewRequest(receiver.Method, receiver.Url, receiver.Body); err != nil {
+		wrongs.ThrowForbidden("初始化请求错误：%s", err.Error())
+	} else {
+		switch receiver.Method {
+		case http.MethodGet:
+			if receiver.DataType == HTTP_REQUEST_DATA_TYPE_JSON {
+				req.Header.Add("Accept", "application/json")
+			}
+		case http.MethodPost:
+		case http.MethodPut:
+		case http.MethodDelete:
+			switch receiver.DataType {
+			case HTTP_REQUEST_DATA_TYPE_URL_ENCODE:
+				req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+			case HTTP_REQUEST_DATA_TYPE_JSON:
+				req.Header.Add("Content-Type", "application/json")
+			}
 		}
 	}
 
