@@ -40,5 +40,7 @@ func (AuthRout) Load(engine *gin.Engine) {
 		needLogin.GET("menus", controllers.NewAuthCtrl().GetMenus)
 		// 修改密码
 		needLogin.PUT("updatePassword", controllers.NewAuthCtrl().PutUpdatePassword)
+		// 退出登录
+		needLogin.Any("logout", controllers.NewAuthCtrl().AnyLogout)
 	}
 }

@@ -87,9 +87,8 @@ async def destroy(account_uuid: str):
     tokens = json.loads(tokens.decode())
     
     # 删除所有对应token的用户信息
-    for token in tokens:
-        rds.delete(token)
+    rds.delete_values(tokens)
         
     # 删除用户权鉴数据
-    rds.delete(account_uuid)
+    rds.delete_value(account_uuid)
     

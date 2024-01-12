@@ -1,12 +1,9 @@
 package controllers
 
 import (
-	"encoding/json"
 	"fmt"
-	"new-fix/database"
 	"new-fix/models"
 	"new-fix/settings"
-	"new-fix/types"
 	"new-fix/utils"
 	"new-fix/wrongs"
 	"path"
@@ -444,14 +441,10 @@ func (receiver AccountCtrl) ListJdt(ctx *gin.Context) {
 }
 
 // PutUpdatePassword 修改密码
-func (recevier *AccountCtrl) PutUpdatePassword(ctx *gin.Context) {
+func (receiver *AccountCtrl) PutUpdatePassword(ctx *gin.Context) {
 	var (
-		ret           *gorm.DB
-		account       *models.AccountMdl
-		rds           *database.Redis
-		accountToken  any
-		accountTokens []string
-		err           error
+		ret     *gorm.DB
+		account *models.AccountMdl
 	)
 
 	form := AccountUpdatePasswordForm{}.ShouldBind(ctx)
@@ -468,23 +461,8 @@ func (recevier *AccountCtrl) PutUpdatePassword(ctx *gin.Context) {
 	// 删除当前用户所有token
 	utils.HttpRequest{
 		Method: "DELETE",
-		Url:    fmt.Sprintf("%s/%s/auth/%s", recevier.dataConversionLayerRootUrl, recevier.dataconversionLayerApiPrefix, account.Uuid),
+		Url:    fmt.Sprintf("%s/%s/auth/%s", receiver.dataConversionLayerRootUrl, receiver.dataconversionLayerApiPrefix, account.Uuid),
 	}.Send()
-
-	rds, accountToken, err = database.NewRedis(int(types.REDIS_DATABASE_AUTH)).GetValue(account.Uuid)
-	if err != nil {
-		wrongs.ThrowForbidden("读取用户信息失败：%s", err.Error())
-	}
-	err = json.Unmarshal([]byte(string(accountToken.(string))), &accountTokens)
-	if err != nil {
-		wrongs.ThrowForbidden("解析用户信息失败：%s", err.Error())
-	}
-	err = rds.DeleteValues(accountTokens...)
-	if err != nil {
-		wrongs.ThrowForbidden("删除用户信息失败：%s", err.Error())
-	}
-	rds.DeleteValues(account.Uuid)
-	rds.Disconnect()
 
 	ctx.JSON(utils.NewCorrectWithGinContext("修改成功", ctx).Blank().ToGinResponse())
 }

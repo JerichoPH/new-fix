@@ -22,6 +22,14 @@ export const ajaxRegister = (params) => {
 };
 
 /**
+ * 退出登录
+ * @returns
+ */
+export const ajaxLogout = () => {
+  return api.post(`${urlPrefix}/logout`);
+};
+
+/**
  * 获取当前用户所有菜单
  * @param {{*}} params
  * @returns

@@ -69,6 +69,10 @@ func CheckAuth() gin.HandlerFunc {
 				if err = json.Unmarshal([]byte(responseBody), &stdResponse); err != nil {
 					wrongs.ThrowUnLogin("解析用户数据失败：%s", err.Error())
 				}
+				_, exist := stdResponse.Content.(map[string]any)["account"]
+				if !exist {
+					wrongs.ThrowForbidden("没有获取到用户信息")
+				}
 				utils.AnyToSturct(stdResponse.Content.(map[string]any)["account"], &accountInfo)
 
 				ctx.Set(string(types.ACCOUNT_UUID), accountInfo.Uuid)         // 设置用户编号

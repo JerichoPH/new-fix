@@ -1,13 +1,11 @@
 import redis
 from redis.commands.core import ResponseT
 
+
 class Redis:
     def __init__(self, database: int = 0) -> None:
-        self._rds = redis.Redis(
-            host="localhost", port=6379, password="", db=database
-        )
+        self._rds = redis.Redis(host="localhost", port=6379, password="", db=database)
         self._database = database
-        
 
     def set_value(
         self,
@@ -20,3 +18,10 @@ class Redis:
 
     def get_value(self, key: str) -> ResponseT:
         return self._rds.get(name=key)
+    
+    def delete_value(self,key:str)->"Redis":
+        return self._rds.delete(key)
+
+    def delete_values(self, keys: list[str]) -> "Redis":
+        self._rds.delete(*keys)
+        return self

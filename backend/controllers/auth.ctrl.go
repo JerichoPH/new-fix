@@ -17,7 +17,10 @@ import (
 
 type (
 	// AuthCtrl 权鉴控制器
-	AuthCtrl struct{}
+	AuthCtrl struct {
+		setting                                                  *settings.Setting
+		dataConversionLayerRootUrl, dataconversionLayerApiPrefix string
+	}
 	// AuthRegisterForm 注册表单
 	AuthRegisterForm struct {
 		Username             string `json:"username" binding:"required"`
@@ -34,7 +37,13 @@ type (
 
 // NewAuthCtrl 构造函数
 func NewAuthCtrl() *AuthCtrl {
-	return &AuthCtrl{}
+	ins := &AuthCtrl{}
+
+	ins.setting = settings.NewSetting()
+	ins.dataConversionLayerRootUrl = ins.setting.Url.Section("data-conversion-layer").Key("root-url").MustString("")
+	ins.dataconversionLayerApiPrefix = ins.setting.Url.Section("data-conversion-layer").Key("api-prefix").MustString("")
+
+	return ins
 }
 
 // ShouldBind 绑定表单（注册）
@@ -104,14 +113,13 @@ func (AuthCtrl) PostRegister(ctx *gin.Context) {
 }
 
 // PostLogin 登录
-func (AuthCtrl) PostLogin(ctx *gin.Context) {
+func (receiver *AuthCtrl) PostLogin(ctx *gin.Context) {
 	// 表单验证
 	form := AuthLoginForm{}.ShouldBind(ctx)
 
 	var (
-		account                                                  models.AccountMdl
-		ret                                                      *gorm.DB
-		dataConversionLayerRootUrl, dataconversionLayerApiPrefix string
+		account models.AccountMdl
+		ret     *gorm.DB
 	)
 
 	// 获取用户
@@ -122,10 +130,6 @@ func (AuthCtrl) PostLogin(ctx *gin.Context) {
 	if !utils.CheckPassword(form.Password, account.Password) {
 		wrongs.ThrowUnAuth("账号或密码错误")
 	}
-
-	setting := settings.NewSetting()
-	dataConversionLayerRootUrl = setting.Url.Section("data-conversion-layer").Key("root-url").MustString("")
-	dataconversionLayerApiPrefix = setting.Url.Section("data-conversion-layer").Key("api-prefix").MustString("")
 
 	// 生成Jwt
 	if token, err := utils.GenerateJwt(
@@ -140,7 +144,7 @@ func (AuthCtrl) PostLogin(ctx *gin.Context) {
 		// 将用户数据保存到redis
 		utils.HttpRequest{
 			Method:   "POST",
-			Url:      fmt.Sprintf("%s/%s/auth", dataConversionLayerRootUrl, dataconversionLayerApiPrefix),
+			Url:      fmt.Sprintf("%s/%s/auth", receiver.dataConversionLayerRootUrl, receiver.dataconversionLayerApiPrefix),
 			DataType: utils.HTTP_REQUEST_DATA_TYPE_JSON,
 			Body:     strings.NewReader(utils.ToJson(map[string]any{"token": token, "account": account})),
 		}.Send()
@@ -189,7 +193,7 @@ func (AuthCtrl) GetMenus(ctx *gin.Context) {
 }
 
 // PutUpdatePassword 修改密码
-func (AuthCtrl) PutUpdatePassword(ctx *gin.Context) {
+func (receiver *AuthCtrl) PutUpdatePassword(ctx *gin.Context) {
 	var (
 		ret         *gorm.DB
 		account     *models.AccountMdl
@@ -209,5 +213,24 @@ func (AuthCtrl) PutUpdatePassword(ctx *gin.Context) {
 	account.Password = utils.GeneratePassword(form.Password)
 	models.NewAccountMdl().GetDb("").Where("uuid = ?", ctx.Param("uuid")).Save(&account)
 
+	// 删除当前用户所有token
+	utils.HttpRequest{
+		Method: "DELETE",
+		Url:    fmt.Sprintf("%s/%s/auth/%s", receiver.dataConversionLayerRootUrl, receiver.dataconversionLayerApiPrefix, account.Uuid),
+	}.Send()
+
 	ctx.JSON(utils.NewCorrectWithGinContext("修改成功", ctx).Blank().ToGinResponse())
+}
+
+// AnyLogout 退出
+func (receiver *AuthCtrl) AnyLogout(ctx *gin.Context) {
+	accountInfo := utils.GetAuth(ctx).(types.AccountInfo)
+
+	// 删除当前用户所有token
+	utils.HttpRequest{
+		Method: "DELETE",
+		Url:    fmt.Sprintf("%s/%s/auth/%s", receiver.dataConversionLayerRootUrl, receiver.dataconversionLayerApiPrefix, accountInfo.Uuid),
+	}.Send()
+
+	ctx.JSON(utils.NewCorrectWithGinContext("退出成功", ctx).Blank().ToGinResponse())
 }

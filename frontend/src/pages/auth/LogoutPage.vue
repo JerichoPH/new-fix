@@ -7,6 +7,10 @@
 
 <script setup>
 import { onMounted } from "vue";
+import {ajaxLogout} from "src/api/auth";
 
-onMounted(() => localStorage.removeItem("auth.token"));
+onMounted(() => {
+  ajaxLogout();
+  localStorage.removeItem("auth.token");
+});
 </script>
