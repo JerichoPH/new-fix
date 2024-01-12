@@ -133,7 +133,7 @@ func (AuthCtrl) PostLogin(ctx *gin.Context) {
 		// 生成jwt错误
 		wrongs.ThrowForbidden(err.Error())
 	} else {
-		// 保存到redis
+		// 将用户数据保存到redis
 		rds, _, err := database.NewRedis(int(types.REDIS_DATABASE_AUTH)).SetJsonValue(token, account, 24*180*time.Hour)
 		if err != nil {
 			wrongs.ThrowForbidden("保存到redis错误：%s", err.Error())
