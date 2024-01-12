@@ -1,5 +1,5 @@
 from typing import List, Union
-from .baseMdl import BaseMdl
+from .base import BaseMdl
 from .rbac import RbacRoleMdl
 
 

@@ -27,7 +27,7 @@ func RabbitMqSendMessage(message string) {
 		Body:        []byte(message),
 	}
 	if err = rabbitMqChannel.PublishWithContext(ctx,
-		"",                // exchange
+		"direct",          // exchange
 		queueDeclare.Name, // routing key
 		false,             // mandatory
 		false,             // immediate

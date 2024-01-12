@@ -1,6 +1,6 @@
 from typing import List, Union
 
-from .baseMdl import BaseMdl
+from .base import BaseMdl
 
 
 class RbacPermissionMdl(BaseMdl):

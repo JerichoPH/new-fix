@@ -2,7 +2,7 @@ from typing import Any
 from pydantic import BaseModel
 
 
-class ResponseMdl(BaseModel):
+class StdResponseMdl(BaseModel):
     message_id: str
     trace_id: str
     msg: str

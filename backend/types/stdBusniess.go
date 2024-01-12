@@ -7,10 +7,10 @@ import (
 type (
 	// StdBusiness tcp服务器端、tcp客户端、websocket业务消息格式
 	StdBusiness struct {
-		MessageId    string                 `json:"message_id"`
-		TraceId      string                 `json:"trace_id"`
-		BusinessType string                 `json:"business_type"`
-		Content      map[string]interface{} `json:"content"`
+		MessageId    string         `json:"message_id"`
+		TraceId      string         `json:"trace_id"`
+		BusinessType string         `json:"business_type"`
+		Content      map[string]any `json:"content"`
 	}
 )
 

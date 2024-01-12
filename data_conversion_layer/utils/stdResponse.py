@@ -1,7 +1,7 @@
-from models.response import ResponseMdl
+from models.stdResponse import StdResponseMdl
 
 
-class Response:
+class StdResponse:
     _message_id = ""
     _trace_id = ""
     _msg = ""
@@ -30,7 +30,7 @@ class Response:
         return self.dict()
 
     def dict(self) -> dict:
-        return ResponseMdl(
+        return StdResponseMdl(
             message_id=self._message_id,
             trace_id=self._trace_id,
             msg=self._msg,

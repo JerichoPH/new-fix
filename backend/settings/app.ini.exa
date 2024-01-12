@@ -18,14 +18,9 @@ addr = "127.0.0.1:18081"
 enable = false
 addr = "127.0.0.1:5672"
 username = "admin"
-password = "zces@1234"
-vhost = "rnv-harbor-default-vhost"
-queue-name = "rnv-default-queue"
-[fix-workshop-project]
-root-url = "http://192.168.0.116:81"
-root-path = "/rnv/nginx/v1.23.1/html/fix-workshop"
-cycle-fix-plan-path = "storage/app/cycleFix"
-equipment-wiki-document-url-prefix = "storage/equipmentWikiDocument"
+password = "123123"
+vhost = "default-vhost"
+queue-name = "default-queue"
 [kafka-server]
 enable = false
 addr = ":9092"

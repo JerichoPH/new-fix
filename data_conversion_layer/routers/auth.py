@@ -4,7 +4,7 @@ from pydantic import BaseModel
 from databases.redis import Redis
 from type.constants import constants
 from models.account import AccountMdl
-from utils.response import Response
+from utils.stdResponse import StdResponse
 
 
 class LoginForm(BaseModel):
@@ -30,10 +30,10 @@ async def index(token: str):
     rds = Redis(constants["redis_database_auth"])
     account = rds.get_value(token)
     if not account:
-        return Response().empty("token不存在")
+        return StdResponse().empty("token不存在")
     else:
         account = json.loads(account.decode())
-        return Response().success({"account": account})
+        return StdResponse().success({"account": account})
 
 
 @router.post("/auth")  # 保存权鉴信息
@@ -59,7 +59,7 @@ async def store(save_auth_form: SaveAuthForm):
         json.dumps(tokens, ensure_ascii=True),
         constants["ex"],
     )
-    return Response().success(tokens)
+    return StdResponse().success(tokens)
 
 
 @router.put("/auth/{account_uuid}")  # 更新权鉴数据
@@ -68,14 +68,14 @@ async def update(account_uuid: str, update_auth_form: UpdateAuthForm):
     rds = Redis(constants["redis_database_auth"])
     tokens = rds.get_value(account_uuid)
     if not tokens:
-        return Response().empty("用户数据不存在")
+        return StdResponse().empty("用户数据不存在")
     tokens = json.loads(tokens.decode())
 
     # 修改所有对应token的用户信息
     for token in tokens:
         rds.set_value(token, update_auth_form.account.json(), constants["ex"])
 
-    return Response().success()
+    return StdResponse().success()
 
 @router.delete("/auth/{account_uuid}") # 删除权鉴数据
 async def destroy(account_uuid: str):
@@ -83,7 +83,7 @@ async def destroy(account_uuid: str):
     rds = Redis(constants["redis_database_auth"])
     tokens = rds.get_value(account_uuid)
     if not tokens:
-        return Response().empty("用户数据不存在")
+        return StdResponse().empty("用户数据不存在")
     tokens = json.loads(tokens.decode())
     
     # 删除所有对应token的用户信息
