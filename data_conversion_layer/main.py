@@ -18,8 +18,9 @@ app.add_middleware(
 
 @app.on_event("startup")
 async def startup_event():
-    rabbit_mq = await AioRabbitMq().connection("new-fix-data-conversion-layer")
-    asyncio.create_task(rabbit_mq.consume_messages())
+    pass
+    # aio_rabbit_mq = await AioRabbitMq().conn()
+    # asyncio.create_task(await aio_rabbit_mq.consume_messages())
 
 
 @app.on_event("shutdown")

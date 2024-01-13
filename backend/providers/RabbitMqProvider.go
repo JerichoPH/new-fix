@@ -182,6 +182,7 @@ func RabbitMqConsume(item struct {
 	queue    amqp.Queue
 	messages <-chan amqp.Delivery
 }) {
+	var forever chan struct{}
 	for receiveMessage := range item.messages {
 		log.Printf("[rabbit-mq-error] [接收消息] %s\n", string(receiveMessage.Body))
 
@@ -196,4 +197,5 @@ func RabbitMqConsume(item struct {
 			// RabbitMqSendMessage(utils.NewCorrectWithBusiness("pong", "pong").Datum(map[string]any{"time": time.Now().Unix()}).ToJsonStr())
 		}
 	}
+	<-forever
 }
