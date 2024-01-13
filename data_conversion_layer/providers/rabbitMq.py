@@ -1,7 +1,4 @@
-import arrow
 import pika
-
-from utils.stdBusiness import StdBusniess
 
 
 class RabbitMq:
@@ -31,8 +28,3 @@ class RabbitMq:
             exchange=exchange, routing_key=self._queue_name, body=message
         )
         print(" [x] Sent %r" % message)
-
-
-if __name__ == "__main__":
-    rabbit_mq = RabbitMq()
-    rabbit_mq.send_message(StdBusniess("ping", {"time": arrow().now()}).to_json_str())

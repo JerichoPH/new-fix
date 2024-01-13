@@ -22,9 +22,10 @@ func (TestRout) Load(engine *gin.Engine) {
 		// middlewares.CheckPermission(),
 	)
 	{
-		r.Any("sendToWebsocket", controllers.NewTestController().AnySendToWebsocket)
-		r.Any("sendToTcpServer", controllers.NewTestController().AnySendToTcpServer)
-		r.Any("sendToTcpClient", controllers.NewTestController().AnySendToTcpClient)
-		r.Any("sendToKafkaClient", controllers.NewTestController().AnySendToKafkaClient)
+		r.Any("sendToWebsocket", controllers.NewTestCtrl().AnySendToWebsocket)
+		r.Any("sendToTcpServer", controllers.NewTestCtrl().AnySendToTcpServer)
+		r.Any("sendToTcpClient", controllers.NewTestCtrl().AnySendToTcpClient)
+		r.Any("sendToKafkaClient", controllers.NewTestCtrl().AnySendToKafkaClient)
+		r.Any("sendToRabbitMq", controllers.NewTestCtrl().AnySendToRabbitMq)
 	}
 }

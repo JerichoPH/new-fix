@@ -4,16 +4,18 @@ import (
 	"fmt"
 	"new-fix/providers"
 	"new-fix/settings"
+	"new-fix/types"
 	"new-fix/utils"
 	"new-fix/wrongs"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"gopkg.in/ini.v1"
 )
 
 type (
-	// TestController 测试控制器
-	TestController struct{}
+	// TestCtrl 测试控制器
+	TestCtrl struct{}
 
 	// 发送消息表单
 	sendMessageForm struct {
@@ -23,9 +25,9 @@ type (
 	}
 )
 
-// NewTestController 构造函数
-func NewTestController() *TestController {
-	return &TestController{}
+// NewTestCtrl 构造函数
+func NewTestCtrl() *TestCtrl {
+	return &TestCtrl{}
 }
 
 // ShouldBind 表单绑定
@@ -40,7 +42,7 @@ func (receiver sendMessageForm) ShouldBind(ctx *gin.Context) sendMessageForm {
 }
 
 // AnySendToWebsocket 接收并转发消息(websocket)
-func (receiver TestController) AnySendToWebsocket(ctx *gin.Context) {
+func (receiver TestCtrl) AnySendToWebsocket(ctx *gin.Context) {
 	form := sendMessageForm{}.ShouldBind(ctx)
 
 	providers.WebsocketSendMessageByUuid(utils.NewCorrectWithBusiness(form.MessageTitle, "message", "").Datum(form.MessageContent).ToJsonStr(), form.ReceiverUuid)
@@ -49,7 +51,7 @@ func (receiver TestController) AnySendToWebsocket(ctx *gin.Context) {
 }
 
 // AnySendToTcpServer 接收并转发消息(tcp server)
-func (receiver TestController) AnySendToTcpServer(ctx *gin.Context) {
+func (receiver TestCtrl) AnySendToTcpServer(ctx *gin.Context) {
 	form := sendMessageForm{}.ShouldBind(ctx)
 
 	providers.TcpServerSendMessageByUuid(utils.NewCorrectWithBusiness(form.MessageTitle, "message", "").Datum(form.MessageContent).ToJsonStr(), form.ReceiverUuid)
@@ -58,7 +60,7 @@ func (receiver TestController) AnySendToTcpServer(ctx *gin.Context) {
 }
 
 // AnySendToTcpClient 接收病转发消息(tcp client)
-func (receiver TestController) AnySendToTcpClient(ctx *gin.Context) {
+func (receiver TestCtrl) AnySendToTcpClient(ctx *gin.Context) {
 	form := sendMessageForm{}.ShouldBind(ctx)
 
 	providers.TcpClientSendMessage(utils.NewCorrectWithBusiness(form.MessageTitle, "message", "").Datum(map[string]any{"content": fmt.Sprintf("%s %v", form.MessageTitle, form.MessageContent)}).ToJsonStr())
@@ -67,7 +69,7 @@ func (receiver TestController) AnySendToTcpClient(ctx *gin.Context) {
 }
 
 // AnySendToKafkaClient 发送消息到kafka
-func (receiver TestController) AnySendToKafkaClient(ctx *gin.Context) {
+func (receiver TestCtrl) AnySendToKafkaClient(ctx *gin.Context) {
 	var (
 		appSetting *ini.File
 		topic      string
@@ -82,4 +84,11 @@ func (receiver TestController) AnySendToKafkaClient(ctx *gin.Context) {
 	if err = providers.KafkaSendMessage(topic, "message", utils.NewCorrectWithBusiness(form.MessageTitle, "message", "").Datum(map[string]any{"content": fmt.Sprintf("%s %v", form.MessageTitle, form.MessageContent)}).ToJsonStr()); err != nil {
 		wrongs.ThrowForbidden("发送失败：%s", err.Error())
 	}
+}
+
+// 发送消息到rabbitmq
+func (receiver TestCtrl) AnySendToRabbitMq(ctx *gin.Context) {
+	now := time.Now().Format(string(types.TIME_FORMAT_DATETIME))
+	providers.RabbitMqSendMessage("new-fix-data-conversion-layer", utils.NewCorrectWithBusiness(now, "ping", "").Datum(map[string]any{"content": "rabbitmq"}).ToJsonStr())
+	ctx.JSON(utils.NewCorrectWithGinContext("OK", ctx).Datum(map[string]any{"content": "rabbitmq"}).ToGinResponse())
 }

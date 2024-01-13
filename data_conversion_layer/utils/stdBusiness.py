@@ -1,4 +1,3 @@
-from typing import Any, Dict
 from models.stdBusniess import StdBusniessMdl
 
 
@@ -8,13 +7,15 @@ class StdBusniess:
     def __init__(
         self,
         business_type: str = "",
-        content: Dict[str, Any] = {},
+        content: dict = {},
         message_id: str = "",
-    ) -> None:
+        trace_id: str = "",
+    ):
         self._std_busniess = StdBusniessMdl(
             message_id=message_id,
             business_type=business_type,
             content=content,
+            trace_id=trace_id,
         )
 
     def to_dict(self) -> dict:

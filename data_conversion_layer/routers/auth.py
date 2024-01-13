@@ -77,7 +77,8 @@ async def update(account_uuid: str, update_auth_form: UpdateAuthForm):
 
     return StdResponse().success()
 
-@router.delete("/auth/{account_uuid}") # 删除权鉴数据
+
+@router.delete("/auth/{account_uuid}")  # 删除权鉴数据
 async def destroy(account_uuid: str):
     # 读取用户对应token列表
     rds = Redis(constants["redis_database_auth"])
@@ -85,10 +86,9 @@ async def destroy(account_uuid: str):
     if not tokens:
         return StdResponse().empty("用户数据不存在")
     tokens = json.loads(tokens.decode())
-    
+
     # 删除所有对应token的用户信息
     rds.delete_values(tokens)
-        
+
     # 删除用户权鉴数据
     rds.delete_value(account_uuid)
-    
