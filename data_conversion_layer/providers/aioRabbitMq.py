@@ -18,9 +18,6 @@ class AioRabbitMq:
     _production_queues = {}
     _consume_queues = {}
 
-    def __init__(self):
-        self.generate_conn()
-
     async def generate_conn(self):
         self._production_queue_names = app_setting.get(
             "rabbit-mq-service", "production-queue-names"
@@ -45,23 +42,6 @@ class AioRabbitMq:
         if self._conn is not None:
             await self._conn.close()
 
-    async def generate_queues(self):
-        # 创建队列（生产者）
-        for producation_queue_name in self._production_queue_names:
-            # self._production_queues[
-            #     producation_queue_name
-            # ] = await self._channel.declare_queue(producation_queue_name)
-            await self._channel.declare_queue(producation_queue_name)
-
-        # 创建队列（消费者）
-        for consume_queue_name in self._consume_queue_names:
-            # self._consume_queues[
-            #     consume_queue_name
-            # ] = await self._channel.declare_queue(consume_queue_name)
-            await self._channel.declare_queue(consume_queue_name)
-
-        return self
-
     @property
     async def get_conn(self):
         return self._conn
@@ -84,22 +64,21 @@ class AioRabbitMq:
             aio_pika.Message(body=message.encode()), routing_key=queue.name
         )
 
-    # async def on_message(message: aio_pika.IncomingMessage):
     async def on_message(self, message: aio_pika.IncomingMessage):
-        print("开始监听")
+        """
+        处理消息
+        :param message: 消息内容
+        :return:
+        """
         try:
-            process = message.process()
-            print(f"收到消息{message.body.decode()}")
-            await process.ack()
-            # async with message.process():
-            #     body = message.body.decode()
-            #     print(f"Received message: {body}")
-                # 在这里处理消息
-                # ...
-                # await message.ack()
-        except Exception as e:
-            await message.reject(request=True)
-            print(f"处理消息错误：{e}")
+            async with message.process():
+                body = message.body.decode()
+                print(f"Received message: {body}")
+
+                with open("./a.json", mode="w") as f:
+                    f.write(body)
+        except:
+            await message.reject()
 
     async def consume_messages(self):
         """
@@ -108,8 +87,3 @@ class AioRabbitMq:
         """
         queue = await self._channel.declare_queue("dcl")
         await queue.consume(self.on_message)
-        # for consume_queue_name in self._consume_queue_names:
-        #     queue = await self._channel.declare_queue(consume_queue_name)
-        #     await queue.consume(self.on_message)
-
-        await asyncio.Future()
