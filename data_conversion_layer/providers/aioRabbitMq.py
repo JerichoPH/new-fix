@@ -85,5 +85,6 @@ class AioRabbitMq:
         消费消息
         :return:
         """
-        queue = await self._channel.declare_queue("dcl")
-        await queue.consume(self.on_message)
+        for queue_name in self._consume_queue_names:
+            queue = await self._channel.declare_queue(queue_name)
+            await queue.consume(self.on_message)
