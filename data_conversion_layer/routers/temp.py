@@ -14,7 +14,7 @@ router = APIRouter()
 async def send_to_rabbit_mq():
     aio_rabbit_mq = await AioRabbitMq().generate_conn()
     await aio_rabbit_mq.send_message(
-        queue_name="backend",
+        queue_name="order.backend",
         message=StdBusniess(
             business_type="ping",
             content={"time": arrow.now().format("YYYY-MM-DD HH:mm:ss")},
