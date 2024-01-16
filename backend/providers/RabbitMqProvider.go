@@ -43,7 +43,6 @@ func RabbitMqSendMessage(queueName, message string) {
 			publishContext); err != nil {
 			log.Printf("[rabbit-mq-error] [发起消息失败 %s] %v\n", err, queue.Name)
 		} else {
-			log.Println("OK", queue.Name)
 			log.Printf("[rabbit-mq-debug] [发起消息成功 %s] %v\n", queue.Name, publishContext)
 		}
 	}
@@ -55,8 +54,8 @@ func RabbitMqHandler(
 	rabbitMqPassword,
 	rabbitMqAddr,
 	rabbitMqVhost string,
-	productionQueueNames,
-	consumeQueueNames []string,
+	productorQueueNames,
+	consumerQueueNames []string,
 ) {
 	rabbitMqConn, err = amqp.Dial(fmt.Sprintf("amqp://%s:%s@%s/%s", rabbitMqUsername, rabbitMqPassword, rabbitMqAddr, rabbitMqVhost))
 	if err != nil {
@@ -83,7 +82,7 @@ func RabbitMqHandler(
 	}(rabbitMqChannel)
 
 	// 链接队列（生产）
-	for _, productionQueueName := range productionQueueNames {
+	for _, productionQueueName := range productorQueueNames {
 		queueDeclare, err := rabbitMqChannel.QueueDeclare(
 			productionQueueName, // name
 			false,               // durable
@@ -100,7 +99,7 @@ func RabbitMqHandler(
 	}
 
 	// 链接队列（消费）
-	for _, consumeQueueName := range consumeQueueNames {
+	for _, consumeQueueName := range consumerQueueNames {
 		queueDeclare, err = rabbitMqChannel.QueueDeclare(
 			consumeQueueName, // name
 			false,            // durable
@@ -148,38 +147,6 @@ func RabbitMqHandler(
 			go RabbitMqConsume(consumeQueueDeclare)
 		}
 	}
-
-	// receiveMessages, err := rabbitMqChannel.Consume(
-	// 	queueDeclare.Name, // queue
-	// 	"",                // consumer
-	// 	true,              // auto-ack
-	// 	false,             // exclusive
-	// 	false,             // no-local
-	// 	false,             // no-wait
-	// 	nil,               // args
-	// )
-	// if err != nil {
-	// 	log.Printf("[rabbit-mq-error] [创建消费信道失败] %v\n", err)
-	// }
-
-	// go func() {
-	// 	for receiveMessage := range receiveMessages {
-	// 		log.Printf("[rabbit-mq-error] [收到消息] %s\n", string(receiveMessage.Body))
-
-	// 		business := &types.StdBusiness{}
-	// 		if err = json.Unmarshal(receiveMessage.Body, business); err != nil {
-	// 			log.Printf("[rabbit-mq-error] [解析业务失败] %v", err)
-	// 		}
-
-	// 		switch business.BusinessType {
-	// 		case "ping":
-	// 			log.Printf("[rabbit-mq-debug] [ping]")
-	// 			// RabbitMqSendMessage(utils.NewCorrectWithBusiness("pong", "pong").Datum(map[string]any{"time": time.Now().Unix()}).ToJsonStr())
-	// 		}
-	// 	}
-	// }()
-
-	// log.Printf("[rabbit-mq-debug] [开始监听] %s\n", queueDeclare.Name)
 	<-forever
 
 }

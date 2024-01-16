@@ -29,7 +29,7 @@ class AioRabbitMq:
         if self._conn is None:
             self._conn = await aio_pika.connect_robust(
                 host="127.0.0.1",
-                virtualhost="default-vhost",
+                virtualhost="new-fix",
                 login="admin",
                 password="123123",
                 port=5672,

@@ -1,33 +1,32 @@
 [app]
-name = "new-fix"
+name = new-fix
 logo =
 production = true
 timezone = Asia/Shanghai
 default-limit = 1000
-version="v0.0.1"
+version=v0.0.1
 sub-version = ""
 [web-service]
-addr = ":18080"
+addr = :18080
 [tcp-server-service]
 enable = false
-addr = "0.0.0.0:18081"
+addr = 0.0.0.0:18081
 [tcp-client-service]
 enable = false
-addr = "127.0.0.1:18081"
+addr = 127.0.0.1:18081
 [rabbit-mq-service]
 enable = false
-addr = "127.0.0.1:5672"
-username = "admin"
-password = "123123"
-vhost = "default-vhost"
-queue-name = "default-queue"
-production-queue-names = "new-fix-data-conversion-layer"
-consume-queue-names = "new-fix-backend"
+addr = 127.0.0.1:5672
+username = admin
+password = 123123
+vhost = new-fix
+consumer-queue-names = order.backend
+productor-queue-names = order.dcl,order.backend
 [kafka-server]
 enable = false
-addr = ":9092"
-topic = "revolution"
+addr = :9092
+topic = revolution
 [kafka-client]
 enable = false
-addr = ":9092"
-topic = "revolution"
+addr = :9092
+topic = revolution

@@ -31,27 +31,27 @@ type (
 
 	// WebServiceCommandSetting web-service 服务配置
 	WebServiceCommandSetting struct {
-		WebAddr                      string
-		TcpServerEnable              bool
-		TcpServerAddr                string
-		TcpClientEnable              bool
-		TcpClientAddr                string
-		RabbitMqEnable               bool
-		RabbitMqAddr                 string
-		RabbitMqUsername             string
-		RabbitMqPassword             string
-		RabbitMqVhost                string
-		RabbitMqQueueName            string
-		RabbitMqProductionQueueNames []string
-		RabbitMqConsumeQueueNames    []string
-		KafkaServerEnable            bool
-		KafkaServerAddr              string
-		KafkaServerTopic             string
-		KafkaClientEnable            bool
-		KafakClientAddr              string
-		KafkaClientTopic             string
-		RocketMqEnable               bool
-		RocketMqAddr                 string
+		WebAddr                     string
+		TcpServerEnable             bool
+		TcpServerAddr               string
+		TcpClientEnable             bool
+		TcpClientAddr               string
+		RabbitMqEnable              bool
+		RabbitMqAddr                string
+		RabbitMqUsername            string
+		RabbitMqPassword            string
+		RabbitMqVhost               string
+		RabbitMqQueueName           string
+		RabbitMqProductorQueueNames []string
+		RabbitMqConsumerQueueNames  []string
+		KafkaServerEnable           bool
+		KafkaServerAddr             string
+		KafkaServerTopic            string
+		KafkaClientEnable           bool
+		KafakClientAddr             string
+		KafkaClientTopic            string
+		RocketMqEnable              bool
+		RocketMqAddr                string
 	}
 )
 
@@ -148,27 +148,27 @@ func launchCommand(commandName string, commandParams, tmp []string, daemon bool)
 	)
 
 	commandSetting = WebServiceCommandSetting{
-		WebAddr:                      appSetting.Section("web-service").Key("addr").MustString(":8091"),
-		TcpServerEnable:              appSetting.Section("tcp-server-service").Key("enable").MustBool(false),
-		TcpServerAddr:                appSetting.Section("tcp-server-service").Key("addr").MustString("0.0.0.0:8092"),
-		TcpClientEnable:              appSetting.Section("tcp-clientche-service").Key("enable").MustBool(false),
-		TcpClientAddr:                appSetting.Section("tcp-client-service").Key("addr").MustString("127.0.0.1:8080"),
-		RabbitMqEnable:               appSetting.Section("rabbit-mq-service").Key("enable").MustBool(false),
-		RabbitMqAddr:                 appSetting.Section("rabbit-mq-service").Key("addr").MustString("127.0.0.1:5672"),
-		RabbitMqUsername:             appSetting.Section("rabbit-mq-service").Key("username").MustString(""),
-		RabbitMqPassword:             appSetting.Section("rabbit-mq-service").Key("password").MustString(""),
-		RabbitMqVhost:                appSetting.Section("rabbit-mq-service").Key("vhost").MustString(""),
-		RabbitMqQueueName:            appSetting.Section("rabbit-mq-service").Key("queue-name").MustString(""),
-		RabbitMqProductionQueueNames: strings.Split(appSetting.Section("rabbit-mq-service").Key("production-queue-names").MustString(""), ","),
-		RabbitMqConsumeQueueNames:    strings.Split(appSetting.Section("rabbit-mq-service").Key("consume-queue-names").MustString(""), ","),
-		KafkaServerEnable:            appSetting.Section("kafka-server").Key("enable").MustBool(false),
-		KafkaServerAddr:              appSetting.Section("kafka-server").Key("addr").MustString(":9092"),
-		KafkaServerTopic:             appSetting.Section("kafka-server").Key("topic").MustString("revolution"),
-		KafkaClientEnable:            appSetting.Section("kafka-client").Key("enable").MustBool(false),
-		KafakClientAddr:              appSetting.Section("kafka-client").Key("addr").MustString(":9092"),
-		KafkaClientTopic:             appSetting.Section("kafka-client").Key("topic").MustString("revolution"),
-		RocketMqEnable:               appSetting.Section("rocket-mq").Key("enable").MustBool(false),
-		RocketMqAddr:                 appSetting.Section("rocket-mq").Key("addr").MustString(""),
+		WebAddr:                     appSetting.Section("web-service").Key("addr").MustString(":8091"),
+		TcpServerEnable:             appSetting.Section("tcp-server-service").Key("enable").MustBool(false),
+		TcpServerAddr:               appSetting.Section("tcp-server-service").Key("addr").MustString("0.0.0.0:8092"),
+		TcpClientEnable:             appSetting.Section("tcp-clientche-service").Key("enable").MustBool(false),
+		TcpClientAddr:               appSetting.Section("tcp-client-service").Key("addr").MustString("127.0.0.1:8080"),
+		RabbitMqEnable:              appSetting.Section("rabbit-mq-service").Key("enable").MustBool(false),
+		RabbitMqAddr:                appSetting.Section("rabbit-mq-service").Key("addr").MustString("127.0.0.1:5672"),
+		RabbitMqUsername:            appSetting.Section("rabbit-mq-service").Key("username").MustString(""),
+		RabbitMqPassword:            appSetting.Section("rabbit-mq-service").Key("password").MustString(""),
+		RabbitMqVhost:               appSetting.Section("rabbit-mq-service").Key("vhost").MustString(""),
+		RabbitMqQueueName:           appSetting.Section("rabbit-mq-service").Key("queue-name").MustString(""),
+		RabbitMqProductorQueueNames: strings.Split(appSetting.Section("rabbit-mq-service").Key("productor-queue-names").MustString(""), ","),
+		RabbitMqConsumerQueueNames:  strings.Split(appSetting.Section("rabbit-mq-service").Key("consumer-queue-names").MustString(""), ","),
+		KafkaServerEnable:           appSetting.Section("kafka-server").Key("enable").MustBool(false),
+		KafkaServerAddr:             appSetting.Section("kafka-server").Key("addr").MustString(":9092"),
+		KafkaServerTopic:            appSetting.Section("kafka-server").Key("topic").MustString("revolution"),
+		KafkaClientEnable:           appSetting.Section("kafka-client").Key("enable").MustBool(false),
+		KafakClientAddr:             appSetting.Section("kafka-client").Key("addr").MustString(":9092"),
+		KafkaClientTopic:            appSetting.Section("kafka-client").Key("topic").MustString("revolution"),
+		RocketMqEnable:              appSetting.Section("rocket-mq").Key("enable").MustBool(false),
+		RocketMqAddr:                appSetting.Section("rocket-mq").Key("addr").MustString(""),
 	}
 
 	if daemon {
@@ -201,8 +201,8 @@ func launchCommand(commandName string, commandParams, tmp []string, daemon bool)
 				commandSetting.RabbitMqPassword,
 				commandSetting.RabbitMqAddr,
 				commandSetting.RabbitMqVhost,
-				commandSetting.RabbitMqProductionQueueNames,
-				commandSetting.RabbitMqConsumeQueueNames,
+				commandSetting.RabbitMqProductorQueueNames,
+				commandSetting.RabbitMqConsumerQueueNames,
 			)
 		}
 

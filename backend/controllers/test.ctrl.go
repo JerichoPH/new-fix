@@ -89,6 +89,6 @@ func (receiver TestCtrl) AnySendToKafkaClient(ctx *gin.Context) {
 // 发送消息到rabbitmq
 func (receiver TestCtrl) AnySendToRabbitMq(ctx *gin.Context) {
 	now := time.Now().Format(string(types.TIME_FORMAT_DATETIME))
-	providers.RabbitMqSendMessage("dcl", utils.NewCorrectWithBusiness(now, "ping", "").Datum(map[string]any{"content": "rabbitmq"}).ToJsonStr())
+	providers.RabbitMqSendMessage("order.backend", utils.NewCorrectWithBusiness(now, "ping", "").Datum(map[string]any{"content": "rabbitmq"}).ToJsonStr())
 	ctx.JSON(utils.NewCorrectWithGinContext("OK", ctx).Datum(map[string]any{"content": "rabbitmq"}).ToGinResponse())
 }
