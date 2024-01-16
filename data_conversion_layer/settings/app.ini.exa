@@ -1,9 +1,8 @@
 [rabbit-mq-service]
 enable = true
-host = 127.0.0.1
+addr = 127.0.0.1
 port = 5672
 username = admin
 password = 123123
 vhost = new-fix
-consume-queue-names = order.dcl
-production-queue-names = order.backend
+consumer-queue-names = order.dcl

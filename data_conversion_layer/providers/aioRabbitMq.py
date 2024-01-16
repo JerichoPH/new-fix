@@ -13,25 +13,20 @@ app = FastAPI()
 class AioRabbitMq:
     _conn = None
     _channel = None
-    _production_queue_names = []
-    _consume_queue_names = []
-    _production_queues = {}
+    _consumer_queue_names = []
     _consume_queues = {}
 
     async def generate_conn(self):
-        self._production_queue_names = app_setting.get(
-            "rabbit-mq-service", "production-queue-names"
-        ).split(",")
-        self._consume_queue_names = app_setting.get(
-            "rabbit-mq-service", "consume-queue-names"
+        self._consumer_queue_names = app_setting.get(
+            "rabbit-mq-service", "consumer-queue-names"
         ).split(",")
 
         if self._conn is None:
             self._conn = await aio_pika.connect_robust(
-                host="127.0.0.1",
-                virtualhost="new-fix",
-                login="admin",
-                password="123123",
+                host=app_setting.get("rabbit-mq-service", "addr"),
+                virtualhost=app_setting.get("rabbit-mq-service", "vhost"),
+                login=app_setting.get("rabbit-mq-service", "username"),
+                password=app_setting.get("rabbit-mq-service", "password"),
                 port=5672,
             )
             self._channel = await self._conn.channel()
@@ -85,6 +80,6 @@ class AioRabbitMq:
         消费消息
         :return:
         """
-        for queue_name in self._consume_queue_names:
+        for queue_name in self._consumer_queue_names:
             queue = await self._channel.declare_queue(queue_name)
             await queue.consume(self.on_message)
