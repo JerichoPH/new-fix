@@ -11,3 +11,4 @@ class StdResponseMdl(BaseModel):
     error_code: int
     pagination: Any
     business_type: str
+

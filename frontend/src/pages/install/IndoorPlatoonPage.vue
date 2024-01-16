@@ -23,11 +23,6 @@
                     data-source-field="install_indoor_room_types" current-field="installIndoorRoomTypeUuid" />
                 </div>
                 <div class="col">
-                  <standard-select label-name="所属机房" sechma="search" :data-source="ajaxGetInstallIndoorRooms"
-                    data-source-field="install_indoor_rooms" current-field="installIndoorRoomUuid"
-                    parent-field="installIndoorRoomTypeUuid" />
-                </div>
-                <div class="col">
                   <standard-select label-name="所属路局" sechma="search" :data-source="ajaxGetOrganizationRailways"
                     data-source-field="organization_railways" current-field="organizationRailwayUuid"
                     label-field="short_name" />
@@ -59,7 +54,11 @@
                     data-source-field="organization_crossroads" current-field="organizationCrossroadUuid"
                     parent-field="organizationWorkshopUuid" />
                 </div>
-                <div class="col"></div>
+                <div class="col">
+                  <standard-select label-name="所属机房" sechma="search" :data-source="ajaxGetInstallIndoorRooms"
+                    data-source-field="install_indoor_rooms" current-field="installIndoorRoomUuid"
+                    parent-field="installIndoorRoomTypeUuid" />
+                </div>
               </div>
             </q-form>
           </div>
@@ -165,27 +164,7 @@
                 parent-field="organizationParagraphUuid" />
             </div>
           </div>
-          <div class="row q-mt-md">
-            <div class="col">
-              <standard-select label-name="所属站场" sechma="alertCreate" :data-source="ajaxGetOrganizationStations"
-                data-source-field="organization_stations" current-field="organizationStationUuid"
-                parent-field="organizationWorkshopUuid" />
-            </div>
-          </div>
-          <div class="row q-mt-md">
-            <div class="col">
-              <standard-select label-name="所属中心" sechma="alertCreate" :data-source="ajaxGetOrganizationCenters"
-                data-source-field="organization_centers" current-field="organizationCenterUuid"
-                parent-field="organizationWorkshopUuid" />
-            </div>
-          </div>
-          <div class="row q-mt-md">
-            <div class="col">
-              <standard-select label-name="所属道口" sechma="alertCreate" :data-source="ajaxGetOrganizationCrossroads"
-                data-source-field="organization_crossroads" current-field="organizationCrossroadUuid"
-                parent-field="organizationWorkshopUuid" />
-            </div>
-          </div>
+          <use-location-combo sechma="alertCreate" />
         </q-card-section>
         <q-card-actions align="right">
           <q-btn-group>
@@ -222,6 +201,7 @@ import {
 import { notifies, actions } from "src/utils/notify";
 import JoinString from "src/components/JoinString.vue";
 import StandardSelect from "src/components/StandardSelect.vue";
+import UseLocationCombo from "src/components/UseLocationCombo.vue";
 import collect from "collect.js";
 
 // 搜索栏数据
@@ -267,6 +247,8 @@ const organizationCenterUuid_alertCreateInstallIndoorPlatoon = ref("");
 provide("organizationCenterUuid_alertCreate", organizationCenterUuid_alertCreateInstallIndoorPlatoon);
 const organizationCrossroadUuid_alertCreateInstallIndoorPlatoon = ref("");
 provide("organizationCrossroadUuid_alertCreate", organizationCrossroadUuid_alertCreateInstallIndoorPlatoon);
+const strategy_alertCreateInstallIndoorPlatoon = ref("");
+provide("strategy_alertCreate", strategy_alertCreateInstallIndoorPlatoon);
 
 onMounted(() => fnInit());
 

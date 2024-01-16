@@ -7,7 +7,7 @@
 
 <script setup>
 import { onMounted } from "vue";
-import {ajaxLogout} from "src/api/auth";
+import { ajaxLogout } from "src/apis/auth";
 
 onMounted(() => {
   ajaxLogout();

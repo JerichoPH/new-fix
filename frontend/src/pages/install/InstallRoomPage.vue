@@ -69,7 +69,8 @@
           <div class="col"><span :style="{ fontSize: '20px' }">室内上道位置-机房列表</span></div>
           <div class="col text-right">
             <q-btn-group>
-              <q-btn color="secondary" outline label="新建室内上道位置-机房" icon="add" @click="fnOpenAlertCreateInstallIndoorRoom" />
+              <q-btn color="secondary" outline label="新建室内上道位置-机房" icon="add"
+                @click="fnOpenAlertCreateInstallIndoorRoom" />
               <q-btn color="negative" outline label="删除室内上道位置-机房" icon="deleted" @click="fnDestroyInstallIndoorRooms" />
             </q-btn-group>
           </div>
@@ -114,8 +115,10 @@
                   </q-td>
                   <q-td key="operation" :props="props">
                     <q-btn-group>
-                      <q-btn @click="fnOpenAlertEditInstallIndoorRoom(props.row.operation)" color="warning" icon="edit" outline label="编辑" />
-                      <q-btn @click="fnDestroyInstallIndoorRoom(props.row.operation)" color="negative" icon="delete" outline label="删除" />
+                      <q-btn @click="fnOpenAlertEditInstallIndoorRoom(props.row.operation)" color="warning" icon="edit"
+                        outline label="编辑" />
+                      <q-btn @click="fnDestroyInstallIndoorRoom(props.row.operation)" color="negative" icon="delete"
+                        outline label="删除" />
                     </q-btn-group>
                   </q-td>
                 </q-tr>
@@ -150,7 +153,8 @@
           <div class="row q-mt-md">
             <div class="col">
               <StandardSelect label-name="所属路局" sechma="alertCreate" current-field="organizationRailwayUuid"
-                :data-source="ajaxGetOrganizationRailways" data-source-field="organization_railways" />
+                :data-source="ajaxGetOrganizationRailways" data-source-field="organization_railways"
+                label-field="short_name" />
             </div>
           </div>
           <div class="row q-mt-md">
@@ -220,7 +224,8 @@
           <div class="row q-mt-md">
             <div class="col">
               <StandardSelect label-name="所属路局" sechma="alertEdit" current-field="organizationRailwayUuid"
-                :data-source="ajaxGetOrganizationRailways" data-source-field="organization_railways" />
+                :data-source="ajaxGetOrganizationRailways" data-source-field="organization_railways"
+                label-field="short_name" />
             </div>
           </div>
           <div class="row q-mt-md">

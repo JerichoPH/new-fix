@@ -1,6 +1,7 @@
 import json
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
+from urllib3 import HTTPResponse
 from databases.redis import Redis
 from type.constants import constants
 from models.account import AccountMdl
@@ -30,7 +31,7 @@ async def index(token: str):
     rds = Redis(constants["redis_database_auth"])
     account = rds.get_value(token)
     if not account:
-        return StdResponse().empty("token不存在")
+        raise HTTPException(401, "token不存在")
     else:
         account = json.loads(account.decode())
         return StdResponse().success({"account": account})
@@ -68,7 +69,7 @@ async def update(account_uuid: str, update_auth_form: UpdateAuthForm):
     rds = Redis(constants["redis_database_auth"])
     tokens = rds.get_value(account_uuid)
     if not tokens:
-        return StdResponse().empty("用户数据不存在")
+        raise HTTPException(401, "用户数据不存在")
     tokens = json.loads(tokens.decode())
 
     # 修改所有对应token的用户信息
@@ -84,7 +85,7 @@ async def destroy(account_uuid: str):
     rds = Redis(constants["redis_database_auth"])
     tokens = rds.get_value(account_uuid)
     if not tokens:
-        return StdResponse().empty("用户数据不存在")
+        raise HTTPException(401, "用户数据不存在")
     tokens = json.loads(tokens.decode())
 
     # 删除所有对应token的用户信息

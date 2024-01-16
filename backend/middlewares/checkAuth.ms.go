@@ -34,6 +34,8 @@ func CheckAuth() gin.HandlerFunc {
 			claims                                                   *utils.Claims
 			err                                                      error
 			responseBody                                             string
+			responseStatus                                           int
+			dclResponse                                              types.DclResponse
 			dataConversionLayerRootUrl, dataconversionLayerApiPrefix string
 			stdResponse                                              types.StdResponse
 		)
@@ -62,10 +64,14 @@ func CheckAuth() gin.HandlerFunc {
 				}
 
 				// 获取用户信息
-				_, responseBody = utils.HttpRequest{
+				responseStatus, responseBody = utils.HttpRequest{
 					Url:    fmt.Sprintf("%s/%s/auth/%s", dataConversionLayerRootUrl, dataconversionLayerApiPrefix, token),
 					Method: "GET",
 				}.Send()
+				if responseStatus == 401 {
+					utils.FromJson(responseBody, &dclResponse)
+					wrongs.ThrowUnLogin("")
+				}
 				if err = json.Unmarshal([]byte(responseBody), &stdResponse); err != nil {
 					wrongs.ThrowUnLogin("解析用户数据失败：%s", err.Error())
 				}
